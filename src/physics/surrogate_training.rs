@@ -9,8 +9,8 @@ use std::path::Path;
 
 use candle_core::{DType, Device, Tensor};
 use candle_nn::{optim::AdamW, Optimizer, VarBuilder, VarMap};
-use rand::seq::SliceRandom;
 use rand::rngs::StdRng;
+use rand::seq::SliceRandom;
 use rand::SeedableRng;
 
 use super::apfel::ApfelStructureFunctionProvider;
@@ -149,12 +149,7 @@ pub fn train_and_save_surrogate(
 
     for &idx in train_indices {
         let pt = &data[idx];
-        let inputs = [
-            pt.x.log10(),
-            pt.q2.log10(),
-            pt.mu_f_ratio,
-            pt.mu_r_ratio,
-        ];
+        let inputs = [pt.x.log10(), pt.q2.log10(), pt.mu_f_ratio, pt.mu_r_ratio];
         let targets = [pt.f2.max(1e-10).log10(), pt.fl, pt.xf3];
 
         for i in 0..4 {
@@ -201,7 +196,12 @@ pub fn train_and_save_surrogate(
     let val_y = build_target_tensor(&data, val_indices, &target_mean, &target_std, &device)?;
 
     println!("\nTraining surrogate...");
-    println!("Train set: {}, Val set: {}, Test set: {}", train_indices.len(), val_indices.len(), test_indices.len());
+    println!(
+        "Train set: {}, Val set: {}, Test set: {}",
+        train_indices.len(),
+        val_indices.len(),
+        test_indices.len()
+    );
 
     let epochs = 2000;
     let mut best_val_loss = f32::MAX;
@@ -213,7 +213,7 @@ pub fn train_and_save_surrogate(
         // Forward pass
         let pred = model.forward(&train_x)?;
         let loss = pred.sub(&train_y)?.sqr()?.mean_all()?;
-        
+
         optimizer.backward_step(&loss)?;
 
         if epoch % 50 == 0 || epoch == epochs - 1 {
@@ -250,13 +250,16 @@ pub fn train_and_save_surrogate(
         let f2_log_norm = test_pred_vec[i][0];
         let f2_log = f2_log_norm * target_std[0] + target_mean[0];
         let f2_pred = 10_f32.powf(f2_log);
-        
+
         let target_f2 = pt.f2 as f32;
         let rel_err = (f2_pred - target_f2).abs() / target_f2.max(1e-12);
         max_rel_error = max_rel_error.max(rel_err);
     }
 
-    println!("Test Set Max Relative Error on F2: {:.2}%", max_rel_error * 100.0);
+    println!(
+        "Test Set Max Relative Error on F2: {:.2}%",
+        max_rel_error * 100.0
+    );
 
     // Save config
     let config = SurrogateConfig {
@@ -285,7 +288,10 @@ pub fn train_and_save_surrogate(
         serde_json::to_string_pretty(&config)?,
     )?;
 
-    println!("Surrogate successfully trained and saved to {}", dir.display());
+    println!(
+        "Surrogate successfully trained and saved to {}",
+        dir.display()
+    );
     Ok(())
 }
 
@@ -322,11 +328,7 @@ fn build_target_tensor(
     let mut flat = Vec::with_capacity(indices.len() * 3);
     for &idx in indices {
         let pt = &data[idx];
-        let targets = [
-            pt.f2.max(1e-10).log10() as f32,
-            pt.fl as f32,
-            pt.xf3 as f32,
-        ];
+        let targets = [pt.f2.max(1e-10).log10() as f32, pt.fl as f32, pt.xf3 as f32];
         for i in 0..3 {
             flat.push((targets[i] - mean[i]) / std[i]);
         }

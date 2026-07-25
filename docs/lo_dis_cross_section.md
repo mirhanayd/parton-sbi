@@ -168,8 +168,7 @@ an unintended data-grid change is reported rather than silently accepted.
   hadronization, detector simulation, or event record.
 - Grid validity and flavor content are defined by the selected LHAPDF set. The
   calculation does not extrapolate points rejected by the wrapper.
-- The legacy Cornell neural-network visualization remains independent and is not
-  a PDF provider.
+- The removed legacy visualization is not a PDF provider.
 
 ## References
 

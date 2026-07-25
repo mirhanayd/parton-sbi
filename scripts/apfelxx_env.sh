@@ -14,6 +14,7 @@ _apfel_repo_root="$(cd -- "${_apfel_script_dir}/.." && pwd -P)"
 source "${_apfel_script_dir}/lhapdf_env.sh"
 
 export APFELXX_ROOT="${APFELXX_ROOT:-${_apfel_repo_root}/.external/apfelxx-4.8.0}"
+export NLOHMANN_JSON_INCLUDE_DIR="${NLOHMANN_JSON_INCLUDE_DIR:-${_apfel_repo_root}/.external/include}"
 export APFEL_BACKEND_BIN="${APFEL_BACKEND_BIN:-${_apfel_repo_root}/physics-engine/build/apfel_cli}"
 
 case ":${PATH}:" in

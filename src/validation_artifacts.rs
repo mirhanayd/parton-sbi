@@ -1,7 +1,7 @@
 //! CSV, JSON, and SVG artifacts for structure-function validation.
 //!
-//! This module is intentionally independent of the legacy Cornell plotting
-//! code and Candle. It validates the complete report before writing, permits an
+//! This module is intentionally independent of Candle. It validates the
+//! complete report before writing, permits an
 //! existing output directory, and never overwrites a final artifact.
 
 use std::error::Error;
@@ -598,7 +598,7 @@ mod tests {
                 .expect("clock should be after the Unix epoch")
                 .as_nanos();
             let path = std::env::temp_dir().join(format!(
-                "quark_sim_validation_artifacts_{}_{}",
+                "parton_sbi_validation_artifacts_{}_{}",
                 std::process::id(),
                 nonce
             ));
@@ -613,7 +613,7 @@ mod tests {
                 .0
                 .file_name()
                 .and_then(|name| name.to_str())
-                .is_some_and(|name| name.starts_with("quark_sim_validation_artifacts_"))
+                .is_some_and(|name| name.starts_with("parton_sbi_validation_artifacts_"))
             {
                 let _ = fs::remove_dir_all(&self.0);
             }

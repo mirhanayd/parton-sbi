@@ -3,14 +3,14 @@ use std::path::PathBuf;
 use std::process::Command;
 
 fn binary() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_quark_sim"))
+    Command::new(env!("CARGO_BIN_EXE_parton-sbi"))
 }
 
 fn create_temp_dir() -> PathBuf {
     use rand::Rng;
     let mut rng = rand::thread_rng();
     let num: u32 = rng.gen();
-    let path = std::env::temp_dir().join(format!("quark_sim_test_{}", num));
+    let path = std::env::temp_dir().join(format!("parton_sbi_test_{}", num));
     fs::create_dir_all(&path).unwrap();
     path
 }

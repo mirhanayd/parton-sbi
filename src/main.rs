@@ -1,77 +1,52 @@
-mod gui;
-mod model;
-mod plotting;
-mod scattering;
-mod training;
-
-use candle_core::{Device, Error, Result};
+use candle_core::{Error, Result};
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::path::PathBuf;
 
-use gui::launch_gui;
-use gui::legacy_cornell::{AppData, InteractiveContext};
-use plotting::plot_results;
-use quark_sim::physics::{
+use parton_sbi::physics::{
     collider_beams, compute_dis_kinematics, evaluate_lo_structure_functions, exact_inelasticity,
     lo_differential_cross_section, scattered_electron, FixedAlpha, LhapdfProvider,
 };
-use scattering::{get_proton_quarks, plot_scattering, simulate_scattering, ScatteringParams};
-use training::{
-    create_model_and_optimizer, generate_training_data, load_model_with_config,
-    save_model_with_config, test_model, train_model,
-};
 
-const TRAINING_SAMPLES: usize = 15_000;
-const TRAINING_EPOCHS: usize = 5_000;
-const LEARNING_RATE: f64 = 0.01;
-
-const HELP: &str = "Cornell-potential neural-network visualization
+const HELP: &str =
+    "PartonSBI: Simulation-Based Inference for Parton Structure from Event-Level Scattering Data
 
 Usage:
-  quark_sim
-      Train a new model, create plots and launch the interactive GUI.
+  parton-sbi [COMMAND]
 
-  quark_sim --load <session.json>
-      Load saved arrays and trajectories for static viewing. This does not
-      restore a model or resume/replay the simulation.
-
-  quark_sim --load-model <model.safetensors>
-      Load a trained model. A sibling <model>_config.json file is required.
-
-  quark_sim dis-kinematics [OPTIONS]
+Commands:
+  dis-kinematics [OPTIONS]
       Compute validated inclusive electron-proton DIS invariants.
-      Run `quark_sim dis-kinematics --help` for the required options.
+      Run `parton-sbi dis-kinematics --help` for the required options.
 
-  quark_sim dis-cross-section [OPTIONS]
+  dis-cross-section [OPTIONS]
       Evaluate LO electromagnetic inclusive DIS with an installed LHAPDF set.
-      Run `quark_sim dis-cross-section --help` for the required options.
+      Run `parton-sbi dis-cross-section --help` for the required options.
 
-  quark_sim generate-dis-events [OPTIONS]
+  structure-functions [OPTIONS]
+      Evaluate LO, APFEL++, or checked-in surrogate structure functions.
+
+  generate-dis-events [OPTIONS]
       Generate Monte Carlo DIS events using the PYTHIA 8 backend.
-      Run `quark_sim generate-dis-events --help` for the required options.
+      Run `parton-sbi generate-dis-events --help` for the required options.
 
-  quark_sim validate-hera [OPTIONS]
+  validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
-      Run `quark_sim validate-hera --help` for the options.
 
-  quark_sim theory-uncertainties [OPTIONS]
-      Validate predictions and calculate theory uncertainties against HERA DIS measurements.
-      Run `quark_sim theory-uncertainties --help` for the options.
+  theory-uncertainties [OPTIONS]
+      Calculate PDF-member and scale uncertainties for HERA validation.
 
-  quark_sim -h | --help
-      Show this help message without training or launching the GUI.
+  train-surrogate [OPTIONS]
+      Train the existing pointwise APFEL++ structure-function surrogate.
 
-Build modes:
-  CPU (default): cargo run --release
-  Optional CUDA: cargo run --release --features cuda
+  -h, --help
+      Show this help message. Running without a command also prints help.
 ";
 
 const DIS_HELP: &str = "Neutral-current inclusive electron-proton DIS kinematics
 
 Usage:
-  quark_sim dis-kinematics \\
+  parton-sbi dis-kinematics \\
       --electron-energy <GEV> \\
       --proton-energy <GEV> \\
       --scattered-electron-energy <GEV> \\
@@ -98,7 +73,7 @@ and W² in GeV-based natural units. Unphysical inputs are rejected, not clamped.
 const CROSS_SECTION_HELP: &str = "Leading-order electromagnetic inclusive electron-proton DIS
 
 Usage:
-  quark_sim dis-cross-section \\
+  parton-sbi dis-cross-section \\
       --x <BJORKEN_X> \\
       --q2 <GEV2> \\
       --electron-energy <GEV> \\
@@ -133,7 +108,7 @@ unphysical y or outside the selected PDF grid are rejected.
 const GENERATE_DIS_EVENTS_HELP: &str = "Generate Monte Carlo DIS events using the PYTHIA 8 backend
 
 Usage:
-  quark_sim generate-dis-events \
+  parton-sbi generate-dis-events \
       --electron-energy <GEV> \
       --proton-energy <GEV> \
       --q2-min <GEV2> \
@@ -166,10 +141,6 @@ Defaults:
 
 #[derive(Debug, PartialEq)]
 enum Command {
-    LaunchGui,
-    Train,
-    LoadSession(PathBuf),
-    LoadModel(PathBuf),
     DisKinematics(DisCommand),
     DisCrossSection(CrossSectionCommand),
     GenerateDisEvents(GenerateDisEventsCommand),
@@ -288,22 +259,6 @@ fn main() -> Result<()> {
     })?;
 
     match command {
-        Command::LaunchGui => gui::launch_dis_gui("QuarkSim"),
-        Command::Train => run_training(),
-        Command::LoadSession(session_file) => {
-            let app_data = AppData::load_session(&session_file).map_err(Error::wrap)?;
-            launch_gui(app_data, "Kayıtlı Oturum (Statik Görünüm)", None)
-        }
-        Command::LoadModel(model_path) => {
-            let config_path = model_config_path(&model_path)?;
-            if !config_path.is_file() {
-                return Err(Error::Msg(format!(
-                    "model configuration not found: {} (normalization values are required)",
-                    config_path.display()
-                )));
-            }
-            run_with_pretrained_model(&model_path, &config_path)
-        }
         Command::DisKinematics(DisCommand::Calculate(arguments)) => run_dis_kinematics(arguments),
         Command::DisKinematics(DisCommand::Help) => {
             print!("{DIS_HELP}");
@@ -323,18 +278,10 @@ fn main() -> Result<()> {
             print!("{GENERATE_DIS_EVENTS_HELP}");
             Ok(())
         }
-        Command::StructureFunctions(arguments) => {
-            run_structure_functions(arguments)
-        }
-        Command::ValidateHera(arguments) => {
-            run_validate_hera(arguments)
-        }
-        Command::TheoryUncertainties(arguments) => {
-            run_theory_uncertainties(arguments)
-        }
-        Command::TrainSurrogate(arguments) => {
-            run_train_surrogate(arguments)
-        }
+        Command::StructureFunctions(arguments) => run_structure_functions(arguments),
+        Command::ValidateHera(arguments) => run_validate_hera(arguments),
+        Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
+        Command::TrainSurrogate(arguments) => run_train_surrogate(arguments),
         Command::Help => {
             print!("{HELP}");
             Ok(())
@@ -345,7 +292,7 @@ fn main() -> Result<()> {
 fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<Command, String> {
     let args: Vec<String> = args.into_iter().collect();
     match args.as_slice() {
-        [] => Ok(Command::LaunchGui),
+        [] => Ok(Command::Help),
         [flag] if flag == "-h" || flag == "--help" => Ok(Command::Help),
         [subcommand, remaining @ ..] if subcommand == "dis-kinematics" => {
             parse_dis_command(remaining).map(Command::DisKinematics)
@@ -367,11 +314,6 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
         }
         [subcommand, remaining @ ..] if subcommand == "train-surrogate" => {
             parse_train_surrogate_command(remaining).map(Command::TrainSurrogate)
-        }
-        [flag, path] if flag == "--load" => Ok(Command::LoadSession(PathBuf::from(path))),
-        [flag, path] if flag == "--load-model" => Ok(Command::LoadModel(PathBuf::from(path))),
-        [flag] if flag == "--load" || flag == "--load-model" => {
-            Err(format!("{flag} requires a file path"))
         }
         _ => Err(format!("unrecognized arguments: {}", args.join(" "))),
     }
@@ -625,177 +567,6 @@ fn run_dis_cross_section(arguments: CrossSectionCliArgs) -> Result<()> {
         result.d2sigma_dx_dq2_pb_per_gev2
     );
     Ok(())
-}
-
-fn model_config_path(model_path: &Path) -> Result<PathBuf> {
-    let stem = model_path
-        .file_stem()
-        .and_then(|value| value.to_str())
-        .ok_or_else(|| Error::Msg(format!("invalid model path: {}", model_path.display())))?;
-    Ok(model_path.with_file_name(format!("{stem}_config.json")))
-}
-
-fn active_device() -> Result<Device> {
-    #[cfg(feature = "cuda")]
-    {
-        if candle_core::utils::cuda_is_available() {
-            println!("CUDA feature enabled; using CUDA device 0.");
-            return Device::new_cuda(0);
-        }
-        eprintln!("CUDA feature enabled, but no CUDA device is available; falling back to CPU.");
-    }
-
-    println!("Using CPU.");
-    Ok(Device::Cpu)
-}
-
-fn create_output_dir(suffix: &str) -> Result<String> {
-    let timestamp = Utc::now().format("%Y%m%d_%H%M%S").to_string();
-    let output_dir = format!("outputs/{timestamp}_{suffix}");
-    std::fs::create_dir_all(&output_dir).map_err(Error::wrap)?;
-    println!("Output directory: {output_dir}");
-    Ok(output_dir)
-}
-
-fn run_training() -> Result<()> {
-    let output_dir = create_output_dir("GMT")?;
-    let device = active_device()?;
-
-    println!("Preparing {TRAINING_SAMPLES} training samples...");
-    let (distances, target, target_mean, target_std) =
-        generate_training_data(TRAINING_SAMPLES, &device)?;
-    let (model, mut optimizer, varmap) = create_model_and_optimizer(&device, LEARNING_RATE)?;
-    let loss_history = train_model(
-        &model,
-        &mut optimizer,
-        &distances,
-        &target,
-        target_mean,
-        target_std,
-        TRAINING_EPOCHS,
-        &device,
-    )?;
-
-    let model_path = format!("{output_dir}/trained_model.safetensors");
-    let config_path = format!("{output_dir}/trained_model_config.json");
-    save_model_with_config(&varmap, &model_path, &config_path, target_mean, target_std)?;
-
-    let (test_distances, cornell_values, nn_values, theory_points, nn_points) =
-        test_model(&model, target_mean, target_std, &device)?;
-    let (loss_file, potential_file) = plot_results(
-        &output_dir,
-        &loss_history,
-        &test_distances,
-        &cornell_values,
-        &nn_values,
-        &model,
-        target_mean,
-        target_std,
-        &device,
-    )?;
-
-    let scattering_params = ScatteringParams::default();
-    let electrons =
-        simulate_scattering(&model, &scattering_params, target_mean, target_std, &device)?;
-    let scattering_file = format!("{output_dir}/scattering.svg");
-    plot_scattering(&electrons, &scattering_file)?;
-
-    let electron_data = electrons
-        .iter()
-        .map(|electron| crate::gui::legacy_cornell::ElectronData {
-            trajectory: electron.trajectory.clone(),
-            impact_parameter: electron.impact_parameter,
-        })
-        .collect();
-    let app_data = AppData {
-        loss_history,
-        potential_theory: theory_points,
-        potential_nn: nn_points,
-        test_distances,
-        cornell_values,
-        nn_values,
-        loss_file,
-        potential_file,
-        scattering_file: Some(scattering_file),
-        electrons: Some(electron_data),
-    };
-    app_data.save_session(&output_dir).map_err(Error::wrap)?;
-
-    let interactive_context = InteractiveContext {
-        model: Arc::new(model),
-        device,
-        mean: target_mean,
-        std: target_std,
-        live_electrons: Vec::new(),
-        targets: get_proton_quarks(),
-    };
-    launch_gui(app_data, "Cornell Laboratuvarı", Some(interactive_context))
-}
-
-fn run_with_pretrained_model(model_path: &Path, config_path: &Path) -> Result<()> {
-    println!("Loading trained model...");
-    let device = active_device()?;
-    let (model, _varmap, target_mean, target_std) = load_model_with_config(
-        &model_path.to_string_lossy(),
-        &config_path.to_string_lossy(),
-        &device,
-    )?;
-    let output_dir = create_output_dir("LOADED")?;
-
-    let (test_distances, cornell_values, nn_values, theory_points, nn_points) =
-        test_model(&model, target_mean, target_std, &device)?;
-    let (loss_file, potential_file) = plot_results(
-        &output_dir,
-        &[],
-        &test_distances,
-        &cornell_values,
-        &nn_values,
-        &model,
-        target_mean,
-        target_std,
-        &device,
-    )?;
-
-    let scattering_params = ScatteringParams::default();
-    let electrons =
-        simulate_scattering(&model, &scattering_params, target_mean, target_std, &device)?;
-    let scattering_file = format!("{output_dir}/scattering.svg");
-    plot_scattering(&electrons, &scattering_file)?;
-
-    let electron_data = electrons
-        .iter()
-        .map(|electron| crate::gui::legacy_cornell::ElectronData {
-            trajectory: electron.trajectory.clone(),
-            impact_parameter: electron.impact_parameter,
-        })
-        .collect();
-    let app_data = AppData {
-        loss_history: Vec::new(),
-        potential_theory: theory_points,
-        potential_nn: nn_points,
-        test_distances,
-        cornell_values,
-        nn_values,
-        loss_file,
-        potential_file,
-        scattering_file: Some(scattering_file),
-        electrons: Some(electron_data),
-    };
-    app_data.save_session(&output_dir).map_err(Error::wrap)?;
-
-    let interactive_context = InteractiveContext {
-        model: Arc::new(model),
-        device,
-        mean: target_mean,
-        std: target_std,
-        live_electrons: Vec::new(),
-        targets: get_proton_quarks(),
-    };
-    launch_gui(
-        app_data,
-        "Cornell Laboratuvarı (Yüklenmiş Model)",
-        Some(interactive_context),
-    )
 }
 
 fn parse_generate_dis_events_command(
@@ -1056,11 +827,13 @@ fn run_generate_dis_events(arguments: GenerateDisEventsCliArgs) -> Result<()> {
     Ok(())
 }
 
-fn parse_validate_hera_command(args: &[String]) -> std::result::Result<ValidateHeraCliArgs, String> {
+fn parse_validate_hera_command(
+    args: &[String],
+) -> std::result::Result<ValidateHeraCliArgs, String> {
     if matches!(args, [flag] if flag == "-h" || flag == "--help") {
         return Err("validate-hera --dataset <DATASET_ID> --backend apfel --order NLO --pdf-set <SET> --output outputs/validation/".to_owned());
     }
-    
+
     let mut dataset = None;
     let mut backend = None;
     let mut order = None;
@@ -1068,7 +841,7 @@ fn parse_validate_hera_command(args: &[String]) -> std::result::Result<ValidateH
     let mut pdf_member = Some(0);
     let mut output = None;
     let mut index = 0;
-    
+
     while index < args.len() {
         let flag = args[index].as_str();
         if flag == "-h" || flag == "--help" {
@@ -1080,12 +853,12 @@ fn parse_validate_hera_command(args: &[String]) -> std::result::Result<ValidateH
         ) {
             return Err(format!("unknown validate-hera option: {flag}"));
         }
-        
+
         let value_text = args
             .get(index + 1)
             .filter(|value| !value.starts_with("--"))
             .ok_or_else(|| format!("{flag} requires a value"))?;
-            
+
         match flag {
             "--dataset" => dataset = Some(value_text.clone()),
             "--backend" => backend = Some(value_text.clone()),
@@ -1102,7 +875,7 @@ fn parse_validate_hera_command(args: &[String]) -> std::result::Result<ValidateH
         }
         index += 2;
     }
-    
+
     Ok(ValidateHeraCliArgs {
         dataset: dataset.ok_or_else(|| "missing required option: --dataset".to_owned())?,
         backend: backend.ok_or_else(|| "missing required option: --backend".to_owned())?,
@@ -1115,66 +888,99 @@ fn parse_validate_hera_command(args: &[String]) -> std::result::Result<ValidateH
 
 fn run_validate_hera(arguments: ValidateHeraCliArgs) -> Result<()> {
     if arguments.backend != "apfel" {
-        return Err(Error::Msg(format!("Unsupported backend: {}. Only 'apfel' is supported currently.", arguments.backend)));
+        return Err(Error::Msg(format!(
+            "Unsupported backend: {}. Only 'apfel' is supported currently.",
+            arguments.backend
+        )));
     }
     if arguments.order != "LO" && arguments.order != "NLO" {
-        return Err(Error::Msg(format!("Unsupported order: {}. Only 'LO' or 'NLO' is supported.", arguments.order)));
+        return Err(Error::Msg(format!(
+            "Unsupported order: {}. Only 'LO' or 'NLO' is supported.",
+            arguments.order
+        )));
     }
-    
+
     let compare_script = PathBuf::from("analysis/validation/compare.py");
     if !compare_script.is_file() {
-        return Err(Error::Msg("compare.py script not found under analysis/validation/compare.py".to_string()));
+        return Err(Error::Msg(
+            "compare.py script not found under analysis/validation/compare.py".to_string(),
+        ));
     }
-    
+
     println!("Launching HERA validation pipeline via Python...");
-    
+
     let mut cmd = std::process::Command::new("python3");
     cmd.arg(compare_script.to_string_lossy().as_ref())
-        .arg("--dataset").arg(&arguments.dataset)
-        .arg("--backend").arg(&arguments.backend)
-        .arg("--order").arg(&arguments.order)
-        .arg("--pdf-set").arg(&arguments.pdf_set)
-        .arg("--pdf-member").arg(arguments.pdf_member.to_string())
-        .arg("--output").arg(&arguments.output);
-        
-    let status = cmd.status().map_err(|err| {
-        Error::Msg(format!("Failed to execute python validation script: {err}"))
-    })?;
-    
+        .arg("--dataset")
+        .arg(&arguments.dataset)
+        .arg("--backend")
+        .arg(&arguments.backend)
+        .arg("--order")
+        .arg(&arguments.order)
+        .arg("--pdf-set")
+        .arg(&arguments.pdf_set)
+        .arg("--pdf-member")
+        .arg(arguments.pdf_member.to_string())
+        .arg("--output")
+        .arg(&arguments.output);
+
+    let status = cmd
+        .status()
+        .map_err(|err| Error::Msg(format!("Failed to execute python validation script: {err}")))?;
+
     if !status.success() {
         let code = status.code().unwrap_or(-1);
-        return Err(Error::Msg(format!("Validation pipeline failed with exit code: {code}")));
+        return Err(Error::Msg(format!(
+            "Validation pipeline failed with exit code: {code}"
+        )));
     }
-    
-    let summary_path = arguments.output.join(&arguments.dataset).join("summary.json");
+
+    let summary_path = arguments
+        .output
+        .join(&arguments.dataset)
+        .join("summary.json");
     if summary_path.is_file() {
         let summary_text = std::fs::read_to_string(&summary_path).map_err(Error::wrap)?;
         let summary: serde_json::Value = serde_json::from_str(&summary_text)
             .map_err(|err| Error::Msg(format!("failed to parse summary.json: {err}")))?;
-        
+
         println!("\n============================================================");
         println!("Validation Summary (summary.json)");
         println!("============================================================");
         println!("Number of Points:       {}", summary["number_of_points"]);
-        println!("Uncorrelated Chi2:      {:.3}", summary["chi_square_uncorrelated"]);
+        println!(
+            "Uncorrelated Chi2:      {:.3}",
+            summary["chi_square_uncorrelated"]
+        );
         println!("Full Covariance Chi2:   {:.3}", summary["chi_square"]);
         println!("Degrees of Freedom:     {}", summary["degrees_of_freedom"]);
-        println!("Chi2 / NDF:             {:.3}", summary["chi_square_per_ndf"]);
+        println!(
+            "Chi2 / NDF:             {:.3}",
+            summary["chi_square_per_ndf"]
+        );
         println!("Mean Ratio (D/T):       {:.4}", summary["mean_ratio"]);
-        println!("Max Absolute Pull:      {:.3}", summary["maximum_absolute_pull"]);
+        println!(
+            "Max Absolute Pull:      {:.3}",
+            summary["maximum_absolute_pull"]
+        );
         println!("============================================================\n");
     } else {
-        println!("Warning: summary.json not found under {}", summary_path.display());
+        println!(
+            "Warning: summary.json not found under {}",
+            summary_path.display()
+        );
     }
-    
+
     Ok(())
 }
 
-fn parse_theory_uncertainties_command(args: &[String]) -> std::result::Result<TheoryUncertaintiesCliArgs, String> {
+fn parse_theory_uncertainties_command(
+    args: &[String],
+) -> std::result::Result<TheoryUncertaintiesCliArgs, String> {
     if matches!(args, [flag] if flag == "-h" || flag == "--help") {
         return Err("theory-uncertainties --dataset <DATASET_ID> --backend apfel --order NLO --pdf-set <SET> [--pdf-uncertainty] [--scale-variations] --output outputs/uncertainties/".to_owned());
     }
-    
+
     let mut dataset = None;
     let mut backend = None;
     let mut order = None;
@@ -1184,7 +990,7 @@ fn parse_theory_uncertainties_command(args: &[String]) -> std::result::Result<Th
     let mut scale_variations = false;
     let mut output = None;
     let mut index = 0;
-    
+
     while index < args.len() {
         let flag = args[index].as_str();
         if flag == "-h" || flag == "--help" {
@@ -1206,12 +1012,12 @@ fn parse_theory_uncertainties_command(args: &[String]) -> std::result::Result<Th
         ) {
             return Err(format!("unknown theory-uncertainties option: {flag}"));
         }
-        
+
         let value_text = args
             .get(index + 1)
             .filter(|value| !value.starts_with("--"))
             .ok_or_else(|| format!("{flag} requires a value"))?;
-            
+
         match flag {
             "--dataset" => dataset = Some(value_text.clone()),
             "--backend" => backend = Some(value_text.clone()),
@@ -1228,7 +1034,7 @@ fn parse_theory_uncertainties_command(args: &[String]) -> std::result::Result<Th
         }
         index += 2;
     }
-    
+
     Ok(TheoryUncertaintiesCliArgs {
         dataset: dataset.ok_or_else(|| "missing required option: --dataset".to_owned())?,
         backend: backend.ok_or_else(|| "missing required option: --backend".to_owned())?,
@@ -1243,67 +1049,97 @@ fn parse_theory_uncertainties_command(args: &[String]) -> std::result::Result<Th
 
 fn run_theory_uncertainties(arguments: TheoryUncertaintiesCliArgs) -> Result<()> {
     if arguments.backend != "apfel" {
-        return Err(Error::Msg(format!("Unsupported backend: {}. Only 'apfel' is supported currently.", arguments.backend)));
+        return Err(Error::Msg(format!(
+            "Unsupported backend: {}. Only 'apfel' is supported currently.",
+            arguments.backend
+        )));
     }
     if arguments.order != "LO" && arguments.order != "NLO" {
-        return Err(Error::Msg(format!("Unsupported order: {}. Only 'LO' or 'NLO' is supported.", arguments.order)));
+        return Err(Error::Msg(format!(
+            "Unsupported order: {}. Only 'LO' or 'NLO' is supported.",
+            arguments.order
+        )));
     }
-    
+
     let compare_script = PathBuf::from("analysis/validation/compare_uncertainty.py");
     if !compare_script.is_file() {
-        return Err(Error::Msg("compare_uncertainty.py script not found".to_string()));
+        return Err(Error::Msg(
+            "compare_uncertainty.py script not found".to_string(),
+        ));
     }
-    
+
     println!("Launching theory uncertainties pipeline via Python...");
-    
+
     let mut cmd = std::process::Command::new("python3");
     cmd.arg(compare_script.to_string_lossy().as_ref())
-        .arg("--dataset").arg(&arguments.dataset)
-        .arg("--backend").arg(&arguments.backend)
-        .arg("--order").arg(&arguments.order)
-        .arg("--pdf-set").arg(&arguments.pdf_set)
-        .arg("--pdf-member").arg(arguments.pdf_member.to_string())
-        .arg("--output").arg(&arguments.output);
-        
+        .arg("--dataset")
+        .arg(&arguments.dataset)
+        .arg("--backend")
+        .arg(&arguments.backend)
+        .arg("--order")
+        .arg(&arguments.order)
+        .arg("--pdf-set")
+        .arg(&arguments.pdf_set)
+        .arg("--pdf-member")
+        .arg(arguments.pdf_member.to_string())
+        .arg("--output")
+        .arg(&arguments.output);
+
     if arguments.pdf_uncertainty {
         cmd.arg("--pdf-uncertainty");
     }
     if arguments.scale_variations {
         cmd.arg("--scale-variations");
     }
-        
-    let status = cmd.status().map_err(|err| {
-        Error::Msg(format!("Failed to execute python script: {err}"))
-    })?;
-    
+
+    let status = cmd
+        .status()
+        .map_err(|err| Error::Msg(format!("Failed to execute python script: {err}")))?;
+
     if !status.success() {
         let code = status.code().unwrap_or(-1);
-        return Err(Error::Msg(format!("Theory uncertainties pipeline failed with exit code: {code}")));
+        return Err(Error::Msg(format!(
+            "Theory uncertainties pipeline failed with exit code: {code}"
+        )));
     }
-    
-    let summary_path = arguments.output.join(&arguments.dataset).join("summary.json");
+
+    let summary_path = arguments
+        .output
+        .join(&arguments.dataset)
+        .join("summary.json");
     if summary_path.is_file() {
         let summary_text = std::fs::read_to_string(&summary_path).map_err(Error::wrap)?;
         let summary: serde_json::Value = serde_json::from_str(&summary_text)
             .map_err(|err| Error::Msg(format!("failed to parse summary.json: {err}")))?;
-        
+
         println!("\n============================================================");
         println!("Theory Uncertainties Summary (summary.json)");
         println!("============================================================");
         println!("Number of Points:       {}", summary["number_of_points"]);
         println!("Full Covariance Chi2:   {:.3}", summary["chi_square"]);
         println!("Degrees of Freedom:     {}", summary["degrees_of_freedom"]);
-        println!("Chi2 / NDF:             {:.3}", summary["chi_square_per_ndf"]);
+        println!(
+            "Chi2 / NDF:             {:.3}",
+            summary["chi_square_per_ndf"]
+        );
         println!("Mean Ratio (D/T):       {:.4}", summary["mean_ratio"]);
-        println!("Max Absolute Pull:      {:.3}", summary["maximum_absolute_pull"]);
+        println!(
+            "Max Absolute Pull:      {:.3}",
+            summary["maximum_absolute_pull"]
+        );
         println!("============================================================\n");
     } else {
-        println!("Warning: summary.json not found under {}", summary_path.display());
+        println!(
+            "Warning: summary.json not found under {}",
+            summary_path.display()
+        );
     }
-    
+
     Ok(())
 }
-fn parse_structure_functions_command(args: &[String]) -> std::result::Result<StructureFunctionsCliArgs, String> {
+fn parse_structure_functions_command(
+    args: &[String],
+) -> std::result::Result<StructureFunctionsCliArgs, String> {
     let mut backend = None;
     let mut x = None;
     let mut q2 = None;
@@ -1327,10 +1163,18 @@ fn parse_structure_functions_command(args: &[String]) -> std::result::Result<Str
             "--order" => order = Some(value_text.clone()),
             "--pdf-set" => pdf_set = Some(value_text.clone()),
             "--pdf-member" => {
-                pdf_member = Some(value_text.parse::<i32>().map_err(|_| format!("invalid integer for --pdf-member: {value_text}"))?);
+                pdf_member = Some(
+                    value_text
+                        .parse::<i32>()
+                        .map_err(|_| format!("invalid integer for --pdf-member: {value_text}"))?,
+                );
             }
-            "--mu-f-over-q" => mu_f_over_q = parse_finite_cross_number("--mu-f-over-q", value_text)?,
-            "--mu-r-over-q" => mu_r_over_q = parse_finite_cross_number("--mu-r-over-q", value_text)?,
+            "--mu-f-over-q" => {
+                mu_f_over_q = parse_finite_cross_number("--mu-f-over-q", value_text)?
+            }
+            "--mu-r-over-q" => {
+                mu_r_over_q = parse_finite_cross_number("--mu-r-over-q", value_text)?
+            }
             _ => return Err(format!("unknown option: {flag}")),
         }
         index += 2;
@@ -1349,19 +1193,17 @@ fn parse_structure_functions_command(args: &[String]) -> std::result::Result<Str
 }
 
 fn run_structure_functions(args: StructureFunctionsCliArgs) -> Result<()> {
-    use quark_sim::physics::structure_function_provider::{
-        StructureFunctionBackend, StructureFunctionProvider, StructureFunctionRequest,
-        PerturbativeOrder, StructureFunctionProcess, DisProjectile, DisTarget,
+    use parton_sbi::physics::apfel::ApfelStructureFunctionProvider;
+    use parton_sbi::physics::structure_function_provider::{
+        PerturbativeOrder, StructureFunctionProvider, StructureFunctionRequest,
     };
-    use quark_sim::physics::apfel::ApfelStructureFunctionProvider;
-    use quark_sim::physics::surrogate::SurrogateProvider;
-    use quark_sim::physics::LoPdfStructureFunctionProvider;
-    use quark_sim::physics::LhapdfProvider;
+    use parton_sbi::physics::surrogate::SurrogateProvider;
+    use parton_sbi::physics::LhapdfProvider;
+    use parton_sbi::physics::LoPdfStructureFunctionProvider;
     use std::str::FromStr;
 
-    let order = PerturbativeOrder::from_str(&args.order).map_err(|_| {
-        Error::Msg(format!("Invalid perturbative order: {}", args.order))
-    })?;
+    let order = PerturbativeOrder::from_str(&args.order)
+        .map_err(|_| Error::Msg(format!("Invalid perturbative order: {}", args.order)))?;
 
     let mut request = StructureFunctionRequest::electromagnetic_nc(
         args.x,
@@ -1380,19 +1222,20 @@ fn run_structure_functions(args: StructureFunctionsCliArgs) -> Result<()> {
         }
         "surrogate" => {
             let dir = std::env::current_dir().unwrap().join("models/surrogate_v1");
-            let provider = SurrogateProvider::load(&dir)
-                .map_err(|e| Error::Msg(e.to_string()))?;
+            let provider = SurrogateProvider::load(&dir).map_err(|e| Error::Msg(e.to_string()))?;
             provider.evaluate(&request)
         }
         "lo" => {
             let pdf = LhapdfProvider::new(&args.pdf_set, args.pdf_member)
                 .map_err(|e| Error::Msg(e.to_string()))?;
-            let provider = LoPdfStructureFunctionProvider::new(pdf, &args.pdf_set, args.pdf_member, 0, 0)
-                .map_err(|e| Error::Msg(e.to_string()))?;
+            let provider =
+                LoPdfStructureFunctionProvider::new(pdf, &args.pdf_set, args.pdf_member, 0, 0)
+                    .map_err(|e| Error::Msg(e.to_string()))?;
             provider.evaluate(&request)
         }
         other => return Err(Error::Msg(format!("Unsupported backend: {other}"))),
-    }.map_err(|e| Error::Msg(e.to_string()))?;
+    }
+    .map_err(|e| Error::Msg(e.to_string()))?;
 
     // Enrich with reproducibility metadata
     let mut enriched_result = result;
@@ -1407,7 +1250,9 @@ fn run_structure_functions(args: StructureFunctionsCliArgs) -> Result<()> {
     Ok(())
 }
 
-fn parse_train_surrogate_command(args: &[String]) -> std::result::Result<TrainSurrogateCliArgs, String> {
+fn parse_train_surrogate_command(
+    args: &[String],
+) -> std::result::Result<TrainSurrogateCliArgs, String> {
     let mut pdf_set = None;
     let mut pdf_member = None;
     let mut order = None;
@@ -1444,19 +1289,18 @@ fn parse_train_surrogate_command(args: &[String]) -> std::result::Result<TrainSu
 }
 
 fn run_train_surrogate(arguments: TrainSurrogateCliArgs) -> Result<()> {
-    use quark_sim::physics::apfel::ApfelStructureFunctionProvider;
-    use quark_sim::physics::structure_function_provider::PerturbativeOrder;
-    use quark_sim::physics::surrogate_training::{generate_dataset, train_and_save_surrogate};
+    use parton_sbi::physics::apfel::ApfelStructureFunctionProvider;
+    use parton_sbi::physics::structure_function_provider::PerturbativeOrder;
+    use parton_sbi::physics::surrogate_training::{generate_dataset, train_and_save_surrogate};
     use std::str::FromStr;
 
     println!("Starting surrogate dataset generation and training...");
-    
-    let order = PerturbativeOrder::from_str(&arguments.order).map_err(|_| {
-        Error::Msg(format!("Invalid perturbative order: {}", arguments.order))
-    })?;
+
+    let order = PerturbativeOrder::from_str(&arguments.order)
+        .map_err(|_| Error::Msg(format!("Invalid perturbative order: {}", arguments.order)))?;
 
     let provider = ApfelStructureFunctionProvider::new("physics-engine/build/apfel_cli");
-    
+
     let dataset = generate_dataset(&provider, &arguments.pdf_set, arguments.pdf_member, order)
         .map_err(|e| Error::Msg(e.to_string()))?;
 
@@ -1466,7 +1310,8 @@ fn run_train_surrogate(arguments: TrainSurrogateCliArgs) -> Result<()> {
         arguments.pdf_set,
         arguments.pdf_member,
         order,
-    ).map_err(|e| Error::Msg(e.to_string()))?;
+    )
+    .map_err(|e| Error::Msg(e.to_string()))?;
 
     Ok(())
 }
@@ -1481,6 +1326,7 @@ mod tests {
 
     #[test]
     fn help_is_explicit_and_does_not_select_training() {
+        assert_eq!(parse(&[]), Ok(Command::Help));
         assert_eq!(parse(&["--help"]), Ok(Command::Help));
         assert_eq!(parse(&["-h"]), Ok(Command::Help));
     }
@@ -1597,15 +1443,5 @@ mod tests {
         assert!(parse(&["dis-cross-section", "--pdf-member", "-1"]).is_err());
         assert!(parse(&["dis-cross-section", "--x", "0.01", "--x", "0.02"]).is_err());
         assert!(parse(&["dis-cross-section", "--q2", "--electron-energy", "27.5"]).is_err());
-    }
-
-    #[test]
-    fn model_config_is_a_sibling_with_config_suffix() -> Result<()> {
-        let model = Path::new("outputs/run/trained_model.safetensors");
-        assert_eq!(
-            model_config_path(model)?,
-            PathBuf::from("outputs/run/trained_model_config.json")
-        );
-        Ok(())
     }
 }

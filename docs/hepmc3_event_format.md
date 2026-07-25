@@ -1,6 +1,6 @@
 # HepMC3 event format and Rust extraction contract
 
-QuarkSim's PYTHIA 8 backend writes HepMC3 ASCII v3 with `HepMC3::WriterAscii` in
+PartonSBI's PYTHIA 8 backend writes HepMC3 ASCII v3 with `HepMC3::WriterAscii` in
 `physics-engine/src/pythia_dis_generator.cpp::run_generator`. The installed and
 observed writer version is HepMC3 3.3.0 (`HepMC::Version 3.03.00`). The
 authoritative Rust reader for this dialect is `src/physics/hepmc3.rs`.
@@ -79,7 +79,7 @@ They map directly to `HepMcPdfInfo`. The observed electron-proton records put
 the electron-side incoming ID and momentum fraction first and the proton-side
 parton second. Any future trailing fields are preserved in
 `additional_fields`. `event_scale` is independently retained as an optional
-event attribute; QuarkSim does not claim that it is separately both the
+event attribute; PartonSBI does not claim that it is separately both the
 factorization and renormalization scale.
 
 Hard incoming flavor and nominal `xf` values are generator truth needed for
@@ -104,7 +104,7 @@ remain absent.
 ## Streaming API
 
 ```rust
-use quark_sim::physics::HepMcReader;
+use parton_sbi::physics::HepMcReader;
 
 let mut reader = HepMcReader::open("outputs/dis_run/example/events.hepmc3")?;
 while let Some(event) = reader.next_event()? {
@@ -130,7 +130,7 @@ repository's HepMC3 3.3.0/PYTHIA 8 converter. It does not currently support:
 - HepMC2 ASCII, ROOT trees, protobuf, compressed input, or other historical
   dialects;
 - general run-info weight names, tools, or arbitrary run attributes embedded
-  before the event list (QuarkSim run provenance comes from JSON);
+  before the event list (PartonSBI run provenance comes from JSON);
 - semantic decoding of attributes other than the typed owner-0 fields above;
 - unescaping every general HepMC string escape sequence; or
 - unknown non-attribute record types inside an event.
@@ -138,7 +138,7 @@ repository's HepMC3 3.3.0/PYTHIA 8 converter. It does not currently support:
 Unsupported structural records are rejected clearly. Valid optional `A`
 attributes are tolerated and preserved. The real-format regression fixture at
 `tests/fixtures/hepmc3_real_minimal.hepmc3` contains two complete events copied
-from QuarkSim run `dis_run_20260717_141023` (event numbers 225 and 2743), with
+from a historical QuarkSim run `dis_run_20260717_141023` (event numbers 225 and 2743), with
 only the surrounding file reduced.
 
 ## Status conventions used by the viewer

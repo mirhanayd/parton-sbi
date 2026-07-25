@@ -1,9 +1,10 @@
-use quark_sim::physics::{HepMcError, HepMcReader, HepMcRunProvenance};
+use parton_sbi::physics::{HepMcError, HepMcReader, HepMcRunProvenance};
 use std::fs;
 use std::io::{BufReader, Cursor};
 use std::path::{Path, PathBuf};
 
 const FIXTURE: &str = "tests/fixtures/hepmc3_real_minimal.hepmc3";
+const SMOKE_FILE_ENV: &str = "PARTONSBI_HEPMC3_SMOKE_FILE";
 
 fn approx_eq(actual: f64, expected: f64, tolerance: f64) {
     assert!(
@@ -12,7 +13,7 @@ fn approx_eq(actual: f64, expected: f64, tolerance: f64) {
     );
 }
 
-fn first_fixture_event() -> quark_sim::physics::HepMcEvent {
+fn first_fixture_event() -> parton_sbi::physics::HepMcEvent {
     let mut reader = HepMcReader::open(FIXTURE).expect("fixture should open");
     reader
         .next_event()
@@ -141,6 +142,16 @@ fn iterator_streams_multiple_real_events() {
 }
 
 #[test]
+fn streaming_parser_accepts_configured_smoke_file() {
+    let path = std::env::var(SMOKE_FILE_ENV).unwrap_or_else(|_| FIXTURE.to_string());
+    let reader = HepMcReader::open(&path).expect("HepMC3 input should open");
+    let event_count = reader
+        .map(|event| event.expect("HepMC3 event should parse"))
+        .count();
+    assert!(event_count > 0, "HepMC3 input should contain an event");
+}
+
+#[test]
 fn all_event_weights_are_preserved() {
     let input = b"HepMC::Version 3.03.00\nE 7 1 2\nU GEV MM\nW 1.0 -0.5 2.25\nP 1 0 11 0 0 10 10 0 4\nP 2 1 11 1 0 9 9.1 0 1\nHepMC::Asciiv3-END_EVENT_LISTING\n";
     let mut reader = HepMcReader::new(BufReader::new(Cursor::new(input)));
@@ -187,7 +198,7 @@ fn run_provenance_loads_config_and_metadata_without_fabricating_missing_fields()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    let run_dir = std::env::temp_dir().join(format!("quark_sim_hepmc_fixture_{unique}"));
+    let run_dir = std::env::temp_dir().join(format!("parton_sbi_hepmc_fixture_{unique}"));
     fs::create_dir_all(&run_dir).unwrap();
     copy_fixture(
         "tests/fixtures/hepmc3_real_minimal_config.json",

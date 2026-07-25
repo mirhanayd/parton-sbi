@@ -1,4 +1,4 @@
-name: QuarkSim CI
+name: PartonSBI CI
 
 on:
   push:
@@ -20,7 +20,7 @@ jobs:
         with:
           components: rustfmt
       - name: Check Formatting
-        run: cargo fmt -- --check
+        run: cargo fmt --all -- --check
 
   clippy:
     name: Clippy
@@ -34,7 +34,7 @@ jobs:
         with:
           components: clippy
       - name: Run Clippy
-        run: bash -l -c "source scripts/apfelxx_env.sh && cargo clippy -- -D warnings"
+        run: bash -l -c "source scripts/pythia_env.sh && cargo clippy --workspace -- -D warnings"
 
   test_rust:
     name: Rust Unit Tests
@@ -46,7 +46,7 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
       - name: Run Rust Tests
-        run: bash -l -c "source scripts/apfelxx_env.sh && cargo test"
+        run: bash -l -c "source scripts/pythia_env.sh && cargo test --workspace"
 
   test_python:
     name: Python Analysis Tests
@@ -72,5 +72,5 @@ jobs:
         run: ./scripts/setup_all_wsl.sh
       - name: Run CTest
         run: |
-          cd physics-engine/build
-          ctest --output-on-failure
+          source scripts/pythia_env.sh
+          ctest --test-dir physics-engine/build --output-on-failure

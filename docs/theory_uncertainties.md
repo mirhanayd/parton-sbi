@@ -1,6 +1,6 @@
 # Systematic Theory Uncertainties in HERA DIS Validation
 
-This document describes the systematic theory uncertainty calculations implemented in the `neuronswq/quark_sim` HERA validation framework.
+This document describes the systematic theory uncertainty calculations implemented in the PartonSBI HERA validation framework.
 
 ---
 

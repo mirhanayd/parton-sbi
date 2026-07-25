@@ -1,10 +1,14 @@
 # Phase 0A: streaming HepMC3 extraction
 
+> Historical phase record: Phase 0A was completed before the imported QuarkSim
+> codebase was renamed to PartonSBI. GUI references below describe the state at
+> phase completion; the authoritative parser remains in the current library.
+
 ## Implementation summary
 
 Phase 0A replaces the GUI-only, shifted-column parser with a reusable physics
 module at `src/physics/hepmc3.rs`. It reads the real HepMC3 ASCII v3 syntax
-written by QuarkSim's PYTHIA backend, yields one event at a time, preserves all
+written by the then-named QuarkSim PYTHIA backend, yields one event at a time, preserves all
 numeric weights and relevant attributes, reconstructs explicit and compact
 implicit vertices, and reports contextual typed errors.
 
@@ -40,7 +44,7 @@ Modified:
 
 ## Public API
 
-The `quark_sim::physics` module exports:
+The current `parton_sbi::physics` module exports:
 
 - `HepMcReader<R: BufRead>` with `new`, `open`, `next_event`, `format_version`,
   and the standard `Iterator` implementation;
@@ -59,7 +63,7 @@ values use `f64`.
 ## Fixture origin
 
 `hepmc3_real_minimal.hepmc3` is a reduced, deterministic fixture from the
-existing QuarkSim-generated file:
+existing historical QuarkSim-generated file:
 
 ```text
 outputs/dis_run/dis_run_20260717_141023/events.hepmc3
@@ -116,7 +120,7 @@ because it is unrelated to Phase 0A.
 
 ## Remaining limitations
 
-- The parser is intentionally scoped to QuarkSim's HepMC3 ASCII v3 dialect;
+- The parser is intentionally scoped to the repository's HepMC3 ASCII v3 dialect;
   embedded general run-info blocks and other serialization formats are not yet
   represented.
 - The GUI still materializes its display projections for navigation, although

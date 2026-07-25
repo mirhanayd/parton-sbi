@@ -15,6 +15,7 @@ source "${_pythia_script_dir}/apfelxx_env.sh"
 
 export HEPMC3_ROOT="${HEPMC3_ROOT:-${_pythia_repo_root}/.external/hepmc3-3.3.0}"
 export PYTHIA8_ROOT="${PYTHIA8_ROOT:-${_pythia_repo_root}/.external/pythia-8.3.12}"
+export PYTHIA8DATA="${PYTHIA8DATA:-${PYTHIA8_ROOT}/share/Pythia8/xmldoc}"
 export PYTHIA_BACKEND_BIN="${PYTHIA_BACKEND_BIN:-${_pythia_repo_root}/physics-engine/build/pythia_dis_cli}"
 
 # Path updates

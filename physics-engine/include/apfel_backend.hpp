@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace neuronswquarks::apfel_backend
+namespace parton_sbi::apfel_backend
 {
   inline constexpr int SchemaVersion = 1;
 

@@ -12,10 +12,10 @@
 
 namespace
 {
-  using neuronswquarks::apfel_backend::BackendError;
-  using neuronswquarks::apfel_backend::PerturbativeOrder;
-  using neuronswquarks::apfel_backend::StructureFunctionRequest;
-  using neuronswquarks::apfel_backend::StructureFunctionResult;
+  using parton_sbi::apfel_backend::BackendError;
+  using parton_sbi::apfel_backend::PerturbativeOrder;
+  using parton_sbi::apfel_backend::StructureFunctionRequest;
+  using parton_sbi::apfel_backend::StructureFunctionResult;
 
   int failures = 0;
 
@@ -86,7 +86,7 @@ namespace
                                  {"mu_r_over_q", 1}};
     try
       {
-        static_cast<void>(neuronswquarks::apfel_backend::request_from_json(invalid_order));
+        static_cast<void>(parton_sbi::apfel_backend::request_from_json(invalid_order));
         check(false, "NNLO request should be rejected");
       }
     catch (BackendError const& error)
@@ -98,7 +98,7 @@ namespace
     invalid_order["mu_f_over_q"] = 0;
     try
       {
-        static_cast<void>(neuronswquarks::apfel_backend::request_from_json(invalid_order));
+        static_cast<void>(parton_sbi::apfel_backend::request_from_json(invalid_order));
         check(false, "zero factorization scale should be rejected");
       }
     catch (BackendError const& error)
@@ -108,7 +108,7 @@ namespace
       }
 
     const nlohmann::json failure =
-      neuronswquarks::apfel_backend::error_response("invalid_request",
+      parton_sbi::apfel_backend::error_response("invalid_request",
                                                     "bad request",
                                                     "fix it");
     check(failure.at("schema_version") == 1 && !failure.at("success").get<bool>(),
@@ -121,7 +121,7 @@ namespace
 
 int main()
 {
-  using neuronswquarks::apfel_backend::evaluate;
+  using parton_sbi::apfel_backend::evaluate;
 
   test_invalid_protocol_requests();
   if (failures != 0)
@@ -163,7 +163,7 @@ int main()
             "electromagnetic-mode metadata");
 
       const nlohmann::json serialized =
-        neuronswquarks::apfel_backend::success_response(lo);
+        parton_sbi::apfel_backend::success_response(lo);
       check(serialized.at("metadata").at("backend") == "apfel",
             "wire metadata identifies the APFEL backend");
       check(serialized.at("metadata").at("pdf_data_version")

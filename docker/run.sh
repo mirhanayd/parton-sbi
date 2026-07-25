@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Run the quark_sim Docker image
+# Run the PartonSBI Docker image
 
 set -Eeuo pipefail
 
-readonly IMAGE_NAME="quark_sim:latest"
+readonly IMAGE_NAME="parton-sbi:latest"
 
 echo "Running Docker image: ${IMAGE_NAME}..."
 if [ $# -eq 0 ]; then

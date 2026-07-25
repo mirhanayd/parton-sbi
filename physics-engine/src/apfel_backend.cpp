@@ -16,7 +16,7 @@
 #include <utility>
 #include <vector>
 
-namespace neuronswquarks::apfel_backend
+namespace parton_sbi::apfel_backend
 {
   namespace
   {

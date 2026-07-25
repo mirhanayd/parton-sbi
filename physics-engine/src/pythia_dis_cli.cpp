@@ -13,7 +13,7 @@
 
 int main(int argc, char* argv[])
 {
-  using namespace neuronswquarks::pythia_dis_generator;
+  using namespace parton_sbi::pythia_dis_generator;
 
   if (argc < 2)
     {

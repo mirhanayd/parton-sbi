@@ -9,12 +9,12 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
-use quark_sim::physics::{PerturbativeOrder, DEFAULT_APFEL_BACKEND_PATH};
+use parton_sbi::physics::{PerturbativeOrder, DEFAULT_APFEL_BACKEND_PATH};
 
 pub const STRUCTURE_FUNCTIONS_HELP: &str = r#"Inclusive neutral-current DIS structure functions
 
 Usage:
-  quark_sim structure-functions \
+  parton-sbi structure-functions \
       --backend <lo|apfel> \
       --x <BJORKEN_X> \
       --q2 <GEV2> \
@@ -34,7 +34,7 @@ An unavailable APFEL backend is an error; there is no fallback to direct LO.
 pub const VALIDATE_STRUCTURE_FUNCTIONS_HELP: &str = r#"Validate APFEL structure functions against the direct LO baseline
 
 Usage:
-  quark_sim validate-structure-functions \
+  parton-sbi validate-structure-functions \
       --pdf-set <INSTALLED_SET> \
       --output <DIRECTORY> \
       [--pdf-member <INDEX>] \

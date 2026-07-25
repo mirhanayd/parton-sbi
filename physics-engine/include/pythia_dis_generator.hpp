@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace neuronswquarks::pythia_dis_generator
+namespace parton_sbi::pythia_dis_generator
 {
   inline constexpr int SchemaVersion = 1;
 

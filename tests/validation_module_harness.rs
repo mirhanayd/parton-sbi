@@ -1,24 +1,27 @@
-extern crate quark_sim as quark_sim_real;
+extern crate parton_sbi as parton_sbi_real;
+
+mod structure_function_provider {
+    pub use parton_sbi_real::physics::structure_function_provider::*;
+}
+
+#[path = "../src/physics/structure_function_validation.rs"]
+pub mod structure_function_validation;
 
 mod physics {
-    pub mod structure_function_provider {
-        pub use quark_sim_real::physics::structure_function_provider::*;
-    }
-
-    pub use quark_sim_real::physics::{
+    pub use parton_sbi_real::physics::{
         PerturbativeOrder, StructureFunctionBackend, StructureFunctionMetadata,
         StructureFunctionProvider, StructureFunctionProviderError, StructureFunctionRequest,
         StructureFunctionResult,
     };
 
-    #[path = "/mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/neuronswq/quark_sim/src/physics/structure_function_validation.rs"]
-    pub mod structure_function_validation;
+    pub use crate::structure_function_validation;
 }
 
-#[path = "/mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/neuronswq/quark_sim/src/structure_function_cli.rs"]
+#[path = "../src/structure_function_cli.rs"]
+#[allow(dead_code)]
 mod structure_function_cli;
 
-#[path = "/mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/neuronswq/quark_sim/src/validation_artifacts.rs"]
+#[path = "../src/validation_artifacts.rs"]
 mod validation_artifacts;
 
 #[test]

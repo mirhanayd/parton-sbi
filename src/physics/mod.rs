@@ -1,7 +1,4 @@
-//! Physics utilities kept independent from the GUI and neural-network code.
-//!
-//! The legacy Cornell potential remains available at this module's root for
-//! compatibility. Relativistic DIS calculations live in dedicated modules.
+//! Physics utilities for the PartonSBI DIS research pipeline.
 
 pub mod apfel;
 pub mod constants;
@@ -9,9 +6,9 @@ pub mod cross_section;
 pub mod dis_kinematics;
 pub mod four_vector;
 pub mod hepmc3;
-pub mod legacy_cornell;
 pub mod pdf;
 pub mod structure_function_provider;
+pub mod structure_function_validation;
 pub mod structure_functions;
 pub mod surrogate;
 pub mod surrogate_training;
@@ -35,7 +32,6 @@ pub use hepmc3::{
     HepMcAttribute, HepMcError, HepMcEvent, HepMcParticle, HepMcPdfInfo, HepMcReader, HepMcRunCuts,
     HepMcRunProvenance, HepMcVertex,
 };
-pub use legacy_cornell::{cornell_potential, ALPHA_S, HBARC, STRING_TENSION};
 pub use pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,

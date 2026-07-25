@@ -1,112 +1,181 @@
-# QuarkSim: Inclusive DIS, Theory Uncertainties, and Surrogate ML
+# PartonSBI
 
-QuarkSim is an advanced command-line and graphical application for simulating inclusive Deep Inelastic Scattering (DIS), computing fully reproducible NLO theoretical predictions, and visualizing results. It leverages `APFEL++` for DGLAP evolution, `PYTHIA 8` for event generation, and `LHAPDF` for partonic densities, alongside an optional Neural Network Surrogate backend for extremely fast $x-Q^2$ interpolation.
+**PartonSBI: Simulation-Based Inference for Parton Structure from Event-Level Scattering Data**
 
-It strictly separates the scientific physics framework from a legacy educational demonstration of the Cornell potential.
+PartonSBI is a research repository for forward simulation, extraction, and validation of inclusive deep-inelastic electron-proton scattering data. Its current role is primarily a forward simulation and validation framework: it provides tested DIS kinematics, structure-function calculations, event generation, provenance, and event-level extraction on which later simulation-based inference studies may be built.
 
-## 🏗️ Architecture
+## Scientific objective
 
-```mermaid
-graph TD
-    UI[QuarkSim Rust UI]
-    CLI[Rust CLI]
-    Backend[Physics Backend enum]
-    APFEL[APFEL++ C++ Backend]
-    Surrogate[NN Surrogate Candle_core]
-    PYTHIA[PYTHIA 8 Event Gen]
-    Data[HEPData Validation Pipeline]
-    
-    UI --> Backend
-    CLI --> Backend
-    Backend --> APFEL
-    Backend --> Surrogate
-    APFEL --> PYTHIA
-    CLI --> Data
+The long-term inference unit is a pseudo-experiment containing a set of events,
+
+```text
+D = {event_1, ..., event_N},
 ```
 
-## 🚀 Installation
+with target posterior `p(theta_PDF | D)`. The objective is not to determine an instantaneous PDF for one proton from one event.
 
-### Option A: WSL 2 (Native Development)
-Run all Cargo commands from the `quark_sim` directory within WSL Ubuntu.
+## Implemented capabilities
 
-1. **Setup dependencies**:
+- exact finite-mass electron and proton beam four-vectors and inclusive DIS kinematics;
+- leading-order electromagnetic DIS structure functions and differential cross sections using LHAPDF;
+- LO/NLO photon-exchange structure functions through APFEL++;
+- the checked-in Candle pointwise APFEL++ surrogate in `models/surrogate_v1/` and its existing training command;
+- HERA comparison and theory-uncertainty analysis utilities;
+- PYTHIA 8 neutral-current electron-proton event generation with configurable seeds, cuts, showering, and hadronization;
+- HepMC3 event output plus JSON/CSV run artifacts;
+- typed streaming Rust extraction of real HepMC3 ASCII v3 records, including all weights, `GenPdfInfo`, typed attributes, particles, vertices, and run provenance; and
+- Rust, C++, and Python validation fixtures supporting these components.
+
+## Explicit non-capabilities
+
+PartonSBI does not currently implement PDF reweighting, continuous PDF parameterization, pseudo-experiment construction, amortized neural posterior inference, detector simulation, unfolding, or real-data PDF extraction. Phase 1A discrete LHAPDF-member reweighting closure and effective-sample-size validation have not yet been performed.
+
+Inclusive neutral-current electron-proton data do not provide unrestricted full-flavor PDF separation. The implemented channel primarily constrains charge-weighted quark-plus-antiquark combinations, with only indirect and correlated sensitivity to other directions. `GenPdfInfo`, hard flavor, and nominal PDF values are generator truth/provenance for validation and future reweighting studies; they are not detector-observed inputs and must not be exposed as default inference features.
+
+## Repository architecture
+
+```text
+src/physics/       Rust DIS, PDF, APFEL, surrogate, and HepMC3 library code
+src/main.rs        Headless scientific CLI
+physics-engine/    C++17 APFEL++ and PYTHIA 8 subprocess backends
+analysis/          HERA validation and uncertainty analysis
+models/            Validated checked-in structure-function surrogate artifact
+tests/             Rust integration tests and deterministic fixtures
+data/hepdata/      Source-controlled HERA reference data
+scripts/           WSL-native dependency setup and environment activation
+docs/              Scientific scope, audit, roadmap, and phase records
+docker/            Optional reproducible container build surface
+```
+
+The APFEL++ structure-function path and PYTHIA event path are separate. APFEL++ output is not injected into PYTHIA, and the pointwise surrogate is not an event generator or posterior model.
+
+## Native dependencies
+
+The supported local environment is WSL Ubuntu. The setup scripts install or configure:
+
+- a Rust 2021 toolchain;
+- CMake and a C++17 compiler;
+- LHAPDF 6.5.6 with CT18LO and CT18NLO;
+- APFEL++ 4.8.0;
+- PYTHIA 8.312;
+- HepMC3 3.3.0; and
+- Python 3 with the packages in `analysis/requirements.txt`.
+
+## WSL Ubuntu setup
+
+Run all local commands from the repository root in WSL Ubuntu:
+
 ```bash
 ./scripts/setup_all_wsl.sh
-```
-This script downloads and installs LHAPDF, HepMC3, Pythia 8, and APFEL++.
-
-2. **Activate the environment**:
-```bash
-source scripts/apfelxx_env.sh
+source scripts/pythia_env.sh
+python3 -m venv analysis/venv
+analysis/venv/bin/pip install -r analysis/requirements.txt
 ```
 
-3. **Build and Run**:
+Do not use native Windows Rust/C++ tools, PowerShell, CMD, Git Bash, or WSLg. The default workflow is headless.
+
+## Build
+
 ```bash
+source scripts/pythia_env.sh
+cmake -S physics-engine -B physics-engine/build
+cmake --build physics-engine/build
 cargo build --release
 ```
 
-### Option B: Docker (Clean-Room Reproducibility)
-QuarkSim ships with a multi-stage `Dockerfile` capturing the entire environment in a container.
-```bash
-./docker/build.sh
-./docker/run.sh
-```
+Running without a command prints help and exits normally:
 
-## 🔬 Quick Start & Examples
-
-### 1. HERA Validation Example
-Validates predictions against real, combined HERA experimental data, computing $\chi^2$, data/theory ratios, and residuals.
-```bash
-cargo run --release -- validate-hera --q2-min 3.5 --output-dir outputs/hera_validation
-```
-
-### 2. Systematic Theory Uncertainties
-Calculates and plots the 7-point $\mu_R, \mu_F$ scale variations and asymmetric LHAPDF eigenvector uncertainties.
-```bash
-cargo run --release -- theory-uncertainties --q2-min 3.5 --output-dir outputs/theory_bands
-```
-
-### 3. DIS Structure Function Evaluation
-Evaluate $F_2$, $F_L$, and $xF_3$ directly at an $(x, Q^2)$ point via `APFEL++`.
-```bash
-cargo run --release -- structure-functions --backend apfel --x 0.01 --q2 100 --order NLO --pdf-set CT18NLO
-```
-
-### 4. DIS Event Generation
-Generate DIS events mediated by PYTHIA 8, tracking the full output via HepMC3 format.
-```bash
-cargo run --release -- generate-events --electron-energy 27.5 --proton-energy 920.0 --events 100
-```
-
-### 5. Launch GUI
 ```bash
 cargo run --release
+cargo run --release -- --help
 ```
-Select "DIS Analysis" to enter the scientific UI.
 
-## 🧠 Scientific Limitations
-QuarkSim is designed for rigorous DIS validation at intermediate-to-high $Q^2$, but contains deliberate approximations:
-- Calculates up to NLO; missing NNLO terms.
-- Pure QCD virtual-photon exchange; $Z$-boson and $\gamma Z$ interference electroweak corrections are omitted.
-- Utilizes ZMVFNS (massless heavy quarks) leading to deviations near the charm threshold.
-- PYTHIA 8 provides purely phenomenological hadronization; **no GEANT4 detector simulation is included.**
-- See [docs/scientific_scope_and_limitations.md](docs/scientific_scope_and_limitations.md) for the complete scientific audit.
+## Tests
 
-## 🔒 Reproducibility Guarantee
-Every physics calculation and generated file injects a robust reproducibility metadata JSON footprint, tracking:
-- Target architecture and OS
-- Rustc toolchain version
-- Exact `APFEL++`, `LHAPDF`, `PYTHIA 8`, and `HepMC3` versions
-- Git Hash and Dirty working-tree status
-- Exact analytical physics configuration (Scales, Orders, Schemes)
-
-## 🧪 Testing
-We maintain rigorous deterministic CI regression testing:
 ```bash
-cargo test
-cargo clippy -- -D warnings
-cargo fmt -- --check
+source scripts/pythia_env.sh
+cargo fmt --all -- --check
+cargo check --workspace
+cargo test --workspace
+ctest --test-dir physics-engine/build --output-on-failure
+analysis/venv/bin/python -m pytest analysis/tests
+git diff --check
 ```
 
-## 📚 Legacy Educational Mode
-QuarkSim retains its original legacy demonstration visualizing simulated electron trajectories within the Cornell strong-force potential via an explicit `egui` state machine split. This is solely an educational tool and does not represent physical DIS cross-sections. Do not conflate the "Cornell Demo" tab with the "DIS Analysis" tab.
+The five LHAPDF installation tests are intentionally ignored by the normal Rust suite. Run them explicitly after environment activation:
+
+```bash
+cargo test --test lhapdf_integration -- --ignored
+```
+
+## Structure-function CLI
+
+Evaluate APFEL++ at one point:
+
+```bash
+cargo run --release -- structure-functions \
+  --backend apfel \
+  --x 0.01 \
+  --q2 100 \
+  --order NLO \
+  --pdf-set CT18NLO \
+  --pdf-member 0
+```
+
+The existing `lo` and `surrogate` backends use the same command contract. The surrogate is a bounded pointwise interpolator and rejects out-of-domain queries.
+
+## Event-generation CLI
+
+Generate a small reproducible run:
+
+```bash
+cargo run --release -- generate-dis-events \
+  --electron-energy 27.5 \
+  --proton-energy 920.0 \
+  --q2-min 10.0 \
+  --events 10 \
+  --seed 42 \
+  --pdf-set CT18LO \
+  --pdf-member 0 \
+  --output outputs/smoke
+```
+
+Each timestamped run contains `config.json`, `metadata.json`, `generator.log`, `events.hepmc3`, `inclusive_observables.csv`, and `summary.json`. Generated runs belong under ignored output directories and must not be committed.
+
+## HepMC3 extraction
+
+The authoritative streaming reader is `parton_sbi::physics::HepMcReader`:
+
+```rust
+use parton_sbi::physics::HepMcReader;
+
+let mut reader = HepMcReader::open("outputs/example/events.hepmc3")?;
+while let Some(event) = reader.next_event()? {
+    println!("event {}: {} particles", event.event_number, event.particles.len());
+}
+```
+
+Load adjacent run provenance separately with `HepMcRunProvenance::load`. The parser keeps event data streaming and does not fabricate absent metadata.
+
+## Current roadmap
+
+Completed groundwork includes the repository/scientific audit and Phase 0A typed streaming HepMC3 extraction. The single next phase is Phase 1A: discrete LHAPDF-member hard-PDF reweighting closure and ESS validation. Phase 1B, continuous parameterization, and neural inference are gated on a documented Phase 1A scientific decision. See `docs/CURRENT_PHASE.md` and `docs/AMORTIZED_INFERENCE_ROADMAP.md`.
+
+## Scientific limitations
+
+- The Rust LO and APFEL++ paths use a photon-exchange definition, while the current PYTHIA process enables gamma/Z exchange; these paths must not be treated as identical.
+- APFEL++ uses a zero-mass variable-flavor-number scheme, which limits threshold studies.
+- No target-mass, higher-twist, complete electroweak/radiative, or detector corrections are implemented.
+- PYTHIA showering and hadronization are phenomenological and model dependent.
+- The checked-in surrogate is an interpolation artifact, not simulation truth for inference.
+- Hard-PDF reweighting sufficiency, support, and shower dependence remain unvalidated.
+
+See `docs/scientific_scope_and_limitations.md` and the amortized-inference audit for the complete source-grounded limitations.
+
+## Reproducibility policy
+
+Seeds, PDF set/member, cuts, beam settings, native dependency versions, Git metadata where available, and run configuration must be retained with generated artifacts. Missing provenance remains explicitly absent. Generated event pools, caches, local environments, and analysis outputs are not source artifacts and must not be committed. Scientific approximations and negative closure/calibration results must be documented rather than hidden.
+
+## Citation
+
+No PartonSBI publication is claimed. A project citation will be added if and when an archival release or publication exists.

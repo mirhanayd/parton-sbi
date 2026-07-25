@@ -14,8 +14,8 @@ use serde::{Deserialize, Serialize};
 
 use super::structure_function_provider::{
     PerturbativeOrder, StructureFunctionBackend, StructureFunctionMetadata,
-    StructureFunctionProvider, StructureFunctionProviderError,
-    StructureFunctionRequest, StructureFunctionResult, PHOTON_EXCHANGE_MODE,
+    StructureFunctionProvider, StructureFunctionProviderError, StructureFunctionRequest,
+    StructureFunctionResult, PHOTON_EXCHANGE_MODE,
 };
 
 /// Name of the scheme used by the surrogate.

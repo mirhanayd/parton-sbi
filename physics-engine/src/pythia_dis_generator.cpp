@@ -34,7 +34,7 @@
 #define BUILD_TIMESTAMP_STR "unknown"
 #endif
 
-namespace neuronswquarks::pythia_dis_generator
+namespace parton_sbi::pythia_dis_generator
 {
   DisEventRequest request_from_json(nlohmann::json const& input)
   {

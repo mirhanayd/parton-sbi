@@ -1,5 +1,9 @@
 # Amortized PDF inference: repository and scientific audit
 
+> Historical provenance: this audit records the pre-cleanup QuarkSim source
+> state and its original paths. Active PartonSBI commands and package metadata
+> are documented in the repository README and `docs/CURRENT_PHASE.md`.
+
 Audit date: 2026-07-25  
 Repository root: `neuronswq/`  
 Active Rust package: `neuronswq/quark_sim/`  
@@ -346,4 +350,3 @@ analysis/venv/bin/python -m pytest analysis/tests
 ```
 
 Read-only inventory/source commands included `git status --short`, `git ls-files`, `git ls-files --others --exclude-standard`, `find` with generated-tree exclusions, `wc -l`, `sed -n`, `grep -RInE`, `du -h`, and inspection of installed CT18 metadata. `rg` was attempted first as the preferred search tool but is not installed in the WSL distribution (`bash: rg: command not found`), so `grep` was used. The first unrestricted `find` timed out because it descended into large generated dependency/build trees; the subsequent source inventory explicitly pruned those trees.
-

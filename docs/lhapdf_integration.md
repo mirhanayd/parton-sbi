@@ -10,7 +10,7 @@ currently provide an `lhapdf` or `liblhapdf-dev` candidate in its standard
 repositories, so the project installs the official LHAPDF 6.5.6 release into a
 user-owned prefix and does not require `sudo`.
 
-From the `quark_sim` directory:
+From the PartonSBI repository root:
 
 ```bash
 bash scripts/setup_lhapdf_wsl.sh

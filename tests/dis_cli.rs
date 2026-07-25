@@ -1,7 +1,7 @@
 use std::process::Command;
 
 fn binary() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_quark_sim"))
+    Command::new(env!("CARGO_BIN_EXE_parton-sbi"))
 }
 
 #[test]
@@ -18,6 +18,17 @@ fn subcommand_help_has_no_training_or_gui_side_effects() {
     assert!(!stdout.contains("Using CPU"));
     assert!(!stdout.contains("Output directory"));
     assert!(!stdout.contains("training samples"));
+}
+
+#[test]
+fn no_arguments_prints_headless_help() {
+    let output = binary().output().expect("PartonSBI should start");
+    let stdout = String::from_utf8(output.stdout).expect("stdout should be UTF-8");
+
+    assert!(output.status.success());
+    assert!(stdout.contains("PartonSBI"));
+    assert!(stdout.contains("structure-functions"));
+    assert!(!stdout.contains("GUI"));
 }
 
 #[test]

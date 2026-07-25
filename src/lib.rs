@@ -1,3 +1,3 @@
-//! Reusable library components for the Cornell visualization and DIS tools.
+//! Reusable DIS simulation, validation, and event-extraction infrastructure.
 
 pub mod physics;

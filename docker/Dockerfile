@@ -15,9 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libssl-dev \
     libfontconfig1-dev \
     libfontconfig1 \
-    libxcb-shape0-dev \
-    libxcb-xfixes0-dev \
-    libxkbcommon-dev \
     python3 \
     python3-pip \
     python3-venv \
@@ -34,11 +31,11 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --de
 # Create a non-root user for building
 RUN useradd -ms /bin/bash quark && echo "quark:quark" | chpasswd && adduser quark sudo
 USER quark
-WORKDIR /home/quark/quark_sim
+WORKDIR /home/quark/parton-sbi
 
 # Create Python virtual environment
-RUN python3 -m venv /home/quark/quark_sim/.venv
-ENV PATH="/home/quark/quark_sim/.venv/bin:$PATH"
+RUN python3 -m venv /home/quark/parton-sbi/.venv
+ENV PATH="/home/quark/parton-sbi/.venv/bin:$PATH"
 
 # Install Python requirements
 COPY --chown=quark:quark analysis/requirements.txt analysis/
@@ -52,8 +49,8 @@ RUN ./scripts/setup_all_wsl.sh
 COPY --chown=quark:quark . .
 
 # Build the Rust application (using the apfelxx_env.sh variables)
-RUN bash -l -c "source scripts/apfelxx_env.sh && cargo build --release"
+RUN bash -l -c "source scripts/pythia_env.sh && cargo build --release"
 
 # Default entrypoint activates the environment
-ENTRYPOINT ["bash", "-l", "-c", "source scripts/apfelxx_env.sh && exec \"$@\"", "--"]
+ENTRYPOINT ["bash", "-l", "-c", "source scripts/pythia_env.sh && exec \"$@\"", "--"]
 CMD ["cargo", "run", "--release", "--", "--help"]

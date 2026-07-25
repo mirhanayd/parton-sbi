@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(neuronswquarks_apfel_backend VERSION 1.0.0 LANGUAGES CXX)
+if(POLICY CMP0144)
+  cmake_policy(SET CMP0144 NEW)
+endif()
+
+project(parton_sbi_physics_engine VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,6 +52,11 @@ execute_process(
 if(NOT APFELXX_INCDIR_RESULT EQUAL 0 OR NOT APFELXX_LIBDIR_RESULT EQUAL 0)
   message(FATAL_ERROR "apfelxx-config could not report include/library directories")
 endif()
+if(APFELXX_ROOT AND
+   (NOT IS_DIRECTORY "${APFELXX_INCDIR}" OR NOT IS_DIRECTORY "${APFELXX_LIBDIR}"))
+  set(APFELXX_INCDIR "${APFELXX_ROOT}/include")
+  set(APFELXX_LIBDIR "${APFELXX_ROOT}/lib")
+endif()
 
 find_path(APFELXX_INCLUDE_DIR
   NAMES apfel/apfelxx.h
@@ -67,7 +76,7 @@ find_path(NLOHMANN_JSON_INCLUDE_DIR_RESOLVED
   REQUIRED)
 
 add_library(apfel_backend STATIC src/apfel_backend.cpp)
-add_library(neuronswquarks::apfel_backend ALIAS apfel_backend)
+add_library(parton_sbi::apfel_backend ALIAS apfel_backend)
 target_include_directories(apfel_backend
   PUBLIC
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
@@ -136,6 +145,18 @@ execute_process(
   OUTPUT_VARIABLE PYTHIA8_LIBDIR
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+if(NOT PYTHIA8_INCDIR_RESULT EQUAL 0 OR
+   NOT PYTHIA8_LIBDIR_RESULT EQUAL 0 OR
+   NOT IS_DIRECTORY "${PYTHIA8_INCDIR}" OR
+   NOT IS_DIRECTORY "${PYTHIA8_LIBDIR}")
+  if(NOT PYTHIA8_ROOT)
+    message(FATAL_ERROR
+      "pythia8-config is not relocatable and PYTHIA8_ROOT is unset")
+  endif()
+  set(PYTHIA8_INCDIR "${PYTHIA8_ROOT}/include")
+  set(PYTHIA8_LIBDIR "${PYTHIA8_ROOT}/lib")
+endif()
+
 find_path(PYTHIA8_INCLUDE_DIR
   NAMES Pythia8/Pythia.h
   HINTS "${PYTHIA8_INCDIR}"
@@ -148,8 +169,15 @@ find_library(PYTHIA8_LIBRARY
 
 execute_process(
   COMMAND "${PYTHIA8_CONFIG_EXECUTABLE}" --version
+  RESULT_VARIABLE PYTHIA8_VERSION_RESULT
   OUTPUT_VARIABLE PYTHIA8_VERSION
   OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(NOT PYTHIA8_VERSION_RESULT EQUAL 0)
+  file(STRINGS "${PYTHIA8_INCLUDE_DIR}/Pythia8/Pythia.h"
+    PYTHIA8_VERSION_DEFINE REGEX "^#define PYTHIA_VERSION ")
+  string(REGEX REPLACE "^#define PYTHIA_VERSION +" ""
+    PYTHIA8_VERSION "${PYTHIA8_VERSION_DEFINE}")
+endif()
 
 find_program(HEPMC3_CONFIG_EXECUTABLE
   NAMES hepmc3-config HepMC3-config
@@ -221,4 +249,3 @@ message(STATUS "APFEL++ library: ${APFELXX_LIBRARY}")
 message(STATUS "LHAPDF version: ${LHAPDF_VERSION}")
 message(STATUS "PYTHIA 8 version: ${PYTHIA8_VERSION}")
 message(STATUS "HepMC3 version: ${HEPMC3_VERSION}")
-

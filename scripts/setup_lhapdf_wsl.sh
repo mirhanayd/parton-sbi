@@ -282,7 +282,7 @@ tmp_root="$(readlink -f -- "${TMPDIR:-/tmp}")" ||
 [[ -d "${tmp_root}" && -w "${tmp_root}" ]] ||
     die "temporary directory is not writable: ${tmp_root}"
 
-work_dir="$(mktemp -d "${tmp_root}/neuronswq-lhapdf.XXXXXXXX")"
+work_dir="$(mktemp -d "${tmp_root}/partonsbi-lhapdf.XXXXXXXX")"
 work_dir="$(readlink -f -- "${work_dir}")" ||
     die "failed to resolve the temporary work directory"
 cleanup() {
@@ -292,7 +292,7 @@ cleanup() {
     work_parent="$(dirname -- "${work_dir}")"
     work_name="$(basename -- "${work_dir}")"
     if [[ "${work_parent}" == "${tmp_root}" &&
-        "${work_name}" == neuronswq-lhapdf.* &&
+        "${work_name}" == partonsbi-lhapdf.* &&
         -d "${work_dir}" ]]; then
         rm -rf -- "${work_dir}"
     else

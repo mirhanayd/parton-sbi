@@ -5,8 +5,8 @@
 //!
 //! `cargo test --test lhapdf_integration -- --ignored`
 
-use quark_sim::physics::pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
-use quark_sim::physics::structure_functions::electromagnetic_f2_from_xf;
+use parton_sbi::physics::pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
+use parton_sbi::physics::structure_functions::electromagnetic_f2_from_xf;
 
 const PINNED_SET: &str = "CT18LO";
 const PINNED_MEMBER: i32 = 0;
@@ -58,7 +58,7 @@ fn pinned_set_member_and_grid_metadata_are_available() {
 #[test]
 #[ignore = "requires a working LHAPDF 6 installation in WSL"]
 fn unavailable_set_returns_a_typed_error() {
-    let error = LhapdfProvider::new("__quark_sim_set_that_does_not_exist__", 0).unwrap_err();
+    let error = LhapdfProvider::new("__parton_sbi_set_that_does_not_exist__", 0).unwrap_err();
 
     assert!(matches!(error, PdfError::SetUnavailable { .. }));
 }

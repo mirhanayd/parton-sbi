@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Orchestrates the setup of all external physics dependencies for quark_sim.
+# Orchestrates the setup of all external physics dependencies for PartonSBI.
 # Ensures the exact order of operations: LHAPDF -> HepMC3 -> Pythia 8 -> APFEL++ & backend.
 
 set -Eeuo pipefail
@@ -23,7 +23,7 @@ log_error() {
 
 cd "${REPO_ROOT}"
 
-log_info "Starting full WSL setup for quark_sim environment..."
+log_info "Starting full WSL setup for PartonSBI environment..."
 
 # 1. LHAPDF
 log_info "Step 1/4: Installing LHAPDF..."
@@ -43,4 +43,4 @@ log_info "Step 4/4: Installing APFEL++ and building physics backend..."
 
 log_info "All external physics dependencies successfully installed!"
 log_info "Run the following to initialize the active environment:"
-log_info "  source \"${SCRIPT_DIR}/apfelxx_env.sh\""
+log_info "  source \"${SCRIPT_DIR}/pythia_env.sh\""

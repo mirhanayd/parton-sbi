@@ -8,7 +8,7 @@
 
 int main()
 {
-  using namespace neuronswquarks::apfel_backend;
+  using namespace parton_sbi::apfel_backend;
 
   const std::string input{std::istreambuf_iterator<char>{std::cin},
                           std::istreambuf_iterator<char>{}};

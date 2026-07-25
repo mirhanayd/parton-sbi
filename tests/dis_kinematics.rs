@@ -1,6 +1,6 @@
 //! Public-API regression fixture for the DIS kinematics core.
 
-use quark_sim::physics::{
+use parton_sbi::physics::{
     collider_beams, compute_dis_kinematics, scattered_electron, ELECTRON_MASS_GEV, PROTON_MASS_GEV,
 };
 

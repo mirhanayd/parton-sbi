@@ -1,4 +1,4 @@
-//! Streaming extraction of QuarkSim's HepMC3 ASCII v3 event records.
+//! Streaming extraction of PartonSBI's HepMC3 ASCII v3 event records.
 //!
 //! The supported particle layout is the one emitted by HepMC3 3.3.0:
 //! `P id parent_object pdg_id px py pz energy mass status`. A positive
@@ -200,7 +200,7 @@ pub struct HepMcRunProvenance {
 }
 
 impl HepMcRunProvenance {
-    /// Load `config.json` and `metadata.json` from a QuarkSim run directory.
+    /// Load `config.json` and `metadata.json` from a PartonSBI run directory.
     pub fn load(run_directory: impl AsRef<Path>) -> Result<Self, HepMcError> {
         let source_run_directory = run_directory.as_ref().to_path_buf();
         let config_path = source_run_directory.join("config.json");

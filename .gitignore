@@ -22,3 +22,13 @@
 # Output dosyaları (isteğe bağlı - kaydedilmesini istiyorsanız kaldırın)
 /outputs/
 /analysis/venv/
+/analysis/outputs/
+/data/cache/
+/closure-study-outputs/
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.env
+.env.*
+.venv/
