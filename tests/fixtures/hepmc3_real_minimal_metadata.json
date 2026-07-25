@@ -1,0 +1,24 @@
+{
+  "accepted_event_count": 10000,
+  "build_timestamp": "2026-07-17T12:51:53Z",
+  "cuts": {
+    "q2_max_gev2": 10000.0,
+    "q2_min_gev2": 3.5,
+    "x_max": 0.8,
+    "x_min": 0.0001,
+    "y_max": 0.95,
+    "y_min": 0.01
+  },
+  "electron_energy_gev": 27.5,
+  "git_commit": "8db5ed31df7a89ae343c9ccd0d47d4b42e6da86e",
+  "hadronization_state": true,
+  "hepmc3_version": "3.03.00",
+  "lhapdf_version": "6.5.6",
+  "parton_shower_state": true,
+  "pdf_member": 0,
+  "pdf_set": "CT18NLO",
+  "proton_energy_gev": 920.0,
+  "pythia_version": "8.312",
+  "random_seed": 204505473,
+  "requested_event_count": 10000
+}

@@ -1,0 +1,24 @@
+# Rust derleme dosyaları
+/target/
+/.external/
+/physics-engine/build/
+**/*.rs.bk
+*.pdb
+
+# Cargo lock (binary projeler için isteğe bağlı)
+# Cargo.lock
+
+# IDE / Editor dosyaları
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup dosyaları
+*.backup
+*.bak
+
+# Output dosyaları (isteğe bağlı - kaydedilmesini istiyorsanız kaldırın)
+/outputs/
+/analysis/venv/

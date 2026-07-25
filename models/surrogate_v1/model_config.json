@@ -1,0 +1,38 @@
+{
+  "source_backend": "apfel",
+  "pdf_set": "CT18NLO",
+  "pdf_member": 0,
+  "order": "NLO",
+  "x_min": 0.00001,
+  "x_max": 0.8000000000000004,
+  "q2_min": 3.5000000000000004,
+  "q2_max": 10000.0,
+  "mu_f_ratio_min": 0.5,
+  "mu_f_ratio_max": 2.0,
+  "mu_r_ratio_min": 0.5,
+  "mu_r_ratio_max": 2.0,
+  "input_mean": [
+    -2.6360102,
+    2.5435715,
+    1.1607143,
+    1.1642857
+  ],
+  "input_std": [
+    1.7374796,
+    1.1126167,
+    0.61315304,
+    0.619455
+  ],
+  "target_mean": [
+    -0.19191584,
+    0.64426714,
+    0.0
+  ],
+  "target_std": [
+    1.1822673,
+    0.8961562,
+    0.000001
+  ],
+  "validation_mse": 0.018635651,
+  "test_max_rel_error": 1.1251794
+}
