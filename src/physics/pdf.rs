@@ -92,6 +92,9 @@ pub enum PdfError {
         minimum: f64,
         maximum: f64,
     },
+    UnsupportedFlavor {
+        pdg_id: i32,
+    },
     BackendEvaluationFailed {
         pdg_id: i32,
         x: f64,
@@ -166,6 +169,9 @@ impl fmt::Display for PdfError {
                 formatter,
                 "Q^2={q2} GeV^2 is outside the PDF grid [{minimum}, {maximum}] GeV^2"
             ),
+            Self::UnsupportedFlavor { pdg_id } => {
+                write!(formatter, "PDF grid does not provide PDG flavor {pdg_id}")
+            }
             Self::BackendEvaluationFailed { pdg_id, x, q2 } => write!(
                 formatter,
                 "LHAPDF failed while evaluating PDG flavor {pdg_id} at x={x}, Q^2={q2} GeV^2"
@@ -191,6 +197,7 @@ pub struct LhapdfProvider {
     pdf: Pdf,
     set_name: String,
     member: i32,
+    member_count: usize,
     data_version: usize,
     order_qcd: i32,
     available_flavors: Vec<i32>,
@@ -292,6 +299,7 @@ impl LhapdfProvider {
             pdf,
             set_name: set_name.to_owned(),
             member,
+            member_count,
             data_version,
             order_qcd,
             available_flavors,
@@ -310,6 +318,12 @@ impl LhapdfProvider {
     #[must_use]
     pub const fn member(&self) -> i32 {
         self.member
+    }
+
+    /// Number of members declared by the installed PDF set.
+    #[must_use]
+    pub const fn member_count(&self) -> usize {
+        self.member_count
     }
 
     /// Version of the installed grid data, as declared by the PDF set.
@@ -338,6 +352,41 @@ impl LhapdfProvider {
     #[must_use]
     pub const fn q2_range(&self) -> (f64, f64) {
         (self.q2_minimum, self.q2_maximum)
+    }
+
+    /// Evaluate the LHAPDF quantity `x f(flavor, x, Q)` at a scale `Q` in GeV.
+    ///
+    /// The managed wrapper exposes LHAPDF's `xfxQ2` call, so this helper
+    /// squares the physical scale exactly once and returns `x f`, not `f`.
+    /// Unlike the inclusive-density adapter, an unavailable flavor is an
+    /// error: PDF reweighting must never silently replace it with zero.
+    pub fn xfx_at_scale(&self, pdg_id: i32, x: f64, scale_gev: f64) -> Result<f64, PdfError> {
+        if !scale_gev.is_finite() || scale_gev <= 0.0 {
+            return Err(PdfError::InvalidInput {
+                name: "Q",
+                value: scale_gev,
+                requirement: "finite and positive",
+            });
+        }
+        let q2 = scale_gev * scale_gev;
+        if !q2.is_finite() {
+            return Err(PdfError::InvalidInput {
+                name: "Q^2",
+                value: q2,
+                requirement: "finite and positive",
+            });
+        }
+        self.validate_point(x, q2)?;
+        if !self.available_flavors.contains(&pdg_id) {
+            return Err(PdfError::UnsupportedFlavor { pdg_id });
+        }
+
+        let value = catch_unwind(AssertUnwindSafe(|| self.pdf.xfx_q2(pdg_id, x, q2)))
+            .map_err(|_| PdfError::BackendEvaluationFailed { pdg_id, x, q2 })?;
+        if !value.is_finite() {
+            return Err(PdfError::NonFiniteDensity { pdg_id, value });
+        }
+        Ok(value)
     }
 
     fn validate_point(&self, x: f64, q2: f64) -> Result<(), PdfError> {

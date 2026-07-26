@@ -289,6 +289,9 @@ namespace parton_sbi::pythia_dis_generator
     // Main Event Loop
     int accepted_count = 0;
     int attempted_count = 0;
+    double selected_weight_sum = 0.0;
+    double selected_weight_squared_sum = 0.0;
+    int selected_negative_weight_count = 0;
 
     while (accepted_count < request.number_of_events)
       {
@@ -430,6 +433,13 @@ namespace parton_sbi::pythia_dis_generator
           }
 
         // 8. Event Accepted! Write to HepMC3 file
+        const double event_weight = pythia.info.weight();
+        selected_weight_sum += event_weight;
+        selected_weight_squared_sum += event_weight * event_weight;
+        if (event_weight < 0.0)
+          {
+            selected_negative_weight_count++;
+          }
         HepMC3::GenEvent ge(HepMC3::Units::GEV, HepMC3::Units::MM);
         toHepMC.fill_next_event(pythia, &ge);
         ascii_io.write_event(ge);
@@ -441,7 +451,7 @@ namespace parton_sbi::pythia_dis_generator
         double w2_mismatch = std::abs(w2_reco - w2_true);
 
         csv_file << accepted_count << ","
-                 << pythia.info.weight() << ","
+                 << event_weight << ","
                  << q2_true << ","
                  << x_true << ","
                  << y_true << ","
@@ -498,6 +508,10 @@ namespace parton_sbi::pythia_dis_generator
         meta["build_timestamp"] = BUILD_TIMESTAMP_STR;
         meta["parton_shower_state"] = request.parton_shower;
         meta["hadronization_state"] = request.hadronization;
+        meta["event_schema_version"] = 1;
+        meta["electroweak_process"] = "gamma_z_t_channel";
+        meta["event_selection"] = "post_pythia_reconstructed_dis_cuts_and_conservation";
+        meta["space_shower_dipole_recoil"] = true;
         metadata_file << meta.dump(2) << "\n";
         metadata_file.close();
       }
@@ -519,6 +533,23 @@ namespace parton_sbi::pythia_dis_generator
         summary["max_energy_mismatch_gev"] = stats.max_energy_mismatch_gev;
         summary["momentum_conservation_tolerance_gev"] = stats.momentum_conservation_tolerance_gev;
         summary["failure_reasons"] = failure_reasons;
+        const double pythia_weight_sum = pythia.info.weightSum();
+        const double sigma_gen_mb = pythia.info.sigmaGen();
+        const double sigma_err_mb = pythia.info.sigmaErr();
+        const double selected_fraction = pythia_weight_sum != 0.0
+          ? selected_weight_sum / pythia_weight_sum
+          : 0.0;
+        summary["event_weight_semantics"] = "PYTHIA Info::weight for the accepted event; weights are not clipped";
+        summary["pythia_weight_sum"] = pythia_weight_sum;
+        summary["selected_weight_sum"] = selected_weight_sum;
+        summary["selected_weight_squared_sum"] = selected_weight_squared_sum;
+        summary["selected_negative_weight_count"] = selected_negative_weight_count;
+        summary["sigma_gen_mb"] = sigma_gen_mb;
+        summary["sigma_err_mb"] = sigma_err_mb;
+        summary["selected_weight_fraction"] = selected_fraction;
+        summary["selected_cross_section_mb"] = sigma_gen_mb * selected_fraction;
+        summary["selected_cross_section_pb"] = sigma_gen_mb * selected_fraction * 1.0e9;
+        summary["rate_normalization_method"] = "sigmaGen * selected_weight_sum / Info::weightSum";
         summary_file << summary.dump(2) << "\n";
         summary_file.close();
       }

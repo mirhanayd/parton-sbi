@@ -176,6 +176,10 @@ pub struct HepMcRunProvenance {
     pub metadata_path: PathBuf,
     pub schema_version: Option<i64>,
     pub process: Option<String>,
+    pub event_schema_version: Option<i64>,
+    pub electroweak_process: Option<String>,
+    pub event_selection: Option<String>,
+    pub space_shower_dipole_recoil: Option<bool>,
     pub beam_particle_id_1: Option<i32>,
     pub beam_particle_id_2: Option<i32>,
     pub electron_energy_gev: Option<f64>,
@@ -197,6 +201,77 @@ pub struct HepMcRunProvenance {
     pub git_commit: Option<String>,
     pub git_dirty: Option<bool>,
     pub build_timestamp: Option<String>,
+}
+
+/// Final run-level generation and rate-normalization statistics.
+///
+/// `GenCrossSection` inside an event is only PYTHIA's running estimate at that
+/// point in generation. These fields come from the final `summary.json` and
+/// therefore provide the authoritative final estimate for newly generated
+/// Phase 1A runs.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HepMcRunSummary {
+    pub source_summary_path: PathBuf,
+    pub requested_events: Option<u64>,
+    pub attempted_events: Option<u64>,
+    pub accepted_events: Option<u64>,
+    pub failed_events: Option<u64>,
+    pub vetoed_cuts_events: Option<u64>,
+    pub vetoed_conservation_events: Option<u64>,
+    pub event_weight_semantics: Option<String>,
+    pub pythia_weight_sum: Option<f64>,
+    pub selected_weight_sum: Option<f64>,
+    pub selected_weight_squared_sum: Option<f64>,
+    pub selected_negative_weight_count: Option<u64>,
+    pub sigma_gen_mb: Option<f64>,
+    pub sigma_err_mb: Option<f64>,
+    pub selected_weight_fraction: Option<f64>,
+    pub selected_cross_section_mb: Option<f64>,
+    pub selected_cross_section_pb: Option<f64>,
+    pub rate_normalization_method: Option<String>,
+}
+
+impl HepMcRunSummary {
+    pub fn load(run_directory: impl AsRef<Path>) -> Result<Self, HepMcError> {
+        let source_summary_path = run_directory.as_ref().join("summary.json");
+        let summary = read_json(&source_summary_path)?;
+        Ok(Self {
+            source_summary_path,
+            requested_events: value_u64(&summary, "requested_events"),
+            attempted_events: value_u64(&summary, "attempted_events"),
+            accepted_events: value_u64(&summary, "accepted_events"),
+            failed_events: value_u64(&summary, "failed_events"),
+            vetoed_cuts_events: value_u64(&summary, "vetoed_cuts_events"),
+            vetoed_conservation_events: value_u64(&summary, "vetoed_conservation_events"),
+            event_weight_semantics: value_string(&summary, "event_weight_semantics"),
+            pythia_weight_sum: value_f64(&summary, "pythia_weight_sum"),
+            selected_weight_sum: value_f64(&summary, "selected_weight_sum"),
+            selected_weight_squared_sum: value_f64(&summary, "selected_weight_squared_sum"),
+            selected_negative_weight_count: value_u64(&summary, "selected_negative_weight_count"),
+            sigma_gen_mb: value_f64(&summary, "sigma_gen_mb"),
+            sigma_err_mb: value_f64(&summary, "sigma_err_mb"),
+            selected_weight_fraction: value_f64(&summary, "selected_weight_fraction"),
+            selected_cross_section_mb: value_f64(&summary, "selected_cross_section_mb"),
+            selected_cross_section_pb: value_f64(&summary, "selected_cross_section_pb"),
+            rate_normalization_method: value_string(&summary, "rate_normalization_method"),
+        })
+    }
+
+    #[must_use]
+    pub fn rate_normalization_established(&self) -> bool {
+        [
+            self.pythia_weight_sum,
+            self.selected_weight_sum,
+            self.selected_weight_squared_sum,
+            self.sigma_gen_mb,
+            self.sigma_err_mb,
+            self.selected_cross_section_pb,
+        ]
+        .into_iter()
+        .all(|value| value.is_some_and(f64::is_finite))
+            && self.event_weight_semantics.is_some()
+            && self.rate_normalization_method.is_some()
+    }
 }
 
 impl HepMcRunProvenance {
@@ -228,6 +303,10 @@ impl HepMcRunProvenance {
             schema_version: value_i64(&config, "schema_version"),
             process: value_string(&config, "process")
                 .or_else(|| value_string(&metadata, "process")),
+            event_schema_version: value_i64(&metadata, "event_schema_version"),
+            electroweak_process: value_string(&metadata, "electroweak_process"),
+            event_selection: value_string(&metadata, "event_selection"),
+            space_shower_dipole_recoil: value_bool(&metadata, "space_shower_dipole_recoil"),
             beam_particle_id_1: value_i32(&metadata, "beam_particle_id_1")
                 .or_else(|| value_i32(&config, "beam_particle_id_1")),
             beam_particle_id_2: value_i32(&metadata, "beam_particle_id_2")
