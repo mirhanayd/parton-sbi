@@ -25,6 +25,9 @@ readonly GFORTRAN_VERSION="13.3.0-6ubuntu2~24.04.1"
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 readonly REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 
+# shellcheck source=scripts/platform_policy.sh
+source "${SCRIPT_DIR}/platform_policy.sh"
+
 die() {
     printf 'error: %s\n' "$*" >&2
     exit 1
@@ -53,19 +56,6 @@ APFEL_BUILD_JOBS. Source scripts/apfelxx_env.sh after setup.
 EOF
 }
 
-require_wsl_ubuntu() {
-    [[ -r /proc/sys/kernel/osrelease ]] ||
-        die "cannot inspect the kernel; run this script inside WSL Ubuntu"
-    grep -qi microsoft /proc/sys/kernel/osrelease ||
-        die "this installer is restricted to WSL"
-    [[ -r /etc/os-release ]] || die "/etc/os-release is unavailable"
-
-    # shellcheck disable=SC1091
-    source /etc/os-release
-    [[ "${ID:-}" == "ubuntu" ]] ||
-        die "this installer supports WSL Ubuntu; detected ${PRETTY_NAME:-unknown}"
-}
-
 normalise_path() {
     local path="$1"
     [[ -n "${path}" ]] || die "paths must not be empty"
@@ -80,7 +70,7 @@ check_prerequisites() {
     local -a missing=()
     local command_name
 
-    for command_name in apt awk cat cmake curl dirname dpkg-deb g++ gcc-13 grep \
+    for command_name in apt awk cat cmake curl dirname dpkg-deb g++ grep \
         install ldconfig ln make mktemp mv nproc pkg-config readlink rm sed \
         sha256sum tar tr; do
         command -v "${command_name}" >/dev/null 2>&1 || missing+=("${command_name}")
@@ -225,7 +215,7 @@ if [[ -z "${jobs}" ]]; then
 fi
 [[ "${jobs}" =~ ^[1-9][0-9]*$ ]] || die "build jobs must be a positive integer"
 
-require_wsl_ubuntu
+partonsbi_require_wsl_or_native_ci
 
 # shellcheck source=scripts/lhapdf_env.sh
 source "${SCRIPT_DIR}/lhapdf_env.sh"
@@ -245,6 +235,8 @@ install -d -- "${DOWNLOAD_DIR}" "${SOURCE_PARENT}" "${external_root}/build" \
 
 fortran_compiler="$(command -v gfortran || true)"
 if [[ -z "${fortran_compiler}" ]]; then
+    command -v gcc-13 >/dev/null 2>&1 ||
+        die "gcc-13 is required when the pinned local gfortran fallback is used"
     fortran_compiler="${TOOLCHAIN_DIR}/usr/bin/x86_64-linux-gnu-gfortran-13"
     if [[ ! -x "${fortran_compiler}" ]]; then
         package_dir="${DOWNLOAD_DIR}/gfortran-${GFORTRAN_VERSION}"

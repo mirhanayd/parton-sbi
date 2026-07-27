@@ -11,6 +11,9 @@ readonly HEPMC3_SHA256="6f876091edcf7ee6d0c0db04e080056e89efc1a61abe62355d97ce8e
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 readonly REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 
+# shellcheck source=scripts/platform_policy.sh
+source "${SCRIPT_DIR}/platform_policy.sh"
+
 die() {
     printf 'error: %s\n' "$*" >&2
     exit 1
@@ -32,19 +35,6 @@ Options:
   --jobs N              Parallel build jobs (default: min(nproc, 4))
   -h, --help            Show this help
 EOF
-}
-
-require_wsl_ubuntu() {
-    [[ -r /proc/sys/kernel/osrelease ]] ||
-        die "cannot inspect the kernel; run this script inside WSL Ubuntu"
-    grep -qi microsoft /proc/sys/kernel/osrelease ||
-        die "this installer is restricted to WSL"
-    [[ -r /etc/os-release ]] || die "/etc/os-release is unavailable"
-
-    # shellcheck disable=SC1091
-    source /etc/os-release
-    [[ "${ID:-}" == "ubuntu" ]] ||
-        die "this installer supports WSL Ubuntu; detected ${PRETTY_NAME:-unknown}"
 }
 
 normalise_path() {
@@ -176,6 +166,7 @@ if [[ -z "${jobs}" ]]; then
 fi
 [[ "${jobs}" =~ ^[1-9][0-9]*$ ]] || die "build jobs must be a positive integer"
 
+partonsbi_require_wsl_or_native_ci
 check_prerequisites
 
 readonly DOWNLOAD_DIR="${external_root}/downloads"
