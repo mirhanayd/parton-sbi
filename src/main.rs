@@ -8,6 +8,13 @@ use parton_sbi::physics::{
     lo_differential_cross_section, scattered_electron, FixedAlpha, LhapdfProvider,
 };
 
+mod pdf_reweighting_cli;
+use pdf_reweighting_cli::{
+    parse_scan_pdf_members, parse_validate_pdf_reweighting, run_scan_pdf_members,
+    run_validate_pdf_reweighting, ScanPdfMembersArgs, ValidatePdfReweightingArgs,
+    SCAN_PDF_MEMBERS_HELP, VALIDATE_PDF_REWEIGHTING_HELP,
+};
+
 const HELP: &str =
     "PartonSBI: Simulation-Based Inference for Parton Structure from Event-Level Scattering Data
 
@@ -29,6 +36,12 @@ Commands:
   generate-dis-events [OPTIONS]
       Generate Monte Carlo DIS events using the PYTHIA 8 backend.
       Run `parton-sbi generate-dis-events --help` for the required options.
+
+  validate-pdf-reweighting [OPTIONS]
+      Stream one run and evaluate a discrete LHAPDF-member hard-PDF ratio.
+
+  scan-pdf-members [OPTIONS]
+      Deterministically score every non-central member over nominal support.
 
   validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
@@ -144,6 +157,10 @@ enum Command {
     DisKinematics(DisCommand),
     DisCrossSection(CrossSectionCommand),
     GenerateDisEvents(GenerateDisEventsCommand),
+    ValidatePdfReweighting(ValidatePdfReweightingArgs),
+    ValidatePdfReweightingHelp,
+    ScanPdfMembers(ScanPdfMembersArgs),
+    ScanPdfMembersHelp,
     StructureFunctions(StructureFunctionsCliArgs),
     ValidateHera(ValidateHeraCliArgs),
     TheoryUncertainties(TheoryUncertaintiesCliArgs),
@@ -278,6 +295,18 @@ fn main() -> Result<()> {
             print!("{GENERATE_DIS_EVENTS_HELP}");
             Ok(())
         }
+        Command::ValidatePdfReweighting(arguments) => {
+            run_validate_pdf_reweighting(arguments).map_err(Error::Msg)
+        }
+        Command::ValidatePdfReweightingHelp => {
+            print!("{VALIDATE_PDF_REWEIGHTING_HELP}");
+            Ok(())
+        }
+        Command::ScanPdfMembers(arguments) => run_scan_pdf_members(arguments).map_err(Error::Msg),
+        Command::ScanPdfMembersHelp => {
+            print!("{SCAN_PDF_MEMBERS_HELP}");
+            Ok(())
+        }
         Command::StructureFunctions(arguments) => run_structure_functions(arguments),
         Command::ValidateHera(arguments) => run_validate_hera(arguments),
         Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
@@ -302,6 +331,20 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
         }
         [subcommand, remaining @ ..] if subcommand == "generate-dis-events" => {
             parse_generate_dis_events_command(remaining).map(Command::GenerateDisEvents)
+        }
+        [subcommand, remaining @ ..] if subcommand == "validate-pdf-reweighting" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::ValidatePdfReweightingHelp)
+            } else {
+                parse_validate_pdf_reweighting(remaining).map(Command::ValidatePdfReweighting)
+            }
+        }
+        [subcommand, remaining @ ..] if subcommand == "scan-pdf-members" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::ScanPdfMembersHelp)
+            } else {
+                parse_scan_pdf_members(remaining).map(Command::ScanPdfMembers)
+            }
         }
         [subcommand, remaining @ ..] if subcommand == "validate-hera" => {
             parse_validate_hera_command(remaining).map(Command::ValidateHera)

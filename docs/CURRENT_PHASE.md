@@ -13,19 +13,23 @@
 - APFEL++, LHAPDF, PYTHIA 8, HepMC3, and Candle surrogate retained.
 - No Cornell demo.
 - No desktop GUI.
-- No PDF reweighting implementation.
+- Phase 1A reweighting infrastructure implemented, audited, and unit-tested.
+- Phase 1A scientific validation blocked at Stage A by an out-of-grid CT18NLO
+  scale in the nominal pool; no direct-target closure was started.
 - No continuous PDF parameterization.
 - No amortized posterior model.
 
 # Next phase
 
-Phase 1A:
-
-Discrete LHAPDF-member hard-PDF reweighting closure and ESS validation.
+Resolve the Phase 1A PDF-support contract, then restart discrete
+LHAPDF-member hard-PDF reweighting closure under a new study ID. The current
+nominal smoke sample also has `ESS/N = 0.01176`, below the mandatory 0.20 reuse
+threshold.
 
 # Gate
 
-Do not begin Phase 1B or neural inference until Phase 1A produces a documented scientific decision.
+Do not begin Phase 1B or neural inference. Phase 1A is incomplete and blocked;
+pool reuse is not authorized.
 
 # Model recommendation
 

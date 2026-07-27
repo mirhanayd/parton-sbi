@@ -7,6 +7,7 @@ pub mod dis_kinematics;
 pub mod four_vector;
 pub mod hepmc3;
 pub mod pdf;
+pub mod pdf_reweighting;
 pub mod structure_function_provider;
 pub mod structure_function_validation;
 pub mod structure_functions;
@@ -30,9 +31,18 @@ pub use dis_kinematics::{
 pub use four_vector::{FourVector, FourVectorError};
 pub use hepmc3::{
     HepMcAttribute, HepMcError, HepMcEvent, HepMcParticle, HepMcPdfInfo, HepMcReader, HepMcRunCuts,
-    HepMcRunProvenance, HepMcVertex,
+    HepMcRunProvenance, HepMcRunSummary, HepMcVertex,
 };
 pub use pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
+pub use pdf_reweighting::{
+    extract_event_observables, identify_proton_pdf_entry, reweight_event, summarize_reweighting,
+    validate_run_compatibility, DenominatorPolicy, EffectiveSampleSize, EventObservableSummary,
+    InclusiveObservableRow, PdfEntrySide, PdfMemberSpec, PdfReweightingAccumulator,
+    PdfReweightingDiagnostics, PdfReweightingError, PdfReweightingInvalidReason,
+    PdfReweightingRequest, PdfReweightingResult, PdfWeightEvaluator, ProtonPdfEntry,
+    RatioStatistics, RunCompatibilityIssue, RunCompatibilityReport, ScalarDistributionStatistics,
+    WeightStatistics, DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
+};
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,
     PerturbativeOrder, StructureFunctionBackend, StructureFunctionMetadata,
