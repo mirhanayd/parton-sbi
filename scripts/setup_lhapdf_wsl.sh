@@ -20,6 +20,9 @@ readonly PDF_SET_SHA256="e3c37591ebd0f4c8e413d16b49a2e6c6cdefc1cb575b5e75e21dedd
 
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
+# shellcheck source=scripts/platform_policy.sh
+source "${SCRIPT_DIR}/platform_policy.sh"
+
 die() {
     printf 'error: %s\n' "$*" >&2
     exit 1
@@ -49,20 +52,6 @@ and LHAPDF_BUILD_JOBS. Command-line options take precedence.
 This script intentionally does not run apt or sudo. If prerequisites are
 missing, it prints the Ubuntu package command for the user to review.
 EOF
-}
-
-require_wsl_ubuntu() {
-    [[ -r /proc/sys/kernel/osrelease ]] ||
-        die "cannot inspect the kernel; run this script inside WSL Ubuntu"
-    grep -qi 'microsoft' /proc/sys/kernel/osrelease ||
-        die "this installer is restricted to WSL"
-    [[ -r /etc/os-release ]] ||
-        die "/etc/os-release is unavailable"
-
-    # shellcheck disable=SC1091
-    source /etc/os-release
-    [[ "${ID:-}" == "ubuntu" ]] ||
-        die "this installer supports WSL Ubuntu; detected ${PRETTY_NAME:-unknown}"
 }
 
 normalise_path() {
@@ -254,7 +243,7 @@ while (($# > 0)); do
     esac
 done
 
-require_wsl_ubuntu
+partonsbi_require_wsl_or_native_ci
 check_prerequisites
 
 prefix="$(normalise_path "${prefix}")"

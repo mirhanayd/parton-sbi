@@ -42,7 +42,7 @@ analysis/          HERA validation and uncertainty analysis
 models/            Validated checked-in structure-function surrogate artifact
 tests/             Rust integration tests and deterministic fixtures
 data/hepdata/      Source-controlled HERA reference data
-scripts/           WSL-native dependency setup and environment activation
+scripts/           WSL-local and native-Ubuntu CI dependency setup and activation
 docs/              Scientific scope, audit, roadmap, and phase records
 docker/            Optional reproducible container build surface
 ```
@@ -66,13 +66,24 @@ The supported local environment is WSL Ubuntu. The setup scripts install or conf
 Run all local commands from the repository root in WSL Ubuntu:
 
 ```bash
-./scripts/setup_all_wsl.sh
+bash scripts/setup_all_wsl.sh
 source scripts/pythia_env.sh
 python3 -m venv analysis/venv
 analysis/venv/bin/pip install -r analysis/requirements.txt
 ```
 
 Do not use native Windows Rust/C++ tools, PowerShell, CMD, Git Bash, or WSLg. The default workflow is headless.
+
+GitHub Actions runs on native Ubuntu rather than WSL and therefore uses the
+dedicated CI entry point:
+
+```bash
+bash scripts/setup_ci_ubuntu.sh
+```
+
+That entry point requires GitHub Actions environment markers and is not a
+replacement for the WSL-only local setup. A pushed change must complete the
+remote workflow before CI can be described as green.
 
 ## Build
 

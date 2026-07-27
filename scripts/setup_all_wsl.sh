@@ -7,6 +7,9 @@ set -Eeuo pipefail
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 readonly REPO_ROOT="$(dirname "${SCRIPT_DIR}")"
 
+# shellcheck source=scripts/platform_policy.sh
+source "${SCRIPT_DIR}/platform_policy.sh"
+
 # Define ANSI color codes for readable logging
 readonly GREEN='\033[0;32m'
 readonly BLUE='\033[0;34m'
@@ -22,6 +25,8 @@ log_error() {
 }
 
 cd "${REPO_ROOT}"
+
+partonsbi_require_wsl_ubuntu
 
 log_info "Starting full WSL setup for PartonSBI environment..."
 
