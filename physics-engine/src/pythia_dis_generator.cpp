@@ -3,6 +3,7 @@
 #include "Pythia8Plugins/HepMC3.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/GenEvent.h"
+#include "LHAPDF/LHAPDF.h"
 #include "LHAPDF/Version.h"
 
 #include <iostream>
@@ -10,6 +11,9 @@
 #include <sstream>
 #include <cmath>
 #include <iomanip>
+#include <limits>
+#include <memory>
+#include <set>
 #include <chrono>
 #include <algorithm>
 #include <stdexcept>
@@ -40,6 +44,142 @@
 
 namespace parton_sbi::pythia_dis_generator
 {
+  namespace
+  {
+    struct PdfSupportBounds
+    {
+      double x_minimum = 0.0;
+      double x_maximum = 0.0;
+      double q_minimum_gev = 0.0;
+      double q_maximum_gev = 0.0;
+    };
+
+    PdfSupportBounds support_bounds_from_json(nlohmann::json const& input)
+    {
+      PdfSupportBounds bounds;
+      bounds.x_minimum = input.at("x_minimum").get<double>();
+      bounds.x_maximum = input.at("x_maximum").get<double>();
+      bounds.q_minimum_gev = input.at("q_minimum_gev").get<double>();
+      bounds.q_maximum_gev = input.at("q_maximum_gev").get<double>();
+      if (!std::isfinite(bounds.x_minimum) || !std::isfinite(bounds.x_maximum)
+          || !std::isfinite(bounds.q_minimum_gev) || !std::isfinite(bounds.q_maximum_gev)
+          || bounds.x_minimum <= 0.0 || bounds.x_maximum < bounds.x_minimum
+          || bounds.x_maximum > 1.0 || bounds.q_minimum_gev <= 0.0
+          || bounds.q_maximum_gev < bounds.q_minimum_gev)
+        {
+          throw GeneratorError("invalid_pdf_support_contract",
+                               "Strict PDF support contains invalid numeric bounds.",
+                               "Regenerate the contract from authoritative LHAPDF member metadata.", 2);
+        }
+      return bounds;
+    }
+
+    bool same_bounds(PdfSupportBounds const& left, PdfSupportBounds const& right)
+    {
+      return left.x_minimum == right.x_minimum && left.x_maximum == right.x_maximum
+        && left.q_minimum_gev == right.q_minimum_gev
+        && left.q_maximum_gev == right.q_maximum_gev;
+    }
+
+    PdfSupportBounds actual_member_bounds(std::string const& set_name, int member)
+    {
+      std::unique_ptr<LHAPDF::PDF> pdf(LHAPDF::mkPDF(set_name, member));
+      return {pdf->xMin(), pdf->xMax(), pdf->qMin(), pdf->qMax()};
+    }
+
+    PdfSupportBounds validate_support_contract(DisEventRequest const& request)
+    {
+      auto const& contract = request.pdf_support_contract;
+      try
+        {
+          LHAPDF::setVerbosity(0);
+          if (!contract.is_object() || contract.at("schema_version").get<int>() != 1
+              || contract.at("policy").get<std::string>() != "strict_in_grid"
+              || contract.at("extrapolation_allowed").get<bool>()
+              || contract.at("pdf_set").get<std::string>() != request.pdf_set
+              || contract.at("nominal_member").get<int>() != request.pdf_member)
+            {
+              throw std::runtime_error("policy or run identity mismatch");
+            }
+
+          auto const& domains = contract.at("member_domains");
+          if (!domains.is_array() || domains.empty())
+            {
+              throw std::runtime_error("member domain list is empty");
+            }
+          LHAPDF::PDFSet set(request.pdf_set);
+          if (domains.size() != set.size())
+            {
+              throw std::runtime_error("contract does not cover every member in the PDF set");
+            }
+
+          std::set<int> members;
+          PdfSupportBounds computed_intersection{
+            0.0, 1.0, 0.0, std::numeric_limits<double>::infinity()
+          };
+          bool nominal_found = false;
+          bool all_members_share = true;
+          PdfSupportBounds first{};
+          bool first_set = false;
+          for (auto const& domain : domains)
+            {
+              int const member = domain.at("member").get<int>();
+              if (!members.insert(member).second)
+                {
+                  throw std::runtime_error("duplicate member domain");
+                }
+              PdfSupportBounds const recorded = support_bounds_from_json(domain.at("bounds"));
+              PdfSupportBounds const actual = actual_member_bounds(request.pdf_set, member);
+              if (!same_bounds(recorded, actual))
+                {
+                  throw std::runtime_error("recorded member bounds differ from LHAPDF metadata");
+                }
+              if (!first_set)
+                {
+                  first = recorded;
+                  first_set = true;
+                }
+              else
+                {
+                  all_members_share = all_members_share && same_bounds(first, recorded);
+                }
+              computed_intersection.x_minimum = std::max(computed_intersection.x_minimum, recorded.x_minimum);
+              computed_intersection.x_maximum = std::min(computed_intersection.x_maximum, recorded.x_maximum);
+              computed_intersection.q_minimum_gev = std::max(computed_intersection.q_minimum_gev, recorded.q_minimum_gev);
+              computed_intersection.q_maximum_gev = std::min(computed_intersection.q_maximum_gev, recorded.q_maximum_gev);
+              nominal_found = nominal_found || member == request.pdf_member;
+            }
+          PdfSupportBounds const recorded_intersection = support_bounds_from_json(contract.at("intersection"));
+          if (!nominal_found || !same_bounds(recorded_intersection, computed_intersection)
+              || contract.at("all_members_share_bounds").get<bool>() != all_members_share)
+            {
+              throw std::runtime_error("member-grid intersection or common-grid flag is inconsistent");
+            }
+          return recorded_intersection;
+        }
+      catch (GeneratorError const&)
+        {
+          throw;
+        }
+      catch (std::exception const& error)
+        {
+          throw GeneratorError("invalid_pdf_support_contract",
+                               "Strict PDF support contract validation failed: " + std::string(error.what()),
+                               "Regenerate the contract from authoritative LHAPDF member metadata.", 2);
+        }
+    }
+
+    std::string support_outcome(PdfSupportBounds const& bounds, double x, double q_gev)
+    {
+      if (!std::isfinite(x) || !std::isfinite(q_gev)) return "non_finite";
+      if (x < bounds.x_minimum) return "below_x_minimum";
+      if (x > bounds.x_maximum) return "above_x_maximum";
+      if (q_gev < bounds.q_minimum_gev) return "below_q_minimum";
+      if (q_gev > bounds.q_maximum_gev) return "above_q_maximum";
+      return "in_support";
+    }
+  }
+
   DisEventRequest request_from_json(nlohmann::json const& input)
   {
     DisEventRequest req;
@@ -111,6 +251,17 @@ namespace parton_sbi::pythia_dis_generator
       {
         req.pdf_member = input.at("pdf_member").get<int>();
       }
+    if (!input.contains("pdf_support_contract"))
+      {
+        throw GeneratorError("missing_pdf_support_contract",
+                             "Generation requires an explicit strict_in_grid PDF support contract.",
+                             "Use the PartonSBI generate-dis-events CLI to build the contract.", 2);
+      }
+    req.pdf_support_contract = input.at("pdf_support_contract");
+    if (input.contains("command"))
+      {
+        req.command = input.at("command").get<std::vector<std::string>>();
+      }
     if (input.contains("parton_shower"))
       {
         req.parton_shower = input.at("parton_shower").get<bool>();
@@ -152,6 +303,12 @@ namespace parton_sbi::pythia_dis_generator
                              "Set number_of_events >= 1.", 2);
       }
 
+    PdfSupportBounds const validated_support = validate_support_contract(req);
+    req.pdf_support_x_minimum = validated_support.x_minimum;
+    req.pdf_support_x_maximum = validated_support.x_maximum;
+    req.pdf_support_q_minimum_gev = validated_support.q_minimum_gev;
+    req.pdf_support_q_maximum_gev = validated_support.q_maximum_gev;
+
     return req;
   }
 
@@ -186,6 +343,12 @@ namespace parton_sbi::pythia_dis_generator
 
   void run_generator(DisEventRequest const& request, std::string const& output_dir)
   {
+    PdfSupportBounds const support_bounds{
+      request.pdf_support_x_minimum,
+      request.pdf_support_x_maximum,
+      request.pdf_support_q_minimum_gev,
+      request.pdf_support_q_maximum_gev
+    };
     Pythia8::Pythia pythia;
 
     // Beam settings
@@ -312,6 +475,7 @@ namespace parton_sbi::pythia_dis_generator
             failure_reasons.push_back("pythia_next_failed");
             continue;
           }
+        stats.pythia_generated_events++;
 
         // 1. Find the beams (indices 1 & 2)
         int electron_beam_idx = (pythia.event[1].id() == 11) ? 1 : ((pythia.event[2].id() == 11) ? 2 : -1);
@@ -439,6 +603,19 @@ namespace parton_sbi::pythia_dis_generator
             continue;
           }
 
+        // The HepMC3 converter serializes GenPdfInfo::x2 from Info::x2pdf()
+        // and GenPdfInfo::scale from Info::QFac(). Apply the strict support
+        // selection to those exact values, with Q in GeV (not Q^2).
+        double const proton_pdf_x = pythia.info.x2pdf();
+        double const pdf_scale_gev = pythia.info.QFac();
+        std::string const pdf_support_outcome = support_outcome(support_bounds, proton_pdf_x, pdf_scale_gev);
+        if (pdf_support_outcome != "in_support")
+          {
+            stats.vetoed_pdf_support_events++;
+            stats.pdf_support_vetoes_by_reason[pdf_support_outcome]++;
+            continue;
+          }
+
         // 8. Event Accepted! Write to HepMC3 file
         const double event_weight = pythia.info.weight();
         selected_weight_sum += event_weight;
@@ -511,7 +688,10 @@ namespace parton_sbi::pythia_dis_generator
         };
         meta["requested_event_count"] = request.number_of_events;
         meta["accepted_event_count"] = accepted_count;
-        meta["failed_event_count"] = stats.failed_events + stats.vetoed_cuts_events + stats.vetoed_conservation_events;
+        meta["attempted_event_count"] = stats.attempted_events;
+        meta["pythia_generated_event_count"] = stats.pythia_generated_events;
+        meta["failed_event_count"] = stats.failed_events + stats.vetoed_cuts_events
+          + stats.vetoed_conservation_events + stats.vetoed_pdf_support_events;
         meta["random_seed"] = pythia.settings.mode("Random:seed"); // get actual seed used
         meta["git_commit"] = GIT_COMMIT_STR;
         meta["git_dirty"] = GIT_DIRTY_BOOL;
@@ -521,7 +701,11 @@ namespace parton_sbi::pythia_dis_generator
         meta["hadronization_state"] = request.hadronization;
         meta["event_schema_version"] = 1;
         meta["electroweak_process"] = "gamma_z_t_channel";
-        meta["event_selection"] = "post_pythia_reconstructed_dis_cuts_and_conservation";
+        meta["event_selection"] = "post_pythia_reconstructed_dis_cuts_conservation_and_strict_pdf_support_v1";
+        meta["pdf_support_contract"] = request.pdf_support_contract;
+        meta["pdf_support_vetoed_event_count"] = stats.vetoed_pdf_support_events;
+        meta["pdf_support_vetoes_by_reason"] = stats.pdf_support_vetoes_by_reason;
+        meta["command"] = request.command;
         meta["space_shower_dipole_recoil"] = true;
         metadata_file << meta.dump(2) << "\n";
         metadata_file.close();
@@ -536,10 +720,16 @@ namespace parton_sbi::pythia_dis_generator
         summary["success"] = true;
         summary["requested_events"] = stats.requested_events;
         summary["attempted_events"] = stats.attempted_events;
+        summary["pythia_generated_events"] = stats.pythia_generated_events;
         summary["accepted_events"] = stats.accepted_events;
         summary["failed_events"] = stats.failed_events;
         summary["vetoed_cuts_events"] = stats.vetoed_cuts_events;
         summary["vetoed_conservation_events"] = stats.vetoed_conservation_events;
+        summary["vetoed_pdf_support_events"] = stats.vetoed_pdf_support_events;
+        summary["pdf_support_vetoes_by_reason"] = stats.pdf_support_vetoes_by_reason;
+        summary["pdf_support_policy_version"] = request.pdf_support_contract.at("schema_version");
+        summary["pdf_support_policy"] = request.pdf_support_contract.at("policy");
+        summary["pdf_support_bounds"] = request.pdf_support_contract.at("intersection");
         summary["max_momentum_mismatch_gev"] = stats.max_momentum_mismatch_gev;
         summary["max_energy_mismatch_gev"] = stats.max_energy_mismatch_gev;
         summary["momentum_conservation_tolerance_gev"] = stats.momentum_conservation_tolerance_gev;

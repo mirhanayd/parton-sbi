@@ -1,9 +1,10 @@
 use chrono::Utc;
 use parton_sbi::physics::{
-    extract_event_observables, reweight_event, validate_run_compatibility, DenominatorPolicy,
-    EventObservableSummary, HepMcReader, HepMcRunProvenance, HepMcRunSummary,
-    InclusiveObservableRow, LhapdfProvider, PdfMemberSpec, PdfReweightingAccumulator,
-    PdfReweightingDiagnostics, PdfReweightingRequest, PdfReweightingResult, WeightStatistics,
+    extract_event_observables, load_full_set_strict_support_contract, reweight_event,
+    validate_run_compatibility, DenominatorPolicy, EventObservableSummary, HepMcReader,
+    HepMcRunProvenance, HepMcRunSummary, InclusiveObservableRow, LhapdfProvider, PdfMemberSpec,
+    PdfReweightingAccumulator, PdfReweightingDiagnostics, PdfReweightingRequest,
+    PdfReweightingResult, PdfSupportContract, WeightStatistics,
     DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
 };
 use serde::Serialize;
@@ -319,6 +320,30 @@ fn relative_difference(left: f64, right: f64) -> f64 {
     (left - right).abs() / left.abs().max(right.abs()).max(f64::MIN_POSITIVE)
 }
 
+fn verified_support_contract(
+    provenance: &HepMcRunProvenance,
+    pdf_set: &str,
+    nominal_member: i32,
+) -> Result<PdfSupportContract, String> {
+    let recorded = provenance.pdf_support_contract.clone().ok_or_else(|| {
+        "run does not declare the required strict_in_grid PDF support contract".to_owned()
+    })?;
+    let nominal_spec =
+        PdfMemberSpec::new(pdf_set, nominal_member).map_err(|error| error.to_string())?;
+    recorded
+        .validate_for_members(&nominal_spec, &nominal_spec)
+        .map_err(|error| format!("invalid recorded PDF support contract: {error}"))?;
+    let current = load_full_set_strict_support_contract(pdf_set, nominal_member)
+        .map_err(|error| format!("failed to load authoritative PDF support: {error}"))?;
+    if recorded != current {
+        return Err(
+            "recorded PDF support contract differs from authoritative installed LHAPDF metadata"
+                .to_owned(),
+        );
+    }
+    Ok(recorded)
+}
+
 pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<(), String> {
     ensure_fresh_output(
         &args.output,
@@ -343,16 +368,24 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
             args.target_pdf_set, source_set
         ));
     }
+    let support_contract =
+        verified_support_contract(&nominal_provenance, &source_set, source_member)?;
+    let source_spec =
+        PdfMemberSpec::new(&source_set, source_member).map_err(|error| error.to_string())?;
+    let target_spec = PdfMemberSpec::new(&args.target_pdf_set, args.target_pdf_member)
+        .map_err(|error| error.to_string())?;
+    support_contract
+        .validate_for_members(&source_spec, &target_spec)
+        .map_err(|error| error.to_string())?;
     let request = PdfReweightingRequest {
-        source_pdf: PdfMemberSpec::new(&source_set, source_member)
-            .map_err(|error| error.to_string())?,
-        target_pdf: PdfMemberSpec::new(&args.target_pdf_set, args.target_pdf_member)
-            .map_err(|error| error.to_string())?,
+        source_pdf: source_spec,
+        target_pdf: target_spec,
         source_run_identity: args.nominal_run.to_string_lossy().into_owned(),
         source_seed: nominal_provenance.generator_seed,
         event_weight_index: args.event_weight_index,
         denominator_policy: args.denominator_policy,
         nominal_xf_relative_tolerance: args.nominal_xf_relative_tolerance,
+        support_contract,
     };
     let nominal_pdf =
         LhapdfProvider::new(&source_set, source_member).map_err(|error| error.to_string())?;
@@ -632,6 +665,7 @@ struct MemberScanDocument<'a> {
     nominal_provenance: &'a HepMcRunProvenance,
     pdf_set: &'a str,
     nominal_member: i32,
+    support_contract: &'a PdfSupportContract,
     event_count: usize,
     invalid_nominal_events: usize,
     nominal_xf_relative_tolerance: f64,
@@ -695,6 +729,7 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
     let nominal_member = provenance
         .pdf_member
         .ok_or_else(|| "nominal run does not declare a PDF member".to_owned())?;
+    let support_contract = verified_support_contract(&provenance, &pdf_set, nominal_member)?;
     let nominal_pdf =
         LhapdfProvider::new(&pdf_set, nominal_member).map_err(|error| error.to_string())?;
     let member_count = nominal_pdf.member_count();
@@ -708,6 +743,7 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
         event_weight_index: args.event_weight_index,
         denominator_policy: DenominatorPolicy::Stored,
         nominal_xf_relative_tolerance: args.nominal_xf_relative_tolerance,
+        support_contract: support_contract.clone(),
     };
     let mut support = Vec::new();
     let mut invalid_nominal_events = 0usize;
@@ -884,6 +920,7 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
         nominal_provenance: &provenance,
         pdf_set: &pdf_set,
         nominal_member,
+        support_contract: &support_contract,
         event_count: support.len() + invalid_nominal_events,
         invalid_nominal_events,
         nominal_xf_relative_tolerance: args.nominal_xf_relative_tolerance,

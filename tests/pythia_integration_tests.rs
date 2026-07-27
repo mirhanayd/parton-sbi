@@ -58,6 +58,12 @@ fn test_json_configuration_creation() {
     assert_eq!(parsed["schema_version"], 1);
     assert_eq!(parsed["electron_energy_gev"], 27.5);
     assert_eq!(parsed["proton_energy_gev"], 920.0);
+    assert_eq!(parsed["pdf_support_contract"]["policy"], "strict_in_grid");
+    assert_eq!(
+        parsed["pdf_support_contract"]["extrapolation_allowed"],
+        false
+    );
+    assert!(parsed["command"].is_array());
 
     let _ = fs::remove_dir_all(output_path);
 }
@@ -221,6 +227,19 @@ fn test_small_deterministic_generation() {
     let summary_content = fs::read_to_string(summary_file).unwrap();
     let summary: serde_json::Value = serde_json::from_str(&summary_content).unwrap();
     assert_eq!(summary["success"], true);
+    assert_eq!(summary["requested_events"], 5);
+    assert_eq!(summary["accepted_events"], 5);
+    assert!(summary["pythia_generated_events"].as_u64().unwrap() >= 5);
+    let support_veto_sum: u64 = summary["pdf_support_vetoes_by_reason"]
+        .as_object()
+        .unwrap()
+        .values()
+        .map(|count| count.as_u64().unwrap())
+        .sum();
+    assert_eq!(
+        support_veto_sum,
+        summary["vetoed_pdf_support_events"].as_u64().unwrap()
+    );
     assert_eq!(
         summary["vetoed_conservation_events"], 0,
         "No events should fail momentum conservation"
@@ -256,6 +275,27 @@ fn test_small_deterministic_generation() {
     assert_eq!(metadata["requested_event_count"], 5);
     assert_eq!(metadata["accepted_event_count"], 5);
     assert_eq!(metadata["random_seed"], 42);
+    assert_eq!(
+        metadata["event_selection"],
+        "post_pythia_reconstructed_dis_cuts_conservation_and_strict_pdf_support_v1"
+    );
+    let contract: PdfSupportContract =
+        serde_json::from_value(metadata["pdf_support_contract"].clone()).unwrap();
+    assert!(!contract.extrapolation_allowed);
+    let mut reader = HepMcReader::open(run_dir.join("events.hepmc3")).unwrap();
+    let mut parsed_events = 0;
+    while let Some(event) = reader.next_event().unwrap() {
+        let entry = identify_proton_pdf_entry(&event, None).unwrap();
+        assert_eq!(
+            contract.assess(entry.x, entry.scale_gev),
+            PdfSupportOutcome::InSupport
+        );
+        parsed_events += 1;
+    }
+    assert_eq!(
+        parsed_events, 5,
+        "support veto must not reduce requested output"
+    );
 
     let _ = fs::remove_dir_all(output_path);
 }
@@ -345,3 +385,6 @@ fn test_same_seed_reproducibility() {
     let _ = fs::remove_dir_all(output_path_1);
     let _ = fs::remove_dir_all(output_path_2);
 }
+use parton_sbi::physics::{
+    identify_proton_pdf_entry, HepMcReader, PdfSupportContract, PdfSupportOutcome,
+};

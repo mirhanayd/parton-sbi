@@ -5,7 +5,9 @@
 //!
 //! `cargo test --test lhapdf_integration -- --ignored`
 
-use parton_sbi::physics::pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
+use parton_sbi::physics::pdf::{
+    LhapdfProvider, PartonDensities, PdfError, PdfProvider, PdfSupportBoundSource,
+};
 use parton_sbi::physics::structure_functions::electromagnetic_f2_from_xf;
 
 const PINNED_SET: &str = "CT18LO";
@@ -53,6 +55,19 @@ fn pinned_set_member_and_grid_metadata_are_available() {
     let (q2_minimum, q2_maximum) = provider.q2_range();
     assert!(x_minimum > 0.0 && x_minimum < x_maximum && x_maximum <= 1.0);
     assert!(q2_minimum > 0.0 && q2_minimum < q2_maximum);
+    let support = provider.support_bounds();
+    assert_eq!(support.x_minimum, x_minimum);
+    assert_eq!(support.x_maximum, x_maximum);
+    assert_eq!(support.q_minimum_gev * support.q_minimum_gev, q2_minimum);
+    assert_eq!(support.q_maximum_gev * support.q_maximum_gev, q2_maximum);
+    assert_eq!(
+        support.q_minimum_source,
+        PdfSupportBoundSource::LhapdfPdfQMin
+    );
+    assert_eq!(
+        support.q_maximum_source,
+        PdfSupportBoundSource::LhapdfPdfQMax
+    );
 }
 
 #[test]

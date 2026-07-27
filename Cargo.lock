@@ -1216,9 +1216,11 @@ version = "0.1.0"
 dependencies = [
  "candle-core",
  "candle-nn",
+ "cc",
  "chrono",
  "csv",
  "managed-lhapdf",
+ "pkg-config",
  "plotters",
  "rand 0.8.5",
  "serde",

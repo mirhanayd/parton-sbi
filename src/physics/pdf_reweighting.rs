@@ -4,7 +4,7 @@
 //! generator truth. They are used for importance weighting and diagnostics,
 //! never as default observed inference features.
 
-use super::{HepMcEvent, HepMcRunProvenance, LhapdfProvider, PdfError};
+use super::{HepMcEvent, HepMcRunProvenance, LhapdfProvider, PdfError, PdfSupportBounds};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::error::Error;
@@ -12,9 +12,197 @@ use std::fmt;
 
 pub const DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE: f64 = 1.0e-6;
 pub const PDF_REUSE_ESS_FRACTION_THRESHOLD: f64 = 0.20;
+pub const PDF_SUPPORT_POLICY_VERSION: u32 = 1;
 const RELATIVE_DENOMINATOR_EPSILON: f64 = 1.0e-300;
 const ELECTRON_PDG_ID: i32 = 11;
 const PROTON_PDG_ID: i32 = 2212;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PdfSupportPolicy {
+    StrictInGrid,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PdfSupportOutcome {
+    InSupport,
+    BelowXMinimum,
+    AboveXMaximum,
+    BelowQMinimum,
+    AboveQMaximum,
+    NonFinite,
+}
+
+impl fmt::Display for PdfSupportOutcome {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let name = serde_json::to_value(self)
+            .ok()
+            .and_then(|value| value.as_str().map(str::to_owned))
+            .unwrap_or_else(|| "unknown".to_owned());
+        formatter.write_str(&name)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PdfMemberSupportDomain {
+    pub member: i32,
+    pub bounds: PdfSupportBounds,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PdfSupportContract {
+    pub schema_version: u32,
+    pub policy: PdfSupportPolicy,
+    pub extrapolation_allowed: bool,
+    pub pdf_set: String,
+    pub nominal_member: i32,
+    pub member_domains: Vec<PdfMemberSupportDomain>,
+    pub intersection: PdfSupportBounds,
+    pub all_members_share_bounds: bool,
+}
+
+impl PdfSupportContract {
+    pub fn strict_in_grid(
+        pdf_set: impl Into<String>,
+        nominal_member: i32,
+        mut member_domains: Vec<PdfMemberSupportDomain>,
+    ) -> Result<Self, PdfReweightingError> {
+        let pdf_set = pdf_set.into();
+        if pdf_set.trim().is_empty() || nominal_member < 0 || member_domains.is_empty() {
+            return Err(PdfReweightingError::InvalidRequest(
+                "strict support requires a PDF set, nominal member, and member domains".to_owned(),
+            ));
+        }
+        member_domains.sort_by_key(|domain| domain.member);
+        if member_domains
+            .windows(2)
+            .any(|pair| pair[0].member == pair[1].member)
+            || !member_domains
+                .iter()
+                .any(|domain| domain.member == nominal_member)
+        {
+            return Err(PdfReweightingError::InvalidRequest(
+                "support domains must contain unique members including the nominal member"
+                    .to_owned(),
+            ));
+        }
+        let first = member_domains[0].bounds.clone();
+        let all_members_share_bounds = member_domains
+            .iter()
+            .all(|domain| domain.bounds.same_numeric_domain(&first));
+        let x_minimum = member_domains
+            .iter()
+            .map(|domain| domain.bounds.x_minimum)
+            .max_by(f64::total_cmp)
+            .expect("non-empty member domains");
+        let x_maximum = member_domains
+            .iter()
+            .map(|domain| domain.bounds.x_maximum)
+            .min_by(f64::total_cmp)
+            .expect("non-empty member domains");
+        let q_minimum_gev = member_domains
+            .iter()
+            .map(|domain| domain.bounds.q_minimum_gev)
+            .max_by(f64::total_cmp)
+            .expect("non-empty member domains");
+        let q_maximum_gev = member_domains
+            .iter()
+            .map(|domain| domain.bounds.q_maximum_gev)
+            .min_by(f64::total_cmp)
+            .expect("non-empty member domains");
+        let intersection =
+            PdfSupportBounds::new(x_minimum, x_maximum, q_minimum_gev, q_maximum_gev).map_err(
+                |message| PdfReweightingError::InconsistentMemberGrid {
+                    pdf_set: pdf_set.clone(),
+                    message,
+                },
+            )?;
+        Ok(Self {
+            schema_version: PDF_SUPPORT_POLICY_VERSION,
+            policy: PdfSupportPolicy::StrictInGrid,
+            extrapolation_allowed: false,
+            pdf_set,
+            nominal_member,
+            member_domains,
+            intersection,
+            all_members_share_bounds,
+        })
+    }
+
+    #[must_use]
+    pub fn assess(&self, x: f64, q_gev: f64) -> PdfSupportOutcome {
+        if !x.is_finite() || !q_gev.is_finite() {
+            PdfSupportOutcome::NonFinite
+        } else if x < self.intersection.x_minimum {
+            PdfSupportOutcome::BelowXMinimum
+        } else if x > self.intersection.x_maximum {
+            PdfSupportOutcome::AboveXMaximum
+        } else if q_gev < self.intersection.q_minimum_gev {
+            PdfSupportOutcome::BelowQMinimum
+        } else if q_gev > self.intersection.q_maximum_gev {
+            PdfSupportOutcome::AboveQMaximum
+        } else {
+            PdfSupportOutcome::InSupport
+        }
+    }
+
+    pub fn validate_for_members(
+        &self,
+        source: &PdfMemberSpec,
+        target: &PdfMemberSpec,
+    ) -> Result<(), PdfReweightingError> {
+        if self.schema_version != PDF_SUPPORT_POLICY_VERSION
+            || self.policy != PdfSupportPolicy::StrictInGrid
+            || self.extrapolation_allowed
+            || self.pdf_set != source.set_name
+            || self.pdf_set != target.set_name
+            || self.nominal_member != source.member
+            || !self
+                .member_domains
+                .iter()
+                .any(|domain| domain.member == target.member)
+        {
+            return Err(PdfReweightingError::InvalidRequest(
+                "reweighting request is incompatible with the strict in-grid support contract"
+                    .to_owned(),
+            ));
+        }
+        Ok(())
+    }
+
+    #[must_use]
+    pub fn same_reusable_domain(&self, other: &Self) -> bool {
+        self.schema_version == other.schema_version
+            && self.policy == other.policy
+            && !self.extrapolation_allowed
+            && !other.extrapolation_allowed
+            && self.pdf_set == other.pdf_set
+            && self.member_domains == other.member_domains
+            && self.intersection == other.intersection
+            && self.all_members_share_bounds == other.all_members_share_bounds
+    }
+}
+
+pub fn load_full_set_strict_support_contract(
+    pdf_set: &str,
+    nominal_member: i32,
+) -> Result<PdfSupportContract, PdfReweightingError> {
+    let nominal = LhapdfProvider::new(pdf_set, nominal_member)?;
+    let member_count = nominal.member_count();
+    let mut domains = Vec::with_capacity(member_count);
+    for member in 0..member_count {
+        let member = i32::try_from(member).map_err(|_| {
+            PdfReweightingError::InvalidRequest("PDF member count exceeds i32".to_owned())
+        })?;
+        let provider = LhapdfProvider::new(pdf_set, member)?;
+        domains.push(PdfMemberSupportDomain {
+            member,
+            bounds: provider.support_bounds().clone(),
+        });
+    }
+    PdfSupportContract::strict_in_grid(pdf_set, nominal_member, domains)
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PdfMemberSpec {
@@ -65,6 +253,7 @@ pub struct PdfReweightingRequest {
     pub event_weight_index: Option<usize>,
     pub denominator_policy: DenominatorPolicy,
     pub nominal_xf_relative_tolerance: f64,
+    pub support_contract: PdfSupportContract,
 }
 
 impl PdfReweightingRequest {
@@ -82,6 +271,8 @@ impl PdfReweightingRequest {
                 self.nominal_xf_relative_tolerance
             )));
         }
+        self.support_contract
+            .validate_for_members(&self.source_pdf, &self.target_pdf)?;
         Ok(())
     }
 }
@@ -99,6 +290,7 @@ pub enum PdfReweightingInvalidReason {
     MultipleEventWeightsRequireIndex,
     EventWeightIndexOutOfRange,
     NonFiniteEventWeight,
+    OutsideStrictPdfSupport,
     NonFiniteStoredNominalXf,
     NonPositiveStoredNominalXf,
     NominalPdfEvaluationFailed,
@@ -125,6 +317,7 @@ impl fmt::Display for PdfReweightingInvalidReason {
 #[derive(Debug)]
 pub enum PdfReweightingError {
     InvalidRequest(String),
+    InconsistentMemberGrid { pdf_set: String, message: String },
     Pdf(PdfError),
 }
 
@@ -132,6 +325,12 @@ impl fmt::Display for PdfReweightingError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::InvalidRequest(message) => formatter.write_str(message),
+            Self::InconsistentMemberGrid { pdf_set, message } => {
+                write!(
+                    formatter,
+                    "PDF set '{pdf_set}' has no valid member-grid intersection: {message}"
+                )
+            }
             Self::Pdf(error) => error.fmt(formatter),
         }
     }
@@ -141,7 +340,7 @@ impl Error for PdfReweightingError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
             Self::Pdf(error) => Some(error),
-            Self::InvalidRequest(_) => None,
+            Self::InvalidRequest(_) | Self::InconsistentMemberGrid { .. } => None,
         }
     }
 }
@@ -193,6 +392,7 @@ pub struct PdfReweightingResult {
     pub proton_side_x: Option<f64>,
     pub pdf_scale_gev: Option<f64>,
     pub stored_nominal_xf: Option<f64>,
+    pub support_outcome: Option<PdfSupportOutcome>,
     pub recomputed_nominal_xf: Option<f64>,
     pub target_xf: Option<f64>,
     pub stored_nominal_relative_difference: Option<f64>,
@@ -226,6 +426,7 @@ impl PdfReweightingResult {
             proton_side_x: None,
             pdf_scale_gev: None,
             stored_nominal_xf: None,
+            support_outcome: None,
             recomputed_nominal_xf: None,
             target_xf: None,
             stored_nominal_relative_difference: None,
@@ -252,6 +453,11 @@ impl PdfReweightingResult {
     fn with_weight(mut self, index: usize, weight: f64) -> Self {
         self.selected_event_weight_index = Some(index);
         self.original_event_weight = Some(weight);
+        self
+    }
+
+    fn with_support_outcome(mut self, outcome: PdfSupportOutcome) -> Self {
+        self.support_outcome = Some(outcome);
         self
     }
 }
@@ -434,10 +640,31 @@ pub fn reweight_event(
         Ok(entry) => entry,
         Err((reason, message)) => return Ok(base(reason, message)),
     };
+    let support_outcome = request.support_contract.assess(entry.x, entry.scale_gev);
+    if support_outcome != PdfSupportOutcome::InSupport {
+        return Ok(base(
+            PdfReweightingInvalidReason::OutsideStrictPdfSupport,
+            format!(
+                "strict support decision {support_outcome} for x={} and GenPdfInfo Q={} GeV within x=[{}, {}], Q=[{}, {}] GeV",
+                entry.x,
+                entry.scale_gev,
+                request.support_contract.intersection.x_minimum,
+                request.support_contract.intersection.x_maximum,
+                request.support_contract.intersection.q_minimum_gev,
+                request.support_contract.intersection.q_maximum_gev,
+            ),
+        )
+        .with_entry(&entry)
+        .with_support_outcome(support_outcome));
+    }
     let (weight_index, original_weight) =
         match select_event_weight(event, request.event_weight_index) {
             Ok(weight) => weight,
-            Err((reason, message)) => return Ok(base(reason, message).with_entry(&entry)),
+            Err((reason, message)) => {
+                return Ok(base(reason, message)
+                    .with_entry(&entry)
+                    .with_support_outcome(support_outcome))
+            }
         };
 
     let nominal_xf = match nominal_pdf.xfx_at_scale(entry.flavor, entry.x, entry.scale_gev) {
@@ -448,6 +675,7 @@ pub fn reweight_event(
                 message,
             )
             .with_entry(&entry)
+            .with_support_outcome(support_outcome)
             .with_weight(weight_index, original_weight))
         }
     };
@@ -457,6 +685,7 @@ pub fn reweight_event(
             format!("recomputed nominal xf is {nominal_xf}"),
         )
         .with_entry(&entry)
+        .with_support_outcome(support_outcome)
         .with_weight(weight_index, original_weight));
     }
     if nominal_xf <= 0.0 {
@@ -478,6 +707,7 @@ pub fn reweight_event(
                 message,
             )
             .with_entry(&entry)
+            .with_support_outcome(support_outcome)
             .with_weight(weight_index, original_weight);
             result.recomputed_nominal_xf = Some(nominal_xf);
             result.stored_nominal_relative_difference = Some(relative_difference);
@@ -492,6 +722,7 @@ pub fn reweight_event(
         "uninitialized ratio",
     )
     .with_entry(&entry)
+    .with_support_outcome(support_outcome)
     .with_weight(weight_index, original_weight);
     result.recomputed_nominal_xf = Some(nominal_xf);
     result.target_xf = Some(target_xf);
@@ -1035,12 +1266,36 @@ pub fn validate_run_compatibility(
         &nominal.git_commit,
         &direct_target.git_commit,
     );
-    compare_required_field(
-        &mut issues,
-        "git_dirty",
-        &nominal.git_dirty,
-        &direct_target.git_dirty,
-    );
+    if nominal.git_dirty != Some(false)
+        || direct_target.git_dirty != Some(false)
+        || nominal.git_dirty != direct_target.git_dirty
+    {
+        issues.push(RunCompatibilityIssue {
+            field: "git_dirty".to_owned(),
+            nominal: format!("{:?}", nominal.git_dirty),
+            direct_target: format!("{:?}", direct_target.git_dirty),
+        });
+    }
+    let support_compatible = match (
+        nominal.pdf_support_contract.as_ref(),
+        direct_target.pdf_support_contract.as_ref(),
+        nominal.pdf_member,
+        direct_target.pdf_member,
+    ) {
+        (Some(left), Some(right), Some(left_member), Some(right_member)) => {
+            left.nominal_member == left_member
+                && right.nominal_member == right_member
+                && left.same_reusable_domain(right)
+        }
+        _ => false,
+    };
+    if !support_compatible {
+        issues.push(RunCompatibilityIssue {
+            field: "pdf_support_contract".to_owned(),
+            nominal: format!("{:?}", nominal.pdf_support_contract),
+            direct_target: format!("{:?}", direct_target.pdf_support_contract),
+        });
+    }
 
     RunCompatibilityReport {
         compatible: issues.is_empty(),
