@@ -96,6 +96,11 @@ bash "${SCRIPT_DIR}/setup_hepmc3_wsl.sh" --external-root "${EXTERNAL_ROOT}"
 printf '%s\n' "==> Installing PYTHIA 8.312"
 bash "${SCRIPT_DIR}/setup_pythia8_wsl.sh" --external-root "${EXTERNAL_ROOT}"
 
+# The HepMC3 and PYTHIA child processes cannot update this shell. Activate the
+# authoritative native environment before configuring the combined backends.
+# shellcheck source=scripts/pythia_env.sh
+source "${SCRIPT_DIR}/pythia_env.sh"
+
 printf '%s\n' "==> Installing APFEL++ 4.8.0 and building native backends"
 bash "${SCRIPT_DIR}/setup_apfelxx_wsl.sh" \
     --external-root "${EXTERNAL_ROOT}" \
