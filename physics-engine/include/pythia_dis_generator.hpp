@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nlohmann/json.hpp>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -24,6 +25,12 @@ namespace parton_sbi::pythia_dis_generator
     int         random_seed = -1;
     std::string pdf_set = "";
     int         pdf_member = 0;
+    nlohmann::json pdf_support_contract;
+    std::vector<std::string> command;
+    double      pdf_support_x_minimum = 0.0;
+    double      pdf_support_x_maximum = 0.0;
+    double      pdf_support_q_minimum_gev = 0.0;
+    double      pdf_support_q_maximum_gev = 0.0;
     bool        parton_shower = true;
     bool        hadronization = true;
   };
@@ -52,10 +59,13 @@ namespace parton_sbi::pythia_dis_generator
   {
     int    requested_events = 0;
     int    attempted_events = 0;
+    int    pythia_generated_events = 0;
     int    accepted_events = 0;
     int    failed_events = 0;
     int    vetoed_cuts_events = 0;
     int    vetoed_conservation_events = 0;
+    int    vetoed_pdf_support_events = 0;
+    std::map<std::string, int> pdf_support_vetoes_by_reason;
     double max_momentum_mismatch_gev = 0.0;
     double max_energy_mismatch_gev = 0.0;
     double momentum_conservation_tolerance_gev = 1.0e-3;

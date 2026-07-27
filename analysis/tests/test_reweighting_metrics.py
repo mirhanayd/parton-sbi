@@ -15,7 +15,11 @@ from reweighting.closure import (
     _pooled_bootstrap_indices,
 )
 from reweighting.metrics import compare_samples, weighted_histogram
-from reweighting.run_phase1a import apply_ess_gate, single_case_decision
+from reweighting.run_phase1a import (
+    apply_ess_gate,
+    finalize_phase1a_ess_decision,
+    single_case_decision,
+)
 from reweighting.schema import OBSERVABLES, load_diagnostic_sample
 
 
@@ -158,3 +162,31 @@ def test_passing_single_case_still_cannot_grant_aggregate_permissions():
     assert decision["decision"] == "PASS"
     assert decision["pool_reuse_permission"] is False
     assert decision["phase1b_permission"] is False
+
+
+def test_aggregate_low_ess_finalizes_negative_phase1a_result():
+    decision = finalize_phase1a_ess_decision(
+        nominal_ess_fraction=0.011,
+        mild_ess_fraction=0.012,
+        stress_ess_fraction=0.013,
+    )
+    assert decision["decision"] == "FAIL — NOMINAL-POOL REUSE REJECTED"
+    assert decision["direct_closure_executed"] is False
+    assert decision["pool_reuse_allowed"] is False
+    assert decision["reweighting_path_allowed"] is False
+    assert decision["direct_regeneration_required"] is True
+    assert decision["phase1a_complete"] is True
+    assert decision["phase1bd_planning_permission"] is True
+
+
+def test_aggregate_ess_pass_never_grants_reuse_without_direct_closure():
+    decision = finalize_phase1a_ess_decision(
+        nominal_ess_fraction=0.8,
+        mild_ess_fraction=0.7,
+        stress_ess_fraction=0.6,
+    )
+    assert decision["decision"] == "PENDING — DIRECT CLOSURE REQUIRED"
+    assert decision["pool_reuse_allowed"] is False
+    assert decision["reweighting_path_allowed"] is False
+    assert decision["phase1a_complete"] is False
+    assert decision["phase1bd_planning_permission"] is False

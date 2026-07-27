@@ -1,6 +1,27 @@
 use std::process::Command;
 
 fn main() {
+    println!("cargo:rerun-if-changed=src/lhapdf_support_bridge.cpp");
+
+    let lhapdf = pkg_config::Config::new()
+        .atleast_version("6")
+        .cargo_metadata(false)
+        .probe("lhapdf")
+        .expect("LHAPDF 6 must be available through pkg-config");
+    let mut support_bridge = cc::Build::new();
+    support_bridge
+        .cpp(true)
+        .file("src/lhapdf_support_bridge.cpp")
+        .flag_if_supported("-std=c++17");
+    for include_path in lhapdf.include_paths {
+        support_bridge.include(include_path);
+    }
+    support_bridge.compile("partonsbi_lhapdf_support_bridge");
+    pkg_config::Config::new()
+        .atleast_version("6")
+        .probe("lhapdf")
+        .expect("LHAPDF 6 must be linkable through pkg-config");
+
     // Re-run this build script if the .git directory changes
     println!("cargo:rerun-if-changed=.git/HEAD");
     println!("cargo:rerun-if-changed=.git/index");

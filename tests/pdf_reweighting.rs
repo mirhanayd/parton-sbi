@@ -1,9 +1,10 @@
 use parton_sbi::physics::{
-    identify_proton_pdf_entry, reweight_event, summarize_reweighting, validate_run_compatibility,
-    DenominatorPolicy, HepMcEvent, HepMcReader, HepMcRunCuts, HepMcRunProvenance, LhapdfProvider,
-    PdfEntrySide, PdfMemberSpec, PdfReweightingAccumulator, PdfReweightingInvalidReason,
-    PdfReweightingRequest, PdfWeightEvaluator, WeightStatistics,
-    DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE,
+    identify_proton_pdf_entry, load_full_set_strict_support_contract, reweight_event,
+    summarize_reweighting, validate_run_compatibility, DenominatorPolicy, HepMcEvent, HepMcReader,
+    HepMcRunCuts, HepMcRunProvenance, LhapdfProvider, PdfEntrySide, PdfMemberSpec,
+    PdfMemberSupportDomain, PdfReweightingAccumulator, PdfReweightingError,
+    PdfReweightingInvalidReason, PdfReweightingRequest, PdfSupportBounds, PdfSupportContract,
+    PdfSupportOutcome, PdfWeightEvaluator, WeightStatistics, DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE,
 };
 use std::io::{BufReader, Cursor};
 use std::path::PathBuf;
@@ -45,7 +46,147 @@ fn request() -> PdfReweightingRequest {
         event_weight_index: None,
         denominator_policy: DenominatorPolicy::Stored,
         nominal_xf_relative_tolerance: DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE,
+        support_contract: support_contract("MockSet", 0),
     }
+}
+
+fn support_contract(set_name: &str, nominal_member: i32) -> PdfSupportContract {
+    let bounds = PdfSupportBounds::new(1.0e-6, 1.0, 1.0, 100_000.0).unwrap();
+    PdfSupportContract::strict_in_grid(
+        set_name,
+        nominal_member,
+        vec![0, 1]
+            .into_iter()
+            .map(|member| PdfMemberSupportDomain {
+                member,
+                bounds: bounds.clone(),
+            })
+            .collect(),
+    )
+    .unwrap()
+}
+
+#[test]
+fn strict_support_uses_gen_pdf_q_not_q_squared() {
+    let bounds = PdfSupportBounds::new(0.1, 0.3, 9.0, 20.0).unwrap();
+    let contract = PdfSupportContract::strict_in_grid(
+        "MockSet",
+        0,
+        vec![0, 1]
+            .into_iter()
+            .map(|member| PdfMemberSupportDomain {
+                member,
+                bounds: bounds.clone(),
+            })
+            .collect(),
+    )
+    .unwrap();
+    assert_eq!(contract.assess(0.2, 10.0), PdfSupportOutcome::InSupport);
+    assert_eq!(
+        contract.assess(0.2, 8.999),
+        PdfSupportOutcome::BelowQMinimum
+    );
+    assert_eq!(
+        contract.assess(0.2, 20.001),
+        PdfSupportOutcome::AboveQMaximum
+    );
+    // Treating the stored Q=10 GeV as Q^2=100 GeV^2 would reject this point.
+}
+
+#[test]
+fn strict_support_rejects_x_boundaries_and_non_finite_values_by_reason() {
+    let contract = support_contract("MockSet", 0);
+    assert_eq!(
+        contract.assess(0.5e-6, 10.0),
+        PdfSupportOutcome::BelowXMinimum
+    );
+    assert_eq!(
+        contract.assess(1.01, 10.0),
+        PdfSupportOutcome::AboveXMaximum
+    );
+    assert_eq!(
+        contract.assess(f64::NAN, 10.0),
+        PdfSupportOutcome::NonFinite
+    );
+    assert!(!contract.extrapolation_allowed);
+}
+
+#[test]
+fn member_grid_intersection_is_explicit_and_detects_inconsistency() {
+    let contract = PdfSupportContract::strict_in_grid(
+        "MockSet",
+        0,
+        vec![
+            PdfMemberSupportDomain {
+                member: 0,
+                bounds: PdfSupportBounds::new(1.0e-6, 1.0, 1.0, 100.0).unwrap(),
+            },
+            PdfMemberSupportDomain {
+                member: 1,
+                bounds: PdfSupportBounds::new(2.0e-6, 0.9, 2.0, 90.0).unwrap(),
+            },
+        ],
+    )
+    .unwrap();
+    assert!(!contract.all_members_share_bounds);
+    assert_eq!(contract.intersection.x_minimum, 2.0e-6);
+    assert_eq!(contract.intersection.x_maximum, 0.9);
+    assert_eq!(contract.intersection.q_minimum_gev, 2.0);
+    assert_eq!(contract.intersection.q_maximum_gev, 90.0);
+
+    let error = PdfSupportContract::strict_in_grid(
+        "MockSet",
+        0,
+        vec![
+            PdfMemberSupportDomain {
+                member: 0,
+                bounds: PdfSupportBounds::new(1.0e-6, 0.1, 1.0, 10.0).unwrap(),
+            },
+            PdfMemberSupportDomain {
+                member: 1,
+                bounds: PdfSupportBounds::new(0.2, 1.0, 20.0, 100.0).unwrap(),
+            },
+        ],
+    )
+    .unwrap_err();
+    assert!(matches!(
+        error,
+        PdfReweightingError::InconsistentMemberGrid { .. }
+    ));
+}
+
+#[test]
+fn out_of_support_event_is_typed_invalid_without_pdf_evaluation() {
+    let mut request = request();
+    request.support_contract = PdfSupportContract::strict_in_grid(
+        "MockSet",
+        0,
+        vec![0, 1]
+            .into_iter()
+            .map(|member| PdfMemberSupportDomain {
+                member,
+                bounds: PdfSupportBounds::new(0.1, 0.3, 11.0, 20.0).unwrap(),
+            })
+            .collect(),
+    )
+    .unwrap();
+    let result = reweight_event(
+        &standard_event(),
+        None,
+        &request,
+        &MockPdf(Err("must not evaluate".to_owned())),
+        &MockPdf(Err("must not evaluate".to_owned())),
+    )
+    .unwrap();
+    assert!(!result.valid);
+    assert_eq!(
+        result.invalid_reason,
+        Some(PdfReweightingInvalidReason::OutsideStrictPdfSupport)
+    );
+    assert_eq!(
+        result.support_outcome,
+        Some(PdfSupportOutcome::BelowQMinimum)
+    );
 }
 
 fn evaluate(
@@ -299,6 +440,7 @@ fn provenance() -> HepMcRunProvenance {
         proton_energy_gev: Some(920.0),
         pdf_set: Some("CT18NLO".to_owned()),
         pdf_member: Some(0),
+        pdf_support_contract: Some(support_contract("CT18NLO", 0)),
         configured_seed: Some(100),
         generator_seed: Some(100),
         parton_shower: Some(true),
@@ -329,7 +471,8 @@ fn provenance() -> HepMcRunProvenance {
 fn run_compatibility_accepts_member_and_seed_differences() {
     let nominal = provenance();
     let mut target = nominal.clone();
-    target.pdf_member = Some(7);
+    target.pdf_member = Some(1);
+    target.pdf_support_contract = Some(support_contract("CT18NLO", 1));
     target.configured_seed = Some(200);
     target.generator_seed = Some(200);
     target.build_timestamp = Some("different-time".to_owned());
@@ -483,6 +626,7 @@ fn stored_vs_recomputed_nominal_xf_integration_check() {
     let mut request = request();
     request.source_pdf = PdfMemberSpec::new("CT18NLO", 0).unwrap();
     request.target_pdf = request.source_pdf.clone();
+    request.support_contract = load_full_set_strict_support_contract("CT18NLO", 0).unwrap();
     let result = reweight_event(&event, None, &request, &pdf, &pdf).unwrap();
     assert!(result.valid, "{result:?}");
 }
@@ -509,6 +653,13 @@ fn cli_smoke_output_has_the_declared_schema() {
         run.join("metadata.json"),
     )
     .unwrap();
+    let authoritative_contract = load_full_set_strict_support_contract("CT18NLO", 0).unwrap();
+    for path in [run.join("config.json"), run.join("metadata.json")] {
+        let mut document: serde_json::Value =
+            serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+        document["pdf_support_contract"] = serde_json::to_value(&authoritative_contract).unwrap();
+        std::fs::write(&path, serde_json::to_vec_pretty(&document).unwrap()).unwrap();
+    }
     let csv_data = "event_number,event_weight,Q2,x,y,W2,scattered_electron_E,scattered_electron_px,scattered_electron_py,scattered_electron_pz,number_of_final_state_particles,number_of_charged_final_state_particles\n\
 225,1,3.88727,0.336657,0.000114097,8.53975,26.2138,-1.91659,0.454825,26.1397,4,2\n\
 2743,1,3.54945,0.256776,0.000136591,11.154,26.7593,-1.59,-1.02789,26.6923,4,2\n";
@@ -600,5 +751,30 @@ fn cli_smoke_output_has_the_declared_schema() {
         .status()
         .unwrap();
     assert!(!mismatch_status.success());
+
+    let metadata_path = run.join("metadata.json");
+    let mut incompatible_metadata: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&metadata_path).unwrap()).unwrap();
+    incompatible_metadata["pdf_support_contract"]["intersection"]["x_minimum"] =
+        serde_json::json!(2.0e-9);
+    std::fs::write(
+        &metadata_path,
+        serde_json::to_vec_pretty(&incompatible_metadata).unwrap(),
+    )
+    .unwrap();
+    let incompatible_scan_output = root.join("incompatible-scan");
+    let incompatible_scan = std::process::Command::new(env!("CARGO_BIN_EXE_parton-sbi"))
+        .args([
+            "scan-pdf-members",
+            "--nominal-run",
+            run.to_str().unwrap(),
+            "--pdf-set",
+            "CT18NLO",
+            "--output",
+            incompatible_scan_output.to_str().unwrap(),
+        ])
+        .status()
+        .unwrap();
+    assert!(!incompatible_scan.success());
     let _ = std::fs::remove_dir_all(root);
 }

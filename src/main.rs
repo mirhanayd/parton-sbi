@@ -5,7 +5,8 @@ use std::path::PathBuf;
 
 use parton_sbi::physics::{
     collider_beams, compute_dis_kinematics, evaluate_lo_structure_functions, exact_inelasticity,
-    lo_differential_cross_section, scattered_electron, FixedAlpha, LhapdfProvider,
+    lo_differential_cross_section, load_full_set_strict_support_contract, scattered_electron,
+    FixedAlpha, LhapdfProvider, PdfSupportContract, PdfSupportPolicy,
 };
 
 mod pdf_reweighting_cli;
@@ -135,6 +136,7 @@ Usage:
       [--y-max <Y>] \
       [--seed <SEED>] \
       [--pdf-member <INDEX>] \
+      [--pdf-support-policy strict_in_grid] \
       [--parton-shower <true|false>] \
       [--hadronization <true|false>]
 
@@ -149,6 +151,8 @@ Required options:
 Defaults:
   --q2-max 10000.0, --x-min 0.0001, --x-max 0.8, --y-min 0.01, --y-max 0.95,
   --pdf-member 0, --parton-shower true, --hadronization true.
+  --pdf-support-policy strict_in_grid is the only accepted support policy and
+  applies the intersection of every member domain in the selected set.
   If --seed is omitted, a random seed is dynamically generated.
 ";
 
@@ -176,7 +180,7 @@ enum DisCommand {
 
 #[derive(Debug, PartialEq)]
 enum GenerateDisEventsCommand {
-    Calculate(GenerateDisEventsCliArgs),
+    Calculate(Box<GenerateDisEventsCliArgs>),
     Help,
 }
 
@@ -197,6 +201,8 @@ struct GenerateDisEventsCliArgs {
     random_seed: Option<i32>,
     pdf_set: String,
     pdf_member: i32,
+    pdf_support_contract: PdfSupportContract,
+    command: Vec<String>,
     parton_shower: bool,
     hadronization: bool,
     #[serde(skip)]
@@ -289,7 +295,7 @@ fn main() -> Result<()> {
             Ok(())
         }
         Command::GenerateDisEvents(GenerateDisEventsCommand::Calculate(arguments)) => {
-            run_generate_dis_events(arguments)
+            run_generate_dis_events(*arguments)
         }
         Command::GenerateDisEvents(GenerateDisEventsCommand::Help) => {
             print!("{GENERATE_DIS_EVENTS_HELP}");
@@ -636,6 +642,7 @@ fn parse_generate_dis_events_command(
     let mut seed = None;
     let mut pdf_set = None;
     let mut pdf_member = Some(0);
+    let mut pdf_support_policy = Some(PdfSupportPolicy::StrictInGrid);
     let mut parton_shower = Some(true);
     let mut hadronization = Some(true);
     let mut output = None;
@@ -691,6 +698,17 @@ fn parse_generate_dis_events_command(
                 }
                 pdf_member = Some(val);
             }
+            "--pdf-support-policy" => {
+                let policy = match value_text.as_str() {
+                    "strict_in_grid" => PdfSupportPolicy::StrictInGrid,
+                    _ => {
+                        return Err(format!(
+                            "{flag} only accepts strict_in_grid; PDF extrapolation is not supported"
+                        ))
+                    }
+                };
+                pdf_support_policy = Some(policy);
+            }
             "--parton-shower" => {
                 let val = value_text
                     .parse::<bool>()
@@ -722,9 +740,15 @@ fn parse_generate_dis_events_command(
     let q2_min = q2_min.ok_or_else(|| "missing required option: --q2-min".to_string())?;
     let events = events.ok_or_else(|| "missing required option: --events".to_string())?;
     let pdf_set = pdf_set.ok_or_else(|| "missing required option: --pdf-set".to_string())?;
+    let pdf_member = pdf_member.unwrap_or(0);
+    if pdf_support_policy != Some(PdfSupportPolicy::StrictInGrid) {
+        return Err("strict_in_grid is the required PDF support policy".to_owned());
+    }
+    let pdf_support_contract = load_full_set_strict_support_contract(&pdf_set, pdf_member)
+        .map_err(|error| format!("failed to establish strict PDF support: {error}"))?;
     let output = output.ok_or_else(|| "missing required option: --output".to_string())?;
 
-    Ok(GenerateDisEventsCommand::Calculate(
+    Ok(GenerateDisEventsCommand::Calculate(Box::new(
         GenerateDisEventsCliArgs {
             schema_version: 1,
             process: "neutral_current_dis".to_string(),
@@ -739,12 +763,14 @@ fn parse_generate_dis_events_command(
             number_of_events: events,
             random_seed: seed,
             pdf_set,
-            pdf_member: pdf_member.unwrap_or(0),
+            pdf_member,
+            pdf_support_contract,
+            command: std::env::args().collect(),
             parton_shower: parton_shower.unwrap_or(true),
             hadronization: hadronization.unwrap_or(true),
             output,
         },
-    ))
+    )))
 }
 
 fn run_generate_dis_events(arguments: GenerateDisEventsCliArgs) -> Result<()> {
@@ -770,6 +796,15 @@ fn run_generate_dis_events(arguments: GenerateDisEventsCliArgs) -> Result<()> {
     }
     if arguments.number_of_events == 0 {
         return Err(Error::Msg("number of events must be positive".to_string()));
+    }
+    if arguments.pdf_support_contract.policy != PdfSupportPolicy::StrictInGrid
+        || arguments.pdf_support_contract.extrapolation_allowed
+        || arguments.pdf_support_contract.pdf_set != arguments.pdf_set
+        || arguments.pdf_support_contract.nominal_member != arguments.pdf_member
+    {
+        return Err(Error::Msg(
+            "generation requires a matching strict_in_grid support contract".to_owned(),
+        ));
     }
 
     let timestamp = Utc::now().format("%Y%m%d_%H%M%S").to_string();
@@ -865,6 +900,12 @@ fn run_generate_dis_events(arguments: GenerateDisEventsCliArgs) -> Result<()> {
     }
     if let Some(vetoed) = summary.get("vetoed_cuts_events") {
         println!("Vetoed by cuts: {}", vetoed);
+    }
+    if let Some(generated) = summary.get("pythia_generated_events") {
+        println!("PYTHIA-generated events: {}", generated);
+    }
+    if let Some(vetoed) = summary.get("vetoed_pdf_support_events") {
+        println!("Vetoed by strict PDF support: {}", vetoed);
     }
 
     Ok(())

@@ -59,6 +59,21 @@ Acceptance criteria:
 
 ### Phase 1 — PDF parameterization and reweighting feasibility
 
+**Current decision.** Phase 1A is complete. A provenance-clean, strict-support
+confirmation study rejected reweighting-based nominal-pool reuse because the
+nominal, mild-member, and stress-member samples all had `ESS/N < 0.20`.
+Consequently:
+
+- reweighting-based pool reuse is rejected;
+- direct generation at every PDF parameter point is required;
+- hard-PDF ratios remain diagnostics, not an authorized event-pool path; and
+- neural inference remains unimplemented.
+
+The next planned subphase is **Phase 1B-D — Continuous, sum-rule-preserving PDF
+family with direct event regeneration**. The `-D` suffix records the direct
+generation route. Planning is permitted; implementation is outside Phase 1A
+and must not revive the failed nominal-pool reuse path.
+
 Work:
 
 1. Implement a small, sum-rule-aware continuous PDF family at `Q0` behind a versioned interface.
@@ -400,6 +415,9 @@ A posterior can have acceptable parameter RMSE and still fail posterior predicti
 
 ## 11. Single next implementation step
 
-After this audit, the next implementation step should be **Phase 0's standards-compliant streaming HepMC3 event extractor and real-file fixture tests**, including `GenPdfInfo`, event weight, correct particle columns/statuses, vertices, run metadata, and pool/seed provenance.
-
-This comes before a neural model because it establishes the trustworthy event and reweighting data contract on which every later pseudo-experiment depends.
+Write and review the Phase 1B-D scientific design for a continuous,
+sum-rule-preserving PDF family whose parameter points are simulated through
+direct event regeneration. Define parameter support, sum-rule tolerances,
+generator coupling, seed separation, computational budget, and acceptance
+criteria before implementation. Do not train a neural model or reuse the
+rejected nominal-pool weighting path.

@@ -14,6 +14,8 @@ use std::fs::File;
 use std::io::{self, BufRead, BufReader};
 use std::path::{Path, PathBuf};
 
+use super::pdf_reweighting::PdfSupportContract;
+
 /// A preserved HepMC3 attribute, including attributes not interpreted here.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct HepMcAttribute {
@@ -202,6 +204,7 @@ pub struct HepMcRunProvenance {
     pub git_commit: Option<String>,
     pub git_dirty: Option<bool>,
     pub build_timestamp: Option<String>,
+    pub pdf_support_contract: Option<PdfSupportContract>,
 }
 
 /// Final run-level generation and rate-normalization statistics.
@@ -215,10 +218,13 @@ pub struct HepMcRunSummary {
     pub source_summary_path: PathBuf,
     pub requested_events: Option<u64>,
     pub attempted_events: Option<u64>,
+    pub pythia_generated_events: Option<u64>,
     pub accepted_events: Option<u64>,
     pub failed_events: Option<u64>,
     pub vetoed_cuts_events: Option<u64>,
     pub vetoed_conservation_events: Option<u64>,
+    pub vetoed_pdf_support_events: Option<u64>,
+    pub pdf_support_vetoes_by_reason: BTreeMap<String, u64>,
     pub event_weight_semantics: Option<String>,
     pub pythia_weight_sum: Option<f64>,
     pub selected_weight_sum: Option<f64>,
@@ -240,10 +246,22 @@ impl HepMcRunSummary {
             source_summary_path,
             requested_events: value_u64(&summary, "requested_events"),
             attempted_events: value_u64(&summary, "attempted_events"),
+            pythia_generated_events: value_u64(&summary, "pythia_generated_events"),
             accepted_events: value_u64(&summary, "accepted_events"),
             failed_events: value_u64(&summary, "failed_events"),
             vetoed_cuts_events: value_u64(&summary, "vetoed_cuts_events"),
             vetoed_conservation_events: value_u64(&summary, "vetoed_conservation_events"),
+            vetoed_pdf_support_events: value_u64(&summary, "vetoed_pdf_support_events"),
+            pdf_support_vetoes_by_reason: summary
+                .get("pdf_support_vetoes_by_reason")
+                .and_then(Value::as_object)
+                .map(|values| {
+                    values
+                        .iter()
+                        .filter_map(|(key, value)| value.as_u64().map(|value| (key.clone(), value)))
+                        .collect()
+                })
+                .unwrap_or_default(),
             event_weight_semantics: value_string(&summary, "event_weight_semantics"),
             pythia_weight_sum: value_f64(&summary, "pythia_weight_sum"),
             selected_weight_sum: value_f64(&summary, "selected_weight_sum"),
@@ -296,6 +314,15 @@ impl HepMcRunProvenance {
             y_max: nested_f64(metadata_cuts, "y_max").or_else(|| value_f64(&config, "y_max")),
         };
         let pythia_version = value_string(&metadata, "pythia_version");
+        let pdf_support_contract = metadata
+            .get("pdf_support_contract")
+            .cloned()
+            .map(serde_json::from_value)
+            .transpose()
+            .map_err(|error| HepMcError::Provenance {
+                path: metadata_path.clone(),
+                message: format!("invalid pdf_support_contract: {error}"),
+            })?;
 
         Ok(Self {
             source_run_directory,
@@ -341,6 +368,7 @@ impl HepMcRunProvenance {
             git_commit: value_string(&metadata, "git_commit"),
             git_dirty: value_bool(&metadata, "git_dirty"),
             build_timestamp: value_string(&metadata, "build_timestamp"),
+            pdf_support_contract,
         })
     }
 

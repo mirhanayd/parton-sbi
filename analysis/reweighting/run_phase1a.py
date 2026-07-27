@@ -13,6 +13,68 @@ from .schema import load_diagnostic_sample
 ESS_THRESHOLD = 0.20
 
 
+def finalize_phase1a_ess_decision(
+    *,
+    nominal_ess_fraction: float,
+    mild_ess_fraction: float,
+    stress_ess_fraction: float,
+    direct_closure_passed: bool | None = None,
+) -> dict[str, object]:
+    """Apply the aggregate predeclared ESS gate before any direct closure."""
+    fractions = {
+        "nominal": nominal_ess_fraction,
+        "mild": mild_ess_fraction,
+        "stress": stress_ess_fraction,
+    }
+    if any(not 0.0 <= value <= 1.0 for value in fractions.values()):
+        raise ValueError("all ESS fractions must be between zero and one")
+    failed = [name for name, value in fractions.items() if value < ESS_THRESHOLD]
+    if failed:
+        return {
+            "schema_version": 1,
+            "decision": "FAIL — NOMINAL-POOL REUSE REJECTED",
+            "reason": "DIRECT REGENERATION REQUIRED: predeclared ESS/N gate failed",
+            "ess_threshold": ESS_THRESHOLD,
+            "ess_fractions": fractions,
+            "failed_ess_roles": failed,
+            "direct_closure_executed": False,
+            "pool_reuse_allowed": False,
+            "reweighting_path_allowed": False,
+            "direct_regeneration_required": True,
+            "phase1a_complete": True,
+            "phase1bd_planning_permission": True,
+        }
+    if direct_closure_passed is not True:
+        return {
+            "schema_version": 1,
+            "decision": "PENDING — DIRECT CLOSURE REQUIRED",
+            "reason": "ESS passed, but ESS alone cannot validate pool reuse",
+            "ess_threshold": ESS_THRESHOLD,
+            "ess_fractions": fractions,
+            "failed_ess_roles": [],
+            "direct_closure_executed": direct_closure_passed is not None,
+            "pool_reuse_allowed": False,
+            "reweighting_path_allowed": False,
+            "direct_regeneration_required": False,
+            "phase1a_complete": False,
+            "phase1bd_planning_permission": False,
+        }
+    return {
+        "schema_version": 1,
+        "decision": "PASS",
+        "reason": "ESS and independently seeded direct closure passed",
+        "ess_threshold": ESS_THRESHOLD,
+        "ess_fractions": fractions,
+        "failed_ess_roles": [],
+        "direct_closure_executed": True,
+        "pool_reuse_allowed": True,
+        "reweighting_path_allowed": True,
+        "direct_regeneration_required": False,
+        "phase1a_complete": True,
+        "phase1bd_planning_permission": False,
+    }
+
+
 def apply_ess_gate(shape_result: dict[str, object], ess_fraction: float) -> dict[str, object]:
     """Apply the mandatory single-case ESS stop without mutating shape output."""
     if not 0.0 <= ess_fraction <= 1.0:

@@ -33,15 +33,19 @@ pub use hepmc3::{
     HepMcAttribute, HepMcError, HepMcEvent, HepMcParticle, HepMcPdfInfo, HepMcReader, HepMcRunCuts,
     HepMcRunProvenance, HepMcRunSummary, HepMcVertex,
 };
-pub use pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
+pub use pdf::{
+    LhapdfProvider, PartonDensities, PdfError, PdfProvider, PdfSupportBoundSource, PdfSupportBounds,
+};
 pub use pdf_reweighting::{
-    extract_event_observables, identify_proton_pdf_entry, reweight_event, summarize_reweighting,
-    validate_run_compatibility, DenominatorPolicy, EffectiveSampleSize, EventObservableSummary,
-    InclusiveObservableRow, PdfEntrySide, PdfMemberSpec, PdfReweightingAccumulator,
-    PdfReweightingDiagnostics, PdfReweightingError, PdfReweightingInvalidReason,
-    PdfReweightingRequest, PdfReweightingResult, PdfWeightEvaluator, ProtonPdfEntry,
+    extract_event_observables, identify_proton_pdf_entry, load_full_set_strict_support_contract,
+    reweight_event, summarize_reweighting, validate_run_compatibility, DenominatorPolicy,
+    EffectiveSampleSize, EventObservableSummary, InclusiveObservableRow, PdfEntrySide,
+    PdfMemberSpec, PdfMemberSupportDomain, PdfReweightingAccumulator, PdfReweightingDiagnostics,
+    PdfReweightingError, PdfReweightingInvalidReason, PdfReweightingRequest, PdfReweightingResult,
+    PdfSupportContract, PdfSupportOutcome, PdfSupportPolicy, PdfWeightEvaluator, ProtonPdfEntry,
     RatioStatistics, RunCompatibilityIssue, RunCompatibilityReport, ScalarDistributionStatistics,
     WeightStatistics, DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
+    PDF_SUPPORT_POLICY_VERSION,
 };
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,

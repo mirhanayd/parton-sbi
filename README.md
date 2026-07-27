@@ -33,10 +33,12 @@ with target posterior `p(theta_PDF | D)`. The objective is not to determine an i
 PartonSBI does not currently implement continuous PDF parameterization,
 pseudo-experiment construction, amortized neural posterior inference, detector
 simulation, unfolding, or real-data PDF extraction. Phase 1A discrete
-LHAPDF-member reweighting infrastructure is implemented, but its Stage A study
-stopped on a structural CT18NLO support failure. Direct-target closure was not
-started, no event-pool reuse domain was validated, and Phase 1B is not
-authorized.
+LHAPDF-member reweighting infrastructure is implemented and Phase 1A is
+complete with a negative result: the clean strict-support study failed the
+fixed `ESS/N >= 0.20` gate. Nominal-pool reuse and the reweighting production
+path are rejected; direct regeneration is required per PDF parameter point.
+No direct-target closure was needed or claimed. Phase 1B-D is authorized for
+planning only and is not implemented.
 
 Inclusive neutral-current electron-proton data do not provide unrestricted full-flavor PDF separation. The implemented channel primarily constrains charge-weighted quark-plus-antiquark combinations, with only indirect and correlated sensitivity to other directions. `GenPdfInfo`, hard flavor, and nominal PDF values are generator truth/provenance for validation and future reweighting studies; they are not detector-observed inputs and must not be exposed as default inference features.
 
@@ -156,10 +158,18 @@ cargo run --release -- generate-dis-events \
   --seed 42 \
   --pdf-set CT18LO \
   --pdf-member 0 \
+  --pdf-support-policy strict_in_grid \
   --output outputs/smoke
 ```
 
 Each timestamped run contains `config.json`, `metadata.json`, `generator.log`, `events.hepmc3`, `inclusive_observables.csv`, and `summary.json`. Generated runs belong under ignored output directories and must not be committed.
+
+`strict_in_grid` is the only supported generation policy. PartonSBI obtains
+per-member bounds from authoritative LHAPDF metadata, uses their intersection,
+and continues generation until the requested number of events passes DIS cuts,
+momentum conservation, and strict PDF support. PDF extrapolation is disabled.
+The support scale is the Q in GeV serialized as `GenPdfInfo::scale`; it is
+squared exactly once for LHAPDF's `xfxQ2` call.
 
 ## HepMC3 extraction
 
@@ -196,13 +206,14 @@ not, by itself, a closure result or permission to reuse an event pool.
 ## Current roadmap
 
 Completed groundwork includes the repository/scientific audit and Phase 0A
-typed streaming HepMC3 extraction. Phase 1A infrastructure and a 2,000-event
-nominal smoke study are complete, but the study is scientifically blocked by
-one accepted event below the CT18NLO grid; the supported subset also has
-`ESS/N = 0.01176`, below the fixed 0.20 reuse threshold. The next step is an
-explicit scientific decision on the generator/PDF support contract, followed
-by a new Phase 1A study ID. Phase 1B, continuous parameterization, and neural
-inference remain gated. See `docs/CURRENT_PHASE.md` and
+typed streaming HepMC3 extraction. Phase 1A is complete. The original blocked
+smoke study is retained as historical evidence; a clean replacement generated
+2,000 accepted in-support events under a no-extrapolation contract. Its nominal
+`ESS/N = 0.04156296`, while mild member 24 and stress member 51 also remained
+below 0.20. Pool reuse was therefore rejected before direct closure. The next
+step is Phase 1B-D planning for a continuous, sum-rule-preserving PDF family
+with direct event regeneration. Continuous parameterization and neural
+inference are not implemented. See `docs/CURRENT_PHASE.md` and
 `docs/AMORTIZED_INFERENCE_PHASE1A_REWEIGHTING.md`.
 
 ## Scientific limitations
@@ -213,8 +224,10 @@ inference remain gated. See `docs/CURRENT_PHASE.md` and
 - PYTHIA showering and hadronization are phenomenological and model dependent.
 - The checked-in surrogate is an interpolation artifact, not simulation truth for inference.
 - Hard-PDF direct closure and shower/hadronization sufficiency remain
-  unvalidated; the first Phase 1A smoke study found a structural PDF-support
-  failure and did not proceed to direct samples.
+  unvalidated because the predeclared ESS gate already rejected pool reuse;
+  no direct sample was generated or claimed.
+- The validated study domain is the declared DIS selection intersected with
+  strict LHAPDF support, not the unrestricted PYTHIA domain.
 
 See `docs/scientific_scope_and_limitations.md` and the amortized-inference audit for the complete source-grounded limitations.
 

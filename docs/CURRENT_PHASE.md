@@ -6,6 +6,11 @@
 - Phase 0A typed streaming HepMC3 extraction.
 - Rust baseline restored to green.
 - Research-only repository cleanup and renaming.
+- Phase 1A discrete LHAPDF-member reweighting infrastructure.
+- Strict in-grid LHAPDF support contract and provenance-complete confirmation
+  study.
+- Phase 1A negative decision: nominal-pool reuse rejected by the predeclared
+  ESS gate.
 
 # Current state
 
@@ -13,23 +18,25 @@
 - APFEL++, LHAPDF, PYTHIA 8, HepMC3, and Candle surrogate retained.
 - No Cornell demo.
 - No desktop GUI.
-- Phase 1A reweighting infrastructure implemented, audited, and unit-tested.
-- Phase 1A scientific validation blocked at Stage A by an out-of-grid CT18NLO
-  scale in the nominal pool; no direct-target closure was started.
+- Phase 1A is complete with a negative scientific result.
+- The active support policy is `strict_in_grid`; PDF extrapolation is disabled.
+- The clean 2,000-event confirmation pool had nominal `ESS/N = 0.04156296`,
+  below the fixed 0.20 reuse threshold.
+- Reweighting-based pool reuse is rejected; direct event generation is required
+  at every PDF parameter point.
 - No continuous PDF parameterization.
 - No amortized posterior model.
 
 # Next phase
 
-Resolve the Phase 1A PDF-support contract, then restart discrete
-LHAPDF-member hard-PDF reweighting closure under a new study ID. The current
-nominal smoke sample also has `ESS/N = 0.01176`, below the mandatory 0.20 reuse
-threshold.
+Phase 1B-D planning: a continuous, sum-rule-preserving PDF family coupled to
+direct event regeneration at each PDF parameter point.
 
 # Gate
 
-Do not begin Phase 1B or neural inference. Phase 1A is incomplete and blocked;
-pool reuse is not authorized.
+Phase 1B-D is authorized for planning only. Do not implement it until its
+scientific design and acceptance criteria are reviewed. The failed nominal-pool
+reuse path is not authorized, and neural inference is not implemented.
 
 # Model recommendation
 

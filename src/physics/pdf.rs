@@ -6,10 +6,13 @@
 //! from accidentally multiplying by `x` twice.
 
 use std::error::Error;
+use std::ffi::{CStr, CString};
 use std::fmt;
+use std::os::raw::{c_char, c_int};
 use std::panic::{catch_unwind, AssertUnwindSafe};
 
 use managed_lhapdf::{Pdf, PdfSet};
+use serde::{Deserialize, Serialize};
 
 const GLUON_ID: i32 = 21;
 const DOWN_ID: i32 = 1;
@@ -47,6 +50,127 @@ pub trait PdfProvider {
     fn parton_densities(&self, x: f64, q2: f64) -> Result<PartonDensities, PdfError>;
 }
 
+/// Authoritative origin of one strict-support boundary.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum PdfSupportBoundSource {
+    LhapdfPdfXMin,
+    LhapdfPdfXMax,
+    LhapdfPdfQMin,
+    LhapdfPdfQMax,
+}
+
+/// Per-member LHAPDF validity domain, with `Q` expressed in GeV.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PdfSupportBounds {
+    pub x_minimum: f64,
+    pub x_maximum: f64,
+    pub q_minimum_gev: f64,
+    pub q_maximum_gev: f64,
+    pub x_minimum_source: PdfSupportBoundSource,
+    pub x_maximum_source: PdfSupportBoundSource,
+    pub q_minimum_source: PdfSupportBoundSource,
+    pub q_maximum_source: PdfSupportBoundSource,
+}
+
+impl PdfSupportBounds {
+    pub fn new(
+        x_minimum: f64,
+        x_maximum: f64,
+        q_minimum_gev: f64,
+        q_maximum_gev: f64,
+    ) -> Result<Self, String> {
+        if !x_minimum.is_finite()
+            || !x_maximum.is_finite()
+            || !q_minimum_gev.is_finite()
+            || !q_maximum_gev.is_finite()
+            || x_minimum <= 0.0
+            || x_maximum < x_minimum
+            || x_maximum > 1.0
+            || q_minimum_gev <= 0.0
+            || q_maximum_gev < q_minimum_gev
+        {
+            return Err(format!(
+                "invalid LHAPDF support bounds: x=[{x_minimum}, {x_maximum}], Q=[{q_minimum_gev}, {q_maximum_gev}] GeV"
+            ));
+        }
+        Ok(Self {
+            x_minimum,
+            x_maximum,
+            q_minimum_gev,
+            q_maximum_gev,
+            x_minimum_source: PdfSupportBoundSource::LhapdfPdfXMin,
+            x_maximum_source: PdfSupportBoundSource::LhapdfPdfXMax,
+            q_minimum_source: PdfSupportBoundSource::LhapdfPdfQMin,
+            q_maximum_source: PdfSupportBoundSource::LhapdfPdfQMax,
+        })
+    }
+
+    #[must_use]
+    pub fn same_numeric_domain(&self, other: &Self) -> bool {
+        self.x_minimum == other.x_minimum
+            && self.x_maximum == other.x_maximum
+            && self.q_minimum_gev == other.q_minimum_gev
+            && self.q_maximum_gev == other.q_maximum_gev
+    }
+}
+
+#[repr(C)]
+#[derive(Default)]
+struct RawPdfSupportBounds {
+    x_minimum: f64,
+    x_maximum: f64,
+    q_minimum_gev: f64,
+    q_maximum_gev: f64,
+}
+
+extern "C" {
+    fn partonsbi_lhapdf_member_support(
+        set_name: *const c_char,
+        member: c_int,
+        x_minimum: *mut f64,
+        x_maximum: *mut f64,
+        q_minimum_gev: *mut f64,
+        q_maximum_gev: *mut f64,
+        error_buffer: *mut c_char,
+        error_buffer_size: usize,
+    ) -> c_int;
+}
+
+fn authoritative_member_support(set_name: &str, member: i32) -> Result<PdfSupportBounds, String> {
+    let set_name = CString::new(set_name)
+        .map_err(|_| "PDF set name contains an embedded NUL byte".to_owned())?;
+    let mut raw = RawPdfSupportBounds::default();
+    let mut error_buffer = [0 as c_char; 1024];
+    // SAFETY: every pointer refers to live, writable storage for the duration
+    // of the call. The C++ bridge catches exceptions and reports a status code.
+    let status = unsafe {
+        partonsbi_lhapdf_member_support(
+            set_name.as_ptr(),
+            member,
+            &mut raw.x_minimum,
+            &mut raw.x_maximum,
+            &mut raw.q_minimum_gev,
+            &mut raw.q_maximum_gev,
+            error_buffer.as_mut_ptr(),
+            error_buffer.len(),
+        )
+    };
+    if status != 0 {
+        // SAFETY: the bridge always NUL-terminates the fixed-size error buffer.
+        let message = unsafe { CStr::from_ptr(error_buffer.as_ptr()) }
+            .to_string_lossy()
+            .into_owned();
+        return Err(message);
+    }
+    PdfSupportBounds::new(
+        raw.x_minimum,
+        raw.x_maximum,
+        raw.q_minimum_gev,
+        raw.q_maximum_gev,
+    )
+}
+
 /// Failures reported while selecting or evaluating a PDF.
 #[derive(Debug, Clone, PartialEq)]
 pub enum PdfError {
@@ -73,6 +197,11 @@ pub enum PdfError {
         member_count: usize,
     },
     MemberUnavailable {
+        set_name: String,
+        member: i32,
+        message: String,
+    },
+    SupportMetadataUnavailable {
         set_name: String,
         member: i32,
         message: String,
@@ -145,6 +274,14 @@ impl fmt::Display for PdfError {
                 formatter,
                 "PDF set '{set_name}' member {member} is unavailable: {message}"
             ),
+            Self::SupportMetadataUnavailable {
+                set_name,
+                member,
+                message,
+            } => write!(
+                formatter,
+                "support metadata for PDF set '{set_name}' member {member} is unavailable: {message}"
+            ),
             Self::InvalidInput {
                 name,
                 value,
@@ -205,6 +342,7 @@ pub struct LhapdfProvider {
     x_maximum: f64,
     q2_minimum: f64,
     q2_maximum: f64,
+    support_bounds: PdfSupportBounds,
 }
 
 impl LhapdfProvider {
@@ -249,27 +387,23 @@ impl LhapdfProvider {
             });
         }
 
-        // LHAPDF's metadata records Q rather than Q^2, in GeV.
-        let q_minimum = parse_f64_metadata(&set, set_name, "QMin")?;
-        let q_maximum = parse_f64_metadata(&set, set_name, "QMax")?;
-        if !q_minimum.is_finite()
-            || !q_maximum.is_finite()
-            || q_minimum <= 0.0
-            || q_maximum < q_minimum
-        {
-            return Err(PdfError::InvalidSetMetadata {
+        let support_bounds = authoritative_member_support(set_name, member).map_err(|message| {
+            PdfError::SupportMetadataUnavailable {
                 set_name: set_name.to_owned(),
-                key: "QMin/QMax",
-                value: format!("{q_minimum}/{q_maximum}"),
-            });
-        }
-        let q2_minimum = q_minimum * q_minimum;
-        let q2_maximum = q_maximum * q_maximum;
+                member,
+                message,
+            }
+        })?;
+        let q2_minimum = support_bounds.q_minimum_gev * support_bounds.q_minimum_gev;
+        let q2_maximum = support_bounds.q_maximum_gev * support_bounds.q_maximum_gev;
         if !q2_minimum.is_finite() || !q2_maximum.is_finite() {
             return Err(PdfError::InvalidSetMetadata {
                 set_name: set_name.to_owned(),
                 key: "QMin/QMax",
-                value: format!("{q_minimum}/{q_maximum}"),
+                value: format!(
+                    "{}/{}",
+                    support_bounds.q_minimum_gev, support_bounds.q_maximum_gev
+                ),
             });
         }
 
@@ -282,6 +416,16 @@ impl LhapdfProvider {
         })?;
         let x_minimum = pdf.x_min();
         let x_maximum = pdf.x_max();
+        if x_minimum != support_bounds.x_minimum || x_maximum != support_bounds.x_maximum {
+            return Err(PdfError::InvalidSetMetadata {
+                set_name: set_name.to_owned(),
+                key: "XMin/XMax",
+                value: format!(
+                    "managed-lhapdf={x_minimum}/{x_maximum}, authoritative={}/{}",
+                    support_bounds.x_minimum, support_bounds.x_maximum
+                ),
+            });
+        }
         if !x_minimum.is_finite()
             || !x_maximum.is_finite()
             || x_minimum <= 0.0
@@ -307,6 +451,7 @@ impl LhapdfProvider {
             x_maximum,
             q2_minimum,
             q2_maximum,
+            support_bounds,
         })
     }
 
@@ -352,6 +497,11 @@ impl LhapdfProvider {
     #[must_use]
     pub const fn q2_range(&self) -> (f64, f64) {
         (self.q2_minimum, self.q2_maximum)
+    }
+
+    #[must_use]
+    pub fn support_bounds(&self) -> &PdfSupportBounds {
+        &self.support_bounds
     }
 
     /// Evaluate the LHAPDF quantity `x f(flavor, x, Q)` at a scale `Q` in GeV.
@@ -472,17 +622,6 @@ fn parse_usize_metadata(
     let value = metadata_value(set, set_name, key)?;
     value
         .parse::<usize>()
-        .map_err(|_| PdfError::InvalidSetMetadata {
-            set_name: set_name.to_owned(),
-            key,
-            value,
-        })
-}
-
-fn parse_f64_metadata(set: &PdfSet, set_name: &str, key: &'static str) -> Result<f64, PdfError> {
-    let value = metadata_value(set, set_name, key)?;
-    value
-        .parse::<f64>()
         .map_err(|_| PdfError::InvalidSetMetadata {
             set_name: set_name.to_owned(),
             key,
