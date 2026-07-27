@@ -37,11 +37,11 @@ pub use pdf::{LhapdfProvider, PartonDensities, PdfError, PdfProvider};
 pub use pdf_reweighting::{
     extract_event_observables, identify_proton_pdf_entry, reweight_event, summarize_reweighting,
     validate_run_compatibility, DenominatorPolicy, EffectiveSampleSize, EventObservableSummary,
-    InclusiveObservableRow, PdfEntrySide, PdfMemberSpec, PdfReweightingDiagnostics,
-    PdfReweightingError, PdfReweightingInvalidReason, PdfReweightingRequest, PdfReweightingResult,
-    PdfWeightEvaluator, ProtonPdfEntry, RatioStatistics, RunCompatibilityIssue,
-    RunCompatibilityReport, ScalarDistributionStatistics, WeightStatistics,
-    DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
+    InclusiveObservableRow, PdfEntrySide, PdfMemberSpec, PdfReweightingAccumulator,
+    PdfReweightingDiagnostics, PdfReweightingError, PdfReweightingInvalidReason,
+    PdfReweightingRequest, PdfReweightingResult, PdfWeightEvaluator, ProtonPdfEntry,
+    RatioStatistics, RunCompatibilityIssue, RunCompatibilityReport, ScalarDistributionStatistics,
+    WeightStatistics, DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
 };
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,

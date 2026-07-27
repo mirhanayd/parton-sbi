@@ -52,13 +52,26 @@ class WeightedHistogram:
 def weighted_histogram(values: np.ndarray, weights: np.ndarray, edges: np.ndarray) -> WeightedHistogram:
     values = np.asarray(values, dtype=np.float64)
     weights = np.asarray(weights, dtype=np.float64)
+    edges = np.asarray(edges, dtype=np.float64)
     if values.shape != weights.shape:
         raise ValueError("values and weights must have identical shape")
     if not np.all(np.isfinite(values)) or not np.all(np.isfinite(weights)):
         raise ValueError("histogram inputs must be finite")
+    if edges.ndim != 1 or edges.size < 2:
+        raise ValueError(
+            "histogram edges must be a one-dimensional array with at least two entries"
+        )
+    if not np.all(np.isfinite(edges)) or not np.all(np.diff(edges) > 0.0):
+        raise ValueError("histogram edges must be finite and strictly increasing")
+    outside = (values < edges[0]) | (values > edges[-1])
+    if np.any(outside):
+        raise ValueError(
+            "histogram values must lie within the fixed bin range "
+            f"[{edges[0]}, {edges[-1]}]; found {int(np.count_nonzero(outside))} outside"
+        )
     sum_w, _ = np.histogram(values, bins=edges, weights=weights)
     sum_w2, _ = np.histogram(values, bins=edges, weights=weights * weights)
-    return WeightedHistogram(np.asarray(edges), sum_w.astype(float), sum_w2.astype(float))
+    return WeightedHistogram(edges, sum_w.astype(float), sum_w2.astype(float))
 
 
 def _effective_count(histogram: WeightedHistogram) -> np.ndarray:

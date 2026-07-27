@@ -30,6 +30,10 @@
 #define GIT_COMMIT_STR "unknown"
 #endif
 
+#ifndef GIT_DIRTY_BOOL
+#define GIT_DIRTY_BOOL true
+#endif
+
 #ifndef BUILD_TIMESTAMP_STR
 #define BUILD_TIMESTAMP_STR "unknown"
 #endif
@@ -273,6 +277,9 @@ namespace parton_sbi::pythia_dis_generator
                              "Failed to open output CSV file.",
                              "Ensure output directory path is correct and writable.", 4);
       }
+    // Preserve enough precision to cross-check the CSV Info::weight value
+    // against the independently serialized HepMC3 W record.
+    csv_file << std::setprecision(17);
     csv_file << "event_number,event_weight,Q2,x,y,W2,"
              << "scattered_electron_E,scattered_electron_px,scattered_electron_py,scattered_electron_pz,"
              << "number_of_final_state_particles,number_of_charged_final_state_particles,"
@@ -490,6 +497,8 @@ namespace parton_sbi::pythia_dis_generator
         meta["lhapdf_version"] = LHAPDF_VERSION_STR;
         meta["pdf_set"] = request.pdf_set.empty() ? "default" : request.pdf_set;
         meta["pdf_member"] = request.pdf_member;
+        meta["beam_particle_id_1"] = 11;
+        meta["beam_particle_id_2"] = 2212;
         meta["electron_energy_gev"] = request.electron_energy_gev;
         meta["proton_energy_gev"] = request.proton_energy_gev;
         meta["cuts"] = {
@@ -505,8 +514,10 @@ namespace parton_sbi::pythia_dis_generator
         meta["failed_event_count"] = stats.failed_events + stats.vetoed_cuts_events + stats.vetoed_conservation_events;
         meta["random_seed"] = pythia.settings.mode("Random:seed"); // get actual seed used
         meta["git_commit"] = GIT_COMMIT_STR;
+        meta["git_dirty"] = GIT_DIRTY_BOOL;
         meta["build_timestamp"] = BUILD_TIMESTAMP_STR;
         meta["parton_shower_state"] = request.parton_shower;
+        meta["multiparton_interactions_state"] = false;
         meta["hadronization_state"] = request.hadronization;
         meta["event_schema_version"] = 1;
         meta["electroweak_process"] = "gamma_z_t_channel";

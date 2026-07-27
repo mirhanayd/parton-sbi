@@ -1,9 +1,9 @@
 use chrono::Utc;
 use parton_sbi::physics::{
-    extract_event_observables, reweight_event, summarize_reweighting, validate_run_compatibility,
-    DenominatorPolicy, EventObservableSummary, HepMcReader, HepMcRunProvenance, HepMcRunSummary,
-    InclusiveObservableRow, LhapdfProvider, PdfMemberSpec, PdfReweightingDiagnostics,
-    PdfReweightingRequest, PdfReweightingResult, WeightStatistics,
+    extract_event_observables, reweight_event, validate_run_compatibility, DenominatorPolicy,
+    EventObservableSummary, HepMcReader, HepMcRunProvenance, HepMcRunSummary,
+    InclusiveObservableRow, LhapdfProvider, PdfMemberSpec, PdfReweightingAccumulator,
+    PdfReweightingDiagnostics, PdfReweightingRequest, PdfReweightingResult, WeightStatistics,
     DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
 };
 use serde::Serialize;
@@ -11,6 +11,8 @@ use std::collections::BTreeMap;
 use std::fs::{self, File};
 use std::io::{BufWriter, Write};
 use std::path::{Path, PathBuf};
+
+const CSV_HEPMC_EVENT_WEIGHT_RELATIVE_TOLERANCE: f64 = 1.0e-5;
 
 pub const VALIDATE_PDF_REWEIGHTING_HELP: &str =
     "Validate discrete LHAPDF-member hard-PDF reweighting
@@ -249,6 +251,7 @@ pub fn parse_scan_pdf_members(args: &[String]) -> Result<ScanPdfMembersArgs, Str
 struct EventDiagnosticRecord<'a> {
     #[serde(flatten)]
     reweighting: &'a PdfReweightingResult,
+    event_weight_relative_difference: Option<f64>,
     observables: Option<EventObservableSummary>,
     observable_error: Option<String>,
 }
@@ -260,6 +263,7 @@ struct ReweightingManifest<'a> {
     repository_commit: &'static str,
     repository_dirty: bool,
     package_version: &'static str,
+    rust_version: &'static str,
     command: Vec<String>,
     nominal_run: &'a Path,
     direct_target_run: Option<&'a Path>,
@@ -273,9 +277,12 @@ struct RateClosureSummary {
     status: String,
     source_rate_normalization_established: bool,
     direct_target_rate_normalization_established: bool,
+    normalization_inputs_available_for_comparison: bool,
+    comparison_performed: bool,
     reweighted_selected_cross_section_pb: Option<f64>,
     direct_target_selected_cross_section_pb: Option<f64>,
     method: Option<String>,
+    reason: String,
 }
 
 #[derive(Serialize)]
@@ -306,6 +313,10 @@ fn write_json(path: &Path, value: &impl Serialize) -> Result<(), String> {
         .map_err(|error| format!("failed to create {}: {error}", path.display()))?;
     serde_json::to_writer_pretty(BufWriter::new(file), value)
         .map_err(|error| format!("failed to write {}: {error}", path.display()))
+}
+
+fn relative_difference(left: f64, right: f64) -> f64 {
+    (left - right).abs() / left.abs().max(right.abs()).max(f64::MIN_POSITIVE)
 }
 
 pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<(), String> {
@@ -376,13 +387,16 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
     let diagnostics_file = File::create(&diagnostics_path)
         .map_err(|error| format!("failed to create {}: {error}", diagnostics_path.display()))?;
     let mut diagnostics_writer = BufWriter::new(diagnostics_file);
-    let mut results = Vec::new();
+    let mut diagnostics_accumulator = PdfReweightingAccumulator::default();
+    let mut processed_events = 0usize;
+    let mut reached_hepmc_eof = false;
     let mut observable_invalid_events = 0usize;
     while args
         .max_events
-        .is_none_or(|maximum| results.len() < maximum)
+        .is_none_or(|maximum| processed_events < maximum)
     {
         let Some(event) = reader.next_event().map_err(|error| error.to_string())? else {
+            reached_hepmc_eof = true;
             break;
         };
         if nominal_provenance.beam_particle_id_1.is_none()
@@ -407,17 +421,39 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
             &target_pdf,
         )
         .map_err(|error| error.to_string())?;
-        let (observables, observable_error) = match extract_event_observables(&event, &row) {
-            Ok(observables) => (Some(observables), None),
+        let event_weight_relative_difference = result
+            .original_event_weight
+            .map(|weight| relative_difference(weight, row.event_weight));
+        let event_weight_error = event_weight_relative_difference
+            .filter(|difference| *difference > CSV_HEPMC_EVENT_WEIGHT_RELATIVE_TOLERANCE)
+            .map(|difference| {
+                format!(
+                    "HepMC and generator CSV event weights disagree: relative difference {difference:.6e} exceeds {:.6e}",
+                    CSV_HEPMC_EVENT_WEIGHT_RELATIVE_TOLERANCE
+                )
+            });
+        let mut errors = Vec::new();
+        if let Some(error) = event_weight_error {
+            errors.push(error);
+        }
+        let observables = match extract_event_observables(&event, &row) {
+            Ok(observables) => Some(observables),
             Err(error) => {
-                observable_invalid_events += 1;
-                (None, Some(error))
+                errors.push(error);
+                None
             }
+        };
+        let (observables, observable_error) = if errors.is_empty() {
+            (observables, None)
+        } else {
+            observable_invalid_events += 1;
+            (None, Some(errors.join("; ")))
         };
         serde_json::to_writer(
             &mut diagnostics_writer,
             &EventDiagnosticRecord {
                 reweighting: &result,
+                event_weight_relative_difference,
                 observables,
                 observable_error,
             },
@@ -426,13 +462,24 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
         diagnostics_writer
             .write_all(b"\n")
             .map_err(|error| format!("failed to write event diagnostics: {error}"))?;
-        results.push(result);
+        diagnostics_accumulator.push(&result);
+        processed_events += 1;
+    }
+    if reached_hepmc_eof {
+        if let Some(trailing_row) = csv_rows.next() {
+            let row = trailing_row
+                .map_err(|error| format!("failed to parse trailing inclusive CSV row: {error}"))?;
+            return Err(format!(
+                "inclusive CSV contains a trailing row {} after HepMC EOF",
+                row.event_number
+            ));
+        }
     }
     diagnostics_writer
         .flush()
         .map_err(|error| format!("failed to flush event diagnostics: {error}"))?;
 
-    let diagnostics = summarize_reweighting(&results, args.nominal_xf_relative_tolerance);
+    let diagnostics = diagnostics_accumulator.finish(args.nominal_xf_relative_tolerance);
     let source_summary =
         HepMcRunSummary::load(&args.nominal_run).map_err(|error| error.to_string())?;
     let direct_summary = args
@@ -441,11 +488,16 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
         .map(HepMcRunSummary::load)
         .transpose()
         .map_err(|error| error.to_string())?;
+    let complete_valid_source_sample = args.max_events.is_none()
+        && diagnostics.invalid_events == 0
+        && observable_invalid_events == 0
+        && source_summary.accepted_events == Some(diagnostics.total_events as u64);
     let reweighted_cross_section_pb = match (
+        complete_valid_source_sample,
         source_summary.sigma_gen_mb,
         source_summary.pythia_weight_sum,
     ) {
-        (Some(sigma), Some(weight_sum)) if weight_sum != 0.0 => {
+        (true, Some(sigma), Some(weight_sum)) if weight_sum != 0.0 => {
             Some(sigma * 1.0e9 * diagnostics.overall.sum_weights / weight_sum)
         }
         _ => None,
@@ -453,22 +505,29 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
     let direct_rate_established = direct_summary
         .as_ref()
         .is_some_and(HepMcRunSummary::rate_normalization_established);
-    let rate_established = source_summary.rate_normalization_established()
+    let normalization_inputs_available = source_summary.rate_normalization_established()
         && direct_rate_established
         && reweighted_cross_section_pb.is_some();
     let rate_closure = RateClosureSummary {
-        status: if rate_established {
-            "RATE CLOSURE ESTABLISHED".to_owned()
-        } else {
-            "RATE CLOSURE NOT ESTABLISHED".to_owned()
-        },
+        status: "RATE CLOSURE NOT ESTABLISHED".to_owned(),
         source_rate_normalization_established: source_summary.rate_normalization_established(),
         direct_target_rate_normalization_established: direct_rate_established,
+        normalization_inputs_available_for_comparison: normalization_inputs_available,
+        comparison_performed: false,
         reweighted_selected_cross_section_pb: reweighted_cross_section_pb,
         direct_target_selected_cross_section_pb: direct_summary
             .as_ref()
             .and_then(|summary| summary.selected_cross_section_pb),
         method: source_summary.rate_normalization_method.clone(),
+        reason: if normalization_inputs_available {
+            "normalization inputs are available, but no predeclared direct-versus-reweighted rate acceptance test has been performed".to_owned()
+        } else if !complete_valid_source_sample {
+            "a complete structurally valid nominal sample is required before a reweighted rate can be formed".to_owned()
+        } else if direct_summary.is_none() {
+            "no direct-target run was supplied".to_owned()
+        } else {
+            "final run-normalization metadata are incomplete".to_owned()
+        },
     };
     let decision = if diagnostics.invalid_events > 0 || observable_invalid_events > 0 {
         "STRUCTURAL FAILURE"
@@ -497,6 +556,7 @@ pub fn run_validate_pdf_reweighting(args: ValidatePdfReweightingArgs) -> Result<
         repository_commit: option_env!("GIT_HASH").unwrap_or("unknown"),
         repository_dirty: option_env!("GIT_DIRTY") == Some("true"),
         package_version: env!("CARGO_PKG_VERSION"),
+        rust_version: env!("RUSTC_VERSION"),
         command: std::env::args().collect(),
         nominal_run: &args.nominal_run,
         direct_target_run: args.direct_target_run.as_deref(),
@@ -547,6 +607,7 @@ struct MemberScanEntry {
     member: i32,
     valid_ratio_fraction: f64,
     invalid_ratio_reasons: BTreeMap<String, usize>,
+    zero_ratio_count: usize,
     median_absolute_log_ratio: Option<f64>,
     p95_absolute_log_ratio: Option<f64>,
     p99_absolute_log_ratio: Option<f64>,
@@ -564,6 +625,9 @@ struct MemberScanDocument<'a> {
     created_at_utc: String,
     repository_commit: &'static str,
     repository_dirty: bool,
+    package_version: &'static str,
+    rust_version: &'static str,
+    command: Vec<String>,
     nominal_run: &'a Path,
     nominal_provenance: &'a HepMcRunProvenance,
     pdf_set: &'a str,
@@ -693,14 +757,19 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
         let mut values = Vec::with_capacity(support.len());
         let mut invalid = BTreeMap::new();
         let mut absolute_logs = Vec::new();
+        let mut zero_ratio_count = 0usize;
         for point in &support {
             match target.xfx_at_scale(point.flavor, point.x, point.scale_gev) {
-                Ok(target_xf) if target_xf.is_finite() && target_xf > 0.0 => {
+                Ok(target_xf) if target_xf.is_finite() && target_xf >= 0.0 => {
                     let ratio = target_xf / point.stored_nominal_xf;
                     let weight = point.original_weight * ratio;
-                    if ratio.is_finite() && weight.is_finite() && ratio > 0.0 {
+                    if ratio.is_finite() && weight.is_finite() && ratio >= 0.0 {
                         values.push(Some((weight, ratio)));
-                        absolute_logs.push(ratio.ln().abs());
+                        if ratio == 0.0 {
+                            zero_ratio_count += 1;
+                        } else {
+                            absolute_logs.push(ratio.ln().abs());
+                        }
                     } else {
                         values.push(None);
                         *invalid
@@ -710,9 +779,7 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
                 }
                 Ok(_) => {
                     values.push(None);
-                    *invalid
-                        .entry("non_positive_target_xf".to_owned())
-                        .or_insert(0) += 1;
+                    *invalid.entry("negative_target_xf".to_owned()).or_insert(0) += 1;
                 }
                 Err(_) => {
                     values.push(None);
@@ -728,14 +795,15 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
         let median = quantile(&absolute_logs, 0.5);
         let p95 = quantile(&absolute_logs, 0.95);
         let p99 = quantile(&absolute_logs, 0.99);
-        let score = match (median, p95, p99) {
-            (Some(median), Some(p95), Some(p99)) => Some(median + 0.5 * p95 + 0.25 * p99),
+        let score = match (zero_ratio_count, median, p95, p99) {
+            (0, Some(median), Some(p95), Some(p99)) => Some(median + 0.5 * p95 + 0.25 * p99),
             _ => None,
         };
         entries.push(MemberScanEntry {
             member,
             valid_ratio_fraction: ratios.len() as f64 / support.len() as f64,
             invalid_ratio_reasons: invalid,
+            zero_ratio_count,
             median_absolute_log_ratio: median,
             p95_absolute_log_ratio: p95,
             p99_absolute_log_ratio: p99,
@@ -809,6 +877,9 @@ pub fn run_scan_pdf_members(args: ScanPdfMembersArgs) -> Result<(), String> {
         created_at_utc: Utc::now().to_rfc3339(),
         repository_commit: option_env!("GIT_HASH").unwrap_or("unknown"),
         repository_dirty: option_env!("GIT_DIRTY") == Some("true"),
+        package_version: env!("CARGO_PKG_VERSION"),
+        rust_version: env!("RUSTC_VERSION"),
+        command: std::env::args().collect(),
         nominal_run: &args.nominal_run,
         nominal_provenance: &provenance,
         pdf_set: &pdf_set,

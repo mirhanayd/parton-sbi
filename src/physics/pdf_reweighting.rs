@@ -39,17 +39,12 @@ impl PdfMemberSpec {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum DenominatorPolicy {
+    #[default]
     Stored,
     Recomputed,
-}
-
-impl Default for DenominatorPolicy {
-    fn default() -> Self {
-        Self::Stored
-    }
 }
 
 impl fmt::Display for DenominatorPolicy {
@@ -723,27 +718,138 @@ pub struct PdfReweightingDiagnostics {
     pub by_scale_region: BTreeMap<String, WeightStatistics>,
 }
 
-fn grouped_statistics<'a>(
-    results: impl Iterator<Item = &'a PdfReweightingResult>,
-    key: impl Fn(&PdfReweightingResult) -> Option<String>,
-) -> BTreeMap<String, WeightStatistics> {
-    let mut groups: BTreeMap<String, (Vec<f64>, Vec<f64>)> = BTreeMap::new();
-    for result in results.filter(|result| result.valid) {
-        let (Some(group), Some(weight), Some(ratio)) = (
-            key(result),
-            result.target_event_weight,
-            result.primary_ratio,
-        ) else {
-            continue;
-        };
-        let values = groups.entry(group).or_default();
-        values.0.push(weight);
-        values.1.push(ratio);
+#[derive(Debug, Default)]
+struct GroupValues {
+    weights: Vec<f64>,
+    ratios: Vec<f64>,
+}
+
+impl GroupValues {
+    fn push(&mut self, weight: f64, ratio: f64) {
+        self.weights.push(weight);
+        self.ratios.push(ratio);
     }
-    groups
-        .into_iter()
-        .map(|(key, (weights, ratios))| (key, WeightStatistics::from_weights(&weights, &ratios)))
-        .collect()
+
+    fn into_statistics(self) -> WeightStatistics {
+        WeightStatistics::from_weights(&self.weights, &self.ratios)
+    }
+}
+
+/// Incremental diagnostics builder for a streaming event source.
+///
+/// It retains only the scalar samples required for exact tail quantiles and
+/// grouped ESS calculations, never complete events or event-level result
+/// records. The compact event diagnostics remain authoritative on disk.
+#[derive(Debug, Default)]
+pub struct PdfReweightingAccumulator {
+    total_events: usize,
+    valid_events: usize,
+    invalid_by_reason: BTreeMap<String, usize>,
+    weights: Vec<f64>,
+    ratios: Vec<f64>,
+    nominal_xf_relative_differences: Vec<f64>,
+    by_flavor: BTreeMap<String, GroupValues>,
+    by_x_region: BTreeMap<String, GroupValues>,
+    by_scale_region: BTreeMap<String, GroupValues>,
+}
+
+impl PdfReweightingAccumulator {
+    pub fn push(&mut self, result: &PdfReweightingResult) {
+        self.total_events += 1;
+        if let Some(difference) = result
+            .stored_nominal_relative_difference
+            .filter(|value| value.is_finite())
+        {
+            self.nominal_xf_relative_differences.push(difference);
+        }
+        if !result.valid {
+            let reason = result
+                .invalid_reason
+                .map(|reason| reason.to_string())
+                .unwrap_or_else(|| "unknown".to_owned());
+            *self.invalid_by_reason.entry(reason).or_insert(0) += 1;
+            return;
+        }
+
+        self.valid_events += 1;
+        let (Some(weight), Some(ratio)) = (result.target_event_weight, result.primary_ratio) else {
+            return;
+        };
+        self.weights.push(weight);
+        self.ratios.push(ratio);
+        if let Some(flavor) = result.proton_side_flavor {
+            self.by_flavor
+                .entry(flavor.to_string())
+                .or_default()
+                .push(weight, ratio);
+        }
+        if let Some(x) = result.proton_side_x {
+            let region = match x {
+                value if value < 1.0e-3 => "x_lt_1e-3",
+                value if value < 1.0e-2 => "x_1e-3_to_1e-2",
+                value if value < 1.0e-1 => "x_1e-2_to_1e-1",
+                _ => "x_ge_1e-1",
+            };
+            self.by_x_region
+                .entry(region.to_owned())
+                .or_default()
+                .push(weight, ratio);
+        }
+        if let Some(scale) = result.pdf_scale_gev {
+            let region = match scale {
+                value if value < 2.0 => "q_lt_2",
+                value if value < 5.0 => "q_2_to_5",
+                value if value < 10.0 => "q_5_to_10",
+                value if value < 100.0 => "q_10_to_100",
+                _ => "q_ge_100",
+            };
+            self.by_scale_region
+                .entry(region.to_owned())
+                .or_default()
+                .push(weight, ratio);
+        }
+    }
+
+    #[must_use]
+    pub fn finish(mut self, tolerance: f64) -> PdfReweightingDiagnostics {
+        self.nominal_xf_relative_differences.sort_by(f64::total_cmp);
+        let nominal_xf_consistency = if self.nominal_xf_relative_differences.is_empty() {
+            None
+        } else {
+            let differences = &self.nominal_xf_relative_differences;
+            Some(ScalarDistributionStatistics {
+                count: differences.len(),
+                median: percentile(differences, 0.5),
+                p95: percentile(differences, 0.95),
+                p99: percentile(differences, 0.99),
+                maximum: *differences.last().expect("non-empty differences"),
+                fraction_outside_tolerance: differences
+                    .iter()
+                    .filter(|&&value| value > tolerance)
+                    .count() as f64
+                    / differences.len() as f64,
+                tolerance,
+            })
+        };
+        let group_statistics = |groups: BTreeMap<String, GroupValues>| {
+            groups
+                .into_iter()
+                .map(|(key, values)| (key, values.into_statistics()))
+                .collect()
+        };
+
+        PdfReweightingDiagnostics {
+            total_events: self.total_events,
+            valid_events: self.valid_events,
+            invalid_events: self.total_events - self.valid_events,
+            invalid_by_reason: self.invalid_by_reason,
+            overall: WeightStatistics::from_weights(&self.weights, &self.ratios),
+            nominal_xf_consistency,
+            by_flavor: group_statistics(self.by_flavor),
+            by_x_region: group_statistics(self.by_x_region),
+            by_scale_region: group_statistics(self.by_scale_region),
+        }
+    }
 }
 
 #[must_use]
@@ -751,75 +857,11 @@ pub fn summarize_reweighting(
     results: &[PdfReweightingResult],
     tolerance: f64,
 ) -> PdfReweightingDiagnostics {
-    let valid: Vec<&PdfReweightingResult> = results.iter().filter(|result| result.valid).collect();
-    let weights: Vec<f64> = valid
-        .iter()
-        .filter_map(|result| result.target_event_weight)
-        .collect();
-    let ratios: Vec<f64> = valid
-        .iter()
-        .filter_map(|result| result.primary_ratio)
-        .collect();
-    let mut invalid_by_reason = BTreeMap::new();
-    for result in results.iter().filter(|result| !result.valid) {
-        let reason = result
-            .invalid_reason
-            .map(|reason| reason.to_string())
-            .unwrap_or_else(|| "unknown".to_owned());
-        *invalid_by_reason.entry(reason).or_insert(0) += 1;
+    let mut accumulator = PdfReweightingAccumulator::default();
+    for result in results {
+        accumulator.push(result);
     }
-    let mut differences: Vec<f64> = results
-        .iter()
-        .filter_map(|result| result.stored_nominal_relative_difference)
-        .filter(|value| value.is_finite())
-        .collect();
-    differences.sort_by(f64::total_cmp);
-    let nominal_xf_consistency = if differences.is_empty() {
-        None
-    } else {
-        Some(ScalarDistributionStatistics {
-            count: differences.len(),
-            median: percentile(&differences, 0.5),
-            p95: percentile(&differences, 0.95),
-            p99: percentile(&differences, 0.99),
-            maximum: *differences.last().expect("non-empty differences"),
-            fraction_outside_tolerance: differences
-                .iter()
-                .filter(|&&value| value > tolerance)
-                .count() as f64
-                / differences.len() as f64,
-            tolerance,
-        })
-    };
-
-    PdfReweightingDiagnostics {
-        total_events: results.len(),
-        valid_events: valid.len(),
-        invalid_events: results.len() - valid.len(),
-        invalid_by_reason,
-        overall: WeightStatistics::from_weights(&weights, &ratios),
-        nominal_xf_consistency,
-        by_flavor: grouped_statistics(results.iter(), |result| {
-            result.proton_side_flavor.map(|flavor| flavor.to_string())
-        }),
-        by_x_region: grouped_statistics(results.iter(), |result| {
-            result.proton_side_x.map(|x| match x {
-                value if value < 1.0e-3 => "x_lt_1e-3".to_owned(),
-                value if value < 1.0e-2 => "x_1e-3_to_1e-2".to_owned(),
-                value if value < 1.0e-1 => "x_1e-2_to_1e-1".to_owned(),
-                _ => "x_ge_1e-1".to_owned(),
-            })
-        }),
-        by_scale_region: grouped_statistics(results.iter(), |result| {
-            result.pdf_scale_gev.map(|scale| match scale {
-                value if value < 2.0 => "q_lt_2".to_owned(),
-                value if value < 5.0 => "q_2_to_5".to_owned(),
-                value if value < 10.0 => "q_5_to_10".to_owned(),
-                value if value < 100.0 => "q_10_to_100".to_owned(),
-                _ => "q_ge_100".to_owned(),
-            })
-        }),
-    }
+    accumulator.finish(tolerance)
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -843,6 +885,21 @@ fn compare_field<T: fmt::Debug + PartialEq>(
     direct: &T,
 ) {
     if nominal != direct {
+        issues.push(RunCompatibilityIssue {
+            field: field.to_owned(),
+            nominal: format!("{nominal:?}"),
+            direct_target: format!("{direct:?}"),
+        });
+    }
+}
+
+fn compare_required_field<T: fmt::Debug + PartialEq>(
+    issues: &mut Vec<RunCompatibilityIssue>,
+    field: &str,
+    nominal: &Option<T>,
+    direct: &Option<T>,
+) {
+    if nominal.is_none() || direct.is_none() || nominal != direct {
         issues.push(RunCompatibilityIssue {
             field: field.to_owned(),
             nominal: format!("{nominal:?}"),
@@ -893,6 +950,18 @@ pub fn validate_run_compatibility(
         &nominal.space_shower_dipole_recoil,
         &direct_target.space_shower_dipole_recoil,
     );
+    compare_required_field(
+        &mut issues,
+        "beam_particle_id_1",
+        &nominal.beam_particle_id_1,
+        &direct_target.beam_particle_id_1,
+    );
+    compare_required_field(
+        &mut issues,
+        "beam_particle_id_2",
+        &nominal.beam_particle_id_2,
+        &direct_target.beam_particle_id_2,
+    );
     compare_field(
         &mut issues,
         "electron_energy_gev",
@@ -916,6 +985,12 @@ pub fn validate_run_compatibility(
         "parton_shower",
         &nominal.parton_shower,
         &direct_target.parton_shower,
+    );
+    compare_required_field(
+        &mut issues,
+        "multiparton_interactions",
+        &nominal.multiparton_interactions,
+        &direct_target.multiparton_interactions,
     );
     compare_field(
         &mut issues,
@@ -953,6 +1028,18 @@ pub fn validate_run_compatibility(
         "hepmc_version",
         &nominal.hepmc_version,
         &direct_target.hepmc_version,
+    );
+    compare_required_field(
+        &mut issues,
+        "git_commit",
+        &nominal.git_commit,
+        &direct_target.git_commit,
+    );
+    compare_required_field(
+        &mut issues,
+        "git_dirty",
+        &nominal.git_dirty,
+        &direct_target.git_dirty,
     );
 
     RunCompatibilityReport {

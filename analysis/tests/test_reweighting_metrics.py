@@ -6,9 +6,17 @@ import numpy as np
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from reweighting.closure import evaluate_shape_closure
-from reweighting.metrics import FIXED_BINS, compare_samples, weighted_histogram
-from reweighting.schema import DiagnosticSample, OBSERVABLES, load_diagnostic_sample
+from reweighting.closure import (
+    BOOTSTRAP_REPLICATES,
+    CRITICAL_ORDER_STATISTIC_RANK,
+    EMPIRICAL_TAIL_PROBABILITY_BOUND,
+    PER_COMPARISON_ALPHA,
+    _conservative_empirical_threshold,
+    _pooled_bootstrap_indices,
+)
+from reweighting.metrics import compare_samples, weighted_histogram
+from reweighting.run_phase1a import apply_ess_gate, single_case_decision
+from reweighting.schema import OBSERVABLES, load_diagnostic_sample
 
 
 def test_weighted_histogram_preserves_sum_w_and_sum_w2():
@@ -17,6 +25,27 @@ def test_weighted_histogram_preserves_sum_w_and_sum_w2():
     )
     np.testing.assert_allclose(histogram.sum_w, [3.0, -0.5])
     np.testing.assert_allclose(histogram.sum_w2, [5.0, 0.25])
+
+
+def test_weighted_histogram_rejects_values_below_fixed_range():
+    with np.testing.assert_raises_regex(ValueError, "fixed bin range"):
+        weighted_histogram(
+            np.array([-0.01, 0.5]), np.ones(2), np.array([0.0, 0.5, 1.0])
+        )
+
+
+def test_weighted_histogram_rejects_values_above_fixed_range():
+    with np.testing.assert_raises_regex(ValueError, "fixed bin range"):
+        weighted_histogram(
+            np.array([0.5, 1.01]), np.ones(2), np.array([0.0, 0.5, 1.0])
+        )
+
+
+def test_weighted_histogram_accepts_both_range_endpoints():
+    histogram = weighted_histogram(
+        np.array([0.0, 1.0]), np.ones(2), np.array([0.0, 0.5, 1.0])
+    )
+    np.testing.assert_allclose(histogram.sum_w, [1.0, 1.0])
 
 
 def test_identical_samples_have_zero_shape_distances():
@@ -60,14 +89,72 @@ def test_loader_exposes_only_declared_observables(tmp_path):
     assert "target_xf" not in sample.observables
 
 
-def test_closure_policy_fails_low_ess_after_shape_evaluation():
-    rng = np.random.default_rng(42)
-    size = 100
-    observables = {
-        name: rng.uniform(FIXED_BINS[name][0] + 1e-6, FIXED_BINS[name][-1] - 1e-6, size)
-        for name in OBSERVABLES
+def test_direct_self_bootstrap_draws_both_samples_from_pooled_null():
+    class RecordingGenerator:
+        def __init__(self):
+            self.calls = []
+
+        def integers(self, low, high, size):
+            self.calls.append((low, high, size))
+            return np.arange(size) % high
+
+    rng = RecordingGenerator()
+    index_a, index_b = _pooled_bootstrap_indices(rng, 12, 5, 7)
+    assert rng.calls == [(0, 12, 5), (0, 12, 7)]
+    assert index_a.size == 5
+    assert index_b.size == 7
+
+
+def test_empirical_policy_has_predeclared_resolved_conservative_tail():
+    assert BOOTSTRAP_REPLICATES == 8191
+    assert PER_COMPARISON_ALPHA == 0.05 / 64
+    assert CRITICAL_ORDER_STATISTIC_RANK == 8186
+    assert EMPIRICAL_TAIL_PROBABILITY_BOUND == 6 / 8192
+    assert EMPIRICAL_TAIL_PROBABILITY_BOUND <= PER_COMPARISON_ALPHA
+    values = list(reversed(range(BOOTSTRAP_REPLICATES)))
+    assert _conservative_empirical_threshold(values) == 8185.0
+    assert _conservative_empirical_threshold(values[:-1]) is None
+
+
+def test_low_ess_case_fails_without_granting_aggregate_permissions():
+    shape_result = {
+        "decision": "PASS",
+        "failed_observable_metrics": [],
     }
-    sample = DiagnosticSample(np.arange(size), np.ones(size), observables)
-    result = evaluate_shape_closure(sample, sample, sample)
-    assert result["decision"] in {"PASS", "INCONCLUSIVE"}
-    assert result["multiple_observable_policy"].startswith("Bonferroni")
+    result = apply_ess_gate(shape_result, 0.199)
+    assert result["decision"] == "FAIL"
+    assert result["ess_pass"] is False
+    assert "DIRECT REGENERATION REQUIRED" in result["decision_reason"]
+
+    decision = single_case_decision(
+        result,
+        physics_level="full-event",
+        target_role="mild",
+        target_pdf_set="CT18NLO",
+        target_pdf_member=24,
+    )
+    assert decision["case_identity"] == {
+        "physics_level": "full-event",
+        "target_role": "mild",
+        "target_pdf_set": "CT18NLO",
+        "target_pdf_member": 24,
+    }
+    assert decision["aggregate_gate"] == "NOT_EVALUATED"
+    assert decision["pool_reuse_permission"] is False
+    assert decision["phase1b_permission"] is False
+
+
+def test_passing_single_case_still_cannot_grant_aggregate_permissions():
+    result = apply_ess_gate(
+        {"decision": "PASS", "failed_observable_metrics": []}, 0.75
+    )
+    decision = single_case_decision(
+        result,
+        physics_level="hard-process",
+        target_role="stress",
+        target_pdf_set="CT18NLO",
+        target_pdf_member=51,
+    )
+    assert decision["decision"] == "PASS"
+    assert decision["pool_reuse_permission"] is False
+    assert decision["phase1b_permission"] is False

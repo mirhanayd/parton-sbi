@@ -36,6 +36,14 @@ support signed weights, and a future signed sample must preserve them.
 Multiple weights require an explicit index. Missing weights are invalid; unity
 is never fabricated.
 
+For new runs, the generator writes the inclusive CSV with 17 significant
+digits. Validation independently compares its `Info::weight()` column with the
+selected HepMC3 `W` value using a fixed relative tolerance of `1e-5`. This
+tolerance covers the earlier six-significant-digit CSV contract (the observed
+legacy maximum is `4.6729e-6`); new 17-digit runs are much tighter. A
+mismatch is a structural failure, and trailing CSV rows after HepMC EOF are
+rejected.
+
 HepMC `GenCrossSection` is PYTHIA's evolving cross-section estimate at the time
 an event is written, not a final run normalization. Phase 1A generation now
 records final `sigmaGen`, `sigmaErr`, `Info::weightSum`, selected-event weight
@@ -45,9 +53,12 @@ sums, and
 sigma_selected = sigmaGen * selected_weight_sum / Info::weightSum
 ```
 
-in `summary.json`. Rate closure is established only when both nominal and
-direct-target runs contain this final contract. Older runs are shape-only and
-must report `RATE CLOSURE NOT ESTABLISHED`.
+in `summary.json`. These fields establish that rate-normalization inputs are
+available; they do not establish direct-versus-reweighted rate closure. Until
+a predeclared comparison and acceptance threshold are actually evaluated, the
+status remains `RATE CLOSURE NOT ESTABLISHED`. Prefix runs selected with
+`--max-events` and samples with structural invalid events are never assigned a
+reweighted cross section. Older runs are shape-only.
 
 ## LHAPDF semantics
 
@@ -162,15 +173,19 @@ charged multiplicities, visible final-state energy, scalar final-state `pT`,
 leading stable-hadron `pT`, and coarse stable-particle species fractions. Hard
 flavor, member ID, and nominal/target `xf` remain hidden diagnostics.
 
-`analysis/reweighting/metrics.py` fixes all bin edges. A populated comparison
-bin requires effective weighted counts of at least five on both sides.
-Direct-target A versus B supplies the self-closure reference. Two hundred
-bootstrap pairs use seed `7132026`. For each observable, chi-square per
-effective degree of freedom, maximum populated-bin pull, Jensen-Shannon
-divergence, and Wasserstein distance are compared with the direct-self
-distribution. The acceptance quantile is Bonferroni-adjusted to control a 5%
-familywise error rate across all observables and metrics. Undefined metrics
-make shape closure `INCONCLUSIVE`; any threshold exceedance makes it `FAIL`.
+`analysis/reweighting/metrics.py` fixes all bin edges and rejects any event
+outside the declared range instead of silently dropping underflow or overflow.
+A populated comparison bin requires effective weighted counts of at least five
+on both sides. Direct-target A and B are pooled to define the null, and each
+bootstrap pair is drawn independently from that pool. The predeclared policy
+uses 8,191 replicates with seed `7132026`, allocates alpha `0.05` equally over
+the 64 observable-metric comparisons, and uses the conservative,
+non-interpolated order statistic at rank 8,186. Its finite-sample upper-tail
+bound is `6/8192`, below `0.05/64`. Chi-square per effective degree of freedom,
+maximum populated-bin pull, Jensen-Shannon divergence, and Wasserstein distance
+are compared with this direct-self distribution. Undefined or underresolved
+metrics make shape closure `INCONCLUSIVE`; any threshold exceedance makes it
+`FAIL`.
 
 ## Stage A results
 
@@ -314,6 +329,37 @@ POOL REUSE NOT AUTHORIZED
 PHASE 1B NOT AUTHORIZED
 ```
 
+## Post-study infrastructure audit
+
+The blocked scientific result above is unchanged. Before review, a
+source-level audit hardened restart behavior:
+
+- the streaming validator now retains only compact scalar accumulator state,
+  cross-checks CSV/HepMC weights, and rejects CSV/HepMC cardinality mismatch;
+- rate-normalization metadata can no longer be reported as rate closure, and a
+  partial or structurally invalid nominal sample cannot produce a reweighted
+  cross section;
+- member scans treat a finite zero target density as a valid zero weight while
+  withholding the logarithmic deformation score for that member;
+- new generator metadata records beam IDs, MPI state, Git commit, and dirty
+  state; direct-run compatibility requires all four to be present and equal;
+- fixed-bin analysis rejects out-of-range values and uses a resolved pooled-null
+  bootstrap policy; and
+- a single closure case can never grant pool reuse or Phase 1B permission. The
+  aggregate gate remains unevaluated after the Stage A stop.
+
+The smoke sample predates the new `git_dirty` field and was generated while the
+Phase 1A implementation was uncommitted (`repository_dirty=true` in the member
+scan manifest). This does not change the below-grid support observation, but it
+prevents that sample from serving as a future direct-run compatibility
+reference. A restarted study must use newly generated, provenance-complete runs.
+
+The exact verbatim Stage A shell commands and exit codes were not retained in a
+committed manifest. Configuration, seed, path, versions, counts, timestamp,
+runtime, and numerical results are retained, but the missing command transcript
+is a reproducibility limitation. No command is reconstructed and presented as
+verbatim after the fact.
+
 ## Validation
 
 The post-implementation WSL validation completed with these results:
@@ -322,13 +368,14 @@ The post-implementation WSL validation completed with these results:
 | --- | --- |
 | `cargo fmt --all -- --check` | pass |
 | `cargo check --workspace` | pass, warning-free |
-| `cargo test --workspace` | 142 passed, 7 ignored, 0 failed |
-| `cargo test --test pdf_reweighting -- --nocapture` | 27 passed, 2 installation-dependent ignored |
+| `cargo test --workspace` | 149 passed, 7 ignored, 0 failed |
+| `cargo test --test pdf_reweighting -- --nocapture` | 34 passed, 2 installation-dependent ignored |
 | `cargo test --test pdf_reweighting -- --ignored --nocapture` | 2 passed, 0 failed |
-| `analysis/venv/bin/python -m pytest analysis/tests` | 24 passed |
+| `cargo clippy --workspace --all-targets -- -D warnings` | pass, warning-free |
+| `analysis/venv/bin/python -m pytest analysis/tests` | 30 passed |
 | `ctest --test-dir physics-engine/build --output-on-failure` | 1/1 passed |
 | `git diff --check` | pass |
-| Phase 1A CLI help and real-fixture smoke | pass |
+| Phase 1A CLI help, real-fixture smoke, and 3-event generator/parser smoke | pass |
 
 The ignored study directory contains only the partial full-event smoke run,
 member scan, and nominal diagnostics. The required final-study decision,

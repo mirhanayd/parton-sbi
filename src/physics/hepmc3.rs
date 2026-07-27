@@ -189,6 +189,7 @@ pub struct HepMcRunProvenance {
     pub configured_seed: Option<i64>,
     pub generator_seed: Option<i64>,
     pub parton_shower: Option<bool>,
+    pub multiparton_interactions: Option<bool>,
     pub hadronization: Option<bool>,
     pub cuts: HepMcRunCuts,
     pub configured_event_count: Option<u64>,
@@ -323,6 +324,7 @@ impl HepMcRunProvenance {
             generator_seed: value_i64(&metadata, "random_seed"),
             parton_shower: value_bool(&metadata, "parton_shower_state")
                 .or_else(|| value_bool(&config, "parton_shower")),
+            multiparton_interactions: value_bool(&metadata, "multiparton_interactions_state"),
             hadronization: value_bool(&metadata, "hadronization_state")
                 .or_else(|| value_bool(&config, "hadronization")),
             cuts,

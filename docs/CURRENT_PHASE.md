@@ -13,7 +13,7 @@
 - APFEL++, LHAPDF, PYTHIA 8, HepMC3, and Candle surrogate retained.
 - No Cornell demo.
 - No desktop GUI.
-- Phase 1A reweighting infrastructure implemented and unit-tested.
+- Phase 1A reweighting infrastructure implemented, audited, and unit-tested.
 - Phase 1A scientific validation blocked at Stage A by an out-of-grid CT18NLO
   scale in the nominal pool; no direct-target closure was started.
 - No continuous PDF parameterization.

@@ -23,12 +23,20 @@ with target posterior `p(theta_PDF | D)`. The objective is not to determine an i
 - HERA comparison and theory-uncertainty analysis utilities;
 - PYTHIA 8 neutral-current electron-proton event generation with configurable seeds, cuts, showering, and hadronization;
 - HepMC3 event output plus JSON/CSV run artifacts;
-- typed streaming Rust extraction of real HepMC3 ASCII v3 records, including all weights, `GenPdfInfo`, typed attributes, particles, vertices, and run provenance; and
+- typed streaming Rust extraction of real HepMC3 ASCII v3 records, including all weights, `GenPdfInfo`, typed attributes, particles, vertices, and run provenance;
+- typed discrete LHAPDF-member hard-PDF reweighting, member scanning, ESS and
+  weight-tail diagnostics, plus fixed-bin closure-analysis infrastructure; and
 - Rust, C++, and Python validation fixtures supporting these components.
 
 ## Explicit non-capabilities
 
-PartonSBI does not currently implement PDF reweighting, continuous PDF parameterization, pseudo-experiment construction, amortized neural posterior inference, detector simulation, unfolding, or real-data PDF extraction. Phase 1A discrete LHAPDF-member reweighting closure and effective-sample-size validation have not yet been performed.
+PartonSBI does not currently implement continuous PDF parameterization,
+pseudo-experiment construction, amortized neural posterior inference, detector
+simulation, unfolding, or real-data PDF extraction. Phase 1A discrete
+LHAPDF-member reweighting infrastructure is implemented, but its Stage A study
+stopped on a structural CT18NLO support failure. Direct-target closure was not
+started, no event-pool reuse domain was validated, and Phase 1B is not
+authorized.
 
 Inclusive neutral-current electron-proton data do not provide unrestricted full-flavor PDF separation. The implemented channel primarily constrains charge-weighted quark-plus-antiquark combinations, with only indirect and correlated sensitivity to other directions. `GenPdfInfo`, hard flavor, and nominal PDF values are generator truth/provenance for validation and future reweighting studies; they are not detector-observed inputs and must not be exposed as default inference features.
 
@@ -38,7 +46,7 @@ Inclusive neutral-current electron-proton data do not provide unrestricted full-
 src/physics/       Rust DIS, PDF, APFEL, surrogate, and HepMC3 library code
 src/main.rs        Headless scientific CLI
 physics-engine/    C++17 APFEL++ and PYTHIA 8 subprocess backends
-analysis/          HERA validation and uncertainty analysis
+analysis/          HERA, uncertainty, and reweighting-closure analysis
 models/            Validated checked-in structure-function surrogate artifact
 tests/             Rust integration tests and deterministic fixtures
 data/hepdata/      Source-controlled HERA reference data
@@ -168,9 +176,34 @@ while let Some(event) = reader.next_event()? {
 
 Load adjacent run provenance separately with `HepMcRunProvenance::load`. The parser keeps event data streaming and does not fabricate absent metadata.
 
+## Discrete member reweighting
+
+The Phase 1A CLI streams a generated run and writes compact diagnostics without
+copying the HepMC3 event pool:
+
+```bash
+cargo run --release -- validate-pdf-reweighting \
+  --nominal-run outputs/example-run \
+  --target-pdf-set CT18NLO \
+  --target-pdf-member 24 \
+  --output outputs/example-reweighting
+```
+
+This command implements only the proton-side hard-PDF importance ratio. Hard
+flavor and `GenPdfInfo` remain hidden generator truth. A successful command is
+not, by itself, a closure result or permission to reuse an event pool.
+
 ## Current roadmap
 
-Completed groundwork includes the repository/scientific audit and Phase 0A typed streaming HepMC3 extraction. The single next phase is Phase 1A: discrete LHAPDF-member hard-PDF reweighting closure and ESS validation. Phase 1B, continuous parameterization, and neural inference are gated on a documented Phase 1A scientific decision. See `docs/CURRENT_PHASE.md` and `docs/AMORTIZED_INFERENCE_ROADMAP.md`.
+Completed groundwork includes the repository/scientific audit and Phase 0A
+typed streaming HepMC3 extraction. Phase 1A infrastructure and a 2,000-event
+nominal smoke study are complete, but the study is scientifically blocked by
+one accepted event below the CT18NLO grid; the supported subset also has
+`ESS/N = 0.01176`, below the fixed 0.20 reuse threshold. The next step is an
+explicit scientific decision on the generator/PDF support contract, followed
+by a new Phase 1A study ID. Phase 1B, continuous parameterization, and neural
+inference remain gated. See `docs/CURRENT_PHASE.md` and
+`docs/AMORTIZED_INFERENCE_PHASE1A_REWEIGHTING.md`.
 
 ## Scientific limitations
 
@@ -179,7 +212,9 @@ Completed groundwork includes the repository/scientific audit and Phase 0A typed
 - No target-mass, higher-twist, complete electroweak/radiative, or detector corrections are implemented.
 - PYTHIA showering and hadronization are phenomenological and model dependent.
 - The checked-in surrogate is an interpolation artifact, not simulation truth for inference.
-- Hard-PDF reweighting sufficiency, support, and shower dependence remain unvalidated.
+- Hard-PDF direct closure and shower/hadronization sufficiency remain
+  unvalidated; the first Phase 1A smoke study found a structural PDF-support
+  failure and did not proceed to direct samples.
 
 See `docs/scientific_scope_and_limitations.md` and the amortized-inference audit for the complete source-grounded limitations.
 
