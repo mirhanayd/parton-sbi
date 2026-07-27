@@ -6,8 +6,8 @@ set -euo pipefail
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 readonly REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd -P)"
 readonly EXTERNAL_ROOT="${REPO_ROOT}/.external"
-readonly LHAPDF_PREFIX="${EXTERNAL_ROOT}/lhapdf-6.5.6"
-readonly LHAPDF_DATA_DIR="${LHAPDF_PREFIX}/share/LHAPDF"
+LHAPDF_PREFIX="${EXTERNAL_ROOT}/lhapdf-6.5.6"
+LHAPDF_DATA_DIR="${LHAPDF_PREFIX}/share/LHAPDF"
 
 # shellcheck source=scripts/platform_policy.sh
 source "${SCRIPT_DIR}/platform_policy.sh"
@@ -140,4 +140,3 @@ for path_entry in \
 done
 
 printf '%s\n' "Native Ubuntu CI dependency setup complete."
-
