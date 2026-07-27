@@ -97,7 +97,7 @@ pub struct HepMcEvent {
 
 impl HepMcEvent {
     /// Stable generator-level final-state particles.
-    #[must_use]
+    #[must_use = "iterators are lazy and do nothing unless consumed"]
     pub fn final_state_particles(&self) -> impl Iterator<Item = &HepMcParticle> {
         self.particles
             .iter()
@@ -105,7 +105,7 @@ impl HepMcEvent {
     }
 
     /// Incoming beam particles, as marked by PYTHIA/HepMC status 4.
-    #[must_use]
+    #[must_use = "iterators are lazy and do nothing unless consumed"]
     pub fn beam_particles(&self) -> impl Iterator<Item = &HepMcParticle> {
         self.particles
             .iter()

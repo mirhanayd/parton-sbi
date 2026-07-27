@@ -145,9 +145,11 @@ fn iterator_streams_multiple_real_events() {
 fn streaming_parser_accepts_configured_smoke_file() {
     let path = std::env::var(SMOKE_FILE_ENV).unwrap_or_else(|_| FIXTURE.to_string());
     let reader = HepMcReader::open(&path).expect("HepMC3 input should open");
-    let event_count = reader
-        .map(|event| event.expect("HepMC3 event should parse"))
-        .count();
+    let mut event_count = 0;
+    for event in reader {
+        event.expect("HepMC3 event should parse");
+        event_count += 1;
+    }
     assert!(event_count > 0, "HepMC3 input should contain an event");
 }
 
