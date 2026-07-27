@@ -751,5 +751,30 @@ fn cli_smoke_output_has_the_declared_schema() {
         .status()
         .unwrap();
     assert!(!mismatch_status.success());
+
+    let metadata_path = run.join("metadata.json");
+    let mut incompatible_metadata: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(&metadata_path).unwrap()).unwrap();
+    incompatible_metadata["pdf_support_contract"]["intersection"]["x_minimum"] =
+        serde_json::json!(2.0e-9);
+    std::fs::write(
+        &metadata_path,
+        serde_json::to_vec_pretty(&incompatible_metadata).unwrap(),
+    )
+    .unwrap();
+    let incompatible_scan_output = root.join("incompatible-scan");
+    let incompatible_scan = std::process::Command::new(env!("CARGO_BIN_EXE_parton-sbi"))
+        .args([
+            "scan-pdf-members",
+            "--nominal-run",
+            run.to_str().unwrap(),
+            "--pdf-set",
+            "CT18NLO",
+            "--output",
+            incompatible_scan_output.to_str().unwrap(),
+        ])
+        .status()
+        .unwrap();
+    assert!(!incompatible_scan.success());
     let _ = std::fs::remove_dir_all(root);
 }

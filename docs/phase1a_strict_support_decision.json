@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "study_id": "phase1a_strict_support_confirmation_20260727",
+  "implementation_commit": "424a987ca849554c2fbf8075792633297b1c8a46",
+  "repository_dirty_at_generation": false,
+  "generation_command": [
+    "cargo",
+    "run",
+    "--release",
+    "--",
+    "generate-dis-events",
+    "--electron-energy",
+    "27.5",
+    "--proton-energy",
+    "920",
+    "--q2-min",
+    "3.5",
+    "--q2-max",
+    "10000",
+    "--x-min",
+    "0.0001",
+    "--x-max",
+    "0.8",
+    "--y-min",
+    "0.01",
+    "--y-max",
+    "0.95",
+    "--events",
+    "2000",
+    "--seed",
+    "210201",
+    "--pdf-set",
+    "CT18NLO",
+    "--pdf-member",
+    "0",
+    "--pdf-support-policy",
+    "strict_in_grid",
+    "--parton-shower",
+    "true",
+    "--hadronization",
+    "true",
+    "--output",
+    "outputs/phase1a_strict_support_confirmation_20260727/full/nominal"
+  ],
+  "seed": 210201,
+  "support_policy": {
+    "name": "strict_in_grid",
+    "version": 1,
+    "extrapolation_allowed": false,
+    "pdf_set": "CT18NLO",
+    "nominal_member": 0,
+    "scanned_member_count": 59,
+    "all_members_share_bounds": true,
+    "intersection": {
+      "x_minimum": 1e-9,
+      "x_maximum": 1.0,
+      "q_minimum_gev": 1.295,
+      "q_maximum_gev": 100000.0,
+      "sources": [
+        "LHAPDF::PDF::xMin",
+        "LHAPDF::PDF::xMax",
+        "LHAPDF::PDF::qMin",
+        "LHAPDF::PDF::qMax"
+      ]
+    },
+    "event_scale": "HepMC GenPdfInfo::scale = PYTHIA Info::QFac(), Q in GeV",
+    "pdf_evaluation_scale": "managed-lhapdf xfxQ2 receives GenPdfInfo::scale squared exactly once"
+  },
+  "generation_counts": {
+    "attempted_events": 2336,
+    "pythia_generated_events": 2336,
+    "failed_events": 0,
+    "dis_cut_vetoes": 321,
+    "momentum_vetoes": 14,
+    "pdf_support_vetoes": 1,
+    "pdf_support_vetoes_by_reason": {
+      "below_q_minimum": 1
+    },
+    "accepted_in_support_events": 2000
+  },
+  "normalization": {
+    "pythia_weight_sum": 4882.624220548377,
+    "selected_weight_sum": 3275.821378678103,
+    "selected_sum_squared_weights": 129093.37320307645,
+    "selected_negative_weight_count": 0,
+    "sigma_gen_mb": 0.00014710181824581162,
+    "selected_cross_section_pb": 98692.68231294063,
+    "method": "sigmaGen * selected_weight_sum / Info::weightSum"
+  },
+  "stored_recomputed_nominal_xf": {
+    "count": 2000,
+    "tolerance": 1e-6,
+    "median_relative_difference": 6.744524631535534e-10,
+    "p95_relative_difference": 2.63247814752144e-9,
+    "p99_relative_difference": 5.459636533694609e-9,
+    "maximum_relative_difference": 8.66065223052482e-9,
+    "outside_tolerance": 0
+  },
+  "member_scan": {
+    "noncentral_members_scanned": 58,
+    "structural_failures": 0,
+    "non_finite_ratios": 0,
+    "mild_member": 24,
+    "mild_ess_fraction": 0.041582650026518495,
+    "stress_member": 51,
+    "stress_ess_fraction": 0.04283458330378022
+  },
+  "nominal_ess_fraction": 0.04156296108415559,
+  "ess_threshold": 0.20,
+  "direct_closure": {
+    "executed": false,
+    "reason": "The predeclared nominal-pool ESS gate already rejects reuse; direct closure is unnecessary for this decision."
+  },
+  "decision": "FAIL — NOMINAL-POOL REUSE REJECTED",
+  "decision_reason": "DIRECT REGENERATION REQUIRED: nominal, mild, and stress ESS/N are below 0.20",
+  "pool_reuse_allowed": false,
+  "reweighting_path_allowed": false,
+  "direct_regeneration_required": true,
+  "phase1a_complete": true,
+  "phase1bd_planning_permission": true,
+  "neural_inference_implemented": false
+}

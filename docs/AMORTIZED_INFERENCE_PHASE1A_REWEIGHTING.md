@@ -2,11 +2,41 @@
 
 ## Status
 
-**BLOCKED at the Stage A support gate.** The fresh full-event nominal smoke
-sample contains an event whose serialized PDF scale lies below the declared
-CT18NLO grid. The mandated structural-support stop rule was applied before any
-direct-target sample was generated. Phase 1A remains incomplete, pool reuse is
-not permitted, and Phase 1B is not permitted.
+**COMPLETE — FAIL: NOMINAL-POOL REUSE REJECTED; DIRECT REGENERATION REQUIRED.**
+The original Stage A smoke study remains recorded below as a historically
+blocked run. An explicit no-extrapolation support decision was subsequently
+made and a clean confirmation study generated exactly 2,000 accepted,
+in-support events. Its nominal `ESS/N = 0.04156296108415559`, below the fixed
+0.20 threshold. Mild member 24 and stress member 51 also failed the gate.
+Direct closure was therefore unnecessary and was not run. Pool reuse and the
+reweighting path are rejected; Phase 1B-D is authorized for planning only.
+
+## Strict-support scientific decision
+
+The active policy is version 1 `strict_in_grid`. LHAPDF extrapolation is not
+allowed. The Rust support bridge reads each installed member's authoritative
+`LHAPDF::PDF::xMin`, `xMax`, `qMin`, and `qMax` values. The reusable set domain
+is their intersection; numeric bounds are not hard-coded in generic physics
+code. For installed CT18NLO data version 1, all 59 members were verified to
+share:
+
+```text
+x in [1e-9, 1]
+Q in [1.295, 100000] GeV
+```
+
+The PYTHIA HepMC3 converter serializes proton-side `GenPdfInfo::x2` from
+`Info::x2pdf()` and `GenPdfInfo::scale` from `Info::QFac()`. The generator veto
+uses those exact two quantities. The scale is Q in GeV, not reconstructed DIS
+Q and not Q². For managed-lhapdf evaluation, PartonSBI squares the stored scale
+exactly once before calling `xfxQ2`.
+
+Generation applies the existing DIS cuts, momentum-conservation check, and
+strict support selection before accepting an event, and continues until the
+requested in-support count is reached. Support vetoes remain in the attempted
+event accounting and final selected-cross-section normalization. The study
+domain is therefore the original DIS selection intersected with strict LHAPDF
+support; no equivalence with the unrestricted generator domain is claimed.
 
 ## Scientific hypothesis
 
@@ -187,7 +217,7 @@ are compared with this direct-self distribution. Undefined or underresolved
 metrics make shape closure `INCONCLUSIVE`; any threshold exceedance makes it
 `FAIL`.
 
-## Stage A results
+## Original Stage A smoke study — blocked historical result
 
 The full-event nominal member-0 smoke run used seed `210001` and produced 2,000
 accepted events from 2,352 attempts in 8.97 seconds. It occupied 18 MiB,
@@ -297,42 +327,129 @@ These regional passes do not override the mandatory overall reuse failure.
 The single event below the PDF grid is excluded from these numerical summaries
 only after being retained and counted as a typed structural failure.
 
+## Clean strict-support confirmation study
+
+Study `phase1a_strict_support_confirmation_20260727` was generated from clean
+implementation commit `424a987ca849554c2fbf8075792633297b1c8a46` with
+`git_dirty=false` and seed `210201`. The exact shell invocation was:
+
+```bash
+cargo run --release -- generate-dis-events \
+  --electron-energy 27.5 \
+  --proton-energy 920 \
+  --q2-min 3.5 \
+  --q2-max 10000 \
+  --x-min 0.0001 \
+  --x-max 0.8 \
+  --y-min 0.01 \
+  --y-max 0.95 \
+  --events 2000 \
+  --seed 210201 \
+  --pdf-set CT18NLO \
+  --pdf-member 0 \
+  --pdf-support-policy strict_in_grid \
+  --parton-shower true \
+  --hadronization true \
+  --output outputs/phase1a_strict_support_confirmation_20260727/full/nominal
+```
+
+PYTHIA gamma/Z process 211 was active, showers and hadronization were enabled,
+and MPI was disabled. No generator weights, maxima, phase-space sampling, or
+target members were changed.
+
+| Event accounting | Count |
+| --- | ---: |
+| attempted | 2336 |
+| PYTHIA generated | 2336 |
+| PYTHIA failures | 0 |
+| reconstructed DIS-cut vetoes | 321 |
+| momentum-conservation vetoes | 14 |
+| strict PDF-support vetoes | 1 |
+| accepted in-support | 2000 |
+
+The one support veto was `below_q_minimum`; it was counted and replaced by
+continued generation. The accepted HepMC3 pool streamed as exactly 2,000
+events, all with an unambiguous proton-side entry and `InSupport` outcome.
+There were zero structural failures, missing entries, ambiguous entries,
+non-finite ratios, zero ratios, or observable extraction failures. All 58
+non-central members were scanned with valid-ratio fraction 1.0.
+
+Final normalization metadata were:
+
+| Quantity | Value |
+| --- | ---: |
+| PYTHIA weight sum | 4882.624220548377 |
+| selected weight sum | 3275.821378678103 |
+| selected sum of squared weights | 129093.37320307645 |
+| selected negative weights | 0 |
+| `sigmaGen` | 0.00014710181824581162 mb |
+| selected cross section | 98692.68231294063 pb |
+
+Stored-versus-recomputed nominal `xf` agreement retained the `1e-6` tolerance:
+
+| Statistic | Relative disagreement |
+| --- | ---: |
+| median | 6.744524631535534e-10 |
+| p95 | 2.63247814752144e-9 |
+| p99 | 5.459636533694609e-9 |
+| maximum | 8.66065223052482e-9 |
+| outside tolerance | 0/2000 |
+
+The unchanged target-selection rule again chose mild member 24 and stress
+member 51:
+
+| Role | Member | Score | ESS | ESS/N | Ratio range |
+| --- | ---: | ---: | ---: | ---: | --- |
+| nominal | 0 | — | 83.12592216831118 | 0.04156296108415559 | self ratio |
+| mild | 24 | 0.031459687899194975 | 83.16530005303699 | 0.041582650026518495 | 0.9019719336–1.055561697 |
+| stress | 51 | 0.34155264832892285 | 85.66916660756044 | 0.04283458330378022 | 0.8953801796–1.741981285 |
+
+All three values are below `ESS/N = 0.20`. The nominal self-ratio distribution
+is numerically consistent with one; the low ESS comes from the unmodified
+PYTHIA event-weight tail, not a PDF-ratio failure. No clipping, unweighting,
+winsorization, resampling, or post-hoc target replacement was applied.
+
 ## Closure and rate decisions
 
-- Hard-process direct closure: **INCONCLUSIVE — not started after support stop**.
-- Full-event mild direct closure: **INCONCLUSIVE — not started after support stop**.
-- Full-event stress direct closure: **INCONCLUSIVE — not started after support stop**.
-- Direct-versus-direct self-closure: **not evaluated**.
-- Observable-level failures: **not evaluated**.
-- Direct-target rate closure: **RATE CLOSURE NOT ESTABLISHED** because no direct
-  target sample was generated.
-- Pool reuse: **not allowed**.
-- Phase 1B: **not allowed**.
+- Hard-process direct closure: **not run; unnecessary after the ESS gate rejected reuse**.
+- Full-event mild direct closure: **not run; unnecessary after the ESS gate rejected reuse**.
+- Full-event stress direct closure: **not run; unnecessary after the ESS gate rejected reuse**.
+- Direct-versus-direct self-closure: **not run**.
+- Observable-level closure: **not run and not claimed**.
+- Direct-target rate closure: **not run and not claimed**.
+- Pool reuse: **rejected**.
+- Reweighting path: **rejected for pool production**.
+- Direct regeneration: **required per PDF parameter point**.
+- Phase 1B-D: **planning permitted; implementation not started**.
 
 | Physics level | Mild member 24 | Stress member 51 | Direct self-closure |
 | --- | --- | --- | --- |
-| hard process | INCONCLUSIVE — not run | INCONCLUSIVE — not run | not evaluated |
-| full event | INCONCLUSIVE — support stop | INCONCLUSIVE — support stop | not evaluated |
+| hard process | not run — ESS stop | not run — ESS stop | not run |
+| full event | not run — ESS stop | not run — ESS stop | not run |
 
 All sixteen predeclared observed closure variables therefore have status
-`NOT EVALUATED`; no observable was removed or declared passing. The full-event
-nominal extraction itself produced zero observable-extraction failures. No
-hard-process ESS exists because hard-process generation was not started after
-the structural stop. No valid nominal-pool reuse domain has been established.
+`NOT EVALUATED`; no observable was removed or declared passing. This does not
+make the Phase 1A decision inconclusive: the predeclared ESS gate is sufficient
+to reject pool reuse before direct closure. The full-event nominal extraction
+itself produced zero observable-extraction failures.
 
 The exact state is:
 
 ```text
-PHASE 1A BLOCKED — STRUCTURAL PDF-SUPPORT FAILURE
-DIRECT REGENERATION REQUIRED BY ESS
-POOL REUSE NOT AUTHORIZED
-PHASE 1B NOT AUTHORIZED
+FAIL — NOMINAL-POOL REUSE REJECTED
+DIRECT REGENERATION REQUIRED
+POOL_REUSE_ALLOWED = false
+REWEIGHTING_PATH_ALLOWED = false
+DIRECT_REGENERATION_REQUIRED = true
+PHASE1A_COMPLETE = true
+PHASE1B-D_PLANNING_PERMISSION = true
 ```
 
 ## Post-study infrastructure audit
 
-The blocked scientific result above is unchanged. Before review, a
-source-level audit hardened restart behavior:
+The original blocked observation remains historical evidence. Before the clean
+restart, a source-level audit and strict-support implementation hardened the
+scientific contract:
 
 - the streaming validator now retains only compact scalar accumulator state,
   cross-checks CSV/HepMC weights, and rejects CSV/HepMC cardinality mismatch;
@@ -345,14 +462,17 @@ source-level audit hardened restart behavior:
   state; direct-run compatibility requires all four to be present and equal;
 - fixed-bin analysis rejects out-of-range values and uses a resolved pooled-null
   bootstrap policy; and
-- a single closure case can never grant pool reuse or Phase 1B permission. The
-  aggregate gate remains unevaluated after the Stage A stop.
+- a single closure case can never grant pool reuse or Phase 1B permission;
+- authoritative per-member LHAPDF support is typed, intersected, serialized,
+  and revalidated before generation or scanning; and
+- the aggregate ESS decision can finalize a negative Phase 1A result but can
+  never grant reuse after an ESS pass without independent direct closure.
 
 The smoke sample predates the new `git_dirty` field and was generated while the
 Phase 1A implementation was uncommitted (`repository_dirty=true` in the member
 scan manifest). This does not change the below-grid support observation, but it
 prevents that sample from serving as a future direct-run compatibility
-reference. A restarted study must use newly generated, provenance-complete runs.
+reference. The clean confirmation run replaces it as the decision reference.
 
 The exact verbatim Stage A shell commands and exit codes were not retained in a
 committed manifest. Configuration, seed, path, versions, counts, timestamp,
@@ -368,19 +488,19 @@ The post-implementation WSL validation completed with these results:
 | --- | --- |
 | `cargo fmt --all -- --check` | pass |
 | `cargo check --workspace` | pass, warning-free |
-| `cargo test --workspace` | 149 passed, 7 ignored, 0 failed |
-| `cargo test --test pdf_reweighting -- --nocapture` | 34 passed, 2 installation-dependent ignored |
+| `cargo test --workspace` | 153 passed, 7 ignored, 0 failed |
+| `cargo test --test pdf_reweighting -- --nocapture` | 38 passed, 2 installation-dependent ignored |
 | `cargo test --test pdf_reweighting -- --ignored --nocapture` | 2 passed, 0 failed |
 | `cargo clippy --workspace --all-targets -- -D warnings` | pass, warning-free |
-| `analysis/venv/bin/python -m pytest analysis/tests` | 30 passed |
+| `analysis/venv/bin/python -m pytest analysis/tests` | 32 passed |
 | `ctest --test-dir physics-engine/build --output-on-failure` | 1/1 passed |
 | `git diff --check` | pass |
-| Phase 1A CLI help, real-fixture smoke, and 3-event generator/parser smoke | pass |
+| Clean 2,000-event generator, streaming-parser self-check, and 58-member scan | pass |
 
-The ignored study directory contains only the partial full-event smoke run,
-member scan, and nominal diagnostics. The required final-study decision,
-closure-metric, plot, and report artifacts were not fabricated after the stop
-gate; no generated output is committed.
+Raw event pools, scans, and diagnostics remain under ignored `outputs/` and are
+not committed. The compact machine-readable decision is committed as
+`docs/phase1a_strict_support_decision.json`. No direct-closure metrics or plots
+were fabricated after the ESS stop.
 
 ## Scientific limitations
 
@@ -394,7 +514,6 @@ flavor separation.
 
 ## Next step
 
-Make one explicit scientific decision about the out-of-grid scale contract
-(reject that generator domain, or separately validate exact PYTHIA/LHAPDF
-extrapolation semantics) before restarting Phase 1A under a new study ID. Do
-not begin Phase 1B.
+Write and review the Phase 1B-D scientific design for a continuous,
+sum-rule-preserving PDF family with direct event regeneration at each parameter
+point. Do not implement Phase 1B-D or revive nominal-pool reuse in this task.
