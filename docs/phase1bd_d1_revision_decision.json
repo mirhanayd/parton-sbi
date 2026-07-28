@@ -1,0 +1,96 @@
+{
+  "schema_version": "partonsbi.phase1bd.d1_revision.decision.v1",
+  "date": "2026-07-28",
+  "d1_merge_commit": "c9c8de68c8192309e98bcaf538a8b06e8749f10d",
+  "original_study_id": "phase1bd_d1_apfel_lhapdf_artifact_v1_20260728",
+  "original_stage1_decision": "FAIL",
+  "diagnostic_study_id": "phase1bd_d1r_transport_diagnostic_v1_20260728",
+  "serialization": {
+    "decision": "CORRECT",
+    "exact_knot_comparisons_per_anchor": 69069,
+    "exact_knot_outside_tolerance": 0,
+    "maximum_exact_knot_absolute_error": 3.1763735522036263E-22,
+    "independent_logcubic_outside_tolerance": 0,
+    "maximum_independent_logcubic_absolute_error": 1.0913936421275139E-11
+  },
+  "ct18nlo_subgrids": {
+    "subgrid_count": 1,
+    "x_knots": 161,
+    "q_knots": 37,
+    "duplicated_q_knots": 0
+  },
+  "off_knot_center": {
+    "comparisons": 271887,
+    "outside_tolerance": 56793,
+    "maximum_absolute_error": 13.676177930319682,
+    "worst_flavor": 21,
+    "worst_x": 1.0635741629054353E-9,
+    "worst_q_gev": 71852.27901743959,
+    "threshold_region_failures": 4969,
+    "non_threshold_failures": 51824
+  },
+  "grid_diagnostics": {
+    "single_block_failure_fraction": 0.2088845733705547,
+    "threshold_segmented_failure_fraction": 0.20726993199380625,
+    "refined_q_failure_fraction": 0.17400318005045878,
+    "refined_x_failure_fraction": 0.17469383545117484,
+    "combined_refined_failure_fraction": 0.13351464539865018,
+    "combined_maximum_absolute_error": 4.013933338614152
+  },
+  "finite_support": {
+    "computational_xmin_selected": 1E-11,
+    "exported_xmin_unchanged": 1E-9,
+    "boundary_below_exported_xmin": "zero",
+    "center_doubled_grid_maximum_independent_residual": 8.376906646123672E-7,
+    "delta_min_doubled_grid_maximum_independent_residual": 6.4815101532555985E-6,
+    "center_high_q_momentum_below_exported_support": 5.4194349993874624E-5,
+    "delta_min_high_q_momentum_below_exported_support": 6.25788369543745E-5
+  },
+  "raw_ct18_fidelity": {
+    "raw_boundary_apfel_vs_public_outside": 8529,
+    "projected_vs_raw_boundary_apfel_outside": 0,
+    "projected_apfel_vs_public_outside": 8532,
+    "role": "mandatory_diagnostic_not_gate"
+  },
+  "selected_artifact_contract": {
+    "threshold_separated_subgrids": true,
+    "deterministic_error_driven_refinement": true,
+    "maximum_refinement_iterations": 4,
+    "maximum_x_knots": 1025,
+    "maximum_q_knots": 257,
+    "maximum_member_bytes": 268435456,
+    "maximum_seconds_per_anchor": 600,
+    "pointwise_relative_tolerance": 1E-5,
+    "pointwise_absolute_tolerance": 1E-9
+  },
+  "selected_sum_rule_contract": {
+    "binding_domain": "full_computational_support",
+    "binding_method": "independent_composite_gl64_in_log_x",
+    "maximum_residual": 1E-5,
+    "leakage_convergence_absolute_tolerance": 1E-7,
+    "exported_support_moments_required_but_not_unit_normalized": true
+  },
+  "selected_observable_contract": {
+    "process": "zero_mass_photon_exchange_neutral_current",
+    "order": "NLO",
+    "structure_functions": [
+      "F2",
+      "FL"
+    ],
+    "scale_choice": "mu_f=mu_r=Q",
+    "relative_tolerance": 1E-4,
+    "absolute_tolerance": 1E-8,
+    "full_gamma_z_claim": false
+  },
+  "d1_revision_decision": "SELECTED",
+  "d1_revision_implementation_authorized": true,
+  "d2_authorized": false,
+  "generated_diagnostics_committed": false,
+  "reasons": [
+    "Exact-knot serialization and an independent LHAPDF logcubic reconstruction pass.",
+    "Off-knot error is a global finite-grid representation failure; threshold separation alone is insufficient.",
+    "The high-Q moment failure is dominated by evolution below exported x support and is resolved on a converged extended computational grid.",
+    "Raw CT18 pointwise discrepancies are dominated by independent evolution-engine differences rather than D0 projection.",
+    "The revised implementation remains separately gated and cannot authorize D2."
+  ]
+}

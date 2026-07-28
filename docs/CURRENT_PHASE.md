@@ -22,6 +22,7 @@
   implementation.
 - Phase 1B-D1 negative decision: the fixed off-knot transport and evolved
   sum-rule gates failed across the complete nine-anchor study.
+- Phase 1B-D1 revision audit and ADR-005 proposal.
 
 # Current state
 
@@ -58,14 +59,24 @@
 - Deterministic APFEL-evolved LHAPDF artifacts now exist only in the ignored
   content-addressed cache. No artifact is generator-ready under the failed
   Stage 1 contract.
+- The D1-revision audit found the lhagrid1 serialization correct: all exact
+  knots passed, and an independent log-bicubic implementation reproduced
+  LHAPDF. Off-knot errors are global finite-grid representation errors.
+- The apparent high-Q conservation failure combines finite exported support
+  with evolution below `x=1e-9`. On an APFEL computational grid extending to
+  `1e-11`, independently integrated full-domain moments meet the proposed
+  `1e-5` gate while the lost exported-support momentum remains explicit.
+- ADR-005 proposes threshold-separated, deterministically refined artifacts,
+  computational-domain moment gates, raw-CT18 fidelity as a mandatory
+  diagnostic, and NLO photon-exchange structure-function closure.
+- Revised D1 implementation is authorized only if ADR-005 is accepted.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review the negative D1 result and decide whether a separately
-scoped Stage 1 grid/evolution transport revision is warranted.
+Scientifically review ADR-005 and its revised Stage 1 acceptance contract.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -75,6 +86,8 @@ unimplemented hypotheses.
 
 - Do not reuse or reweight a nominal event pool.
 - Do not begin D2: Stage 1 failed and `D2_AUTHORIZATION_CANDIDATE = false`.
+- Do not implement revised D1 until ADR-005 is reviewed; its authorization is
+  limited to issue #30 and never authorizes D2.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
