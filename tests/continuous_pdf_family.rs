@@ -1,8 +1,10 @@
 use std::collections::BTreeSet;
 
 use parton_sbi::physics::{
-    guard_shell_5_percent, pilot_grid_21x21, validate_positivity, ContinuousPdfContext, PdfTheta,
-    Stage0Classification, DELTA_V_MAX, DELTA_V_MIN, LAMBDA_SEA_MAX, LAMBDA_SEA_MIN,
+    guard_shell_5_percent, pilot_grid_21x21, validate_parameter_identity_version,
+    validate_positivity, ContinuousPdfContext, ContinuousPdfFamilyVersion, PdfTheta,
+    SignRegionKind, Stage0Classification, DELTA_V_MAX, DELTA_V_MIN, LAMBDA_SEA_MAX, LAMBDA_SEA_MIN,
+    PROJECTED_BASELINE_VERSION_V2,
 };
 
 #[test]
@@ -95,6 +97,8 @@ fn authoritative_ct18nlo_metadata_q2_flavors_and_boundary_are_verified() {
     assert_eq!(metadata.bottom_threshold_gev, 4.75);
     assert_eq!(metadata.flavor_scheme, "variable");
     assert_eq!(metadata.lhapdf_version, "6.5.6");
+    assert_eq!(metadata.interpolation_policy, "logcubic");
+    assert_eq!(metadata.installed_extrapolator, "continuation");
     for flavor in [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 21] {
         assert!(metadata.supported_flavors.contains(&flavor));
     }
@@ -181,4 +185,102 @@ fn construction_quadrature_identity_and_positivity_are_deterministic() {
             .canonical_identity()
             .unwrap()
     );
+}
+
+#[test]
+#[ignore = "requires LHAPDF 6.5.6 and CT18NLO DataVersion 1 installed"]
+fn v1_is_immutable_and_v2_projection_is_authoritatively_reproduced() {
+    let v1 = ContinuousPdfContext::load_ct18nlo_v1().unwrap();
+    let v2 = ContinuousPdfContext::load_ct18nlo_v2().unwrap();
+    assert_eq!(v1.family_version(), ContinuousPdfFamilyVersion::V1);
+    assert_eq!(v2.family_version(), ContinuousPdfFamilyVersion::V2);
+    assert!(v1.projected_baseline_manifest().is_none());
+    let projected = v2.projected_baseline_manifest().unwrap();
+    assert_eq!(projected.baseline_version, PROJECTED_BASELINE_VERSION_V2);
+    assert!((projected.projection_constants.a_u0 - 1.0000021151261937).abs() < 1e-13);
+    assert!((projected.projection_constants.a_d0 - 1.0000202605996376).abs() < 1e-13);
+    assert!((projected.projection_constants.a_g0 - 0.9999935202034876).abs() < 1e-13);
+    assert!((projected.raw_moments.u_valence_number - 1.9999957697565598).abs() < 1e-13);
+    assert!((projected.raw_moments.d_valence_number - 0.999_979_739_810_846).abs() < 1e-13);
+    assert!((projected.raw_moments.total_momentum - 0.9999991913056495).abs() < 1e-13);
+    assert!((projected.projected_moments.u_valence_number - 2.0).abs() < 1e-14);
+    assert!((projected.projected_moments.d_valence_number - 1.0).abs() < 1e-14);
+    assert!((projected.projected_moments.total_momentum - 1.0).abs() < 1e-14);
+
+    let theta = PdfTheta::new(0.0, 0.0).unwrap();
+    let old = v1.construct(theta).unwrap();
+    let revised = v2.construct(theta).unwrap();
+    assert!((old.normalizations.a_u - 1.0000021151261937).abs() < 1e-13);
+    assert!((old.normalizations.a_d - 1.0000202605996376).abs() < 1e-13);
+    assert!((old.normalizations.a_g - 0.9999935202034876).abs() < 1e-13);
+    assert!((revised.normalizations.a_u - 1.0).abs() < 2e-15);
+    assert!((revised.normalizations.a_d - 1.0).abs() < 2e-15);
+    assert!((revised.normalizations.a_g - 1.0).abs() < 2e-15);
+    assert_ne!(
+        old.canonical_identity().unwrap().sha256,
+        revised.canonical_identity().unwrap().sha256
+    );
+    assert!(validate_parameter_identity_version(
+        &old.canonical_identity().unwrap(),
+        ContinuousPdfFamilyVersion::V2
+    )
+    .is_err());
+    validate_parameter_identity_version(
+        &revised.canonical_identity().unwrap(),
+        ContinuousPdfFamilyVersion::V2,
+    )
+    .unwrap();
+    assert!(old
+        .canonical_identity()
+        .unwrap()
+        .canonical_utf8
+        .contains("ct18nlo_two_parameter_boundary_v1"));
+    assert!(revised
+        .canonical_identity()
+        .unwrap()
+        .canonical_utf8
+        .contains("ct18nlo_two_parameter_boundary_v2"));
+}
+
+#[test]
+#[ignore = "requires LHAPDF 6.5.6 and CT18NLO DataVersion 1 installed"]
+fn v2_topology_negative_momentum_and_v1_equivalence_are_deterministic() {
+    let v1 = ContinuousPdfContext::load_ct18nlo_v1().unwrap();
+    let v2 = ContinuousPdfContext::load_ct18nlo_v2().unwrap();
+    let gluon = v2.discover_baseline_sign_topology(21).unwrap();
+    let refined = v2
+        .discover_baseline_sign_topology_with_subdivisions(21, 128)
+        .unwrap();
+    assert_eq!(gluon.roots.len(), refined.roots.len());
+    assert!((gluon.roots[0] - 0.9935531299173892).abs() < 1e-12);
+    assert!(gluon
+        .regions
+        .iter()
+        .any(|region| region.kind == SignRegionKind::Negative));
+    let negative = v2.negative_momentum_diagnostic(21).unwrap();
+    assert!((negative.primary - 6.187935491060024e-12).abs() < 2e-15);
+    assert!(negative.integration_difference <= 1e-17);
+    assert!((negative.fraction - 1.5822152070733786e-11).abs() < 2e-14);
+
+    let grid = v2.validation_x_grid();
+    for theta in pilot_grid_21x21() {
+        let old = v1.construct(theta).unwrap();
+        let revised = v2.construct(theta).unwrap();
+        for &x in &grid {
+            for flavor in [21, 2, -2, 1, -1, 3, -3, 4, -4, 5, -5] {
+                let a = old.densities(x).unwrap().flavor(flavor).unwrap();
+                let b = revised.densities(x).unwrap().flavor(flavor).unwrap();
+                let absolute = (a - b).abs();
+                let relative = if a != 0.0 { absolute / a.abs() } else { 0.0 };
+                assert!(
+                    relative <= 1e-12 || absolute <= 1e-14,
+                    "theta={theta:?}, flavor={flavor}, x={x}, relative={relative}, absolute={absolute}"
+                );
+            }
+        }
+        assert_ne!(
+            old.canonical_identity().unwrap().sha256,
+            revised.canonical_identity().unwrap().sha256
+        );
+    }
 }

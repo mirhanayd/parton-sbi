@@ -17,6 +17,11 @@ use super::{LhapdfProvider, PdfError, PdfSupportBounds};
 
 pub const CONTINUOUS_PDF_SCHEMA_VERSION: &str = "partonsbi.pdf_parameter_point.v1";
 pub const CONTINUOUS_PDF_FAMILY_VERSION: &str = "ct18nlo_two_parameter_boundary_v1";
+pub const CONTINUOUS_PDF_SCHEMA_VERSION_V2: &str = "partonsbi.pdf_parameter_point.v2";
+pub const CONTINUOUS_PDF_FAMILY_VERSION_V2: &str = "ct18nlo_two_parameter_boundary_v2";
+pub const PROJECTED_BASELINE_VERSION_V2: &str = "ct18nlo_member0_sumrule_projected_boundary_v2";
+pub const SIGN_TOPOLOGY_POLICY_VERSION: &str = "lhapdf_knots_log_refinement_bisection_v1";
+pub const EXTRAPOLATION_CALLER_POLICY: &str = "strict_no_extrapolation";
 pub const PILOT_DOMAIN_VERSION: &str = "phase1bd_d0_pilot_box_v1";
 pub const INTEGRATION_POLICY_VERSION: &str = "logx_gk15_gl64_v1";
 pub const DELTA_V_MIN: f64 = -0.20;
@@ -71,6 +76,8 @@ pub enum ContinuousPdfError {
         limit: usize,
     },
     IdentitySerialization(String),
+    UnsupportedVersion(String),
+    SignTopology(String),
 }
 
 impl fmt::Display for ContinuousPdfError {
@@ -110,6 +117,10 @@ impl fmt::Display for ContinuousPdfError {
             Self::IdentitySerialization(message) => {
                 write!(f, "canonical identity serialization failed: {message}")
             }
+            Self::UnsupportedVersion(version) => {
+                write!(f, "unsupported continuous-PDF family version: {version}")
+            }
+            Self::SignTopology(message) => write!(f, "sign-topology validation failed: {message}"),
         }
     }
 }
@@ -119,6 +130,29 @@ impl Error for ContinuousPdfError {}
 impl From<PdfError> for ContinuousPdfError {
     fn from(value: PdfError) -> Self {
         Self::Pdf(value)
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ContinuousPdfFamilyVersion {
+    V1,
+    V2,
+}
+
+impl ContinuousPdfFamilyVersion {
+    pub fn family_name(self) -> &'static str {
+        match self {
+            Self::V1 => CONTINUOUS_PDF_FAMILY_VERSION,
+            Self::V2 => CONTINUOUS_PDF_FAMILY_VERSION_V2,
+        }
+    }
+
+    pub fn schema_name(self) -> &'static str {
+        match self {
+            Self::V1 => CONTINUOUS_PDF_SCHEMA_VERSION,
+            Self::V2 => CONTINUOUS_PDF_SCHEMA_VERSION_V2,
+        }
     }
 }
 
@@ -216,7 +250,53 @@ pub struct ContinuousPdfMetadata {
     pub bottom_threshold_gev: f64,
     pub flavor_scheme: String,
     pub lhapdf_version: String,
+    pub interpolation_policy: String,
+    pub installed_extrapolator: String,
     pub x_knots: Vec<f64>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct RawBoundaryMoments {
+    pub u_valence_number: f64,
+    pub d_valence_number: f64,
+    pub u_valence_momentum: f64,
+    pub d_valence_momentum: f64,
+    pub sea_momentum: f64,
+    pub gluon_momentum: f64,
+    pub total_momentum: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct ProjectionConstants {
+    pub a_u0: f64,
+    pub a_d0: f64,
+    pub a_g0: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct ProjectedBoundaryMoments {
+    pub u_valence_number: f64,
+    pub d_valence_number: f64,
+    pub total_momentum: f64,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ProjectedBaselineManifest {
+    pub baseline_version: String,
+    pub raw_set: String,
+    pub raw_member: i32,
+    pub raw_data_version: i32,
+    pub lhapdf_version: String,
+    pub q0_gev: f64,
+    pub support: PdfSupportBounds,
+    pub interpolation_policy: String,
+    pub installed_extrapolator: String,
+    pub extrapolation_policy: String,
+    pub integration_policy_version: String,
+    pub raw_moments: RawBoundaryMoments,
+    pub projection_constants: ProjectionConstants,
+    pub projected_moments: ProjectedBoundaryMoments,
+    pub canonical_identity: ParameterPointIdentity,
 }
 
 #[repr(C)]
@@ -259,6 +339,10 @@ extern "C" {
         flavor_scheme_size: usize,
         lhapdf_version: *mut c_char,
         lhapdf_version_size: usize,
+        interpolation_policy: *mut c_char,
+        interpolation_policy_size: usize,
+        extrapolator_policy: *mut c_char,
+        extrapolator_policy_size: usize,
         flavors: *mut c_int,
         flavor_capacity: usize,
         flavor_count: *mut usize,
@@ -278,6 +362,8 @@ impl ContinuousPdfMetadata {
         let mut raw = RawMetadata::default();
         let mut scheme = [0 as c_char; 128];
         let mut version = [0 as c_char; 128];
+        let mut interpolation = [0 as c_char; 128];
+        let mut extrapolator = [0 as c_char; 128];
         let mut flavors = [0 as c_int; BRIDGE_FLAVOR_CAPACITY];
         let mut flavor_count = 0usize;
         let mut x_knots = [0.0; BRIDGE_X_KNOT_CAPACITY];
@@ -300,6 +386,10 @@ impl ContinuousPdfMetadata {
                 scheme.len(),
                 version.as_mut_ptr(),
                 version.len(),
+                interpolation.as_mut_ptr(),
+                interpolation.len(),
+                extrapolator.as_mut_ptr(),
+                extrapolator.len(),
                 flavors.as_mut_ptr(),
                 flavors.len(),
                 &mut flavor_count,
@@ -330,6 +420,12 @@ impl ContinuousPdfMetadata {
         let lhapdf_version = unsafe { CStr::from_ptr(version.as_ptr()) }
             .to_string_lossy()
             .into_owned();
+        let interpolation_policy = unsafe { CStr::from_ptr(interpolation.as_ptr()) }
+            .to_string_lossy()
+            .into_owned();
+        let installed_extrapolator = unsafe { CStr::from_ptr(extrapolator.as_ptr()) }
+            .to_string_lossy()
+            .into_owned();
         let supported_flavors = flavors[..flavor_count].to_vec();
         let x_knots = x_knots[..x_knot_count].to_vec();
         let metadata = Self {
@@ -347,6 +443,8 @@ impl ContinuousPdfMetadata {
             bottom_threshold_gev: raw.bottom_threshold_gev,
             flavor_scheme,
             lhapdf_version,
+            interpolation_policy,
+            installed_extrapolator,
             x_knots,
         };
         metadata.validate(&provider)?;
@@ -392,6 +490,8 @@ impl ContinuousPdfMetadata {
         }
         if self.flavor_scheme.trim().is_empty()
             || self.lhapdf_version.trim().is_empty()
+            || self.interpolation_policy.trim().is_empty()
+            || self.installed_extrapolator.trim().is_empty()
             || self.x_knots.len() < 2
             || self.x_knots.iter().any(|x| !x.is_finite() || *x <= 0.0)
             || self.x_knots.windows(2).any(|pair| pair[0] >= pair[1])
@@ -470,6 +570,7 @@ pub struct ContinuousPdfPoint<'a> {
     context: &'a ContinuousPdfContext,
     pub theta: PdfTheta,
     pub normalizations: PdfNormalizations,
+    effective_raw_normalizations: PdfNormalizations,
 }
 
 /// Loaded baseline plus deterministic integration policy.
@@ -478,17 +579,37 @@ pub struct ContinuousPdfContext {
     provider: LhapdfProvider,
     pub metadata: ContinuousPdfMetadata,
     partitions_z: Vec<f64>,
+    family_version: ContinuousPdfFamilyVersion,
+    projected_baseline: Option<ProjectedBaselineManifest>,
 }
 
 impl ContinuousPdfContext {
     pub fn load_ct18nlo_v1() -> Result<Self, ContinuousPdfError> {
-        Self::load("CT18NLO", 0, Some(1))
+        Self::load_versioned("CT18NLO", 0, Some(1), ContinuousPdfFamilyVersion::V1)
+    }
+
+    pub fn load_ct18nlo_v2() -> Result<Self, ContinuousPdfError> {
+        Self::load_versioned("CT18NLO", 0, Some(1), ContinuousPdfFamilyVersion::V2)
     }
 
     pub fn load(
         set_name: &str,
         member: i32,
         expected_data_version: Option<i32>,
+    ) -> Result<Self, ContinuousPdfError> {
+        Self::load_versioned(
+            set_name,
+            member,
+            expected_data_version,
+            ContinuousPdfFamilyVersion::V1,
+        )
+    }
+
+    pub fn load_versioned(
+        set_name: &str,
+        member: i32,
+        expected_data_version: Option<i32>,
+        family_version: ContinuousPdfFamilyVersion,
     ) -> Result<Self, ContinuousPdfError> {
         let provider = LhapdfProvider::new(set_name, member)?;
         let metadata = ContinuousPdfMetadata::load(set_name, member)?;
@@ -499,6 +620,14 @@ impl ContinuousPdfContext {
                     metadata.data_version
                 )));
             }
+        }
+        if family_version == ContinuousPdfFamilyVersion::V2
+            && (set_name != "CT18NLO" || member != 0 || metadata.data_version != 1)
+        {
+            return Err(ContinuousPdfError::UnsupportedVersion(format!(
+                "{} is defined only for CT18NLO member 0 DataVersion 1",
+                family_version.family_name()
+            )));
         }
         let mut xs = metadata
             .x_knots
@@ -512,16 +641,21 @@ impl ContinuousPdfContext {
         xs.sort_by(f64::total_cmp);
         xs.dedup_by(|a, b| a.to_bits() == b.to_bits());
         let partitions_z = xs.into_iter().map(f64::ln).collect();
-        let context = Self {
+        let mut context = Self {
             provider,
             metadata,
             partitions_z,
+            family_version,
+            projected_baseline: None,
         };
         context.verify_heavy_boundary()?;
+        if family_version == ContinuousPdfFamilyVersion::V2 {
+            context.projected_baseline = Some(context.build_projected_baseline()?);
+        }
         Ok(context)
     }
 
-    fn baseline(&self, x: f64) -> Result<NumberDensities, ContinuousPdfError> {
+    fn raw_baseline(&self, x: f64) -> Result<NumberDensities, ContinuousPdfError> {
         if x < self.metadata.support.x_minimum || x > 1.0 {
             return Ok(NumberDensities {
                 gluon: 0.0,
@@ -566,6 +700,155 @@ impl ContinuousPdfContext {
 
     pub fn baseline_densities(&self, x: f64) -> Result<NumberDensities, ContinuousPdfError> {
         self.baseline(x)
+    }
+
+    pub fn raw_baseline_densities(&self, x: f64) -> Result<NumberDensities, ContinuousPdfError> {
+        self.raw_baseline(x)
+    }
+
+    pub fn family_version(&self) -> ContinuousPdfFamilyVersion {
+        self.family_version
+    }
+
+    pub fn projected_baseline_manifest(&self) -> Option<&ProjectedBaselineManifest> {
+        self.projected_baseline.as_ref()
+    }
+
+    fn baseline(&self, x: f64) -> Result<NumberDensities, ContinuousPdfError> {
+        let raw = self.raw_baseline(x)?;
+        let Some(manifest) = &self.projected_baseline else {
+            return Ok(raw);
+        };
+        let p = manifest.projection_constants;
+        let up_valence = p.a_u0 * (raw.up - raw.anti_up);
+        let down_valence = p.a_d0 * (raw.down - raw.anti_down);
+        Ok(NumberDensities {
+            gluon: p.a_g0 * raw.gluon,
+            up: up_valence + raw.anti_up,
+            anti_up: raw.anti_up,
+            down: down_valence + raw.anti_down,
+            anti_down: raw.anti_down,
+            strange: raw.strange,
+            anti_strange: raw.anti_strange,
+            charm: 0.0,
+            anti_charm: 0.0,
+            bottom: 0.0,
+            anti_bottom: 0.0,
+        })
+    }
+
+    fn build_projected_baseline(&self) -> Result<ProjectedBaselineManifest, ContinuousPdfError> {
+        let uv = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok(b.up - b.anti_up)
+        })?;
+        let dv = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok(b.down - b.anti_down)
+        })?;
+        let uv_momentum = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok(x * (b.up - b.anti_up))
+        })?;
+        let dv_momentum = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok(x * (b.down - b.anti_down))
+        })?;
+        let sea_momentum = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok(x * (2.0 * b.anti_up + 2.0 * b.anti_down + b.strange + b.anti_strange))
+        })?;
+        let gluon_momentum = self.integrate_primary(|x| Ok(x * self.raw_baseline(x)?.gluon))?;
+        let raw_moments = RawBoundaryMoments {
+            u_valence_number: uv,
+            d_valence_number: dv,
+            u_valence_momentum: uv_momentum,
+            d_valence_momentum: dv_momentum,
+            sea_momentum,
+            gluon_momentum,
+            total_momentum: uv_momentum + dv_momentum + sea_momentum + gluon_momentum,
+        };
+        let a_u0 = 2.0 / uv;
+        let a_d0 = 1.0 / dv;
+        validate_normalization("A_u0", a_u0)?;
+        validate_normalization("A_d0", a_d0)?;
+        let a_g0 = (1.0 - a_u0 * uv_momentum - a_d0 * dv_momentum - sea_momentum) / gluon_momentum;
+        validate_normalization("A_g0", a_g0)?;
+        let projection_constants = ProjectionConstants { a_u0, a_d0, a_g0 };
+        let projected_moments = ProjectedBoundaryMoments {
+            u_valence_number: a_u0 * uv,
+            d_valence_number: a_d0 * dv,
+            total_momentum: a_u0 * uv_momentum
+                + a_d0 * dv_momentum
+                + sea_momentum
+                + a_g0 * gluon_momentum,
+        };
+        let mut values = BTreeMap::<String, String>::new();
+        values.insert(
+            "baseline_version".into(),
+            PROJECTED_BASELINE_VERSION_V2.into(),
+        );
+        values.insert("raw_set".into(), self.metadata.set_name.clone());
+        values.insert("raw_member".into(), self.metadata.member.to_string());
+        values.insert(
+            "raw_data_version".into(),
+            self.metadata.data_version.to_string(),
+        );
+        values.insert("q0_gev".into(), float_hex(self.metadata.q0_gev));
+        values.insert(
+            "support_x_min".into(),
+            float_hex(self.metadata.support.x_minimum),
+        );
+        values.insert(
+            "support_x_max".into(),
+            float_hex(self.metadata.support.x_maximum),
+        );
+        values.insert("raw_u_valence".into(), float_hex(uv));
+        values.insert("raw_d_valence".into(), float_hex(dv));
+        values.insert("raw_momentum".into(), float_hex(raw_moments.total_momentum));
+        values.insert("projection_a_u0".into(), float_hex(a_u0));
+        values.insert("projection_a_d0".into(), float_hex(a_d0));
+        values.insert("projection_a_g0".into(), float_hex(a_g0));
+        values.insert(
+            "interpolation_policy".into(),
+            self.metadata.interpolation_policy.clone(),
+        );
+        values.insert(
+            "installed_extrapolator".into(),
+            self.metadata.installed_extrapolator.clone(),
+        );
+        values.insert(
+            "extrapolation_policy".into(),
+            EXTRAPOLATION_CALLER_POLICY.into(),
+        );
+        values.insert(
+            "integration_policy_version".into(),
+            INTEGRATION_POLICY_VERSION.into(),
+        );
+        let canonical_bytes = serde_json::to_vec(&values)
+            .map_err(|error| ContinuousPdfError::IdentitySerialization(error.to_string()))?;
+        let canonical_identity = ParameterPointIdentity {
+            canonical_utf8: String::from_utf8(canonical_bytes.clone())
+                .map_err(|error| ContinuousPdfError::IdentitySerialization(error.to_string()))?,
+            sha256: format!("sha256:{:x}", Sha256::digest(&canonical_bytes)),
+        };
+        Ok(ProjectedBaselineManifest {
+            baseline_version: PROJECTED_BASELINE_VERSION_V2.into(),
+            raw_set: self.metadata.set_name.clone(),
+            raw_member: self.metadata.member,
+            raw_data_version: self.metadata.data_version,
+            lhapdf_version: self.metadata.lhapdf_version.clone(),
+            q0_gev: self.metadata.q0_gev,
+            support: self.metadata.support.clone(),
+            interpolation_policy: self.metadata.interpolation_policy.clone(),
+            installed_extrapolator: self.metadata.installed_extrapolator.clone(),
+            extrapolation_policy: EXTRAPOLATION_CALLER_POLICY.into(),
+            integration_policy_version: INTEGRATION_POLICY_VERSION.into(),
+            raw_moments,
+            projection_constants,
+            projected_moments,
+            canonical_identity,
+        })
     }
 
     fn verify_heavy_boundary(&self) -> Result<(), ContinuousPdfError> {
@@ -625,15 +908,61 @@ impl ContinuousPdfContext {
             self.integrate_primary(|x| Ok(x * self.baseline(x)?.gluon))?;
         let a_g = (1.0 - quark_momentum) / baseline_gluon_momentum;
         validate_normalization("A_g", a_g)?;
+        let normalizations = PdfNormalizations {
+            a_u,
+            a_d,
+            sea_scale,
+            a_g,
+        };
+        let effective_raw_normalizations =
+            self.effective_raw_normalizations(theta, normalizations)?;
         Ok(ContinuousPdfPoint {
             context: self,
             theta,
-            normalizations: PdfNormalizations {
-                a_u,
-                a_d,
-                sea_scale,
-                a_g,
-            },
+            normalizations,
+            effective_raw_normalizations,
+        })
+    }
+
+    fn effective_raw_normalizations(
+        &self,
+        theta: PdfTheta,
+        selected: PdfNormalizations,
+    ) -> Result<PdfNormalizations, ContinuousPdfError> {
+        let Some(projected) = &self.projected_baseline else {
+            return Ok(selected);
+        };
+        let tilt = |x: f64| (x / VALENCE_PIVOT_X).powf(theta.delta_v);
+        let raw_u = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok((b.up - b.anti_up) * tilt(x))
+        })?;
+        let raw_d = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok((b.down - b.anti_down) * tilt(x))
+        })?;
+        let a_u = 2.0 / raw_u;
+        let a_d = 1.0 / raw_d;
+        let raw_quark_momentum = self.integrate_primary(|x| {
+            let b = self.raw_baseline(x)?;
+            Ok(x * (a_u * (b.up - b.anti_up) * tilt(x)
+                + a_d * (b.down - b.anti_down) * tilt(x)
+                + selected.sea_scale
+                    * (2.0 * b.anti_up + 2.0 * b.anti_down + b.strange + b.anti_strange)))
+        })?;
+        let a_g = (1.0 - raw_quark_momentum) / projected.raw_moments.gluon_momentum;
+        for (name, value) in [
+            ("effective A_u", a_u),
+            ("effective A_d", a_d),
+            ("effective A_g", a_g),
+        ] {
+            validate_normalization(name, value)?;
+        }
+        Ok(PdfNormalizations {
+            a_u,
+            a_d,
+            sea_scale: selected.sea_scale,
+            a_g,
         })
     }
 
@@ -711,15 +1040,19 @@ impl ContinuousPdfContext {
             + sea_scale * baseline.primary_sea_momentum;
         let a_g = (1.0 - quark_momentum) / baseline.primary_gluon_momentum;
         validate_normalization("A_g", a_g)?;
+        let normalizations = PdfNormalizations {
+            a_u,
+            a_d,
+            sea_scale,
+            a_g,
+        };
+        let effective_raw_normalizations =
+            self.effective_raw_normalizations(theta, normalizations)?;
         Ok(ContinuousPdfPoint {
             context: self,
             theta,
-            normalizations: PdfNormalizations {
-                a_u,
-                a_d,
-                sea_scale,
-                a_g,
-            },
+            normalizations,
+            effective_raw_normalizations,
         })
     }
 
@@ -806,6 +1139,28 @@ impl ContinuousPdfContext {
         })
     }
 
+    pub fn integrate_primary_strict<F>(&self, function: F) -> Result<f64, ContinuousPdfError>
+    where
+        F: Fn(f64) -> Result<f64, ContinuousPdfError>,
+    {
+        integrate_gk15_logx(&self.partitions_z, function, 1.0e-18, 1.0e-10, 30)
+    }
+
+    pub fn integrate_independent_strict<F>(
+        &self,
+        function: F,
+    ) -> Result<IndependentIntegral, ContinuousPdfError>
+    where
+        F: Fn(f64) -> Result<f64, ContinuousPdfError>,
+    {
+        let coarse = integrate_gl64_logx(&self.partitions_z, &function, 4)?;
+        let refined = integrate_gl64_logx(&self.partitions_z, &function, 8)?;
+        Ok(IndependentIntegral {
+            value: refined,
+            refinement_change: (refined - coarse).abs(),
+        })
+    }
+
     fn integrate_independent_pair<F>(
         &self,
         function: F,
@@ -830,13 +1185,18 @@ impl ContinuousPdfPoint<'_> {
         if x < self.context.metadata.support.x_minimum || x > 1.0 {
             return self.context.baseline(x);
         }
-        let b = self.context.baseline(x)?;
+        let b = if self.context.family_version == ContinuousPdfFamilyVersion::V2 {
+            self.context.raw_baseline(x)?
+        } else {
+            self.context.baseline(x)?
+        };
+        let normalizations = self.effective_raw_normalizations;
         let tilt = (x / VALENCE_PIVOT_X).powf(self.theta.delta_v);
-        let up_valence = self.normalizations.a_u * (b.up - b.anti_up) * tilt;
-        let down_valence = self.normalizations.a_d * (b.down - b.anti_down) * tilt;
-        let sea = self.normalizations.sea_scale;
+        let up_valence = normalizations.a_u * (b.up - b.anti_up) * tilt;
+        let down_valence = normalizations.a_d * (b.down - b.anti_down) * tilt;
+        let sea = normalizations.sea_scale;
         let result = NumberDensities {
-            gluon: self.normalizations.a_g * b.gluon,
+            gluon: normalizations.a_g * b.gluon,
             up: up_valence + sea * b.anti_up,
             anti_up: sea * b.anti_up,
             down: down_valence + sea * b.anti_down,
@@ -921,7 +1281,7 @@ impl ContinuousPdfPoint<'_> {
         );
         values.insert(
             "family_version".into(),
-            CONTINUOUS_PDF_FAMILY_VERSION.into(),
+            self.context.family_version.family_name().into(),
         );
         values.insert("flavor_scheme".into(), metadata.flavor_scheme.clone());
         values.insert(
@@ -950,7 +1310,7 @@ impl ContinuousPdfPoint<'_> {
         values.insert("q0_gev".into(), float_hex(metadata.q0_gev));
         values.insert(
             "schema_version".into(),
-            CONTINUOUS_PDF_SCHEMA_VERSION.into(),
+            self.context.family_version.schema_name().into(),
         );
         values.insert(
             "support_q_max_gev".into(),
@@ -971,6 +1331,56 @@ impl ContinuousPdfPoint<'_> {
         values.insert("theta_delta_v".into(), float_hex(self.theta.delta_v));
         values.insert("theta_lambda_sea".into(), float_hex(self.theta.lambda_sea));
         values.insert("partonsbi_version".into(), env!("CARGO_PKG_VERSION").into());
+        if let Some(projected) = &self.context.projected_baseline {
+            values.insert(
+                "projected_baseline_version".into(),
+                projected.baseline_version.clone(),
+            );
+            values.insert(
+                "projected_baseline_identity".into(),
+                projected.canonical_identity.sha256.clone(),
+            );
+            values.insert(
+                "projection_a_u0".into(),
+                float_hex(projected.projection_constants.a_u0),
+            );
+            values.insert(
+                "projection_a_d0".into(),
+                float_hex(projected.projection_constants.a_d0),
+            );
+            values.insert(
+                "projection_a_g0".into(),
+                float_hex(projected.projection_constants.a_g0),
+            );
+            values.insert(
+                "raw_u_valence".into(),
+                float_hex(projected.raw_moments.u_valence_number),
+            );
+            values.insert(
+                "raw_d_valence".into(),
+                float_hex(projected.raw_moments.d_valence_number),
+            );
+            values.insert(
+                "raw_momentum".into(),
+                float_hex(projected.raw_moments.total_momentum),
+            );
+            values.insert(
+                "interpolation_policy".into(),
+                projected.interpolation_policy.clone(),
+            );
+            values.insert(
+                "extrapolation_policy".into(),
+                projected.extrapolation_policy.clone(),
+            );
+            values.insert(
+                "installed_extrapolator".into(),
+                projected.installed_extrapolator.clone(),
+            );
+            values.insert(
+                "sign_topology_policy_version".into(),
+                SIGN_TOPOLOGY_POLICY_VERSION.into(),
+            );
+        }
         let canonical_bytes = serde_json::to_vec(&values)
             .map_err(|error| ContinuousPdfError::IdentitySerialization(error.to_string()))?;
         let digest = Sha256::digest(&canonical_bytes);
@@ -998,6 +1408,28 @@ fn float_hex(value: f64) -> String {
 pub struct ParameterPointIdentity {
     pub canonical_utf8: String,
     pub sha256: String,
+}
+
+pub fn validate_parameter_identity_version(
+    identity: &ParameterPointIdentity,
+    expected: ContinuousPdfFamilyVersion,
+) -> Result<(), ContinuousPdfError> {
+    let values: BTreeMap<String, String> = serde_json::from_str(&identity.canonical_utf8)
+        .map_err(|error| ContinuousPdfError::IdentitySerialization(error.to_string()))?;
+    let schema = values.get("schema_version").ok_or_else(|| {
+        ContinuousPdfError::IdentitySerialization("missing schema_version".into())
+    })?;
+    let family = values.get("family_version").ok_or_else(|| {
+        ContinuousPdfError::IdentitySerialization("missing family_version".into())
+    })?;
+    if schema != expected.schema_name() || family != expected.family_name() {
+        return Err(ContinuousPdfError::UnsupportedVersion(format!(
+            "identity is {schema}/{family}, expected {}/{}",
+            expected.schema_name(),
+            expected.family_name()
+        )));
+    }
+    Ok(())
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -1073,6 +1505,231 @@ pub struct PositivityMinimum {
     pub density: f64,
     pub flavor: i32,
     pub x: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SignRegionKind {
+    Positive,
+    Zero,
+    Negative,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SignRegion {
+    pub x_start: f64,
+    pub x_end: f64,
+    pub kind: SignRegionKind,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FlavorSignTopology {
+    pub flavor: i32,
+    pub policy_version: String,
+    pub root_tolerance_x: f64,
+    pub subdivisions_per_knot_interval: usize,
+    pub roots: Vec<f64>,
+    pub regions: Vec<SignRegion>,
+    pub minimum_density: f64,
+    pub minimum_x: f64,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct NegativeMomentumDiagnostic {
+    pub flavor: i32,
+    pub primary: f64,
+    pub independent: f64,
+    pub integration_difference: f64,
+    pub signed_momentum: f64,
+    pub fraction: f64,
+}
+
+const SIGN_ROOT_TOLERANCE_X: f64 = 1.0e-14;
+const SIGN_ROOT_MAX_ITERATIONS: usize = 128;
+const SIGN_VALUE_ZERO_TOLERANCE: f64 = 1.0e-18;
+
+impl ContinuousPdfContext {
+    pub fn discover_baseline_sign_topology(
+        &self,
+        flavor: i32,
+    ) -> Result<FlavorSignTopology, ContinuousPdfError> {
+        self.discover_baseline_sign_topology_with_subdivisions(flavor, 64)
+    }
+
+    pub fn discover_baseline_sign_topology_with_subdivisions(
+        &self,
+        flavor: i32,
+        subdivisions: usize,
+    ) -> Result<FlavorSignTopology, ContinuousPdfError> {
+        if subdivisions == 0 {
+            return Err(ContinuousPdfError::SignTopology(
+                "subdivision count must be positive".into(),
+            ));
+        }
+        let xmin = self.metadata.support.x_minimum;
+        let mut samples = vec![xmin];
+        let knots = self
+            .metadata
+            .x_knots
+            .iter()
+            .copied()
+            .filter(|x| *x >= xmin && *x <= 1.0)
+            .collect::<Vec<_>>();
+        for pair in knots.windows(2) {
+            let (za, zb) = (pair[0].ln(), pair[1].ln());
+            for index in 0..=subdivisions {
+                samples.push((za + (zb - za) * index as f64 / subdivisions as f64).exp());
+            }
+        }
+        samples.push(1.0);
+        samples.sort_by(f64::total_cmp);
+        samples.dedup_by(|a, b| a.to_bits() == b.to_bits());
+        let value = |x: f64| -> Result<f64, ContinuousPdfError> {
+            self.baseline(x)?.flavor(flavor).ok_or_else(|| {
+                ContinuousPdfError::SignTopology(format!("unsupported flavor {flavor}"))
+            })
+        };
+        let mut roots = Vec::new();
+        let mut previous_x = samples[0];
+        let mut previous = value(previous_x)?;
+        let mut minimum_density = previous;
+        let mut minimum_x = previous_x;
+        for &x in samples.iter().skip(1) {
+            let current = value(x)?;
+            if current < minimum_density {
+                minimum_density = current;
+                minimum_x = x;
+            }
+            if current.abs() <= SIGN_VALUE_ZERO_TOLERANCE {
+                if x == 1.0 {
+                    roots.push(x);
+                }
+                continue;
+            }
+            if previous.abs() > SIGN_VALUE_ZERO_TOLERANCE
+                && current.is_sign_positive() != previous.is_sign_positive()
+            {
+                roots.push(bisect_density_root(
+                    &value, previous_x, x, previous, current,
+                )?);
+            }
+            previous_x = x;
+            previous = current;
+        }
+        roots.sort_by(f64::total_cmp);
+        roots.dedup_by(|a, b| (*a - *b).abs() <= SIGN_ROOT_TOLERANCE_X);
+        let mut boundaries = vec![xmin];
+        boundaries.extend(roots.iter().copied().filter(|x| *x > xmin && *x < 1.0));
+        boundaries.push(1.0);
+        boundaries.sort_by(f64::total_cmp);
+        boundaries.dedup_by(|a, b| (*a - *b).abs() <= SIGN_ROOT_TOLERANCE_X);
+        let mut regions = Vec::new();
+        for pair in boundaries.windows(2) {
+            let midpoint = (pair[0].ln().midpoint(pair[1].ln())).exp();
+            let midpoint_value = value(midpoint)?;
+            regions.push(SignRegion {
+                x_start: pair[0],
+                x_end: pair[1],
+                kind: if midpoint_value > SIGN_VALUE_ZERO_TOLERANCE {
+                    SignRegionKind::Positive
+                } else if midpoint_value < -SIGN_VALUE_ZERO_TOLERANCE {
+                    SignRegionKind::Negative
+                } else {
+                    SignRegionKind::Zero
+                },
+            });
+        }
+        for &root in &roots {
+            regions.push(SignRegion {
+                x_start: root,
+                x_end: root,
+                kind: SignRegionKind::Zero,
+            });
+        }
+        regions.sort_by(|a, b| {
+            a.x_start
+                .total_cmp(&b.x_start)
+                .then(a.x_end.total_cmp(&b.x_end))
+        });
+        Ok(FlavorSignTopology {
+            flavor,
+            policy_version: SIGN_TOPOLOGY_POLICY_VERSION.into(),
+            root_tolerance_x: SIGN_ROOT_TOLERANCE_X,
+            subdivisions_per_knot_interval: subdivisions,
+            roots,
+            regions,
+            minimum_density,
+            minimum_x,
+        })
+    }
+
+    pub fn negative_momentum_diagnostic(
+        &self,
+        flavor: i32,
+    ) -> Result<NegativeMomentumDiagnostic, ContinuousPdfError> {
+        let negative = |x: f64| {
+            let value = self.baseline(x)?.flavor(flavor).ok_or_else(|| {
+                ContinuousPdfError::SignTopology(format!("unsupported flavor {flavor}"))
+            })?;
+            Ok(x * (-value).max(0.0))
+        };
+        let signed = |x: f64| {
+            let value = self.baseline(x)?.flavor(flavor).ok_or_else(|| {
+                ContinuousPdfError::SignTopology(format!("unsupported flavor {flavor}"))
+            })?;
+            Ok(x * value)
+        };
+        let primary = self.integrate_primary_strict(negative)?;
+        let independent = self.integrate_independent_strict(negative)?;
+        let signed_momentum = self.integrate_primary(signed)?;
+        Ok(NegativeMomentumDiagnostic {
+            flavor,
+            primary,
+            independent: independent.value,
+            integration_difference: (primary - independent.value).abs(),
+            signed_momentum,
+            fraction: primary / signed_momentum.abs(),
+        })
+    }
+}
+
+fn bisect_density_root<F>(
+    function: &F,
+    mut left: f64,
+    mut right: f64,
+    mut left_value: f64,
+    right_value: f64,
+) -> Result<f64, ContinuousPdfError>
+where
+    F: Fn(f64) -> Result<f64, ContinuousPdfError>,
+{
+    if left_value == 0.0 {
+        return Ok(left);
+    }
+    if right_value == 0.0 {
+        return Ok(right);
+    }
+    if left_value.is_sign_positive() == right_value.is_sign_positive() {
+        return Err(ContinuousPdfError::SignTopology(
+            "root solver requires a sign-changing bracket".into(),
+        ));
+    }
+    for _ in 0..SIGN_ROOT_MAX_ITERATIONS {
+        let midpoint = left.midpoint(right);
+        let value = function(midpoint)?;
+        if value == 0.0 || (right - left).abs() <= SIGN_ROOT_TOLERANCE_X {
+            return Ok(midpoint);
+        }
+        if value.is_sign_positive() == left_value.is_sign_positive() {
+            left = midpoint;
+            left_value = value;
+        } else {
+            right = midpoint;
+        }
+    }
+    Err(ContinuousPdfError::SignTopology(format!(
+        "root solver did not converge within {SIGN_ROOT_MAX_ITERATIONS} iterations"
+    )))
 }
 
 pub fn validate_positivity(

@@ -69,6 +69,10 @@ extern "C" int partonsbi_lhapdf_member_metadata(
     std::size_t flavor_scheme_size,
     char* lhapdf_version,
     std::size_t lhapdf_version_size,
+    char* interpolation_policy,
+    std::size_t interpolation_policy_size,
+    char* extrapolator_policy,
+    std::size_t extrapolator_policy_size,
     int* flavors,
     std::size_t flavor_capacity,
     std::size_t* flavor_count,
@@ -112,6 +116,10 @@ extern "C" int partonsbi_lhapdf_member_metadata(
     copy_string(pdf->info().get_entry("FlavorScheme"), flavor_scheme,
                 flavor_scheme_size);
     copy_string(LHAPDF::version(), lhapdf_version, lhapdf_version_size);
+    copy_string(grid->interpolator().type(), interpolation_policy,
+                interpolation_policy_size);
+    copy_string(pdf->info().get_entry("Extrapolator"), extrapolator_policy,
+                extrapolator_policy_size);
 
     std::copy(member_flavors.begin(), member_flavors.end(), flavors);
     std::copy(member_x_knots.begin(), member_x_knots.end(), x_knots);
