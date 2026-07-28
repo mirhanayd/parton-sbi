@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mirhanayd/parton-sbi/schemas/pdf_parameter_point.schema.json",
+  "title": "PartonSBI Phase 1B-D0 PDF parameter-point identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonical_utf8",
+    "sha256"
+  ],
+  "properties": {
+    "canonical_utf8": {
+      "description": "Deterministic UTF-8 JSON with lexicographically ordered keys and binary64 values encoded as 16 lowercase hexadecimal digits.",
+      "type": "string"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

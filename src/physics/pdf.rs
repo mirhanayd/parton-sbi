@@ -540,11 +540,11 @@ impl LhapdfProvider {
     }
 
     fn validate_point(&self, x: f64, q2: f64) -> Result<(), PdfError> {
-        if !x.is_finite() || x <= 0.0 || x >= 1.0 {
+        if !x.is_finite() || x <= 0.0 || x > 1.0 {
             return Err(PdfError::InvalidInput {
                 name: "x",
                 value: x,
-                requirement: "finite and in (0, 1)",
+                requirement: "finite and in (0, 1]",
             });
         }
         if !q2.is_finite() || q2 <= 0.0 {

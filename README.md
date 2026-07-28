@@ -25,20 +25,27 @@ with target posterior `p(theta_PDF | D)`. The objective is not to determine an i
 - HepMC3 event output plus JSON/CSV run artifacts;
 - typed streaming Rust extraction of real HepMC3 ASCII v3 records, including all weights, `GenPdfInfo`, typed attributes, particles, vertices, and run provenance;
 - typed discrete LHAPDF-member hard-PDF reweighting, member scanning, ESS and
-  weight-tail diagnostics, plus fixed-bin closure-analysis infrastructure; and
+  weight-tail diagnostics, plus fixed-bin closure-analysis infrastructure;
+- the Phase 1B-D0 input-scale two-parameter PDF boundary construction,
+  authoritative CT18NLO metadata/knot audit, independent quadrature, canonical
+  parameter identities, and deterministic Stage 0 validation CLI; and
 - Rust, C++, and Python validation fixtures supporting these components.
 
 ## Explicit non-capabilities
 
-PartonSBI does not currently implement continuous PDF parameterization,
-pseudo-experiment construction, amortized neural posterior inference, detector
-simulation, unfolding, or real-data PDF extraction. Phase 1A discrete
+PartonSBI implements only the D0 input-scale mathematical continuous boundary
+family. It does not implement APFEL evolution of that family, an LHAPDF grid
+artifact, PYTHIA coupling, direct event generation at continuous parameter
+points, pseudo-experiment construction, amortized neural posterior inference,
+detector simulation, unfolding, or real-data PDF extraction. Phase 1A discrete
 LHAPDF-member reweighting infrastructure is implemented and Phase 1A is
 complete with a negative result: the clean strict-support study failed the
 fixed `ESS/N >= 0.20` gate. Nominal-pool reuse and the reweighting production
 path are rejected; direct regeneration is required per PDF parameter point.
-No direct-target closure was needed or claimed. Phase 1B-D is authorized for
-planning only and is not implemented.
+No direct-target closure was needed or claimed. The Phase 1B-D0 pilot study is
+complete with `FAIL`: all 441 proposed hard-box points violate the fixed
+positivity gate near `x -> 1`, and the center violates the fixed reconstruction
+tolerance. D1 is not authorized.
 
 Inclusive neutral-current electron-proton data do not provide unrestricted full-flavor PDF separation. The implemented channel primarily constrains charge-weighted quark-plus-antiquark combinations, with only indirect and correlated sensitivity to other directions. `GenPdfInfo`, hard flavor, and nominal PDF values are generator truth/provenance for validation and future reweighting studies; they are not detector-observed inputs and must not be exposed as default inference features.
 
@@ -203,6 +210,21 @@ This command implements only the proton-side hard-PDF importance ratio. Hard
 flavor and `GenPdfInfo` remain hidden generator truth. A successful command is
 not, by itself, a closure result or permission to reuse an event pool.
 
+## Continuous boundary-family validation
+
+Validate one D0 parameter point:
+
+```bash
+cargo run --release -- validate-continuous-pdf-family \
+  --delta-v 0 \
+  --lambda-sea 0
+```
+
+The `--anchors` and `--full-study` modes write compact reports under an ignored
+output directory. This command evaluates only the input-scale mathematical
+family. It does not evolve PDFs, write an LHAPDF artifact, invoke PYTHIA, or
+generate events.
+
 ## Current roadmap
 
 Completed groundwork includes the repository/scientific audit and Phase 0A
@@ -211,10 +233,13 @@ smoke study is retained as historical evidence; a clean replacement generated
 2,000 accepted in-support events under a no-extrapolation contract. Its nominal
 `ESS/N = 0.04156296`, while mild member 24 and stress member 51 also remained
 below 0.20. Pool reuse was therefore rejected before direct closure. The next
-step is Phase 1B-D planning for a continuous, sum-rule-preserving PDF family
-with direct event regeneration. Continuous parameterization and neural
-inference are not implemented. See `docs/CURRENT_PHASE.md` and
-`docs/AMORTIZED_INFERENCE_PHASE1A_REWEIGHTING.md`.
+Phase 1B-D0 subsequently evaluated the proposed input family over exactly 441
+hard-box points and 80 diagnostic guard-shell points. Sum rules and independent
+quadrature passed, but the fixed positivity and central-reconstruction gates
+failed. The candidate pilot box is not accepted and D1 is not authorized. The
+next action is scientific review and a new ADR, not APFEL evolution. See
+`docs/CURRENT_PHASE.md`, `docs/AMORTIZED_INFERENCE_PHASE1A_REWEIGHTING.md`,
+and `docs/AMORTIZED_INFERENCE_PHASE1BD_D0.md`.
 
 ## Scientific limitations
 
@@ -228,6 +253,8 @@ inference are not implemented. See `docs/CURRENT_PHASE.md` and
   no direct sample was generated or claimed.
 - The validated study domain is the declared DIS selection intersected with
   strict LHAPDF support, not the unrestricted PYTHIA domain.
+- The D0 family is tied to CT18NLO member 0 at `Q0=1.295 GeV`; its complete
+  proposed pilot box failed and must not be used as a production prior.
 
 See `docs/scientific_scope_and_limitations.md` and the amortized-inference audit for the complete source-grounded limitations.
 
