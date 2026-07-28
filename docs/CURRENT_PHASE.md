@@ -24,19 +24,30 @@
   below the fixed 0.20 reuse threshold.
 - Reweighting-based pool reuse is rejected; direct event generation is required
   at every PDF parameter point.
-- No continuous PDF parameterization.
-- No amortized posterior model.
+- A Phase 1B-D design and staged acceptance contract have been drafted for
+  scientific review.
+- No Phase 1B-D code, generated PDF artifact, direct event corpus, continuous
+  parameterization, or amortized posterior model exists.
 
-# Next phase
+# Proposed next phase
 
-Phase 1B-D planning: a continuous, sum-rule-preserving PDF family coupled to
-direct event regeneration at each PDF parameter point.
+```text
+Phase 1B-D0:
+Validate the continuous, sum-rule-preserving input family and candidate pilot
+box without generating a training corpus.
+```
+
+The design selects APFEL++ evolution and an immutable generated LHAPDF artifact
+for direct regeneration. It proposes fixed-envelope accept-reject unweighting
+as an experiment, not as an already validated sampling method.
 
 # Gate
 
-Phase 1B-D is authorized for planning only. Do not implement it until its
-scientific design and acceptance criteria are reviewed. The failed nominal-pool
-reuse path is not authorized, and neural inference is not implemented.
+- Review and accept the Phase 1B-D design and ADRs before D0 implementation.
+- Do not reuse or reweight a nominal event pool.
+- Do not begin D1 until D0 acceptance criteria pass.
+- Do not begin neural inference until D0-D5 pass and a separate neural phase is
+  authorized.
 
 # Model recommendation
 
