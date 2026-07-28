@@ -11,6 +11,11 @@
   study.
 - Phase 1A negative decision: nominal-pool reuse rejected by the predeclared
   ESS gate.
+- Phase 1B-D design and staged acceptance contract.
+- Phase 1B-D0 mathematical boundary-family implementation and complete
+  441-point pilot-box study.
+- Phase 1B-D0 negative decision: the proposed pilot family failed positivity
+  and central-reconstruction gates.
 
 # Current state
 
@@ -24,28 +29,32 @@
   below the fixed 0.20 reuse threshold.
 - Reweighting-based pool reuse is rejected; direct event generation is required
   at every PDF parameter point.
-- A Phase 1B-D design and staged acceptance contract have been drafted for
-  scientific review.
-- No Phase 1B-D code, generated PDF artifact, direct event corpus, continuous
-  parameterization, or amortized posterior model exists.
+- The D0 input-scale continuous boundary family and validation CLI are
+  implemented. This is not an evolved or generator-ready PDF artifact.
+- The clean D0 study evaluated 441 hard-box points and 80 guard-shell
+  diagnostics. All hard-box points failed because the gluon became negative
+  near `x -> 1`; the center also exceeded the fixed reconstruction tolerance.
+- D1 is not authorized.
+- No APFEL-evolved family artifact, generated LHAPDF grid, PYTHIA continuous
+  PDF coupling, direct event corpus, sampling method, dataset, or amortized
+  posterior model exists.
 
-# Proposed next phase
+# Next scientific action
 
 ```text
-Phase 1B-D0:
-Validate the continuous, sum-rule-preserving input family and candidate pilot
-box without generating a training corpus.
+Review the Phase 1B-D0 negative result and write a new ADR before selecting or
+revising any input family.
 ```
 
-The design selects APFEL++ evolution and an immutable generated LHAPDF artifact
-for direct regeneration. It proposes fixed-envelope accept-reject unweighting
-as an experiment, not as an already validated sampling method.
+The approved design's later APFEL and fixed-envelope proposals remain
+unimplemented hypotheses.
 
 # Gate
 
-- Review and accept the Phase 1B-D design and ADRs before D0 implementation.
 - Do not reuse or reweight a nominal event pool.
-- Do not begin D1 until D0 acceptance criteria pass.
+- Do not begin D1: D0 failed its binding acceptance criteria.
+- Do not shrink the pilot box, clip negative densities, or change tolerances
+  without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
   authorized.
 
