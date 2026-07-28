@@ -2,6 +2,7 @@ use std::process::Command;
 
 fn main() {
     println!("cargo:rerun-if-changed=src/lhapdf_support_bridge.cpp");
+    println!("cargo:rerun-if-changed=src/apfel_evolution_bridge.cpp");
 
     let lhapdf = pkg_config::Config::new()
         .atleast_version("6")
@@ -13,10 +14,71 @@ fn main() {
         .cpp(true)
         .file("src/lhapdf_support_bridge.cpp")
         .flag_if_supported("-std=c++17");
-    for include_path in lhapdf.include_paths {
+    for include_path in &lhapdf.include_paths {
         support_bridge.include(include_path);
     }
     support_bridge.compile("partonsbi_lhapdf_support_bridge");
+
+    let apfel_config = std::env::var("APFELXX_ROOT")
+        .map(|root| std::path::PathBuf::from(root).join("bin/apfelxx-config"))
+        .unwrap_or_else(|_| std::path::PathBuf::from("apfelxx-config"));
+    let config_value = |flag: &str| {
+        let output = Command::new(&apfel_config)
+            .arg(flag)
+            .output()
+            .unwrap_or_else(|error| {
+                panic!("failed to run {} {flag}: {error}", apfel_config.display())
+            });
+        assert!(
+            output.status.success(),
+            "{} {flag} failed",
+            apfel_config.display()
+        );
+        String::from_utf8(output.stdout)
+            .expect("apfelxx-config output must be UTF-8")
+            .trim()
+            .to_owned()
+    };
+    let apfel_version = config_value("--version");
+    assert_eq!(
+        apfel_version, "4.8.0",
+        "PartonSBI D1 is pinned to APFEL++ 4.8.0"
+    );
+    let apfel_root = std::env::var("APFELXX_ROOT").ok();
+    let configured_include = std::path::PathBuf::from(config_value("--incdir"));
+    let configured_lib = std::path::PathBuf::from(config_value("--libdir"));
+    let apfel_include = if configured_include.is_dir() {
+        configured_include
+    } else {
+        std::path::PathBuf::from(
+            apfel_root
+                .as_ref()
+                .expect("APFELXX_ROOT is required when apfelxx-config is not relocatable"),
+        )
+        .join("include")
+    };
+    let apfel_lib = if configured_lib.is_dir() {
+        configured_lib
+    } else {
+        std::path::PathBuf::from(
+            apfel_root
+                .as_ref()
+                .expect("APFELXX_ROOT is required when apfelxx-config is not relocatable"),
+        )
+        .join("lib")
+    };
+    let mut evolution_bridge = cc::Build::new();
+    evolution_bridge
+        .cpp(true)
+        .file("src/apfel_evolution_bridge.cpp")
+        .include(&apfel_include)
+        .flag_if_supported("-std=c++17");
+    for include_path in &lhapdf.include_paths {
+        evolution_bridge.include(include_path);
+    }
+    evolution_bridge.compile("partonsbi_apfel_evolution_bridge");
+    println!("cargo:rustc-link-search=native={}", apfel_lib.display());
+    println!("cargo:rustc-link-lib=dylib=apfelxx");
     pkg_config::Config::new()
         .atleast_version("6")
         .probe("lhapdf")

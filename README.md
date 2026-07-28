@@ -228,6 +228,21 @@ reports under an ignored output directory. This command evaluates only the
 input-scale mathematical family. It does not evolve PDFs, write an LHAPDF
 artifact, invoke PYTHIA, or generate events.
 
+Validate one D1 evolved artifact:
+
+```bash
+cargo run --release -- validate-pdf-artifact \
+  --delta-v 0 \
+  --lambda-sea 0
+```
+
+The `--anchors` and clean-provenance `--study` modes validate deterministic
+APFEL++ 4.8.0 evolution and one-member LHAPDF6 transport. Artifacts live in the
+ignored `.external/partonsbi/pdf-artifacts/` cache, use an error extrapolator,
+and are never generator inputs in this phase. The completed nine-anchor Stage
+1 study failed the off-knot round-trip and high-Q evolved-sum-rule gates; this
+command is research infrastructure, not D2 authorization.
+
 ## Current roadmap
 
 Completed groundwork includes the repository/scientific audit and Phase 0A
@@ -240,11 +255,14 @@ Phase 1B-D0 subsequently evaluated the proposed input family over exactly 441
 hard-box points and 80 diagnostic guard-shell points. The v1 positivity and
 central-reconstruction gates failed. ADR-004 then authorized a separate v2
 projected-baseline study; its unchanged 441/80 scan passed without changing
-family values, bounds, or numerical tolerances. D1 nevertheless remains
-unauthorized until scientific review of that result. See
+family values, bounds, or numerical tolerances. D1 was subsequently authorized
+and completed as a negative result: boundary callbacks and alpha_s knots
+passed, while off-knot LHAPDF transport and evolved sum rules failed the fixed
+Stage 1 gates. D2 is not authorized. See
 `docs/CURRENT_PHASE.md`, `docs/AMORTIZED_INFERENCE_PHASE1A_REWEIGHTING.md`,
 `docs/AMORTIZED_INFERENCE_PHASE1BD_D0.md`, and
-`docs/AMORTIZED_INFERENCE_PHASE1BD_D0R.md`.
+`docs/AMORTIZED_INFERENCE_PHASE1BD_D0R.md`, and
+`docs/AMORTIZED_INFERENCE_PHASE1BD_D1.md`.
 
 ## Scientific limitations
 
@@ -259,7 +277,8 @@ unauthorized until scientific review of that result. See
 - The validated study domain is the declared DIS selection intersected with
   strict LHAPDF support, not the unrestricted PYTHIA domain.
 - Both D0 versions are tied to CT18NLO member 0 at `Q0=1.295 GeV`. V1 failed;
-  the v2 PASS is under review and does not make the box a production prior.
+  v2 passed, but the downstream D1 artifact contract failed and the box is not
+  a production prior.
 
 See `docs/scientific_scope_and_limitations.md` and the amortized-inference audit for the complete source-grounded limitations.
 
