@@ -2,6 +2,7 @@
 
 pub mod apfel;
 pub mod constants;
+pub mod continuous_pdf;
 pub mod cross_section;
 pub mod dis_kinematics;
 pub mod four_vector;
@@ -19,6 +20,7 @@ pub use apfel::{
     APFEL_ZM_VFNS_SCHEME, DEFAULT_APFEL_BACKEND_PATH,
 };
 pub use constants::{ELECTRON_MASS_GEV, PROTON_MASS_GEV};
+pub use continuous_pdf::*;
 pub use cross_section::{
     exact_inelasticity, gev_minus_four_to_pb_per_gev2, leptonic_y_plus,
     lo_differential_cross_section, CouplingError, CrossSectionError, ElectromagneticCoupling,

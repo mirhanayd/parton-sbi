@@ -9,7 +9,12 @@ use parton_sbi::physics::{
     FixedAlpha, LhapdfProvider, PdfSupportContract, PdfSupportPolicy,
 };
 
+mod continuous_pdf_cli;
 mod pdf_reweighting_cli;
+use continuous_pdf_cli::{
+    parse_validate_continuous_pdf, run_validate_continuous_pdf, ContinuousPdfCliArgs,
+    VALIDATE_CONTINUOUS_PDF_HELP,
+};
 use pdf_reweighting_cli::{
     parse_scan_pdf_members, parse_validate_pdf_reweighting, run_scan_pdf_members,
     run_validate_pdf_reweighting, ScanPdfMembersArgs, ValidatePdfReweightingArgs,
@@ -43,6 +48,9 @@ Commands:
 
   scan-pdf-members [OPTIONS]
       Deterministically score every non-central member over nominal support.
+
+  validate-continuous-pdf-family [OPTIONS]
+      Validate the Phase 1B-D0 input-scale mathematical PDF family.
 
   validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
@@ -165,6 +173,8 @@ enum Command {
     ValidatePdfReweightingHelp,
     ScanPdfMembers(ScanPdfMembersArgs),
     ScanPdfMembersHelp,
+    ValidateContinuousPdf(ContinuousPdfCliArgs),
+    ValidateContinuousPdfHelp,
     StructureFunctions(StructureFunctionsCliArgs),
     ValidateHera(ValidateHeraCliArgs),
     TheoryUncertainties(TheoryUncertaintiesCliArgs),
@@ -313,6 +323,13 @@ fn main() -> Result<()> {
             print!("{SCAN_PDF_MEMBERS_HELP}");
             Ok(())
         }
+        Command::ValidateContinuousPdf(arguments) => {
+            run_validate_continuous_pdf(arguments).map_err(Error::Msg)
+        }
+        Command::ValidateContinuousPdfHelp => {
+            print!("{VALIDATE_CONTINUOUS_PDF_HELP}");
+            Ok(())
+        }
         Command::StructureFunctions(arguments) => run_structure_functions(arguments),
         Command::ValidateHera(arguments) => run_validate_hera(arguments),
         Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
@@ -350,6 +367,13 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
                 Ok(Command::ScanPdfMembersHelp)
             } else {
                 parse_scan_pdf_members(remaining).map(Command::ScanPdfMembers)
+            }
+        }
+        [subcommand, remaining @ ..] if subcommand == "validate-continuous-pdf-family" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::ValidateContinuousPdfHelp)
+            } else {
+                parse_validate_continuous_pdf(remaining).map(Command::ValidateContinuousPdf)
             }
         }
         [subcommand, remaining @ ..] if subcommand == "validate-hera" => {
