@@ -18,6 +18,10 @@
   and central-reconstruction gates.
 - D0-revision audit and proposed baseline/admissibility contract.
 - ADR-004 accepted and revised D0 projected-baseline revalidation completed.
+- Phase 1B-D1 APFEL++ evolution and deterministic one-member LHAPDF artifact
+  implementation.
+- Phase 1B-D1 negative decision: the fixed off-knot transport and evolved
+  sum-rule gates failed across the complete nine-anchor study.
 
 # Current state
 
@@ -36,7 +40,6 @@
 - The clean v1 D0 study evaluated 441 hard-box points and 80 guard-shell
   diagnostics. All hard-box points failed because the gluon became negative
   near `x -> 1`; the center also exceeded the fixed reconstruction tolerance.
-- D1 is not authorized.
 - The D0-revision audit found no negative raw gluon knots. The inherited
   LHAPDF `logcubic` interpolant first crosses below zero off-knot at
   `x=0.9935531299173892`; its negative gluon momentum fraction is
@@ -44,17 +47,25 @@
 - ADR-004 defines a versioned sum-rule-projected CT18NLO boundary and a
   baseline-relative NLO input-admissibility contract. That v2 contract is now
   implemented and has passed a clean 441-point/80-guard-point revalidation.
-- The historical v1 `FAIL` remains unchanged. The v2 result is a D1
-  authorization candidate only; D1 remains unauthorized pending review.
-- No APFEL-evolved family artifact, generated LHAPDF grid, PYTHIA continuous
-  PDF coupling, direct event corpus, sampling method, dataset, or amortized
-  posterior model exists.
+- The historical D0 v1 `FAIL` and revised-D0 v2 `PASS` remain unchanged.
+- D1 was explicitly authorized after D0R review and is now complete with
+  `STAGE1_DECISION = FAIL`.
+- The clean D1 study evaluated exactly nine anchors from implementation commit
+  `1a7181ad1582029aa93cf743807c24e18a147704`.
+- Boundary callbacks and alpha_s knots passed, but 511,900 off-knot
+  flavor-point round trips exceeded tolerance. The maximum evolved sum-rule
+  residual was `4.2761916359967955e-4` at `Q=100000 GeV`.
+- Deterministic APFEL-evolved LHAPDF artifacts now exist only in the ignored
+  content-addressed cache. No artifact is generator-ready under the failed
+  Stage 1 contract.
+- No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
+  dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review the revised-D0 validation PR. If accepted, make a
-separate explicit decision on whether D1 implementation is authorized.
+Scientifically review the negative D1 result and decide whether a separately
+scoped Stage 1 grid/evolution transport revision is warranted.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -63,8 +74,7 @@ unimplemented hypotheses.
 # Gate
 
 - Do not reuse or reweight a nominal event pool.
-- Do not begin D1: the revised-D0 PASS is only an authorization candidate until
-  its PR is scientifically reviewed and merged.
+- Do not begin D2: Stage 1 failed and `D2_AUTHORIZATION_CANDIDATE = false`.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

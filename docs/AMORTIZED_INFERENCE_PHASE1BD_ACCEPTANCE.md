@@ -1,5 +1,20 @@
 # Phase 1B-D staged acceptance contract
 
+## Recorded Stage 1 result (2026-07-28)
+
+The authorized D1 implementation evaluated the nine mandatory anchors from
+clean commit `1a7181ad1582029aa93cf743807c24e18a147704`.
+
+```text
+STAGE1_DECISION = FAIL
+D2_AUTHORIZATION_CANDIDATE = false
+D2_AUTHORIZED = false
+```
+
+The fixed off-knot LHAPDF round-trip gate and evolved APFEL sum-rule gate
+failed. No tolerance, pilot bound, interpolator, or artifact knot layout was
+changed after observation. See `AMORTIZED_INFERENCE_PHASE1BD_D1.md`.
+
 Status: proposed gate contract for scientific review.
 
 No criterion in this document is evidence that Phase 1B-D has been
