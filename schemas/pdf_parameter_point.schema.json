@@ -17,5 +17,42 @@
       "type": "string",
       "pattern": "^sha256:[0-9a-f]{64}$"
     }
+  },
+  "$defs": {
+    "canonicalInputV1": {
+      "description": "Historical v1 canonical map. Its schema and family version remain immutable.",
+      "type": "object",
+      "required": ["schema_version", "family_version"],
+      "properties": {
+        "schema_version": {"const": "partonsbi.pdf_parameter_point.v1"},
+        "family_version": {"const": "ct18nlo_two_parameter_boundary_v1"}
+      }
+    },
+    "canonicalInputV2": {
+      "description": "ADR-004 projected-baseline identity map. All numerical values are binary64 hexadecimal strings.",
+      "type": "object",
+      "required": [
+        "schema_version",
+        "family_version",
+        "projected_baseline_version",
+        "projected_baseline_identity",
+        "raw_u_valence",
+        "raw_d_valence",
+        "raw_momentum",
+        "projection_a_u0",
+        "projection_a_d0",
+        "projection_a_g0",
+        "interpolation_policy",
+        "extrapolation_policy",
+        "sign_topology_policy_version"
+      ],
+      "properties": {
+        "schema_version": {"const": "partonsbi.pdf_parameter_point.v2"},
+        "family_version": {"const": "ct18nlo_two_parameter_boundary_v2"},
+        "projected_baseline_version": {
+          "const": "ct18nlo_member0_sumrule_projected_boundary_v2"
+        }
+      }
+    }
   }
 }

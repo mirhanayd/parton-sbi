@@ -1,0 +1,69 @@
+{
+  "schema_version": "partonsbi.phase1bd_d0r_decision.v2",
+  "study_id": "phase1bd_d0r_projected_boundary_v2_20260728",
+  "implementation_commit": "94e46aca6dd870c6de21f9426f165ac1880429dd",
+  "git_dirty": false,
+  "baseline_version": "ct18nlo_member0_sumrule_projected_boundary_v2",
+  "family_version": "ct18nlo_two_parameter_boundary_v2",
+  "raw_source": {
+    "set": "CT18NLO",
+    "member": 0,
+    "data_version": 1,
+    "lhapdf_version": "6.5.6",
+    "q0_gev": 1.295,
+    "x_support": [1e-9, 1.0],
+    "interpolator": "logcubic",
+    "installed_extrapolator": "continuation",
+    "caller_extrapolation_policy": "strict_no_extrapolation"
+  },
+  "projection_constants": {
+    "a_u0": 1.000002115126194,
+    "a_d0": 1.0000202605996376,
+    "a_g0": 0.9999935202034873
+  },
+  "raw_moments": {
+    "u_valence_number": 1.9999957697565593,
+    "d_valence_number": 0.999979739810846,
+    "total_momentum": 0.9999991913056491
+  },
+  "projected_moments": {
+    "u_valence_number": 1.9999999999999998,
+    "d_valence_number": 1.0,
+    "total_momentum": 0.9999999999999999
+  },
+  "pilot_points": 441,
+  "guard_shell_points": 80,
+  "invalid_pilot_points": 0,
+  "inconclusive_pilot_points": 0,
+  "projected_center_passed": true,
+  "v1_v2_maximum_relative_disagreement": 0.0,
+  "v1_v2_maximum_absolute_disagreement": 0.0,
+  "maximum_residuals": {
+    "construction_u_valence": 2.220446049250313e-16,
+    "construction_d_valence": 1.1102230246251565e-16,
+    "construction_momentum": 0.0,
+    "independent_u_valence": 2.7977620220553945e-14,
+    "independent_d_valence": 1.0769163338864018e-14,
+    "independent_momentum": 7.216449660063518e-15,
+    "quadrature_refinement": 3.175237850427948e-14
+  },
+  "gluon_sign_topology": {
+    "first_zero_crossing_x": 0.9935531299173881,
+    "minimum_density": -1.88671377771894e-9,
+    "minimum_x": 0.9954963079520738,
+    "negative_momentum": 6.187895394497226e-12,
+    "negative_momentum_fraction": 1.582215207073383e-11,
+    "primary_independent_difference": 1.1738412151519472e-18
+  },
+  "sign_topology_refinement_passed": true,
+  "negative_momentum_invariants_passed": true,
+  "all_441_identities_unique": true,
+  "stage0_decision": "PASS",
+  "d1_authorization_candidate": true,
+  "d1_authorized": false,
+  "reasons": [
+    "The projected center, unchanged sum rules, quadrature, heavy-flavor boundary, versioned identities, and v1/v2 numerical-equivalence gates passed.",
+    "Every inherited sign component is retained under positive scaling; no value is clipped or extrapolated.",
+    "D1 remains unauthorized until this revised-D0 result is scientifically reviewed and merged."
+  ]
+}

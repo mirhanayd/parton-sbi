@@ -22,6 +22,24 @@ stops continuation until the ambiguity is resolved and reviewed.
 
 ## Stage 0 — boundary family and pilot box
 
+### ADR-004 revised-D0 contract
+
+The criteria below remain the immutable v1 contract that produced the
+historical Stage 0 `FAIL`. ADR-004 defines a separate v2 revalidation against
+`ct18nlo_member0_sumrule_projected_boundary_v2`. For v2 only, center identity
+is measured against that named projected object; raw CT18NLO remains a
+mandatory nonzero fidelity report.
+
+V2 replaces universal input-density nonnegativity only with baseline-relative
+NLO input admissibility. It must deterministically enumerate inherited sign
+components, reject every deformation-created component or crossing, preserve
+topology and negative-momentum fractions under positive scaling, and make
+primary/independent negative-momentum integrals agree within
+`max(1e-17,1e-6 N_f)`. All support, no-extrapolation, finite-value,
+positive-normalization, heavy-boundary, sum-rule, quadrature, identity, hard
+box, and no-clipping gates remain unchanged. A v2 PASS is only a D1
+authorization candidate; D1 requires a separate reviewed decision.
+
 Required points include the center, four corners, four axis endpoints, a
 deterministic `21 x 21` scan of the complete proposed box, and a 5% expanded
 guard shell used only as a conditioning diagnostic.

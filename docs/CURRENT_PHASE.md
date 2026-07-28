@@ -17,6 +17,7 @@
 - Phase 1B-D0 negative decision: the proposed pilot family failed positivity
   and central-reconstruction gates.
 - D0-revision audit and proposed baseline/admissibility contract.
+- ADR-004 accepted and revised D0 projected-baseline revalidation completed.
 
 # Current state
 
@@ -32,7 +33,7 @@
   at every PDF parameter point.
 - The D0 input-scale continuous boundary family and validation CLI are
   implemented. This is not an evolved or generator-ready PDF artifact.
-- The clean D0 study evaluated 441 hard-box points and 80 guard-shell
+- The clean v1 D0 study evaluated 441 hard-box points and 80 guard-shell
   diagnostics. All hard-box points failed because the gluon became negative
   near `x -> 1`; the center also exceeded the fixed reconstruction tolerance.
 - D1 is not authorized.
@@ -40,9 +41,11 @@
   LHAPDF `logcubic` interpolant first crosses below zero off-knot at
   `x=0.9935531299173892`; its negative gluon momentum fraction is
   `1.5822152070733786e-11`.
-- ADR-004 proposes a versioned sum-rule-projected CT18NLO boundary and a
-  baseline-relative NLO input-admissibility contract. It is under scientific
-  review and has not been implemented or revalidated.
+- ADR-004 defines a versioned sum-rule-projected CT18NLO boundary and a
+  baseline-relative NLO input-admissibility contract. That v2 contract is now
+  implemented and has passed a clean 441-point/80-guard-point revalidation.
+- The historical v1 `FAIL` remains unchanged. The v2 result is a D1
+  authorization candidate only; D1 remains unauthorized pending review.
 - No APFEL-evolved family artifact, generated LHAPDF grid, PYTHIA continuous
   PDF coupling, direct event corpus, sampling method, dataset, or amortized
   posterior model exists.
@@ -50,8 +53,8 @@
 # Next scientific action
 
 ```text
-Scientifically review ADR-004. If accepted, authorize only the separately
-scoped revised D0 implementation and validation.
+Scientifically review the revised-D0 validation PR. If accepted, make a
+separate explicit decision on whether D1 implementation is authorized.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -60,9 +63,8 @@ unimplemented hypotheses.
 # Gate
 
 - Do not reuse or reweight a nominal event pool.
-- Do not begin D1: D0 failed its binding acceptance criteria.
-- Do not implement the D0 revision until ADR-004 is accepted and the blocked
-  validation issue is explicitly authorized.
+- Do not begin D1: the revised-D0 PASS is only an authorization candidate until
+  its PR is scientifically reviewed and merged.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
