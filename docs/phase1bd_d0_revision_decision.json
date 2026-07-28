@@ -1,0 +1,85 @@
+{
+  "schema_version": "partonsbi.phase1bd_d0_revision_decision.v1",
+  "date": "2026-07-28",
+  "source_d0_decision": {
+    "decision": "FAIL",
+    "d1_authorized": false,
+    "implementation_commit": "96531d02548aa0b4a105c03edac25ac485c061a1",
+    "merge_commit": "6a69943e391d26020256f1b9455eac46c1f65061",
+    "pilot_points": 441,
+    "failed_points": 441,
+    "inconclusive_points": 0
+  },
+  "diagnostic_provenance": {
+    "git_commit": "6a69943e391d26020256f1b9455eac46c1f65061",
+    "git_dirty": false,
+    "lhapdf_version": "6.5.6",
+    "lhapdf_source_tag_commit": "92239ac82134be698805c1002b4615e5167c6fa3",
+    "temporary_diagnostic_source_sha256": "sha256:50f48f7617e1175b7638a13f0194616d3d8428fbea6d95ae5e6d8934fe435701",
+    "generated_outputs_committed": false
+  },
+  "endpoint_diagnosis": {
+    "raw_knot_count": 161,
+    "negative_raw_knots": 0,
+    "last_positive_raw_knot": {
+      "x": 0.99262,
+      "xf_g": 2.6821982100000002e-9
+    },
+    "first_zero_raw_knot": {
+      "x": 1.0,
+      "xf_g": 0.0
+    },
+    "first_off_knot_zero_crossing_x": 0.9935531299173892,
+    "negative_interval": [0.9935531299173892, 1.0],
+    "minimum_interpolated_xf_g": {
+      "value": -1.8784951425865714e-9,
+      "x": 0.9955233026506225
+    },
+    "minimum_interpolated_density_g": {
+      "value": -1.8869448687227857e-9,
+      "x": 0.9955207116819784
+    },
+    "integrated_negative_gluon_momentum": 6.187935491060024e-12,
+    "negative_fraction_of_gluon_momentum": 1.5822152070733786e-11,
+    "origin": "inherited_lhapdf_logcubic_off_knot_overshoot"
+  },
+  "raw_moments": {
+    "u_valence": 1.9999957697565598,
+    "d_valence": 0.999979739810846,
+    "total_momentum": 0.9999991913056495,
+    "gluon_momentum": 0.39109316251016446,
+    "light_sea_momentum": 0.15836225951184732
+  },
+  "projection": {
+    "a_u": 1.0000021151261937,
+    "a_d": 1.0000202605996376,
+    "a_g": 0.9999935202034876,
+    "selected_baseline_version": "ct18nlo_member0_sumrule_projected_boundary_v2",
+    "selected_family_version": "ct18nlo_two_parameter_boundary_v2",
+    "theta_zero_meaning": "exact identity with the versioned sum-rule-projected baseline",
+    "raw_ct18_comparison": "mandatory nonzero fidelity diagnostic"
+  },
+  "selected_admissibility_contract": {
+    "name": "baseline_relative_nlo_input_plus_evolved_observable_gate",
+    "strict_universal_input_nonnegativity": false,
+    "new_sign_changes_allowed": false,
+    "inherited_negative_components_require_positive_declared_scaling": true,
+    "negative_momentum_accounting_required": true,
+    "clipping_allowed": false,
+    "extrapolation_allowed": false,
+    "later_physical_observable_validation_required": true
+  },
+  "decision": {
+    "d0_revision_implementation_authorized": true,
+    "authorization_effective_after_adr_acceptance": true,
+    "revised_d0_validation_authorized": false,
+    "d1_authorized": false,
+    "apfel_evolution_authorized": false,
+    "lhapdf_artifact_authorized": false,
+    "pythia_coupling_authorized": false,
+    "event_generation_authorized": false,
+    "dataset_generation_authorized": false,
+    "neural_inference_authorized": false
+  },
+  "next_step": "Scientifically review ADR-004; if accepted, authorize a separately scoped revised D0 implementation and validation."
+}
