@@ -10,10 +10,15 @@ use parton_sbi::physics::{
 };
 
 mod continuous_pdf_cli;
+mod pdf_artifact_cli;
 mod pdf_reweighting_cli;
 use continuous_pdf_cli::{
     parse_validate_continuous_pdf, run_validate_continuous_pdf, ContinuousPdfCliArgs,
     VALIDATE_CONTINUOUS_PDF_HELP,
+};
+use pdf_artifact_cli::{
+    parse_validate_pdf_artifact, run_validate_pdf_artifact, PdfArtifactCliArgs,
+    VALIDATE_PDF_ARTIFACT_HELP,
 };
 use pdf_reweighting_cli::{
     parse_scan_pdf_members, parse_validate_pdf_reweighting, run_scan_pdf_members,
@@ -51,6 +56,9 @@ Commands:
 
   validate-continuous-pdf-family [OPTIONS]
       Validate the Phase 1B-D0 input-scale mathematical PDF family.
+
+  validate-pdf-artifact [OPTIONS]
+      Validate Phase 1B-D1 APFEL++ evolution and an immutable LHAPDF artifact.
 
   validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
@@ -175,6 +183,8 @@ enum Command {
     ScanPdfMembersHelp,
     ValidateContinuousPdf(ContinuousPdfCliArgs),
     ValidateContinuousPdfHelp,
+    ValidatePdfArtifact(PdfArtifactCliArgs),
+    ValidatePdfArtifactHelp,
     StructureFunctions(StructureFunctionsCliArgs),
     ValidateHera(ValidateHeraCliArgs),
     TheoryUncertainties(TheoryUncertaintiesCliArgs),
@@ -330,6 +340,13 @@ fn main() -> Result<()> {
             print!("{VALIDATE_CONTINUOUS_PDF_HELP}");
             Ok(())
         }
+        Command::ValidatePdfArtifact(arguments) => {
+            run_validate_pdf_artifact(arguments).map_err(Error::Msg)
+        }
+        Command::ValidatePdfArtifactHelp => {
+            print!("{VALIDATE_PDF_ARTIFACT_HELP}");
+            Ok(())
+        }
         Command::StructureFunctions(arguments) => run_structure_functions(arguments),
         Command::ValidateHera(arguments) => run_validate_hera(arguments),
         Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
@@ -374,6 +391,13 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
                 Ok(Command::ValidateContinuousPdfHelp)
             } else {
                 parse_validate_continuous_pdf(remaining).map(Command::ValidateContinuousPdf)
+            }
+        }
+        [subcommand, remaining @ ..] if subcommand == "validate-pdf-artifact" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::ValidatePdfArtifactHelp)
+            } else {
+                parse_validate_pdf_artifact(remaining).map(Command::ValidatePdfArtifact)
             }
         }
         [subcommand, remaining @ ..] if subcommand == "validate-hera" => {

@@ -43,6 +43,7 @@ const CHARM: i32 = 4;
 const BOTTOM: i32 = 5;
 const BRIDGE_FLAVOR_CAPACITY: usize = 32;
 const BRIDGE_X_KNOT_CAPACITY: usize = 4096;
+const BRIDGE_Q_KNOT_CAPACITY: usize = 4096;
 
 /// A typed D0 failure. No variant repairs or clamps an invalid construction.
 #[derive(Debug, Clone, PartialEq)]
@@ -248,11 +249,15 @@ pub struct ContinuousPdfMetadata {
     pub charm_threshold_gev: f64,
     pub bottom_mass_gev: f64,
     pub bottom_threshold_gev: f64,
+    pub top_mass_gev: f64,
+    pub top_threshold_gev: f64,
+    pub mz_gev: f64,
     pub flavor_scheme: String,
     pub lhapdf_version: String,
     pub interpolation_policy: String,
     pub installed_extrapolator: String,
     pub x_knots: Vec<f64>,
+    pub q_knots_gev: Vec<f64>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -308,6 +313,9 @@ struct RawMetadata {
     charm_threshold_gev: f64,
     bottom_mass_gev: f64,
     bottom_threshold_gev: f64,
+    top_mass_gev: f64,
+    top_threshold_gev: f64,
+    mz_gev: f64,
 }
 
 impl Default for RawMetadata {
@@ -320,6 +328,9 @@ impl Default for RawMetadata {
             charm_threshold_gev: f64::NAN,
             bottom_mass_gev: f64::NAN,
             bottom_threshold_gev: f64::NAN,
+            top_mass_gev: f64::NAN,
+            top_threshold_gev: f64::NAN,
+            mz_gev: f64::NAN,
         }
     }
 }
@@ -335,6 +346,9 @@ extern "C" {
         charm_threshold_gev: *mut f64,
         bottom_mass_gev: *mut f64,
         bottom_threshold_gev: *mut f64,
+        top_mass_gev: *mut f64,
+        top_threshold_gev: *mut f64,
+        mz_gev: *mut f64,
         flavor_scheme: *mut c_char,
         flavor_scheme_size: usize,
         lhapdf_version: *mut c_char,
@@ -349,6 +363,9 @@ extern "C" {
         x_knots: *mut f64,
         x_knot_capacity: usize,
         x_knot_count: *mut usize,
+        q_knots: *mut f64,
+        q_knot_capacity: usize,
+        q_knot_count: *mut usize,
         error_buffer: *mut c_char,
         error_buffer_size: usize,
     ) -> c_int;
@@ -368,6 +385,8 @@ impl ContinuousPdfMetadata {
         let mut flavor_count = 0usize;
         let mut x_knots = [0.0; BRIDGE_X_KNOT_CAPACITY];
         let mut x_knot_count = 0usize;
+        let mut q_knots = [0.0; BRIDGE_Q_KNOT_CAPACITY];
+        let mut q_knot_count = 0usize;
         let mut error_buffer = [0 as c_char; 1024];
         // SAFETY: all buffers are valid for the duration of the call and the
         // C++ bridge catches every exception before crossing the ABI.
@@ -382,6 +401,9 @@ impl ContinuousPdfMetadata {
                 &mut raw.charm_threshold_gev,
                 &mut raw.bottom_mass_gev,
                 &mut raw.bottom_threshold_gev,
+                &mut raw.top_mass_gev,
+                &mut raw.top_threshold_gev,
+                &mut raw.mz_gev,
                 scheme.as_mut_ptr(),
                 scheme.len(),
                 version.as_mut_ptr(),
@@ -396,6 +418,9 @@ impl ContinuousPdfMetadata {
                 x_knots.as_mut_ptr(),
                 x_knots.len(),
                 &mut x_knot_count,
+                q_knots.as_mut_ptr(),
+                q_knots.len(),
+                &mut q_knot_count,
                 error_buffer.as_mut_ptr(),
                 error_buffer.len(),
             )
@@ -407,7 +432,10 @@ impl ContinuousPdfMetadata {
                 .into_owned();
             return Err(ContinuousPdfError::MetadataUnavailable(message));
         }
-        if flavor_count > flavors.len() || x_knot_count > x_knots.len() {
+        if flavor_count > flavors.len()
+            || x_knot_count > x_knots.len()
+            || q_knot_count > q_knots.len()
+        {
             return Err(ContinuousPdfError::MetadataInvalid(
                 "bridge returned an invalid output count".into(),
             ));
@@ -428,6 +456,7 @@ impl ContinuousPdfMetadata {
             .into_owned();
         let supported_flavors = flavors[..flavor_count].to_vec();
         let x_knots = x_knots[..x_knot_count].to_vec();
+        let q_knots_gev = q_knots[..q_knot_count].to_vec();
         let metadata = Self {
             set_name: set_name.to_owned(),
             member,
@@ -441,11 +470,15 @@ impl ContinuousPdfMetadata {
             charm_threshold_gev: raw.charm_threshold_gev,
             bottom_mass_gev: raw.bottom_mass_gev,
             bottom_threshold_gev: raw.bottom_threshold_gev,
+            top_mass_gev: raw.top_mass_gev,
+            top_threshold_gev: raw.top_threshold_gev,
+            mz_gev: raw.mz_gev,
             flavor_scheme,
             lhapdf_version,
             interpolation_policy,
             installed_extrapolator,
             x_knots,
+            q_knots_gev,
         };
         metadata.validate(&provider)?;
         Ok(metadata)
@@ -471,6 +504,9 @@ impl ContinuousPdfMetadata {
             ("charm_threshold", self.charm_threshold_gev),
             ("bottom_mass", self.bottom_mass_gev),
             ("bottom_threshold", self.bottom_threshold_gev),
+            ("top_mass", self.top_mass_gev),
+            ("top_threshold", self.top_threshold_gev),
+            ("MZ", self.mz_gev),
         ] {
             if !value.is_finite() || value <= 0.0 {
                 return Err(ContinuousPdfError::MetadataInvalid(format!(
@@ -496,6 +532,9 @@ impl ContinuousPdfMetadata {
             || self.x_knots.iter().any(|x| !x.is_finite() || *x <= 0.0)
             || self.x_knots.windows(2).any(|pair| pair[0] >= pair[1])
             || self.x_knots.last().copied() != Some(1.0)
+            || self.q_knots_gev.len() < 2
+            || self.q_knots_gev.iter().any(|q| !q.is_finite() || *q <= 0.0)
+            || self.q_knots_gev.windows(2).any(|pair| pair[0] >= pair[1])
         {
             return Err(ContinuousPdfError::MetadataInvalid(
                 "flavor scheme, version, or x-knot contract is invalid".into(),
@@ -1176,6 +1215,13 @@ impl ContinuousPdfContext {
 }
 
 impl ContinuousPdfPoint<'_> {
+    /// Effective multipliers applied directly to the authoritative raw
+    /// CT18NLO boundary. D1 uses these values to reproduce the v2 boundary
+    /// callback in APFEL++ without changing the D0R family.
+    pub fn effective_raw_normalizations(&self) -> PdfNormalizations {
+        self.effective_raw_normalizations
+    }
+
     pub fn densities(&self, x: f64) -> Result<NumberDensities, ContinuousPdfError> {
         if !x.is_finite() || x <= 0.0 {
             return Err(ContinuousPdfError::MetadataInvalid(format!(

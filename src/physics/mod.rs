@@ -8,6 +8,7 @@ pub mod dis_kinematics;
 pub mod four_vector;
 pub mod hepmc3;
 pub mod pdf;
+pub mod pdf_artifact;
 pub mod pdf_reweighting;
 pub mod structure_function_provider;
 pub mod structure_function_validation;
@@ -38,6 +39,7 @@ pub use hepmc3::{
 pub use pdf::{
     LhapdfProvider, PartonDensities, PdfError, PdfProvider, PdfSupportBoundSource, PdfSupportBounds,
 };
+pub use pdf_artifact::*;
 pub use pdf_reweighting::{
     extract_event_observables, identify_proton_pdf_entry, load_full_set_strict_support_contract,
     reweight_event, summarize_reweighting, validate_run_compatibility, DenominatorPolicy,

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mirhanayd/parton-sbi/schemas/lhapdf_artifact_manifest.schema.json",
+  "title": "PartonSBI deterministic LHAPDF artifact manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_hash",
+    "set_name",
+    "member",
+    "parameter_identity",
+    "baseline_version",
+    "family_version",
+    "evolution",
+    "grid",
+    "interpolation_policy",
+    "extrapolator_policy",
+    "cache_policy_version",
+    "checksums"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "partonsbi.lhapdf_artifact.v1"
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "set_name": {
+      "type": "string",
+      "pattern": "^PartonSBI_D1_[0-9a-f]{64}$"
+    },
+    "member": {
+      "const": 0
+    },
+    "parameter_identity": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "baseline_version": {
+      "const": "ct18nlo_member0_sumrule_projected_boundary_v2"
+    },
+    "family_version": {
+      "const": "ct18nlo_two_parameter_boundary_v2"
+    },
+    "evolution": {
+      "type": "object"
+    },
+    "grid": {
+      "type": "object"
+    },
+    "interpolation_policy": {
+      "const": "logcubic"
+    },
+    "extrapolator_policy": {
+      "const": "error"
+    },
+    "cache_policy_version": {
+      "const": "immutable_sha256_atomic_publish_v1"
+    },
+    "checksums": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "relative_path",
+          "sha256",
+          "byte_count"
+        ]
+      }
+    }
+  }
+}
