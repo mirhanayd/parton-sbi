@@ -1,91 +1,240 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/mirhanayd/parton-sbi/schemas/pdf_evolution_config.schema.json",
-  "title": "PartonSBI D1 APFEL++ evolution configuration",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "policy_version",
-    "apfelxx_version",
-    "perturbative_order",
-    "flavor_scheme",
-    "maximum_active_flavors",
-    "alpha_s_mz",
-    "mz_gev",
-    "q0_gev",
-    "q_minimum_gev",
-    "q_maximum_gev",
-    "charm_mass_gev",
-    "charm_threshold_gev",
-    "bottom_mass_gev",
-    "bottom_threshold_gev",
-    "top_mass_gev",
-    "top_threshold_gev",
-    "x_minimum",
-    "x_maximum",
-    "extrapolation_policy"
+  "title": "PartonSBI APFEL++ evolution configuration",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/v1"
+    },
+    {
+      "$ref": "#/$defs/v2"
+    }
   ],
-  "properties": {
-    "schema_version": {
-      "const": "partonsbi.lhapdf_artifact.v1"
+  "$defs": {
+    "common": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "policy_version",
+        "apfelxx_version",
+        "perturbative_order",
+        "flavor_scheme",
+        "maximum_active_flavors",
+        "alpha_s_mz",
+        "mz_gev",
+        "q0_gev",
+        "q_minimum_gev",
+        "q_maximum_gev",
+        "charm_mass_gev",
+        "charm_threshold_gev",
+        "bottom_mass_gev",
+        "bottom_threshold_gev",
+        "top_mass_gev",
+        "top_threshold_gev",
+        "extrapolation_policy"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "policy_version": {
+          "type": "string"
+        },
+        "apfelxx_version": {
+          "const": "4.8.0"
+        },
+        "perturbative_order": {
+          "const": 1
+        },
+        "flavor_scheme": {
+          "const": "variable"
+        },
+        "maximum_active_flavors": {
+          "const": 5
+        },
+        "alpha_s_mz": {
+          "type": "number"
+        },
+        "mz_gev": {
+          "type": "number"
+        },
+        "q0_gev": {
+          "type": "number"
+        },
+        "q_minimum_gev": {
+          "type": "number"
+        },
+        "q_maximum_gev": {
+          "type": "number"
+        },
+        "charm_mass_gev": {
+          "type": "number"
+        },
+        "charm_threshold_gev": {
+          "type": "number"
+        },
+        "bottom_mass_gev": {
+          "type": "number"
+        },
+        "bottom_threshold_gev": {
+          "type": "number"
+        },
+        "top_mass_gev": {
+          "type": "number"
+        },
+        "top_threshold_gev": {
+          "type": "number"
+        },
+        "extrapolation_policy": {
+          "const": "strict_no_extrapolation"
+        }
+      }
     },
-    "policy_version": {
-      "const": "apfelxx_4.8.0_nlo_vfns_v1"
+    "v1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "x_minimum",
+            "x_maximum"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "partonsbi.lhapdf_artifact.v1"
+            },
+            "policy_version": {
+              "const": "apfelxx_4.8.0_nlo_vfns_v1"
+            },
+            "apfelxx_version": {},
+            "perturbative_order": {},
+            "flavor_scheme": {},
+            "maximum_active_flavors": {},
+            "alpha_s_mz": {},
+            "mz_gev": {},
+            "q0_gev": {},
+            "q_minimum_gev": {},
+            "q_maximum_gev": {},
+            "charm_mass_gev": {},
+            "charm_threshold_gev": {},
+            "bottom_mass_gev": {},
+            "bottom_threshold_gev": {},
+            "top_mass_gev": {},
+            "top_threshold_gev": {},
+            "x_minimum": {
+              "type": "number"
+            },
+            "x_maximum": {
+              "type": "number"
+            },
+            "extrapolation_policy": {}
+          }
+        }
+      ]
     },
-    "apfelxx_version": {
-      "const": "4.8.0"
+    "v2": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/common"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exported_x_minimum",
+            "exported_x_maximum",
+            "computational_x_minimum",
+            "zero_continuation_below_exported_support",
+            "base_grid",
+            "doubled_grid"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "partonsbi.lhapdf_artifact.v2"
+            },
+            "policy_version": {
+              "const": "apfelxx_4.8.0_nlo_vfns_extended_x_v2"
+            },
+            "apfelxx_version": {},
+            "perturbative_order": {},
+            "flavor_scheme": {},
+            "maximum_active_flavors": {},
+            "alpha_s_mz": {},
+            "mz_gev": {},
+            "q0_gev": {},
+            "q_minimum_gev": {},
+            "q_maximum_gev": {},
+            "charm_mass_gev": {},
+            "charm_threshold_gev": {},
+            "bottom_mass_gev": {},
+            "bottom_threshold_gev": {},
+            "top_mass_gev": {},
+            "top_threshold_gev": {},
+            "exported_x_minimum": {
+              "const": 1e-9
+            },
+            "exported_x_maximum": {
+              "const": 1
+            },
+            "computational_x_minimum": {
+              "const": 1e-11
+            },
+            "zero_continuation_below_exported_support": {
+              "const": true
+            },
+            "extrapolation_policy": {},
+            "base_grid": {
+              "$ref": "#/$defs/computational_grid"
+            },
+            "doubled_grid": {
+              "$ref": "#/$defs/computational_grid"
+            }
+          }
+        }
+      ]
     },
-    "perturbative_order": {
-      "const": 1
-    },
-    "flavor_scheme": {
-      "const": "variable"
-    },
-    "maximum_active_flavors": {
-      "const": 5
-    },
-    "alpha_s_mz": {
-      "type": "number"
-    },
-    "mz_gev": {
-      "type": "number"
-    },
-    "q0_gev": {
-      "type": "number"
-    },
-    "q_minimum_gev": {
-      "type": "number"
-    },
-    "q_maximum_gev": {
-      "type": "number"
-    },
-    "charm_mass_gev": {
-      "type": "number"
-    },
-    "charm_threshold_gev": {
-      "type": "number"
-    },
-    "bottom_mass_gev": {
-      "type": "number"
-    },
-    "bottom_threshold_gev": {
-      "type": "number"
-    },
-    "top_mass_gev": {
-      "type": "number"
-    },
-    "top_threshold_gev": {
-      "type": "number"
-    },
-    "x_minimum": {
-      "type": "number"
-    },
-    "x_maximum": {
-      "type": "number"
-    },
-    "extrapolation_policy": {
-      "const": "strict_no_extrapolation"
+    "computational_grid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "subgrids"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "base",
+            "doubled"
+          ]
+        },
+        "subgrids": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "prefixItems": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "integer",
+                "minimum": 1
+              }
+            ]
+          }
+        }
+      }
     }
   }
 }

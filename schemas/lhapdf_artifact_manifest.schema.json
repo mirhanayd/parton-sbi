@@ -2,73 +2,259 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/mirhanayd/parton-sbi/schemas/lhapdf_artifact_manifest.schema.json",
   "title": "PartonSBI deterministic LHAPDF artifact manifest",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "artifact_hash",
-    "set_name",
-    "member",
-    "parameter_identity",
-    "baseline_version",
-    "family_version",
-    "evolution",
-    "grid",
-    "interpolation_policy",
-    "extrapolator_policy",
-    "cache_policy_version",
-    "checksums"
+  "oneOf": [
+    {
+      "$ref": "#/$defs/v1"
+    },
+    {
+      "$ref": "#/$defs/v2"
+    }
   ],
-  "properties": {
-    "schema_version": {
-      "const": "partonsbi.lhapdf_artifact.v1"
-    },
-    "artifact_hash": {
+  "$defs": {
+    "sha256": {
       "type": "string",
       "pattern": "^sha256:[0-9a-f]{64}$"
-    },
-    "set_name": {
-      "type": "string",
-      "pattern": "^PartonSBI_D1_[0-9a-f]{64}$"
-    },
-    "member": {
-      "const": 0
-    },
-    "parameter_identity": {
-      "type": "string",
-      "pattern": "^sha256:[0-9a-f]{64}$"
-    },
-    "baseline_version": {
-      "const": "ct18nlo_member0_sumrule_projected_boundary_v2"
-    },
-    "family_version": {
-      "const": "ct18nlo_two_parameter_boundary_v2"
-    },
-    "evolution": {
-      "type": "object"
-    },
-    "grid": {
-      "type": "object"
-    },
-    "interpolation_policy": {
-      "const": "logcubic"
-    },
-    "extrapolator_policy": {
-      "const": "error"
-    },
-    "cache_policy_version": {
-      "const": "immutable_sha256_atomic_publish_v1"
     },
     "checksums": {
       "type": "array",
       "minItems": 3,
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "required": [
           "relative_path",
           "sha256",
           "byte_count"
-        ]
+        ],
+        "properties": {
+          "relative_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "byte_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "v1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "artifact_hash",
+        "set_name",
+        "member",
+        "parameter_identity",
+        "baseline_version",
+        "family_version",
+        "evolution",
+        "grid",
+        "interpolation_policy",
+        "extrapolator_policy",
+        "cache_policy_version",
+        "checksums"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "partonsbi.lhapdf_artifact.v1"
+        },
+        "artifact_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "set_name": {
+          "type": "string",
+          "pattern": "^PartonSBI_D1_[0-9a-f]{64}$"
+        },
+        "member": {
+          "const": 0
+        },
+        "parameter_identity": {
+          "$ref": "#/$defs/sha256"
+        },
+        "baseline_version": {
+          "const": "ct18nlo_member0_sumrule_projected_boundary_v2"
+        },
+        "family_version": {
+          "const": "ct18nlo_two_parameter_boundary_v2"
+        },
+        "evolution": {
+          "type": "object"
+        },
+        "grid": {
+          "type": "object"
+        },
+        "interpolation_policy": {
+          "const": "logcubic"
+        },
+        "extrapolator_policy": {
+          "const": "error"
+        },
+        "cache_policy_version": {
+          "const": "immutable_sha256_atomic_publish_v1"
+        },
+        "checksums": {
+          "$ref": "#/$defs/checksums"
+        }
+      }
+    },
+    "v2": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "artifact_hash",
+        "set_name",
+        "member",
+        "parameter_identity",
+        "raw_source_identity",
+        "baseline_version",
+        "family_version",
+        "evolution",
+        "grid",
+        "final_common_grid_hash",
+        "refinement_policy_version",
+        "refinement_trace_hash",
+        "interpolation_policy",
+        "extrapolator_policy",
+        "cache_policy_version",
+        "moment_policy_version",
+        "sign_topology_policy_version",
+        "observable_policy_version",
+        "checksums"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "partonsbi.lhapdf_artifact.v2"
+        },
+        "artifact_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "set_name": {
+          "type": "string",
+          "pattern": "^PartonSBI_D1R_[0-9a-f]{64}$"
+        },
+        "member": {
+          "const": 0
+        },
+        "parameter_identity": {
+          "$ref": "#/$defs/sha256"
+        },
+        "raw_source_identity": {
+          "const": "CT18NLO:0:data-version-1"
+        },
+        "baseline_version": {
+          "const": "ct18nlo_member0_sumrule_projected_boundary_v2"
+        },
+        "family_version": {
+          "const": "ct18nlo_two_parameter_boundary_v2"
+        },
+        "evolution": {
+          "type": "object",
+          "required": [
+            "schema_version",
+            "policy_version"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "partonsbi.lhapdf_artifact.v2"
+            },
+            "policy_version": {
+              "const": "apfelxx_4.8.0_nlo_vfns_extended_x_v2"
+            }
+          }
+        },
+        "grid": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "policy_version",
+            "x_knots",
+            "unique_q_knots_gev",
+            "q_subgrids_gev",
+            "thresholds_gev"
+          ],
+          "properties": {
+            "policy_version": {
+              "const": "threshold_subgrids_bounded_refinement_v2"
+            },
+            "x_knots": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 1025,
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 1
+              }
+            },
+            "unique_q_knots_gev": {
+              "type": "array",
+              "minItems": 6,
+              "maxItems": 257,
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "q_subgrids_gev": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            },
+            "thresholds_gev": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          }
+        },
+        "final_common_grid_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "refinement_policy_version": {
+          "const": "global_nine_anchor_log_probe_bisection_v2"
+        },
+        "refinement_trace_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "interpolation_policy": {
+          "const": "logcubic"
+        },
+        "extrapolator_policy": {
+          "const": "error"
+        },
+        "cache_policy_version": {
+          "const": "immutable_sha256_atomic_publish_v2"
+        },
+        "moment_policy_version": {
+          "const": "independent_gl64_logx_64_panel_v2"
+        },
+        "sign_topology_policy_version": {
+          "const": "direct_artifact_connected_sign_components_v2"
+        },
+        "observable_policy_version": {
+          "const": "apfel_nlo_photon_f2_fl_v2"
+        },
+        "checksums": {
+          "$ref": "#/$defs/checksums"
+        }
       }
     }
   }
