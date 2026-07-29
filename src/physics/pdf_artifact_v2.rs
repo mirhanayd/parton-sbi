@@ -766,7 +766,7 @@ pub fn build_or_load_artifact_v2(
             Ok(artifact) => return Ok(artifact),
             Err(_) => {
                 let quarantine = parent.join(format!(".{hash}.corrupt.{}", std::process::id()));
-                fs::rename(&cache_directory, quarantine)?;
+                rename_directory_atomic_v2(&cache_directory, &quarantine)?;
             }
         }
     }
@@ -827,8 +827,27 @@ pub fn build_or_load_artifact_v2(
         &temp.join("artifact_manifest.json"),
         &serde_json::to_vec_pretty(&manifest)?,
     )?;
-    fs::rename(&temp, &cache_directory)?;
+    rename_directory_atomic_v2(&temp, &cache_directory)?;
     load_and_validate_artifact_v2(&cache_directory)
+}
+
+fn rename_directory_atomic_v2(source: &Path, destination: &Path) -> Result<(), std::io::Error> {
+    let deadline = Instant::now() + Duration::from_secs(30);
+    loop {
+        match fs::rename(source, destination) {
+            Ok(()) => return Ok(()),
+            Err(error)
+                if error.kind() == std::io::ErrorKind::PermissionDenied
+                    && Instant::now() < deadline =>
+            {
+                // DrvFS/OneDrive can hold a transient handle immediately after
+                // the final fsync. Retrying the same directory rename preserves
+                // atomic publication and never accepts a partial artifact.
+                thread::sleep(Duration::from_millis(100));
+            }
+            Err(error) => return Err(error),
+        }
+    }
 }
 
 fn artifact_identity_v2(
