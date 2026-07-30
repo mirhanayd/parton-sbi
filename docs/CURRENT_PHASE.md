@@ -28,6 +28,8 @@
 - Phase 1B-D1R negative decision: deterministic refinement exceeded its fixed
   performance cap, moment/leakage convergence failed, and direct off-knot
   transport remained outside tolerance across all nine anchors.
+- Phase 1B-D1A evolved-PDF transport architecture audit completed with an
+  `INCONCLUSIVE` decision and a bounded prototype authorization.
 
 # Current state
 
@@ -89,14 +91,25 @@
   fixed `1e-7` gate.
 - Revised Stage 1 is complete with `FAIL`;
   `D2_AUTHORIZATION_CANDIDATE = false` and `D2_AUTHORIZED = false`.
+- ADR-006 rejects further unconstrained global LHAPDF refinement as the next
+  path. It does not yet select between a direct APFEL-backed evaluator and a
+  repository-owned deterministic interpolator because all-consumer PYTHIA
+  reachability, evaluator safety, performance, and cache behavior remain
+  unproven.
+- A layered future acceptance contract requires PDF closure on a predeclared
+  conservative all-consumer reachable domain, full neutral-current gamma/Z
+  observable closure, and later separately authorized event-distribution
+  closure. Global-support pointwise discrepancies remain mandatory
+  diagnostics.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review the completed negative D1R result and decide whether a
-new D1 architecture ADR is warranted.
+Scientifically review ADR-006. If accepted, run only its bounded D1A prototype
+to compare direct APFEL-backed and repository-owned deterministic transport
+evaluators and to establish a conservative all-consumer PYTHIA query domain.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -110,6 +123,8 @@ unimplemented hypotheses.
 - Do not reinterpret exact-knot or photon-observable closure as qualification
   of the failed direct off-knot transport contract.
 - Any additional D1 revision requires a new reviewed architecture decision.
+- The D1A prototype authorization is planning/validation only and cannot
+  authorize production PYTHIA coupling or D2.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
