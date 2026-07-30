@@ -1,0 +1,203 @@
+{
+  "schema_version": "partonsbi.phase1bd.d1b.transport-decision.v1",
+  "decision": "AUTHORIZE_SEPARATE_BOUNDED_PROTOTYPE",
+  "selected_architecture": "persistent_in_process_apfel_serialized_v1",
+  "PROTOTYPE_AUTHORIZED": false,
+  "D2_AUTHORIZED": false,
+  "historical_state": {
+    "d1a_merge_commit": "097d72e192fab0289feafc5d61776d4f1f6fee53",
+    "d1a_decision": "INCONCLUSIVE",
+    "direct_apfel_candidate": "INCONCLUSIVE",
+    "fixed_6x6_bilinear_candidate": "FAIL",
+    "all_consumer_envelope_complete": false
+  },
+  "source_audit_evidence": {
+    "apfel_version": "4.8.0",
+    "pythia_version": "8.312",
+    "apfel_build_symbol": "apfel::BuildDglap",
+    "apfel_evaluate_symbol": "apfel::MatchedEvolution<T>::Evaluate",
+    "pythia_pdf_update_symbol": "Pythia8::PDF::xfUpdate",
+    "repository_bridge": "src/apfel_evolution_bridge.cpp",
+    "primary_source_roots": [
+      ".external/src/apfelxx-4.8.0",
+      ".external/src/releases-pythia8312"
+    ]
+  },
+  "apfel_lifetime_findings": {
+    "build_result": "owned_unique_ptr_dglap_distribution",
+    "repeated_evaluate_supported": true,
+    "new_q_repeats_evolution": true,
+    "persistent_context_avoids_rebuilding": [
+      "x_grid",
+      "splitting_objects",
+      "matching_conditions",
+      "boundary_distributions"
+    ],
+    "alpha_qcd_must_outlive_dglap_callback": true,
+    "evaluation_reentrancy_proven": false,
+    "thread_safety_proven": false,
+    "global_state_observed": [
+      "apfel_verbosity",
+      "lhapdf_verbosity_during_initialization"
+    ],
+    "prospective_safety_model": "one_theta_context_per_process_with_mutex_serialized_access"
+  },
+  "architecture_comparison": [
+    {
+      "architecture": "persistent_in_process_apfel_serialized_v1",
+      "status": "SELECTED_FOR_SEPARATE_PROTOTYPE_RECOMMENDATION",
+      "reference": "fresh_rebuild_per_batch_direct_apfel",
+      "principal_risk": "new_q_evolution_cost_and_unproven_library_reentrancy"
+    },
+    {
+      "architecture": "persistent_process_isolated_apfel_worker",
+      "status": "FALLBACK",
+      "principal_risk": "synchronous_scalar_ipc_latency"
+    },
+    {
+      "architecture": "rebuild_per_query_or_small_batch",
+      "status": "REFERENCE_ONLY",
+      "principal_risk": "repeated_initialization_cost"
+    }
+  ],
+  "persistent_evaluator_contract": {
+    "input_flavors": "PDG_-6_to_-1_1_to_6_and_21",
+    "native_scale": "Q_GeV",
+    "pythia_scale": "Q2_GeV2_square_rooted_exactly_once",
+    "return_quantity": "x_times_f",
+    "support_policy": "strict_no_extrapolation_no_clamping",
+    "threshold_policy": "explicit_lower_exact_upper_APFEL_matching_sides",
+    "top_policy": "typed_inactive_flavor",
+    "non_finite_policy": "fail_closed",
+    "identity_components": [
+      "theta_identity",
+      "evaluator_policy_identity",
+      "apfel_and_lhapdf_versions",
+      "support",
+      "thresholds",
+      "evolution_policy",
+      "abi_version"
+    ],
+    "cache_policy": "construct_validate_publish_then_destroy_dglap_before_alpha_dependency",
+    "serial_semantics": "deterministic",
+    "thread_semantics": "mutex_serialized_until_measured",
+    "process_semantics": "one_context_and_one_pythia_instance_per_worker"
+  },
+  "pythia_consumer_matrix": [
+    {
+      "consumer": "hard_neutral_current_dis",
+      "methods": ["xfMax", "xfHard", "xf"],
+      "status": "COVERED",
+      "event_execution_required": false
+    },
+    {
+      "consumer": "initial_state_shower",
+      "methods": ["xfISR", "xf", "xfVal", "xfSea"],
+      "status": "REQUIRES_EVENT_EXECUTION",
+      "event_execution_required": true
+    },
+    {
+      "consumer": "beam_remnants",
+      "methods": ["xfVal", "xfSea", "xf"],
+      "status": "REQUIRES_EVENT_EXECUTION",
+      "event_execution_required": true
+    },
+    {
+      "consumer": "multiparton_interactions",
+      "methods": ["xfMPI", "xfISR"],
+      "status": "DISABLED_BY_CONFIGURATION",
+      "event_execution_required": false
+    },
+    {
+      "consumer": "diffraction",
+      "methods": ["pomeron_pdf"],
+      "status": "DISABLED_BY_CONFIGURATION",
+      "event_execution_required": false
+    },
+    {
+      "consumer": "resolved_photon_and_photon_flux",
+      "methods": ["xfFlux", "xfApprox", "xfGamma"],
+      "status": "DISABLED_BY_CONFIGURATION",
+      "event_execution_required": false
+    },
+    {
+      "consumer": "alternate_hard_pdf_pointer",
+      "methods": ["xfHard", "xfMax", "xfSame"],
+      "status": "REQUIRES_RUNTIME_INSTRUMENTATION",
+      "event_execution_required": false
+    },
+    {
+      "consumer": "initialization_time_trials",
+      "methods": ["xfMax", "xfHard"],
+      "status": "REQUIRES_RUNTIME_INSTRUMENTATION",
+      "event_execution_required": false
+    }
+  ],
+  "event_execution_requirement": {
+    "complete_evidence_requires_pythia_next": true,
+    "execution_class": "controlled_non_production_event_execution",
+    "production_event_generation": false,
+    "zero_event_initialization_sufficient": false,
+    "synthetic_consumer_invocation_sufficient": false,
+    "authorized_by_this_decision": false
+  },
+  "query_envelope_status": "DEFINED_PROSPECTIVELY_BUT_NOT_VALIDATED",
+  "query_envelope": {
+    "hard_process": "intersection_of_x_1e-4_to_0.8_Q2_3.5_to_10000_y_0.01_to_0.95_and_Q2_equals_x_y_s",
+    "s_gev2": 101200.0,
+    "isr_and_remnants": "full_strict_evaluator_support_unless_a_smaller_analytic_superset_is_proven",
+    "observed_queries_define_envelope": false,
+    "out_of_envelope_behavior": "typed_fail_closed",
+    "provenance_fields": ["consumer_class", "method", "flavor", "x_bits", "q2_bits", "call_count", "rejection_reason"],
+    "ml_feature_use": false
+  },
+  "neutral_current_observable_contract": {
+    "observables": ["F2", "FL", "xF3", "reduced_cross_section", "d2sigma_dx_dQ2"],
+    "beam_charges": ["electron", "positron"],
+    "polarization": "unpolarized",
+    "electroweak_content": "gamma_Z_and_gammaZ_interference",
+    "apfel_charge_functions": ["ElectroWeakCharges_Q_false", "ParityViolatingElectroWeakCharges_Q_false"],
+    "perturbative_order": "NLO",
+    "scale_policy": "muF_equals_muR_equals_Q",
+    "domain": "exact_configured_DIS_intersection_plus_one_sided_charm_and_bottom_threshold_probes",
+    "relative_tolerance": 0.0001,
+    "absolute_tolerance": 1e-8,
+    "cross_section_negative_allowance": 1e-12,
+    "lepton_sign_mapping_requires_verification": true
+  },
+  "validation_hierarchy": [
+    "identity_metadata_support_finiteness_determinism",
+    "persistent_vs_fresh_direct_apfel",
+    "one_sided_heavy_thresholds",
+    "performance_memory_lifetime_cache_thread_process",
+    "complete_pythia_consumer_instrumentation",
+    "full_neutral_current_gammaZ_observables",
+    "later_separately_authorized_D2_event_distribution_closure"
+  ],
+  "prospective_performance_formula": "C_required >= N_pdf * R_selected / (epsilon * W * f_pdf)",
+  "performance_unknowns": [
+    "PDF_calls_per_attempted_event",
+    "selection_efficiency",
+    "target_accepted_events_per_second",
+    "available_CPU_workers",
+    "permitted_PDF_time_fraction",
+    "Q_cache_hit_rate",
+    "mutex_or_IPC_overhead"
+  ],
+  "prospective_resource_caps": {
+    "numerical_wall_time_seconds": 1800,
+    "generated_output_bytes": 2147483648,
+    "anchors": "center_plus_at_most_two_predeclared_stress_anchors",
+    "production_event_output": false
+  },
+  "unresolved_questions": [
+    "persistent_scalar_accuracy_and_throughput",
+    "serialized_thread_stress",
+    "multi_process_isolation",
+    "cache_lifetime_and_destruction",
+    "complete_ISR_and_remnant_query_coverage",
+    "PYTHIA_base_PDF_positivity_clamping_effect",
+    "electron_positron_xF3_sign_mapping",
+    "derived_operational_performance_threshold"
+  ]
+}
