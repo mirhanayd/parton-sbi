@@ -30,6 +30,10 @@
   transport remained outside tolerance across all nine anchors.
 - Phase 1B-D1A evolved-PDF transport architecture audit completed with an
   `INCONCLUSIVE` decision and a bounded prototype authorization.
+- Phase 1B-D1A bounded transport-comparison prototype completed with an
+  `INCONCLUSIVE` decision: the fixed custom interpolator failed, while direct
+  APFEL transport remained unselected because required evidence was not
+  measured.
 
 # Current state
 
@@ -101,15 +105,32 @@
   observable closure, and later separately authorized event-distribution
   closure. Global-support pointwise discrepancies remain mandatory
   diagnostics.
+- The clean D1A prototype ran from commit
+  `6cdd617cae88dc7b4d79a2388f1822076a8008bd` with `dirty=false`, three fixed
+  anchors, no events, and the versioned
+  `serde_json_float_roundtrip_pretty_v1` evidence policy.
+- The fixed 6x6 custom bilinear representation reproduced all 396 stored knots
+  at every anchor, but failed 245 of 275 off-knot comparisons at every anchor
+  and failed one-sided threshold closure. It is rejected without post-hoc
+  refinement.
+- Direct APFEL deterministic batch repetition and strict support passed, but
+  persistent scalar throughput, thread safety, process isolation, and the
+  complete all-consumer query envelope were not measured. Direct APFEL
+  transport remains unselected.
+- The unresolved PYTHIA consumers are `initial_state_shower` and
+  `beam_remnants`; all-consumer envelope closure is false.
+- D1A is complete with `PROTOTYPE_DECISION = INCONCLUSIVE`,
+  `DIRECT_CANDIDATE_STATUS = INCONCLUSIVE`, `CUSTOM_CANDIDATE_STATUS = FAIL`,
+  and `D2_AUTHORIZED = false`.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review ADR-006. If accepted, run only its bounded D1A prototype
-to compare direct APFEL-backed and repository-owned deterministic transport
-evaluators and to establish a conservative all-consumer PYTHIA query domain.
+Scientifically review the D1A prototype result. A separate future decision
+would be required to test a persistent direct APFEL-backed scalar adapter and
+instrument all enabled PYTHIA PDF consumers.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -125,6 +146,8 @@ unimplemented hypotheses.
 - Any additional D1 revision requires a new reviewed architecture decision.
 - The D1A prototype authorization is planning/validation only and cannot
   authorize production PYTHIA coupling or D2.
+- The D1A `INCONCLUSIVE` decision does not select direct APFEL transport; the
+  custom 6x6 representation is rejected and D2 remains unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

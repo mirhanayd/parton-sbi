@@ -1,0 +1,225 @@
+{
+  "schema_version": "partonsbi.phase1bd.d1a.transport-prototype-decision.v1",
+  "study_provenance": {
+    "git_commit": "6cdd617cae88dc7b4d79a2388f1822076a8008bd",
+    "git_dirty_at_build": false,
+    "preparation_schema": "partonsbi.d1a.transport-prototype.preparation.v2",
+    "study_schema": "partonsbi.d1a.transport-prototype.study.v3",
+    "evidence_serialization_policy": "serde_json_float_roundtrip_pretty_v1",
+    "study_policy": "d1a_three_anchor_bounded_study_v1",
+    "maximum_runtime_seconds": 1800,
+    "maximum_generated_bytes": 2147483648,
+    "anchors": [
+      "center",
+      "delta_min",
+      "corner_min_max"
+    ],
+    "no_events": true
+  },
+  "output_files": [
+    {
+      "path": "outputs/phase1bd_d1a_transport_prototype/center_custom_grid.json",
+      "sha256": "978ce5232af92c9209e724650adc71639da03c11a5f2008c6cb8614ac47ebe01",
+      "bytes": 9319
+    },
+    {
+      "path": "outputs/phase1bd_d1a_transport_prototype/corner_min_max_custom_grid.json",
+      "sha256": "a01694102bc568fb0dbb7ae81b2224f09d248146e2b4ece598fb41e7df7c77c0",
+      "bytes": 9280
+    },
+    {
+      "path": "outputs/phase1bd_d1a_transport_prototype/delta_min_custom_grid.json",
+      "sha256": "1456282dcbdc324369d09e169f7082ef6cdc7684eb95b145d63ca67f2399974e",
+      "bytes": 9333
+    },
+    {
+      "path": "outputs/phase1bd_d1a_transport_prototype/preparation_manifest.json",
+      "sha256": "cef3bddee68a9a159dfdc1376f38cf10b1e68118770e551fdeff5633431f5e35",
+      "bytes": 3348
+    },
+    {
+      "path": "outputs/phase1bd_d1a_transport_prototype/study_summary.json",
+      "sha256": "aa53b3e5ff8fafc18d4157444dbb7e54db02df2eaa1f256837d865e4edafcbfd",
+      "bytes": 7345
+    }
+  ],
+  "total_generated_output_bytes": 38625,
+  "resource_measurements": {
+    "external_including_release_build": {
+      "wall_seconds": 76.39,
+      "maximum_rss_kib": 782836,
+      "exit_status": 0
+    },
+    "internal_study_process": {
+      "measurement": "linux_VmHWM",
+      "peak_memory_kib": 27836,
+      "initialization_seconds": 0.142924733
+    }
+  },
+  "comparison_tolerance": {
+    "relative_maximum": 0.00001,
+    "absolute_maximum": 1e-9,
+    "combination": "relative_or_absolute"
+  },
+  "anchors": [
+    {
+      "anchor": "center",
+      "theta": {
+        "delta_v": 0.0,
+        "lambda_sea": 0.0
+      },
+      "evaluator_policy_identity": "sha256:ba3c70ecd57151c5370fd8e062f4a495e679955c9f6aec5dded924d033e02eaa",
+      "anchor_transport_identity": "sha256:8ad5e2b1d9ece1798c82a18cbea91260b2d2efb085fba8988fc79e97df900af9",
+      "custom_identity": "sha256:fbb4aff0459afe7b388ef11124628cc97fc4e419023ca29eae46314dfe8ac8d7",
+      "knot_comparison": {
+        "comparison_count": 396,
+        "outside_tolerance_count": 0,
+        "maximum_absolute_error": 0.0,
+        "maximum_relative_error": 0.0
+      },
+      "off_knot_comparison": {
+        "comparison_count": 275,
+        "outside_tolerance_count": 245,
+        "maximum_absolute_error": 6573.413343675164,
+        "maximum_relative_error": 270.94250759930225
+      },
+      "one_sided_threshold_comparison": {
+        "comparison_count": 264,
+        "outside_tolerance_count": 8,
+        "maximum_absolute_error": 5.724478086222007e-6,
+        "maximum_relative_error": 1.7976931348623157e308
+      },
+      "direct_deterministic_repeat": "PASSED",
+      "custom_deterministic_repeat": "PASSED",
+      "reload_audit": {
+        "stored_identity_status": "PASSED",
+        "binary64_identity_status": "PASSED",
+        "canonical_bytes_status": "PASSED",
+        "recomputed_identity": "sha256:fbb4aff0459afe7b388ef11124628cc97fc4e419023ca29eae46314dfe8ac8d7",
+        "first_mismatch": null
+      },
+      "strict_support": "PASSED",
+      "direct_batch_rebuild_effective_calls_per_second": 153.9825939677198,
+      "direct_scalar_adapter_benchmark_status": "NOT_MEASURED",
+      "custom_scalar_calls_per_second": 16971157.517798502
+    },
+    {
+      "anchor": "delta_min",
+      "theta": {
+        "delta_v": -0.2,
+        "lambda_sea": 0.0
+      },
+      "evaluator_policy_identity": "sha256:ba3c70ecd57151c5370fd8e062f4a495e679955c9f6aec5dded924d033e02eaa",
+      "anchor_transport_identity": "sha256:767d1039f92bb54b6e2430d74971c60e6b13381e7edd1f0fe7d5b107126972f3",
+      "custom_identity": "sha256:571bf16724afc613deea2676d54ced6e0a5a32322a05798706a061517cf87b5e",
+      "knot_comparison": {
+        "comparison_count": 396,
+        "outside_tolerance_count": 0,
+        "maximum_absolute_error": 0.0,
+        "maximum_relative_error": 0.0
+      },
+      "off_knot_comparison": {
+        "comparison_count": 275,
+        "outside_tolerance_count": 245,
+        "maximum_absolute_error": 7588.295758877917,
+        "maximum_relative_error": 14841.190788935332
+      },
+      "one_sided_threshold_comparison": {
+        "comparison_count": 264,
+        "outside_tolerance_count": 10,
+        "maximum_absolute_error": 6.582971479929256e-6,
+        "maximum_relative_error": 1.7976931348623157e308
+      },
+      "direct_deterministic_repeat": "PASSED",
+      "custom_deterministic_repeat": "PASSED",
+      "reload_audit": {
+        "stored_identity_status": "PASSED",
+        "binary64_identity_status": "PASSED",
+        "canonical_bytes_status": "PASSED",
+        "recomputed_identity": "sha256:571bf16724afc613deea2676d54ced6e0a5a32322a05798706a061517cf87b5e",
+        "first_mismatch": null
+      },
+      "strict_support": "PASSED",
+      "direct_batch_rebuild_effective_calls_per_second": 150.95530983696736,
+      "direct_scalar_adapter_benchmark_status": "NOT_MEASURED",
+      "custom_scalar_calls_per_second": 16879574.36465282
+    },
+    {
+      "anchor": "corner_min_max",
+      "theta": {
+        "delta_v": -0.2,
+        "lambda_sea": 0.25
+      },
+      "evaluator_policy_identity": "sha256:ba3c70ecd57151c5370fd8e062f4a495e679955c9f6aec5dded924d033e02eaa",
+      "anchor_transport_identity": "sha256:0fd8366cd4636d2d8f94d12369f93219b997ee396fc91e93bae969fe93655553",
+      "custom_identity": "sha256:051c2456e62e422f37cc88a1d6da7f52cb6f515ecb0fe7e681b0f7c7592a0f53",
+      "knot_comparison": {
+        "comparison_count": 396,
+        "outside_tolerance_count": 0,
+        "maximum_absolute_error": 0.0,
+        "maximum_relative_error": 0.0
+      },
+      "off_knot_comparison": {
+        "comparison_count": 275,
+        "outside_tolerance_count": 245,
+        "maximum_absolute_error": 7610.1990946808055,
+        "maximum_relative_error": 347.7008628954715
+      },
+      "one_sided_threshold_comparison": {
+        "comparison_count": 264,
+        "outside_tolerance_count": 8,
+        "maximum_absolute_error": 6.82762225778788e-6,
+        "maximum_relative_error": 1.7976931348623157e308
+      },
+      "direct_deterministic_repeat": "PASSED",
+      "custom_deterministic_repeat": "PASSED",
+      "reload_audit": {
+        "stored_identity_status": "PASSED",
+        "binary64_identity_status": "PASSED",
+        "canonical_bytes_status": "PASSED",
+        "recomputed_identity": "sha256:051c2456e62e422f37cc88a1d6da7f52cb6f515ecb0fe7e681b0f7c7592a0f53",
+        "first_mismatch": null
+      },
+      "strict_support": "PASSED",
+      "direct_batch_rebuild_effective_calls_per_second": 152.38405766987628,
+      "direct_scalar_adapter_benchmark_status": "NOT_MEASURED",
+      "custom_scalar_calls_per_second": 15539001.339461915
+    }
+  ],
+  "candidate_evidence": {
+    "direct": {
+      "accuracy": "NOT_MEASURED",
+      "identity": "PASSED",
+      "reload": "NOT_MEASURED",
+      "threshold": "PASSED",
+      "support": "PASSED",
+      "deterministic_repeat": "PASSED",
+      "scalar_throughput": "NOT_MEASURED",
+      "thread_safety": "NOT_MEASURED",
+      "process_isolation": "NOT_MEASURED",
+      "status": "INCONCLUSIVE"
+    },
+    "custom": {
+      "accuracy": "FAILED",
+      "identity": "PASSED",
+      "reload": "PASSED",
+      "threshold": "FAILED",
+      "support": "PASSED",
+      "deterministic_repeat": "PASSED",
+      "scalar_throughput": "PASSED",
+      "thread_safety": "NOT_MEASURED",
+      "process_isolation": "NOT_MEASURED",
+      "status": "FAIL"
+    }
+  },
+  "all_consumer_envelope_complete": false,
+  "unresolved_consumers": [
+    "initial_state_shower",
+    "beam_remnants"
+  ],
+  "decision": "INCONCLUSIVE",
+  "custom_representation_selected": false,
+  "direct_apfel_transport_selected": false,
+  "prospective_next_question": "A separate future decision would be required to test a persistent direct APFEL-backed scalar adapter and instrument all enabled PYTHIA PDF consumers.",
+  "d2_authorized": false
+}
