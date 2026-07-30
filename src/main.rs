@@ -12,6 +12,7 @@ use parton_sbi::physics::{
 mod continuous_pdf_cli;
 mod pdf_artifact_cli;
 mod pdf_reweighting_cli;
+mod pdf_transport_prototype_cli;
 use continuous_pdf_cli::{
     parse_validate_continuous_pdf, run_validate_continuous_pdf, ContinuousPdfCliArgs,
     VALIDATE_CONTINUOUS_PDF_HELP,
@@ -24,6 +25,10 @@ use pdf_reweighting_cli::{
     parse_scan_pdf_members, parse_validate_pdf_reweighting, run_scan_pdf_members,
     run_validate_pdf_reweighting, ScanPdfMembersArgs, ValidatePdfReweightingArgs,
     SCAN_PDF_MEMBERS_HELP, VALIDATE_PDF_REWEIGHTING_HELP,
+};
+use pdf_transport_prototype_cli::{
+    parse_prototype_pdf_transport, run_prototype_pdf_transport, PdfTransportPrototypeCliArgs,
+    PROTOTYPE_PDF_TRANSPORT_HELP,
 };
 
 const HELP: &str =
@@ -59,6 +64,9 @@ Commands:
 
   validate-pdf-artifact [OPTIONS]
       Validate Phase 1B-D1 APFEL++ evolution and an immutable LHAPDF artifact.
+
+  prototype-pdf-transport [OPTIONS]
+      Prepare or run the bounded Phase 1B-D1A transport comparison prototype.
 
   validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
@@ -185,6 +193,8 @@ enum Command {
     ValidateContinuousPdfHelp,
     ValidatePdfArtifact(PdfArtifactCliArgs),
     ValidatePdfArtifactHelp,
+    PrototypePdfTransport(PdfTransportPrototypeCliArgs),
+    PrototypePdfTransportHelp,
     StructureFunctions(StructureFunctionsCliArgs),
     ValidateHera(ValidateHeraCliArgs),
     TheoryUncertainties(TheoryUncertaintiesCliArgs),
@@ -347,6 +357,13 @@ fn main() -> Result<()> {
             print!("{VALIDATE_PDF_ARTIFACT_HELP}");
             Ok(())
         }
+        Command::PrototypePdfTransport(arguments) => {
+            run_prototype_pdf_transport(arguments).map_err(Error::Msg)
+        }
+        Command::PrototypePdfTransportHelp => {
+            print!("{PROTOTYPE_PDF_TRANSPORT_HELP}");
+            Ok(())
+        }
         Command::StructureFunctions(arguments) => run_structure_functions(arguments),
         Command::ValidateHera(arguments) => run_validate_hera(arguments),
         Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
@@ -398,6 +415,13 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
                 Ok(Command::ValidatePdfArtifactHelp)
             } else {
                 parse_validate_pdf_artifact(remaining).map(Command::ValidatePdfArtifact)
+            }
+        }
+        [subcommand, remaining @ ..] if subcommand == "prototype-pdf-transport" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::PrototypePdfTransportHelp)
+            } else {
+                parse_prototype_pdf_transport(remaining).map(Command::PrototypePdfTransport)
             }
         }
         [subcommand, remaining @ ..] if subcommand == "validate-hera" => {
