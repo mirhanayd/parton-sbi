@@ -171,6 +171,41 @@ Preparation schema v2,
 bridge ABI, mutex-policy version, lock acquisition order, complete serialized
 process scope, and `general_apfel_lhapdf_thread_safety_claimed=false`.
 
+### Authoritative preparation evidence
+
+The preparation command completed from clean commit
+`4fd1b3c45d339a8663ecf750f02662f96383691b`. Its ignored raw manifest uses
+schema `partonsbi.d1c.persistent-apfel.preparation.v2` and has SHA-256
+`08cab671408854bd79bcc0353f3da67ca2dbd5ddfe136a7600e760f8946c73f4`
+over exactly 4,389 bytes. The recorded evaluator, bridge, mutex, and cache
+policies are `persistent_in_process_apfel_serialized_v1`,
+`partonsbi_persistent_apfel_abi_v2`,
+`cross_language_recursive_process_mutex_v2`, and
+`theta_scoped_exact_q_bits_last_distribution_v1`, respectively.
+
+All three anchors share evaluator-policy identity
+`sha256:b05af86fa40b6ffec790c55995038e8f5ff4eb4e59af35e5bef4de5701734b94`.
+Their theta-specific transport identities are:
+
+- `center`:
+  `sha256:7b79d769ae7aa98d142f26f2338c45c9b7b0c1c62fc0c7357e834183a69fe44e`;
+- `delta_min`:
+  `sha256:2baaba8c0753082aa49aa6c7788e26f93428584f0a5e0425f176944f8106b764`;
+- `corner_min_max`:
+  `sha256:5bd8473cd6445265404cb7a1d3fd4eec7f7c4e4c070c539643b8a9372e2b6cfa`.
+
+The external end-to-end command measurement, including its release build, was
+63.06 seconds wall time, 649,236 KiB maximum RSS, and exit status zero. These
+are not persistent scalar latency, throughput, or steady-state-memory
+measurements. Every diagnostic counter was zero because preparation performed
+construction, metadata inspection, and destruction only.
+
+This evidence is an operational preparation `PASS`, not the final D1C
+scientific gate. It makes no throughput, PYTHIA-consumer, observable, event,
+consumer-envelope, or bounded-study claim. The compact reviewed evidence is
+recorded in `docs/phase1bd_d1c_a_preparation_evidence.json`; the raw manifest
+remains ignored and uncommitted.
+
 ## Focused validation
 
 The focused checks cover persistent scalar/batch agreement with the fresh

@@ -147,9 +147,17 @@
 - The D1C-A preparation CLI can initialize and destroy the three authorized
   anchors and record a compact ignored manifest. It has no study, PYTHIA, or
   event-execution mode.
+- D1C-A operational preparation completed successfully from clean commit
+  `4fd1b3c45d339a8663ecf750f02662f96383691b`. This establishes only
+  construction, metadata inspection, identity, and destruction evidence; the
+  ignored raw manifest is preserved by hash in a compact reviewed evidence
+  artifact.
 - D1C scientific validation is not complete. No `pythia.next()` call, event,
   dataset, consumer-envelope result, full neutral-current observable result,
   or final PASS/FAIL/INCONCLUSIVE decision exists.
+- Issue #39 therefore remains in progress: PYTHIA consumer coverage,
+  generator-facing sign behavior, full neutral-current observables, and the
+  bounded study are still outstanding.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
