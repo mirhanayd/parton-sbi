@@ -11,6 +11,7 @@ pub mod pdf;
 pub mod pdf_artifact;
 pub mod pdf_artifact_v2;
 pub mod pdf_reweighting;
+pub mod pdf_transport_prototype;
 pub mod structure_function_provider;
 pub mod structure_function_validation;
 pub mod structure_functions;
@@ -53,6 +54,7 @@ pub use pdf_reweighting::{
     WeightStatistics, DEFAULT_NOMINAL_XF_RELATIVE_TOLERANCE, PDF_REUSE_ESS_FRACTION_THRESHOLD,
     PDF_SUPPORT_POLICY_VERSION,
 };
+pub use pdf_transport_prototype::*;
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,
     PerturbativeOrder, StructureFunctionBackend, StructureFunctionMetadata,
