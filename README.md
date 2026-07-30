@@ -29,24 +29,30 @@ with target posterior `p(theta_PDF | D)`. The objective is not to determine an i
 - the immutable Phase 1B-D0 v1 result and ADR-004 v2 sum-rule-projected
   input-scale two-parameter PDF boundary construction,
   authoritative CT18NLO metadata/knot audit, independent quadrature, canonical
-  parameter identities, and deterministic Stage 0 validation CLI; and
+  parameter identities, and deterministic Stage 0 validation CLI;
+- version-separated APFEL++ evolution and deterministic content-addressed
+  LHAPDF6 artifact research infrastructure, including threshold subgrids,
+  bounded refinement, full/retained moment accounting, cache integrity, and
+  direct/artifact closure diagnostics; and
 - Rust, C++, and Python validation fixtures supporting these components.
 
 ## Explicit non-capabilities
 
-PartonSBI implements only the D0 input-scale mathematical continuous boundary
-family. It does not implement APFEL evolution of that family, an LHAPDF grid
-artifact, PYTHIA coupling, direct event generation at continuous parameter
-points, pseudo-experiment construction, amortized neural posterior inference,
-detector simulation, unfolding, or real-data PDF extraction. Phase 1A discrete
-LHAPDF-member reweighting infrastructure is implemented and Phase 1A is
-complete with a negative result: the clean strict-support study failed the
-fixed `ESS/N >= 0.20` gate. Nominal-pool reuse and the reweighting production
-path are rejected; direct regeneration is required per PDF parameter point.
-No direct-target closure was needed or claimed. The historical Phase 1B-D0 v1
-pilot study remains `FAIL`. A separately versioned ADR-004 revalidation passed
-its baseline-relative NLO input contract over 441 hard-box and 80 guard-shell
-points. That PASS is only a D1 authorization candidate; D1 is not authorized.
+PartonSBI implements the D0 input-scale mathematical continuous boundary family
+and D1/D1R APFEL evolution plus LHAPDF artifact validation infrastructure. The
+completed D1 and revised D1R studies both failed their predeclared scientific
+gates; no generated artifact is qualified for PYTHIA. The repository does not
+implement PYTHIA coupling to the continuous family, direct event generation at
+continuous parameter points, pseudo-experiment construction, amortized neural
+posterior inference, detector simulation, unfolding, or real-data PDF
+extraction. Phase 1A discrete LHAPDF-member reweighting infrastructure is
+implemented and Phase 1A is complete with a negative result: the clean
+strict-support study failed the fixed `ESS/N >= 0.20` gate. Nominal-pool reuse
+and the reweighting production path are rejected; direct regeneration is
+required per PDF parameter point. No direct-target closure was needed or
+claimed. The historical Phase 1B-D0 v1 pilot study remains `FAIL`. A separately
+versioned ADR-004 revalidation passed its baseline-relative NLO input contract
+over 441 hard-box and 80 guard-shell points. D2 remains unauthorized.
 
 Inclusive neutral-current electron-proton data do not provide unrestricted full-flavor PDF separation. The implemented channel primarily constrains charge-weighted quark-plus-antiquark combinations, with only indirect and correlated sensitivity to other directions. `GenPdfInfo`, hard flavor, and nominal PDF values are generator truth/provenance for validation and future reweighting studies; they are not detector-observed inputs and must not be exposed as default inference features.
 
@@ -232,16 +238,21 @@ Validate one D1 evolved artifact:
 
 ```bash
 cargo run --release -- validate-pdf-artifact \
+  --artifact-version v2 \
   --delta-v 0 \
   --lambda-sea 0
 ```
 
 The `--anchors` and clean-provenance `--study` modes validate deterministic
-APFEL++ 4.8.0 evolution and one-member LHAPDF6 transport. Artifacts live in the
-ignored `.external/partonsbi/pdf-artifacts/` cache, use an error extrapolator,
-and are never generator inputs in this phase. The completed nine-anchor Stage
-1 study failed the off-knot round-trip and high-Q evolved-sum-rule gates; this
-command is research infrastructure, not D2 authorization.
+APFEL++ 4.8.0 evolution and one-member LHAPDF6 transport. V1 remains available
+for historical reproduction; v2 selects the ADR-005 threshold-separated,
+bounded-refinement contract. Artifacts live in the ignored
+`.external/partonsbi/pdf-artifacts/` cache, use an error extrapolator, and are
+never generator inputs in this phase. The clean nine-anchor D1R study passed
+exact-knot serialization, independent LHAPDF interpolation, and NLO photon
+F2/FL closure, but failed the fixed refinement-time, moment/leakage, and direct
+off-knot APFEL/artifact gates. This command is research infrastructure, not D2
+authorization.
 
 ## Current roadmap
 
@@ -258,11 +269,18 @@ projected-baseline study; its unchanged 441/80 scan passed without changing
 family values, bounds, or numerical tolerances. D1 was subsequently authorized
 and completed as a negative result: boundary callbacks and alpha_s knots
 passed, while off-knot LHAPDF transport and evolved sum rules failed the fixed
-Stage 1 gates. D2 is not authorized. See
+Stage 1 gates. ADR-005 then defined a version-separated revised contract with
+extended computational support, threshold subgrids, global deterministic
+refinement, and NLO photon-observable closure. The clean revised study again
+ended in `FAIL`: all nine photon-observable closures passed, but refinement
+exceeded 600 seconds per anchor, direct off-knot transport retained 3,492,044
+tolerance failures, and moment/leakage convergence failed. D2 is not
+authorized. See
 `docs/CURRENT_PHASE.md`, `docs/AMORTIZED_INFERENCE_PHASE1A_REWEIGHTING.md`,
-`docs/AMORTIZED_INFERENCE_PHASE1BD_D0.md`, and
-`docs/AMORTIZED_INFERENCE_PHASE1BD_D0R.md`, and
-`docs/AMORTIZED_INFERENCE_PHASE1BD_D1.md`.
+`docs/AMORTIZED_INFERENCE_PHASE1BD_D0.md`,
+`docs/AMORTIZED_INFERENCE_PHASE1BD_D0R.md`,
+`docs/AMORTIZED_INFERENCE_PHASE1BD_D1.md`, and
+`docs/AMORTIZED_INFERENCE_PHASE1BD_D1R.md`.
 
 ## Scientific limitations
 
@@ -277,8 +295,8 @@ Stage 1 gates. D2 is not authorized. See
 - The validated study domain is the declared DIS selection intersected with
   strict LHAPDF support, not the unrestricted PYTHIA domain.
 - Both D0 versions are tied to CT18NLO member 0 at `Q0=1.295 GeV`. V1 failed;
-  v2 passed, but the downstream D1 artifact contract failed and the box is not
-  a production prior.
+  v2 passed, but both downstream D1 artifact contracts failed and the box is
+  not a production prior.
 
 See `docs/scientific_scope_and_limitations.md` and the amortized-inference audit for the complete source-grounded limitations.
 

@@ -1,0 +1,131 @@
+{
+  "schema_version": "partonsbi.phase1bd.d1r.decision.v2",
+  "study_id": "phase1bd_d1r_refined_lhapdf_artifact_v2_20260729",
+  "study_commit": "de26c57066dc018b530963d25d9a547b4b650c67",
+  "git_dirty": false,
+  "adr_merge_commit": "a7002d380a35ff10549905edb22a0b2ad3bf5771",
+  "implementation_commits": [
+    "281675a815d6c087176d9675ae6f1535e5bb6f17",
+    "de26c57066dc018b530963d25d9a547b4b650c67"
+  ],
+  "runtime_seconds": 14673.085230043,
+  "artifact_contract": {
+    "artifact_schema_version": "partonsbi.lhapdf_artifact.v2",
+    "evolution_policy_version": "apfelxx_4.8.0_nlo_vfns_extended_x_v2",
+    "grid_policy_version": "threshold_subgrids_bounded_refinement_v2",
+    "cache_policy_version": "immutable_sha256_atomic_publish_v2",
+    "computational_x_minimum": 1e-11,
+    "exported_x_minimum": 1e-9,
+    "zero_continuation_policy": "exact_zero_on_[1e-11,1e-9)",
+    "base_grid": [
+      [400, 1e-11, 3],
+      [250, 0.1, 3],
+      [180, 0.6, 3],
+      [160, 0.85, 5]
+    ],
+    "doubled_grid": [
+      [800, 1e-11, 3],
+      [500, 0.1, 3],
+      [360, 0.6, 3],
+      [320, 0.85, 5]
+    ]
+  },
+  "final_common_grid": {
+    "hash": "sha256:c345f9136ab12a4054e4c0f6ef3967c611eb0e34fe5c5a57a769cdbf024b1657",
+    "x_knot_count": 641,
+    "unique_q_knot_count": 149,
+    "q_subgrids": [
+      {
+        "minimum_q_gev": 1.295,
+        "maximum_q_gev": 1.3,
+        "q_knot_count": 9
+      },
+      {
+        "minimum_q_gev": 1.3,
+        "maximum_q_gev": 4.75,
+        "q_knot_count": 37
+      },
+      {
+        "minimum_q_gev": 4.75,
+        "maximum_q_gev": 100000.0,
+        "q_knot_count": 105
+      }
+    ]
+  },
+  "refinement": {
+    "trace_hash": "sha256:354320e3b3acee8921c6072e8c4fcfb7924ce41f9ec9201bbe9e2e3207339d21",
+    "complete": false,
+    "failure_reason": "anchor construction/validation exceeded 600 seconds",
+    "maximum_anchor_seconds": 669.137992893,
+    "final_comparisons": 84863988,
+    "final_failures": 3492044,
+    "final_maximum_absolute_error": 1374.7964848542324
+  },
+  "artifacts": {
+    "anchor_count": 9,
+    "unique_identity_count": 9,
+    "minimum_member_bytes": 24412574,
+    "maximum_member_bytes": 24447387,
+    "threshold_subgrids_per_member": 3,
+    "strict_support_passed_for_all": true,
+    "manifest_byte_reproducible_for_all": true,
+    "inactive_top_passed_for_all": true,
+    "generated_artifacts_committed": false
+  },
+  "moments": {
+    "maximum_base_full_domain_residual": 1.0118550574755858e-5,
+    "maximum_doubled_full_domain_residual": 8.177903536354947e-6,
+    "maximum_base_doubled_leakage_difference": 4.501148846980385e-7,
+    "minimum_below_exported_support_momentum": 1.5946975628899906e-8,
+    "maximum_below_exported_support_momentum": 6.399771093912321e-5,
+    "anchor_pass_count": 0
+  },
+  "transport": {
+    "exact_knot_comparisons": 9455391,
+    "exact_knot_outside_tolerance": 0,
+    "maximum_exact_knot_absolute_error": 7.940934264346711e-23,
+    "independent_log_bicubic_comparisons": 84863988,
+    "independent_log_bicubic_outside_tolerance": 0,
+    "maximum_independent_log_bicubic_absolute_error": 1.4551915228366852e-11,
+    "direct_apfel_artifact_comparisons": 84863988,
+    "direct_apfel_artifact_outside_tolerance": 3492044,
+    "maximum_direct_apfel_artifact_absolute_error": 1374.7964848542324,
+    "threshold_comparisons": 760914,
+    "threshold_outside_tolerance": 32573,
+    "maximum_threshold_absolute_error": 0.44561921911935265,
+    "alpha_s_maximum_relative_error": 0.0,
+    "alpha_s_maximum_absolute_error": 0.0,
+    "sign_topology_comparisons": 44154,
+    "sign_topology_mismatched_components": 3,
+    "anchor_pass_count": 0
+  },
+  "observable": {
+    "process": "NLO_zero_mass_photon_exchange",
+    "f2_comparisons": 648,
+    "f2_outside_tolerance": 0,
+    "maximum_f2_absolute_error": 2.7480122328782386e-6,
+    "fl_comparisons": 648,
+    "fl_outside_tolerance": 0,
+    "maximum_fl_absolute_error": 3.450660381432158e-6,
+    "minimum_direct_reduced_cross_section": 0.00100958708359842,
+    "minimum_artifact_reduced_cross_section": 0.0010096128177690012,
+    "non_finite_count": 0,
+    "anchor_pass_count": 9,
+    "full_gamma_z_claim": false
+  },
+  "raw_ct18_fidelity": {
+    "binding_gate": false,
+    "raw_boundary_apfel_vs_public_outside_tolerance": 8682,
+    "projected_vs_raw_boundary_apfel_outside_tolerance": 0,
+    "projected_apfel_vs_public_outside_tolerance": 8681
+  },
+  "revised_stage1_decision": "FAIL",
+  "d2_authorization_candidate": false,
+  "d2_authorized": false,
+  "reasons": [
+    "The common deterministic refinement exceeded the fixed 600-second-per-anchor cap.",
+    "Base/doubled full-domain moment or leakage convergence failed at every anchor.",
+    "Direct APFEL-to-artifact off-knot transport failed at every anchor despite exact-knot and independent-interpolation closure.",
+    "The binding NLO photon observable passed but cannot override failed transport, moment, or performance gates."
+  ]
+}

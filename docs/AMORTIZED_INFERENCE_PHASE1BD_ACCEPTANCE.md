@@ -194,6 +194,30 @@ D2_AUTHORIZED = false
 Only a reviewed revised Stage 1 `PASS` may set
 `D2_AUTHORIZATION_CANDIDATE = true`.
 
+### Recorded ADR-005 revised Stage 1 result (2026-07-29)
+
+The revised implementation evaluated all nine mandatory anchors from clean
+commit `de26c57066dc018b530963d25d9a547b4b650c67`.
+
+```text
+REVISED_STAGE1_DECISION = FAIL
+D2_AUTHORIZATION_CANDIDATE = false
+D2_AUTHORIZED = false
+```
+
+The study retained the fixed contract above. Global refinement reached a
+641-x by 149-unique-Q common grid but exceeded the 600-second-per-anchor cap.
+Exact-knot serialization and an independent LHAPDF log-bicubic reconstruction
+had zero tolerance failures. Direct APFEL-to-artifact off-knot transport still
+had `3,492,044` failures and a maximum absolute error of
+`1374.7964848542324`. The worst base/doubled leakage disagreement was
+`4.501148846980385e-7`, above the fixed `1e-7` convergence gate. All nine
+binding NLO photon F2/FL and reduced-cross-section closures passed, but that
+does not override failed transport, moment/leakage, or performance gates.
+
+No bound, tolerance, anchor, support range, or acceptance rule was changed
+after observation. See `AMORTIZED_INFERENCE_PHASE1BD_D1R.md`.
+
 ## Stage 2 — Pythia coupling and support
 
 Initialize controlled center-point probes with the declared neutral-current
