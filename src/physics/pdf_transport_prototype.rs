@@ -163,10 +163,13 @@ impl DirectApfelEvaluator {
             self.config.q_minimum_gev,
             self.config.q_maximum_gev,
         )?;
-        let mut xs = queries.iter().map(|query| query.x).collect::<Vec<_>>();
-        let mut qs = queries.iter().map(|query| query.q_gev).collect::<Vec<_>>();
-        sort_dedup(&mut xs);
-        sort_dedup(&mut qs);
+        let (xs, qs) = padded_evaluation_axes(
+            queries,
+            self.config.exported_x_minimum,
+            self.config.exported_x_maximum,
+            self.config.q_minimum_gev,
+            self.config.q_maximum_gev,
+        );
         let context = self.context.lock().map_err(|_| {
             TransportPrototypeError::Lifetime("direct APFEL context lock was poisoned".into())
         })?;
@@ -177,6 +180,36 @@ impl DirectApfelEvaluator {
             .map(|query| value_from_grid(&grid, *query, &self.config))
             .collect()
     }
+}
+
+fn padded_evaluation_axes(
+    queries: &[TransportQuery],
+    x_minimum: f64,
+    x_maximum: f64,
+    q_minimum_gev: f64,
+    q_maximum_gev: f64,
+) -> (Vec<f64>, Vec<f64>) {
+    let mut xs = queries.iter().map(|query| query.x).collect::<Vec<_>>();
+    xs.push(x_maximum);
+    sort_dedup(&mut xs);
+    if xs.len() < 2 {
+        xs.push(x_minimum);
+        sort_dedup(&mut xs);
+    }
+
+    let mut qs = queries.iter().map(|query| query.q_gev).collect::<Vec<_>>();
+    qs.push(q_minimum_gev);
+    sort_dedup(&mut qs);
+    if qs.len() < 2 {
+        qs.push(q_maximum_gev);
+        sort_dedup(&mut qs);
+    }
+
+    debug_assert!(xs.len() >= 2 && qs.len() >= 2);
+    debug_assert!(xs[0] >= x_minimum && xs.last().copied() == Some(x_maximum));
+    debug_assert!(qs[0].to_bits() == q_minimum_gev.to_bits());
+    debug_assert!(qs.last().is_some_and(|q| *q <= q_maximum_gev));
+    (xs, qs)
 }
 
 fn value_from_grid(
@@ -863,5 +896,83 @@ mod tests {
         };
         assert_eq!(evidence.decision(), PrototypeDecision::Inconclusive);
         assert!(!D2_AUTHORIZED);
+    }
+
+    #[test]
+    fn prototype_pdf_transport_filter_covers_authorization_gate() {
+        assert!(!D2_AUTHORIZED);
+    }
+
+    #[test]
+    fn direct_axes_pad_off_knot_and_single_query_batches() {
+        let off_knot = vec![
+            TransportQuery {
+                flavor: 21,
+                x: 0.02,
+                q_gev: 5.0,
+            },
+            TransportQuery {
+                flavor: 2,
+                x: 0.03,
+                q_gev: 7.0,
+            },
+        ];
+        let (xs, qs) = padded_evaluation_axes(&off_knot, 1.0e-9, 1.0, 1.295, 100_000.0);
+        assert_eq!(xs, vec![0.02, 0.03, 1.0]);
+        assert_eq!(qs, vec![1.295, 5.0, 7.0]);
+
+        let single = vec![TransportQuery {
+            flavor: 21,
+            x: 1.0,
+            q_gev: 1.295,
+        }];
+        let (xs, qs) = padded_evaluation_axes(&single, 1.0e-9, 1.0, 1.295, 100_000.0);
+        assert_eq!(xs, vec![1.0e-9, 1.0]);
+        assert_eq!(qs, vec![1.295, 100_000.0]);
+    }
+
+    #[test]
+    fn direct_batch_padding_preserves_results_order_and_is_deterministic() {
+        let evaluator = DirectApfelEvaluator::initialize().unwrap();
+        let theta = PdfTheta::new(0.0, 0.0).unwrap();
+        let queries = vec![
+            TransportQuery {
+                flavor: 2,
+                x: 0.03,
+                q_gev: 7.0,
+            },
+            TransportQuery {
+                flavor: 21,
+                x: 0.02,
+                q_gev: 5.0,
+            },
+        ];
+        let first = evaluator.evaluate_batch(theta, &queries).unwrap();
+        let repeated = evaluator.evaluate_batch(theta, &queries).unwrap();
+        assert_eq!(first, repeated);
+        assert_eq!(first.len(), queries.len());
+        assert_eq!(first[0].query, queries[0]);
+        assert_eq!(first[1].query, queries[1]);
+        assert!(first.iter().all(|result| result.query.x != 1.0));
+        assert!(first.iter().all(|result| result.query.q_gev != 1.295));
+
+        let one_query = vec![TransportQuery {
+            flavor: 21,
+            x: 0.02,
+            q_gev: 5.0,
+        }];
+        let one_result = evaluator.evaluate_batch(theta, &one_query).unwrap();
+        assert_eq!(one_result.len(), 1);
+        assert_eq!(one_result[0].query, one_query[0]);
+
+        let outside = vec![TransportQuery {
+            flavor: 21,
+            x: evaluator.config().exported_x_minimum / 2.0,
+            q_gev: 5.0,
+        }];
+        assert!(matches!(
+            evaluator.evaluate_batch(theta, &outside),
+            Err(TransportPrototypeError::Support { .. })
+        ));
     }
 }
