@@ -158,15 +158,25 @@
 - Issue #39 therefore remains in progress: PYTHIA consumer coverage,
   generator-facing sign behavior, full neutral-current observables, and the
   bounded study are still outstanding.
+- The D1C-B source audit found a binding installed-interface incompatibility:
+  PYTHIA 8.312's public `PDF::xf`, `PDF::xfVal`, and `PDF::xfSea` readers are
+  non-virtual and apply positivity clipping. A subclass can fill signed cached
+  values through `xfUpdate`, but calls through `shared_ptr<PDF>` still execute
+  the clipping base readers.
+- D1C-B therefore publishes no facade or transport identity and does not call
+  `Pythia::init()` or `pythia.next()`. A deterministic native probe confirms
+  that signed inclusive, valence, and sea values become positive zero at the
+  public boundary. Runtime consumer attribution and pointer substitution
+  evidence remain unavailable.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Continue issue #39 with the separately scoped fail-closed PYTHIA consumer
-instrumentation stage, preserving the fixed resource caps and without
-authorizing D2.
+Review the D1C-B signed-PDF boundary incompatibility and decide whether a
+versioned PYTHIA interface modification or a different generator transport
+architecture may be prototyped without weakening the accepted sign contract.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -187,6 +197,9 @@ unimplemented hypotheses.
 - Issue #39 authorizes only the bounded D1C prototype. D1C-A does not authorize
   production coupling, retained events, datasets, or D2, and it does not
   complete the D1C scientific gate.
+- Do not proceed from D1C-B to runtime consumer instrumentation using the
+  installed `PDF` subclass boundary: its non-virtual positivity-clipping
+  readers violate the accepted signed-value contract.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

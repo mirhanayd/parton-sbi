@@ -3,6 +3,7 @@ use std::process::Command;
 fn main() {
     println!("cargo:rerun-if-changed=src/lhapdf_support_bridge.cpp");
     println!("cargo:rerun-if-changed=src/apfel_evolution_bridge.cpp");
+    println!("cargo:rerun-if-changed=src/pythia_pdf_contract_audit.cpp");
 
     let lhapdf = pkg_config::Config::new()
         .atleast_version("6")
@@ -83,6 +84,28 @@ fn main() {
         .atleast_version("6")
         .probe("lhapdf")
         .expect("LHAPDF 6 must be linkable through pkg-config");
+
+    let pythia_root = std::env::var("PYTHIA8_ROOT")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(|_| std::path::PathBuf::from(".external/pythia-8.3.12"));
+    let pythia_include = pythia_root.join("include");
+    let pythia_library = pythia_root.join("lib");
+    assert!(
+        pythia_include.join("Pythia8/Pythia.h").is_file(),
+        "PYTHIA 8.312 headers are required for the D1C-B API audit"
+    );
+    let mut pythia_audit = cc::Build::new();
+    pythia_audit
+        .cpp(true)
+        .file("src/pythia_pdf_contract_audit.cpp")
+        .include(&pythia_include)
+        .flag_if_supported("-std=c++17");
+    pythia_audit.compile("partonsbi_pythia_pdf_contract_audit");
+    println!(
+        "cargo:rustc-link-search=native={}",
+        pythia_library.display()
+    );
+    println!("cargo:rustc-link-lib=dylib=pythia8");
 
     // Re-run this build script if the .git directory changes
     println!("cargo:rerun-if-changed=.git/HEAD");

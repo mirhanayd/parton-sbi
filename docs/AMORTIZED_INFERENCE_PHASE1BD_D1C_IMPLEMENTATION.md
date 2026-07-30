@@ -263,6 +263,14 @@ part of this correction.
 This core has no evidence about persistent scalar throughput under a PYTHIA
 consumer load, full consumer coverage, generator-facing sign behavior, or the
 full neutral-current gamma/Z observable contract. The next separately scoped
-step within issue #39 is implementation and review of fail-closed PYTHIA
-consumer instrumentation under the already fixed resource caps. D2 remains
-unauthorized.
+step within issue #39 was the D1C-B facade admission audit.
+
+That audit found an installed-interface incompatibility before facade
+publication: PYTHIA 8.312 declares `PDF::xf`, `PDF::xfVal`, and `PDF::xfSea`
+as non-virtual readers and applies positivity clipping in each. Calls through
+the installed `shared_ptr<PDF>` consumer boundary therefore cannot preserve
+the accepted signed APFEL values bit-for-bit. D1C-B stops fail closed without
+constructing a facade or initializing PYTHIA. See
+`AMORTIZED_INFERENCE_PHASE1BD_D1C_PYTHIA_FACADE.md`. A new reviewed
+architecture decision is required before consumer instrumentation can
+continue. D2 remains unauthorized.
