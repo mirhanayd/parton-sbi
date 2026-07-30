@@ -1,5 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
+use std::sync::Mutex;
 
 use parton_sbi::physics::{
     build_or_load_artifact, build_or_load_artifact_v2, evaluate_artifact, evaluate_artifact_v2,
@@ -15,9 +16,11 @@ fn test_cache() -> PathBuf {
 
 const UNIT_TRACE_HASH: &str =
     "sha256:0000000000000000000000000000000000000000000000000000000000000000";
+static LHAPDF_CONTEXT_LOAD_LOCK: Mutex<()> = Mutex::new(());
 
 #[test]
 fn d1_rejects_every_historical_v1_boundary() {
+    let _guard = LHAPDF_CONTEXT_LOAD_LOCK.lock().unwrap();
     let context = ContinuousPdfContext::load_ct18nlo_v1();
     if let Ok(context) = context {
         let error = D1EvolutionConfig::from_context(&context).unwrap_err();
@@ -134,6 +137,7 @@ fn revised_evolution_is_explicitly_versioned_and_keeps_v1_distinct() {
         PDF_ARTIFACT_SCHEMA_VERSION_V2,
         "partonsbi.lhapdf_artifact.v2"
     );
+    let _guard = LHAPDF_CONTEXT_LOAD_LOCK.lock().unwrap();
     let context = ContinuousPdfContext::load_ct18nlo_v1();
     if let Ok(context) = context {
         assert!(D1EvolutionConfigV2::from_context(&context).is_err());
