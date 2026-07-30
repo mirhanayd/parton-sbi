@@ -116,7 +116,7 @@ pub struct TransportValue {
 pub struct DirectApfelEvaluator {
     context: Mutex<ContinuousPdfContext>,
     config: D1EvolutionConfigV2,
-    identity: String,
+    evaluator_policy_identity: String,
 }
 
 impl DirectApfelEvaluator {
@@ -129,7 +129,7 @@ impl DirectApfelEvaluator {
     pub fn from_context(context: ContinuousPdfContext) -> Result<Self, TransportPrototypeError> {
         let config = D1EvolutionConfigV2::from_context(&context)
             .map_err(|error| TransportPrototypeError::Initialization(error.to_string()))?;
-        let identity = hash_words(&[
+        let evaluator_policy_identity = hash_words(&[
             DIRECT_APFEL_PROTOTYPE_VERSION.as_bytes(),
             config.policy_version.as_bytes(),
             &config.q0_gev.to_bits().to_be_bytes(),
@@ -139,16 +139,34 @@ impl DirectApfelEvaluator {
         Ok(Self {
             context: Mutex::new(context),
             config,
-            identity,
+            evaluator_policy_identity,
         })
     }
 
-    pub fn identity(&self) -> &str {
-        &self.identity
+    pub fn evaluator_policy_identity(&self) -> &str {
+        &self.evaluator_policy_identity
     }
 
     pub fn config(&self) -> &D1EvolutionConfigV2 {
         &self.config
+    }
+
+    pub fn anchor_transport_identity(
+        &self,
+        theta: PdfTheta,
+    ) -> Result<String, TransportPrototypeError> {
+        let context = self.context.lock().map_err(|_| {
+            TransportPrototypeError::Lifetime("direct APFEL context lock was poisoned".into())
+        })?;
+        let parameter_identity = context
+            .construct(theta)
+            .and_then(|point| point.canonical_identity())
+            .map_err(|error| TransportPrototypeError::Initialization(error.to_string()))?;
+        Ok(hash_words(&[
+            b"direct_apfel_anchor_transport_identity_v1",
+            self.evaluator_policy_identity.as_bytes(),
+            parameter_identity.sha256.as_bytes(),
+        ]))
     }
 
     pub fn evaluate_batch(
@@ -323,6 +341,16 @@ impl DeterministicTransportGrid {
         )
     }
 
+    pub fn recompute_identity(&self) -> String {
+        custom_grid_identity(
+            &self.x_knots,
+            &self.q_knots_gev,
+            &self.thresholds_gev,
+            &self.flavors,
+            &self.xf_values,
+        )
+    }
+
     pub fn evaluate(
         &self,
         query: TransportQuery,
@@ -368,6 +396,134 @@ impl DeterministicTransportGrid {
             xf,
             threshold_side: threshold_side(query.q_gev, charm, bottom),
         })
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum MeasurementStatus {
+    Passed,
+    Failed,
+    NotMeasured,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ReloadAudit {
+    pub stored_identity_status: MeasurementStatus,
+    pub binary64_identity_status: MeasurementStatus,
+    pub canonical_bytes_status: MeasurementStatus,
+    pub recomputed_identity: String,
+    pub first_mismatch: Option<String>,
+}
+
+pub fn audit_transport_reload(
+    original: &DeterministicTransportGrid,
+    reloaded: &DeterministicTransportGrid,
+    stored_canonical_bytes: &[u8],
+) -> Result<ReloadAudit, TransportPrototypeError> {
+    let recomputed_identity = reloaded.recompute_identity();
+    let stored_identity_status = status(reloaded.identity == recomputed_identity);
+    let first_mismatch = first_grid_mismatch(original, reloaded);
+    let binary64_identity_status = status(
+        first_mismatch.is_none()
+            && original.identity == reloaded.identity
+            && stored_identity_status == MeasurementStatus::Passed,
+    );
+    let reserialized = serde_json::to_vec_pretty(reloaded)
+        .map_err(|error| TransportPrototypeError::InvalidGrid(error.to_string()))?;
+    Ok(ReloadAudit {
+        stored_identity_status,
+        binary64_identity_status,
+        canonical_bytes_status: status(stored_canonical_bytes == reserialized),
+        recomputed_identity,
+        first_mismatch,
+    })
+}
+
+fn first_grid_mismatch(
+    original: &DeterministicTransportGrid,
+    reloaded: &DeterministicTransportGrid,
+) -> Option<String> {
+    if original.version != reloaded.version {
+        return Some("policy_version".into());
+    }
+    if original.flavors != reloaded.flavors {
+        return Some("flavor_order".into());
+    }
+    for (name, left, right) in [
+        ("x_knots", &original.x_knots, &reloaded.x_knots),
+        ("q_knots_gev", &original.q_knots_gev, &reloaded.q_knots_gev),
+        (
+            "thresholds_gev",
+            &original.thresholds_gev,
+            &reloaded.thresholds_gev,
+        ),
+        ("xf_values", &original.xf_values, &reloaded.xf_values),
+    ] {
+        if left.len() != right.len() {
+            return Some(format!("{name}.length"));
+        }
+        if let Some(index) = left
+            .iter()
+            .zip(right)
+            .position(|(a, b)| a.to_bits() != b.to_bits())
+        {
+            return Some(format!("{name}[{index}]"));
+        }
+    }
+    if original.identity != reloaded.identity {
+        return Some("stored_identity".into());
+    }
+    None
+}
+
+fn status(condition: bool) -> MeasurementStatus {
+    if condition {
+        MeasurementStatus::Passed
+    } else {
+        MeasurementStatus::Failed
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ComparisonEvidence {
+    pub comparison_count: usize,
+    pub outside_tolerance_count: usize,
+    pub maximum_absolute_error: f64,
+    pub maximum_relative_error: f64,
+}
+
+impl ComparisonEvidence {
+    pub fn from_pairs(expected_actual: impl IntoIterator<Item = (f64, f64)>) -> Self {
+        let mut evidence = Self {
+            comparison_count: 0,
+            outside_tolerance_count: 0,
+            maximum_absolute_error: 0.0,
+            maximum_relative_error: 0.0,
+        };
+        for (expected, actual) in expected_actual {
+            let absolute = (actual - expected).abs();
+            let relative = if expected == 0.0 {
+                if absolute == 0.0 {
+                    0.0
+                } else {
+                    f64::MAX
+                }
+            } else {
+                absolute / expected.abs()
+            };
+            evidence.comparison_count += 1;
+            evidence.maximum_absolute_error = evidence.maximum_absolute_error.max(absolute);
+            evidence.maximum_relative_error = evidence.maximum_relative_error.max(relative);
+            if absolute > PROTOTYPE_ABSOLUTE_TOLERANCE && relative > PROTOTYPE_RELATIVE_TOLERANCE {
+                evidence.outside_tolerance_count += 1;
+            }
+        }
+        evidence
+    }
+
+    pub fn status(&self) -> MeasurementStatus {
+        status(self.comparison_count > 0 && self.outside_tolerance_count == 0)
     }
 }
 
@@ -626,45 +782,67 @@ pub enum PrototypeDecision {
     Rejected,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct PrototypeSelectionEvidence {
-    pub direct_accuracy_pass: bool,
-    pub custom_accuracy_pass: bool,
-    pub deterministic_identity_pass: bool,
-    pub strict_support_pass: bool,
-    pub threshold_behavior_pass: bool,
-    pub thread_safety_pass: bool,
-    pub process_isolation_pass: bool,
-    pub cache_reload_pass: bool,
-    pub all_consumer_envelope_complete: bool,
-    pub direct_calls_per_second: f64,
-    pub custom_calls_per_second: f64,
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum CandidateStatus {
+    Pass,
+    Fail,
+    Inconclusive,
 }
 
-impl PrototypeSelectionEvidence {
-    pub fn decision(&self) -> PrototypeDecision {
-        let common = self.deterministic_identity_pass
-            && self.strict_support_pass
-            && self.threshold_behavior_pass
-            && self.thread_safety_pass
-            && self.process_isolation_pass
-            && self.cache_reload_pass;
-        if !common {
-            return PrototypeDecision::Rejected;
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CandidateEvidence {
+    pub accuracy: MeasurementStatus,
+    pub identity: MeasurementStatus,
+    pub reload: MeasurementStatus,
+    pub threshold: MeasurementStatus,
+    pub support: MeasurementStatus,
+    pub deterministic_repeat: MeasurementStatus,
+    pub scalar_throughput: MeasurementStatus,
+    pub thread_safety: MeasurementStatus,
+    pub process_isolation: MeasurementStatus,
+}
+
+impl CandidateEvidence {
+    pub fn status(&self) -> CandidateStatus {
+        let gates = [
+            self.accuracy,
+            self.identity,
+            self.reload,
+            self.threshold,
+            self.support,
+            self.deterministic_repeat,
+            self.scalar_throughput,
+            self.thread_safety,
+            self.process_isolation,
+        ];
+        if gates.contains(&MeasurementStatus::Failed) {
+            CandidateStatus::Fail
+        } else if gates.contains(&MeasurementStatus::NotMeasured) {
+            CandidateStatus::Inconclusive
+        } else {
+            CandidateStatus::Pass
         }
-        if !self.all_consumer_envelope_complete {
-            return PrototypeDecision::Inconclusive;
+    }
+}
+
+pub fn derive_prototype_decision(
+    direct: CandidateStatus,
+    custom: CandidateStatus,
+    all_consumer_envelope_complete: bool,
+) -> PrototypeDecision {
+    if direct == CandidateStatus::Fail && custom == CandidateStatus::Fail {
+        return PrototypeDecision::Rejected;
+    }
+    if !all_consumer_envelope_complete {
+        return PrototypeDecision::Inconclusive;
+    }
+    match (direct, custom) {
+        (CandidateStatus::Pass, CandidateStatus::Fail) => PrototypeDecision::DirectApfelSelected,
+        (CandidateStatus::Fail, CandidateStatus::Pass) => {
+            PrototypeDecision::CustomInterpolatorSelected
         }
-        let direct = self.direct_accuracy_pass
-            && self.direct_calls_per_second >= MINIMUM_PROTOTYPE_CALLS_PER_SECOND;
-        let custom = self.custom_accuracy_pass
-            && self.custom_calls_per_second >= MINIMUM_PROTOTYPE_CALLS_PER_SECOND;
-        match (direct, custom) {
-            (true, false) => PrototypeDecision::DirectApfelSelected,
-            (false, true) => PrototypeDecision::CustomInterpolatorSelected,
-            (true, true) => PrototypeDecision::Inconclusive,
-            (false, false) => PrototypeDecision::Rejected,
-        }
+        _ => PrototypeDecision::Inconclusive,
     }
 }
 
@@ -693,7 +871,9 @@ impl PrototypeStudyContract {
                 "strict_support",
                 "deterministic_repetition",
                 "initialization_time",
-                "calls_per_second",
+                "direct_batch_rebuild_effective_calls_per_second",
+                "direct_scalar_adapter_benchmark_status",
+                "custom_scalar_calls_per_second",
                 "peak_memory_when_measurable",
                 "thread_safety",
                 "process_isolation",
@@ -881,21 +1061,82 @@ mod tests {
     #[test]
     fn disk_cap_and_selection_gates_are_enforced() {
         assert!(StudyBudget::enforce_observed(Duration::ZERO, MAX_STUDY_BYTES + 1).is_err());
-        let evidence = PrototypeSelectionEvidence {
-            direct_accuracy_pass: true,
-            custom_accuracy_pass: true,
-            deterministic_identity_pass: true,
-            strict_support_pass: true,
-            threshold_behavior_pass: true,
-            thread_safety_pass: true,
-            process_isolation_pass: true,
-            cache_reload_pass: true,
-            all_consumer_envelope_complete: false,
-            direct_calls_per_second: 10_000.0,
-            custom_calls_per_second: 10_000.0,
+        let evidence = CandidateEvidence {
+            accuracy: MeasurementStatus::Passed,
+            identity: MeasurementStatus::Passed,
+            reload: MeasurementStatus::Passed,
+            threshold: MeasurementStatus::Passed,
+            support: MeasurementStatus::Passed,
+            deterministic_repeat: MeasurementStatus::Passed,
+            scalar_throughput: MeasurementStatus::NotMeasured,
+            thread_safety: MeasurementStatus::NotMeasured,
+            process_isolation: MeasurementStatus::NotMeasured,
         };
-        assert_eq!(evidence.decision(), PrototypeDecision::Inconclusive);
+        assert_eq!(evidence.status(), CandidateStatus::Inconclusive);
+        assert_eq!(
+            derive_prototype_decision(evidence.status(), CandidateStatus::Fail, false),
+            PrototypeDecision::Inconclusive
+        );
         assert!(!D2_AUTHORIZED);
+    }
+
+    #[test]
+    fn reload_audit_uses_binary64_identity_and_canonical_bytes() {
+        let mut original = synthetic_grid();
+        original.xf_values[0] = -0.0;
+        original.xf_values[1] = 1.0e-300;
+        original.identity = original.recompute_identity();
+        let bytes = serde_json::to_vec_pretty(&original).unwrap();
+        let reloaded: DeterministicTransportGrid = serde_json::from_slice(&bytes).unwrap();
+        let audit = audit_transport_reload(&original, &reloaded, &bytes).unwrap();
+        assert_eq!(audit.stored_identity_status, MeasurementStatus::Passed);
+        assert_eq!(audit.binary64_identity_status, MeasurementStatus::Passed);
+        assert_eq!(audit.canonical_bytes_status, MeasurementStatus::Passed);
+        assert!(audit.first_mismatch.is_none());
+        assert_eq!(reloaded.xf_values[0].to_bits(), (-0.0_f64).to_bits());
+        assert_eq!(reloaded.xf_values[1].to_bits(), 1.0e-300_f64.to_bits());
+    }
+
+    #[test]
+    fn tolerance_and_candidate_decisions_preserve_known_failures() {
+        let comparison =
+            ComparisonEvidence::from_pairs([(1.0, 1.0 + 5.0e-6), (0.0, 5.0e-10), (1.0, 1.1)]);
+        assert_eq!(comparison.comparison_count, 3);
+        assert_eq!(comparison.outside_tolerance_count, 1);
+        assert_eq!(comparison.status(), MeasurementStatus::Failed);
+
+        let custom = CandidateEvidence {
+            accuracy: MeasurementStatus::Failed,
+            identity: MeasurementStatus::Passed,
+            reload: MeasurementStatus::Passed,
+            threshold: MeasurementStatus::Passed,
+            support: MeasurementStatus::Passed,
+            deterministic_repeat: MeasurementStatus::Passed,
+            scalar_throughput: MeasurementStatus::Passed,
+            thread_safety: MeasurementStatus::NotMeasured,
+            process_isolation: MeasurementStatus::NotMeasured,
+        };
+        let direct = CandidateEvidence {
+            accuracy: MeasurementStatus::NotMeasured,
+            identity: MeasurementStatus::Passed,
+            reload: MeasurementStatus::NotMeasured,
+            threshold: MeasurementStatus::Passed,
+            support: MeasurementStatus::Passed,
+            deterministic_repeat: MeasurementStatus::Passed,
+            scalar_throughput: MeasurementStatus::NotMeasured,
+            thread_safety: MeasurementStatus::NotMeasured,
+            process_isolation: MeasurementStatus::NotMeasured,
+        };
+        assert_eq!(custom.status(), CandidateStatus::Fail);
+        assert_eq!(direct.status(), CandidateStatus::Inconclusive);
+        assert_eq!(
+            derive_prototype_decision(direct.status(), custom.status(), false),
+            PrototypeDecision::Inconclusive
+        );
+        assert_eq!(
+            derive_prototype_decision(CandidateStatus::Fail, CandidateStatus::Fail, false),
+            PrototypeDecision::Rejected
+        );
     }
 
     #[test]
@@ -935,6 +1176,12 @@ mod tests {
     fn direct_batch_padding_preserves_results_order_and_is_deterministic() {
         let evaluator = DirectApfelEvaluator::initialize().unwrap();
         let theta = PdfTheta::new(0.0, 0.0).unwrap();
+        let center_identity = evaluator.anchor_transport_identity(theta).unwrap();
+        let delta_identity = evaluator
+            .anchor_transport_identity(PdfTheta::new(-0.2, 0.0).unwrap())
+            .unwrap();
+        assert_ne!(center_identity, delta_identity);
+        assert_ne!(center_identity, evaluator.evaluator_policy_identity());
         let queries = vec![
             TransportQuery {
                 flavor: 2,

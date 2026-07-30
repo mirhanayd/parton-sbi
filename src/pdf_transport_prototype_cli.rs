@@ -3,8 +3,10 @@ use std::path::PathBuf;
 use std::time::Instant;
 
 use parton_sbi::physics::{
-    prototype_anchors, DeterministicTransportGrid, DirectApfelEvaluator, HardProcessQueryEnvelope,
-    PrototypeDecision, PrototypeStudyContract, StudyBudget, TransportQuery, D1_FLAVORS,
+    audit_transport_reload, derive_prototype_decision, prototype_anchors, CandidateEvidence,
+    CandidateStatus, ComparisonEvidence, DeterministicTransportGrid, DirectApfelEvaluator,
+    HardProcessQueryEnvelope, MeasurementStatus, PrototypeDecision, PrototypeStudyContract,
+    ReloadAudit, StudyBudget, TransportQuery, D1_FLAVORS, MINIMUM_PROTOTYPE_CALLS_PER_SECOND,
 };
 use serde::{Deserialize, Serialize};
 
@@ -86,29 +88,36 @@ struct PreparationManifest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct AnchorStudySummary {
     anchor: String,
-    direct_identity: String,
+    evaluator_policy_identity: String,
+    anchor_transport_identity: String,
     custom_identity: String,
-    maximum_absolute_knot_difference: f64,
-    maximum_absolute_off_knot_difference: f64,
-    maximum_relative_off_knot_difference: f64,
-    deterministic_reload: bool,
-    deterministic_repeat: bool,
-    threshold_probe_count: usize,
-    direct_calls_per_second: f64,
-    custom_calls_per_second: f64,
+    knot_comparison: ComparisonEvidence,
+    off_knot_comparison: ComparisonEvidence,
+    one_sided_threshold_comparison: ComparisonEvidence,
+    direct_deterministic_repeat: MeasurementStatus,
+    custom_deterministic_repeat: MeasurementStatus,
+    reload_audit: ReloadAudit,
+    strict_support: MeasurementStatus,
+    direct_batch_rebuild_effective_calls_per_second: f64,
+    direct_scalar_adapter_benchmark_status: MeasurementStatus,
+    custom_scalar_calls_per_second: f64,
 }
 
 #[derive(Debug, Serialize)]
 struct PrototypeStudySummary {
     schema_version: &'static str,
     decision: PrototypeDecision,
+    direct_candidate_status: CandidateStatus,
+    custom_candidate_status: CandidateStatus,
+    all_consumer_envelope_complete: bool,
     anchors: Vec<AnchorStudySummary>,
     initialization_seconds: f64,
     query_envelope: HardProcessQueryEnvelope,
     unresolved_consumers: Vec<String>,
-    serialized_direct_access: bool,
-    custom_thread_safe_immutable_data: bool,
-    process_isolation_probe: &'static str,
+    direct_thread_safety: MeasurementStatus,
+    custom_thread_safety: MeasurementStatus,
+    direct_process_isolation: MeasurementStatus,
+    custom_process_isolation: MeasurementStatus,
     peak_memory_kib: Option<u64>,
     no_events: bool,
     d2_authorized: bool,
@@ -171,7 +180,7 @@ fn run_bounded_study(
     qs.sort_by(f64::total_cmp);
     qs.dedup_by(|a, b| a.to_bits() == b.to_bits());
     let thresholds = vec![config.charm_threshold_gev, config.bottom_threshold_gev];
-    let direct_identity = direct.identity().to_owned();
+    let evaluator_policy_identity = direct.evaluator_policy_identity().to_owned();
     let mut anchor_summaries = Vec::new();
     for anchor in prototype_anchors().map_err(|error| error.to_string())? {
         budget.enforce().map_err(|error| error.to_string())?;
@@ -201,17 +210,19 @@ fn run_bounded_study(
         .map_err(|error| error.to_string())?;
         let cache_path = output.join(format!("{}_custom_grid.json", anchor.name));
         write_json(&cache_path, &custom)?;
+        let stored_bytes = fs::read(&cache_path).map_err(|error| error.to_string())?;
         let reloaded: DeterministicTransportGrid =
-            serde_json::from_slice(&fs::read(&cache_path).map_err(|error| error.to_string())?)
-                .map_err(|error| error.to_string())?;
-        let mut maximum_absolute_knot_difference = 0.0_f64;
+            serde_json::from_slice(&stored_bytes).map_err(|error| error.to_string())?;
+        let reload_audit = audit_transport_reload(&custom, &reloaded, &stored_bytes)
+            .map_err(|error| error.to_string())?;
+        let mut knot_pairs = Vec::with_capacity(queries.len());
         for (query, expected) in queries.iter().zip(values.iter()) {
             let actual = reloaded
                 .evaluate(*query)
                 .map_err(|error| error.to_string())?;
-            maximum_absolute_knot_difference =
-                maximum_absolute_knot_difference.max((actual.xf - expected.xf).abs());
+            knot_pairs.push((expected.xf, actual.xf));
         }
+        let knot_comparison = ComparisonEvidence::from_pairs(knot_pairs);
         let probe_queries = qs
             .windows(2)
             .flat_map(|q_pair| {
@@ -230,73 +241,215 @@ fn run_bounded_study(
         let direct_probes = direct
             .evaluate_batch(anchor.theta, &probe_queries)
             .map_err(|error| error.to_string())?;
-        let direct_calls_per_second =
+        let direct_batch_rebuild_effective_calls_per_second =
             probe_queries.len() as f64 / direct_started.elapsed().as_secs_f64();
         let repeated = direct
             .evaluate_batch(anchor.theta, &probe_queries)
             .map_err(|error| error.to_string())?;
-        let deterministic_repeat = direct_probes == repeated;
-        let mut maximum_absolute_off_knot_difference = 0.0_f64;
-        let mut maximum_relative_off_knot_difference = 0.0_f64;
+        let direct_deterministic_repeat = measurement(direct_probes == repeated);
+        let mut off_knot_pairs = Vec::with_capacity(probe_queries.len());
         for (query, expected) in probe_queries.iter().zip(direct_probes.iter()) {
             let actual = reloaded
                 .evaluate(*query)
                 .map_err(|error| error.to_string())?;
-            let absolute = (actual.xf - expected.xf).abs();
-            let relative = if expected.xf == 0.0 {
-                0.0
-            } else {
-                absolute / expected.xf.abs()
-            };
-            maximum_absolute_off_knot_difference =
-                maximum_absolute_off_knot_difference.max(absolute);
-            maximum_relative_off_knot_difference =
-                maximum_relative_off_knot_difference.max(relative);
+            off_knot_pairs.push((expected.xf, actual.xf));
         }
+        let off_knot_comparison = ComparisonEvidence::from_pairs(off_knot_pairs);
+
+        let threshold_queries = one_sided_threshold_queries(&xs, &thresholds);
+        let direct_thresholds = direct
+            .evaluate_batch(anchor.theta, &threshold_queries)
+            .map_err(|error| error.to_string())?;
+        let mut threshold_pairs = Vec::with_capacity(threshold_queries.len());
+        for (query, expected) in threshold_queries.iter().zip(direct_thresholds.iter()) {
+            let actual = reloaded
+                .evaluate(*query)
+                .map_err(|error| error.to_string())?;
+            threshold_pairs.push((expected.xf, actual.xf));
+        }
+        let one_sided_threshold_comparison = ComparisonEvidence::from_pairs(threshold_pairs);
+
         let benchmark_started = Instant::now();
         let benchmark_query = queries[queries.len() / 2];
         let repetitions = 10_000usize;
+        let first_custom = reloaded
+            .evaluate(benchmark_query)
+            .map_err(|error| error.to_string())?;
         for _ in 0..repetitions {
             let _ = reloaded
                 .evaluate(benchmark_query)
                 .map_err(|error| error.to_string())?;
         }
-        let custom_calls_per_second =
+        let custom_scalar_calls_per_second =
             repetitions as f64 / benchmark_started.elapsed().as_secs_f64();
+        let repeated_custom = reloaded
+            .evaluate(benchmark_query)
+            .map_err(|error| error.to_string())?;
+        let custom_deterministic_repeat =
+            measurement(first_custom.xf.to_bits() == repeated_custom.xf.to_bits());
+        let outside = TransportQuery {
+            flavor: 21,
+            x: config.exported_x_minimum / 2.0,
+            q_gev: config.q_minimum_gev,
+        };
+        let strict_support = measurement(
+            direct.evaluate_batch(anchor.theta, &[outside]).is_err()
+                && reloaded.evaluate(outside).is_err(),
+        );
         anchor_summaries.push(AnchorStudySummary {
             anchor: anchor.name,
-            direct_identity: direct_identity.clone(),
+            evaluator_policy_identity: evaluator_policy_identity.clone(),
+            anchor_transport_identity: direct
+                .anchor_transport_identity(anchor.theta)
+                .map_err(|error| error.to_string())?,
             custom_identity: custom.identity.clone(),
-            maximum_absolute_knot_difference,
-            maximum_absolute_off_knot_difference,
-            maximum_relative_off_knot_difference,
-            deterministic_reload: custom == reloaded,
-            deterministic_repeat,
-            threshold_probe_count: probe_queries.len(),
-            direct_calls_per_second,
-            custom_calls_per_second,
+            knot_comparison,
+            off_knot_comparison,
+            one_sided_threshold_comparison,
+            direct_deterministic_repeat,
+            custom_deterministic_repeat,
+            reload_audit,
+            strict_support,
+            direct_batch_rebuild_effective_calls_per_second,
+            direct_scalar_adapter_benchmark_status: MeasurementStatus::NotMeasured,
+            custom_scalar_calls_per_second,
         });
         budget.enforce().map_err(|error| error.to_string())?;
     }
 
     let unresolved_consumers = envelope.unresolved_consumers();
+    let all_consumer_envelope_complete = unresolved_consumers.is_empty();
+    let anchor_identities_unique = anchor_summaries
+        .iter()
+        .map(|summary| &summary.anchor_transport_identity)
+        .collect::<std::collections::BTreeSet<_>>()
+        .len()
+        == anchor_summaries.len();
+    let direct_evidence = CandidateEvidence {
+        accuracy: MeasurementStatus::NotMeasured,
+        identity: measurement(anchor_identities_unique),
+        reload: MeasurementStatus::NotMeasured,
+        threshold: MeasurementStatus::Passed,
+        support: aggregate(
+            anchor_summaries
+                .iter()
+                .map(|summary| summary.strict_support),
+        ),
+        deterministic_repeat: aggregate(
+            anchor_summaries
+                .iter()
+                .map(|summary| summary.direct_deterministic_repeat),
+        ),
+        scalar_throughput: MeasurementStatus::NotMeasured,
+        thread_safety: MeasurementStatus::NotMeasured,
+        process_isolation: MeasurementStatus::NotMeasured,
+    };
+    let custom_evidence = CandidateEvidence {
+        accuracy: aggregate(anchor_summaries.iter().map(|summary| {
+            measurement(
+                summary.knot_comparison.outside_tolerance_count == 0
+                    && summary.off_knot_comparison.outside_tolerance_count == 0,
+            )
+        })),
+        identity: aggregate(
+            anchor_summaries
+                .iter()
+                .map(|summary| summary.reload_audit.stored_identity_status),
+        ),
+        reload: aggregate(anchor_summaries.iter().map(|summary| {
+            aggregate([
+                summary.reload_audit.binary64_identity_status,
+                summary.reload_audit.canonical_bytes_status,
+            ])
+        })),
+        threshold: aggregate(
+            anchor_summaries
+                .iter()
+                .map(|summary| summary.one_sided_threshold_comparison.status()),
+        ),
+        support: aggregate(
+            anchor_summaries
+                .iter()
+                .map(|summary| summary.strict_support),
+        ),
+        deterministic_repeat: aggregate(
+            anchor_summaries
+                .iter()
+                .map(|summary| summary.custom_deterministic_repeat),
+        ),
+        scalar_throughput: aggregate(anchor_summaries.iter().map(|summary| {
+            measurement(
+                summary.custom_scalar_calls_per_second >= MINIMUM_PROTOTYPE_CALLS_PER_SECOND,
+            )
+        })),
+        thread_safety: MeasurementStatus::NotMeasured,
+        process_isolation: MeasurementStatus::NotMeasured,
+    };
+    let direct_candidate_status = direct_evidence.status();
+    let custom_candidate_status = custom_evidence.status();
+    let decision = derive_prototype_decision(
+        direct_candidate_status,
+        custom_candidate_status,
+        all_consumer_envelope_complete,
+    );
     let summary = PrototypeStudySummary {
-        schema_version: "partonsbi.d1a.transport-prototype.study.v1",
-        decision: PrototypeDecision::Inconclusive,
+        schema_version: "partonsbi.d1a.transport-prototype.study.v2",
+        decision,
+        direct_candidate_status,
+        custom_candidate_status,
+        all_consumer_envelope_complete,
         anchors: anchor_summaries,
         initialization_seconds,
         query_envelope: envelope,
         unresolved_consumers,
-        serialized_direct_access: true,
-        custom_thread_safe_immutable_data: true,
-        process_isolation_probe:
-            "cache reload is process-portable; independent invocation must compare identities",
+        direct_thread_safety: direct_evidence.thread_safety,
+        custom_thread_safety: custom_evidence.thread_safety,
+        direct_process_isolation: direct_evidence.process_isolation,
+        custom_process_isolation: custom_evidence.process_isolation,
         peak_memory_kib: linux_peak_memory_kib(),
         no_events: true,
         d2_authorized: false,
     };
     write_json(output.join("study_summary.json"), &summary)?;
     budget.enforce().map_err(|error| error.to_string())
+}
+
+fn one_sided_threshold_queries(xs: &[f64], thresholds: &[f64]) -> Vec<TransportQuery> {
+    thresholds
+        .iter()
+        .flat_map(|threshold| {
+            let below = f64::from_bits(threshold.to_bits() - 1);
+            let above = f64::from_bits(threshold.to_bits() + 1);
+            [below, above].into_iter().flat_map(|q_gev| {
+                xs.iter().flat_map(move |x| {
+                    D1_FLAVORS.iter().map(move |flavor| TransportQuery {
+                        flavor: *flavor,
+                        x: *x,
+                        q_gev,
+                    })
+                })
+            })
+        })
+        .collect()
+}
+
+fn measurement(passed: bool) -> MeasurementStatus {
+    if passed {
+        MeasurementStatus::Passed
+    } else {
+        MeasurementStatus::Failed
+    }
+}
+
+fn aggregate(statuses: impl IntoIterator<Item = MeasurementStatus>) -> MeasurementStatus {
+    let statuses = statuses.into_iter().collect::<Vec<_>>();
+    if statuses.contains(&MeasurementStatus::Failed) {
+        MeasurementStatus::Failed
+    } else if statuses.is_empty() || statuses.contains(&MeasurementStatus::NotMeasured) {
+        MeasurementStatus::NotMeasured
+    } else {
+        MeasurementStatus::Passed
+    }
 }
 
 fn linux_peak_memory_kib() -> Option<u64> {

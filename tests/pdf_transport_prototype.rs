@@ -1,10 +1,11 @@
 use std::time::Duration;
 
 use parton_sbi::physics::{
-    prototype_anchors, DeterministicTransportGrid, DirectApfelEvaluator, HardProcessQueryEnvelope,
-    PrototypeDecision, PrototypeSelectionEvidence, PrototypeStudyContract, StudyBudget,
-    ThresholdSide, TransportQuery, CUSTOM_INTERPOLATOR_PROTOTYPE_VERSION, D2_AUTHORIZED,
-    DIRECT_APFEL_PROTOTYPE_VERSION, MAX_STUDY_BYTES,
+    derive_prototype_decision, prototype_anchors, CandidateEvidence, CandidateStatus,
+    DeterministicTransportGrid, DirectApfelEvaluator, HardProcessQueryEnvelope, MeasurementStatus,
+    PrototypeDecision, PrototypeStudyContract, StudyBudget, ThresholdSide, TransportQuery,
+    CUSTOM_INTERPOLATOR_PROTOTYPE_VERSION, D2_AUTHORIZED, DIRECT_APFEL_PROTOTYPE_VERSION,
+    MAX_STUDY_BYTES,
 };
 
 fn grid() -> DeterministicTransportGrid {
@@ -67,7 +68,7 @@ fn threshold_behavior_is_one_sided() {
 #[test]
 fn direct_context_initializes_without_evolution() {
     let evaluator = DirectApfelEvaluator::initialize().unwrap();
-    assert!(evaluator.identity().starts_with("sha256:"));
+    assert!(evaluator.evaluator_policy_identity().starts_with("sha256:"));
     assert_eq!(evaluator.config().apfelxx_version, "4.8.0");
 }
 
@@ -97,23 +98,24 @@ fn fixed_caps_anchors_and_d2_gate_are_immutable() {
 
 #[test]
 fn selection_requires_every_predeclared_gate() {
-    let evidence = PrototypeSelectionEvidence {
-        direct_accuracy_pass: true,
-        custom_accuracy_pass: false,
-        deterministic_identity_pass: true,
-        strict_support_pass: true,
-        threshold_behavior_pass: true,
-        thread_safety_pass: true,
-        process_isolation_pass: true,
-        cache_reload_pass: true,
-        all_consumer_envelope_complete: true,
-        direct_calls_per_second: 10_000.0,
-        custom_calls_per_second: 0.0,
+    let evidence = CandidateEvidence {
+        accuracy: MeasurementStatus::Passed,
+        identity: MeasurementStatus::Passed,
+        reload: MeasurementStatus::Passed,
+        threshold: MeasurementStatus::Passed,
+        support: MeasurementStatus::Passed,
+        deterministic_repeat: MeasurementStatus::Passed,
+        scalar_throughput: MeasurementStatus::Passed,
+        thread_safety: MeasurementStatus::Passed,
+        process_isolation: MeasurementStatus::Passed,
     };
-    assert_eq!(evidence.decision(), PrototypeDecision::DirectApfelSelected);
-    let unresolved = PrototypeSelectionEvidence {
-        all_consumer_envelope_complete: false,
-        ..evidence
-    };
-    assert_eq!(unresolved.decision(), PrototypeDecision::Inconclusive);
+    assert_eq!(evidence.status(), CandidateStatus::Pass);
+    assert_eq!(
+        derive_prototype_decision(CandidateStatus::Pass, CandidateStatus::Fail, true),
+        PrototypeDecision::DirectApfelSelected
+    );
+    assert_eq!(
+        derive_prototype_decision(CandidateStatus::Pass, CandidateStatus::Fail, false),
+        PrototypeDecision::Inconclusive
+    );
 }
