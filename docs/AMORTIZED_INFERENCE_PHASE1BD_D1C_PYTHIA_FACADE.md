@@ -4,6 +4,9 @@
 
 ```text
 D1C_STAGE = D1C_B_FACADE_ADMISSION_BLOCKED
+D1C_FINAL_DECISION = FAIL
+DECISION_PRECEDENCE = BINDING_FAIL_PRECEDENCE
+FAILED_GATE = generator_facing_signed_pdf_contract
 FACADE_COMPATIBILITY = INCOMPATIBLE_NONVIRTUAL_POSITIVITY_CLIPPING
 FACADE_PUBLISHED = false
 PYTHIA_INITIALIZED = false
@@ -22,7 +25,16 @@ publishing a persistent-APFEL facade. The public boundary cannot preserve the
 accepted signed binary64 contract. The implementation therefore stops fail
 closed before creating a facade, facade lease, Pythia object, output
 directory, or queryable transport identity. This is a negative compatibility
-result, not the final D1C scientific decision.
+result and the final scientific decision for issue #39. The issue contract
+gives a binding correctness or sign failure precedence over incomplete later
+gates; consequently `D1C_FINAL_DECISION = FAIL`.
+
+The failure is narrowly scoped to persistent in-process APFEL transport
+coupled through the installed stock PYTHIA 8.312 public `PDF` subclass
+interface. It does not reject the D1C-A persistent APFEL core as an isolated
+engineering component, every custom generator interface, every modified or
+forked PYTHIA interface, or every other transport architecture. None of those
+alternatives is selected or authorized here.
 
 ## Installed primary-source audit
 
@@ -127,16 +139,19 @@ claimed as executed facade behavior.
 
 ## Pointer classification and zero-event initialization
 
-The required pre-init policy remains: lepton A uses its pointlike lepton
-provider; proton B and hard-B must be the same instrumented facade;
+The source audit gives a prospective classification for all sixteen installed
+ordinary, hard, pomeron, photon, unresolved, and VMD pointer slots. The
+required pre-init policy would use the pointlike lepton provider on A, require
+the same instrumented facade for proton B and hard-B, and disable
 `PDF:useHard`, nuclear-hard PDFs, MPI, diffraction, resolved photons, photon
-flux, unresolved, pomeron, and VMD slots must be disabled. Any unknown or
-substituted proton provider fails closed.
+flux, unresolved, pomeron, and VMD slots. Any unknown or substituted proton
+provider would fail closed.
 
 Because the primary signed-value admission gate fails before pointer
-installation, no pointer classification is claimed as measured and
-`Pythia::init()` was not called. Post-init pointer substitution evidence is
-therefore unavailable, not assumed successful.
+installation, this is source-backed prospective classification, not runtime
+pointer verification. No pointer was installed, `Pythia::init()` was not
+called, and post-init substitution evidence is unavailable rather than
+assumed successful.
 
 ## Query provenance
 
@@ -152,7 +167,7 @@ closed. Records are provenance diagnostics and never ML features.
 No facade query records were produced because admission stopped before facade
 construction. Runtime consumer attribution therefore remains incomplete.
 
-## CLI and remaining work
+## Final decision and next scientific action
 
 `prototype-pythia-pdf-facade --prepare-only --output <DIRECTORY>` performs the
 signed-boundary admission check before creating its output directory. Under
@@ -161,8 +176,19 @@ the installed 8.312 contract it returns a typed incompatibility. `--study`,
 preparation manifest, Pythia initialization, event attempt, or event output is
 created.
 
-A reviewed architectural decision is required before further D1C work. It
-must decide whether modifying/forking the PYTHIA public PDF boundary is
-scientifically and operationally acceptable, or whether another transport
-interface can preserve the accepted signed contract. The process-isolated
-APFEL fallback does not solve this clipping boundary. D2 remains unauthorized.
+The binding signed-PDF failure terminates issue #39's acceptance hierarchy.
+The zero-event initialization, post-init pointer substitution, runtime
+ISR/remnant attribution, complete consumer envelope, full neutral-current
+gamma/Z closure, operational performance, and controlled-event gates remain
+unevaluated, but they are not required to decide `FAIL`. A full numerical study
+was neither needed nor permitted after the binding failure.
+
+A new reviewed architecture decision is required before any further
+generator-coupling implementation. Candidate questions include whether a
+versioned minimal PYTHIA fork that removes or bypasses positivity clipping is
+scientifically and operationally acceptable, whether another generator
+interface can consume signed PDF values without changing the accepted PDF
+family, and how reproducibility, upstream drift, CI, deployment, and
+validation would be controlled. This PR neither selects nor authorizes any of
+those paths. Process-isolated APFEL alone cannot solve clipping at the stock
+PYTHIA public reader boundary. D2 remains unauthorized.

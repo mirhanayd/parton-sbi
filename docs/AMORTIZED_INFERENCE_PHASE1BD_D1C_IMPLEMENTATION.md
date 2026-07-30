@@ -17,9 +17,11 @@ SCIENTIFIC_GATE_COMPLETE = false
 ```
 
 No PYTHIA PDF facade, consumer-envelope instrumentation, observable scan,
-event execution, event output, dataset, or final D1C scientific decision is
-present. The authorization to use bounded controlled `pythia.next()` later in
-issue #39 is recorded but was not exercised in D1C-A.
+event execution, event output, or dataset is present in D1C-A. The later D1C-B
+admission audit records the final issue #39 scientific decision as `FAIL`
+because the stock PYTHIA 8.312 public PDF reader boundary violates the binding
+signed-value gate. The authorization to use bounded controlled
+`pythia.next()` was never exercised.
 
 ## Native lifetime contract
 
@@ -200,11 +202,13 @@ are not persistent scalar latency, throughput, or steady-state-memory
 measurements. Every diagnostic counter was zero because preparation performed
 construction, metadata inspection, and destruction only.
 
-This evidence is an operational preparation `PASS`, not the final D1C
-scientific gate. It makes no throughput, PYTHIA-consumer, observable, event,
-consumer-envelope, or bounded-study claim. The compact reviewed evidence is
-recorded in `docs/phase1bd_d1c_a_preparation_evidence.json`; the raw manifest
-remains ignored and uncommitted.
+This evidence remains an operational D1C-A preparation `PASS`; it is not a
+generator-transport selection. It makes no throughput, PYTHIA-consumer,
+observable, event, consumer-envelope, or bounded-study claim. The later
+binding D1C-B sign-gate failure gives the overall issue #39 result `FAIL`
+without reinterpreting this engineering evidence. The compact D1C-A evidence
+is recorded in `docs/phase1bd_d1c_a_preparation_evidence.json`; the raw
+manifest remains ignored and uncommitted.
 
 ## Focused validation
 
@@ -258,12 +262,12 @@ changed.
 No APFEL scan, D1A/D1C scientific study, observable scan, or CI watch loop is
 part of this correction.
 
-## Limitations and next step
+## Final D1C decision and next step
 
 This core has no evidence about persistent scalar throughput under a PYTHIA
-consumer load, full consumer coverage, generator-facing sign behavior, or the
-full neutral-current gamma/Z observable contract. The next separately scoped
-step within issue #39 was the D1C-B facade admission audit.
+consumer load, full consumer coverage, or the full neutral-current gamma/Z
+observable contract. D1C-B did establish the generator-facing sign behavior
+needed for the binding admission gate.
 
 That audit found an installed-interface incompatibility before facade
 publication: PYTHIA 8.312 declares `PDF::xf`, `PDF::xfVal`, and `PDF::xfSea`
@@ -273,4 +277,15 @@ the accepted signed APFEL values bit-for-bit. D1C-B stops fail closed without
 constructing a facade or initializing PYTHIA. See
 `AMORTIZED_INFERENCE_PHASE1BD_D1C_PYTHIA_FACADE.md`. A new reviewed
 architecture decision is required before consumer instrumentation can
-continue. D2 remains unauthorized.
+continue. Because issue #39 assigns precedence to any binding correctness or
+sign failure, this evidence finalizes `D1C_FINAL_DECISION = FAIL`. No full
+numerical study was required or permitted after that failure.
+
+The failure applies only to persistent in-process APFEL coupled through the
+installed stock PYTHIA 8.312 public PDF subclass interface. The persistent
+APFEL core remains engineering evidence but is not selected for generator
+production. A new reviewed architecture decision must precede any minimal
+PYTHIA fork, alternative signed generator interface, or other coupling
+implementation and must address reproducibility, upstream drift, CI,
+deployment, and validation. No such path is selected or authorized here. D2
+remains unauthorized.
