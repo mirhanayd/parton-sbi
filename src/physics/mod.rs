@@ -12,6 +12,7 @@ pub mod pdf_artifact;
 pub mod pdf_artifact_v2;
 pub mod pdf_reweighting;
 pub mod pdf_transport_prototype;
+pub mod persistent_apfel;
 pub mod structure_function_provider;
 pub mod structure_function_validation;
 pub mod structure_functions;
@@ -55,6 +56,7 @@ pub use pdf_reweighting::{
     PDF_SUPPORT_POLICY_VERSION,
 };
 pub use pdf_transport_prototype::*;
+pub use persistent_apfel::*;
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,
     PerturbativeOrder, StructureFunctionBackend, StructureFunctionMetadata,

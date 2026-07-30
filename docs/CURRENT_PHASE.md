@@ -37,6 +37,9 @@
 - Phase 1B-D1B source-level persistent-transport and PYTHIA-consumer audit
   completed with a recommendation for a separately authorized bounded
   prototype; this planning result does not itself authorize that prototype.
+- Phase 1B-D1C-A persistent APFEL transport core implementation. This is an
+  engineering milestone inside the authorized bounded prototype, not a
+  completed scientific gate.
 
 # Current state
 
@@ -135,19 +138,35 @@
   separately authorized, controlled non-production `pythia.next()` execution
   with fail-closed PDF instrumentation; observed queries may validate but not
   define the envelope.
-- The D1B planning decision is
-  `AUTHORIZE_SEPARATE_BOUNDED_PROTOTYPE`, while
-  `PROTOTYPE_AUTHORIZED = false` and `D2_AUTHORIZED = false`. No prototype
-  issue or implementation exists.
+- The D1B planning decision `AUTHORIZE_SEPARATE_BOUNDED_PROTOTYPE` was reviewed,
+  and issue #39 separately authorizes the bounded D1C prototype.
+- D1C-A now provides a theta-specific persistent APFEL context with opaque
+  native lifetime, mutex-serialized evaluation, strict support, signed `x*f`,
+  separate evaluator/theta identities, an exact-Q cache, and a safe Rust RAII
+  owner. The fresh rebuild-per-batch APFEL path remains independent.
+- The D1C-A preparation CLI can initialize and destroy the three authorized
+  anchors and record a compact ignored manifest. It has no study, PYTHIA, or
+  event-execution mode.
+- D1C-A operational preparation completed successfully from clean commit
+  `4fd1b3c45d339a8663ecf750f02662f96383691b`. This establishes only
+  construction, metadata inspection, identity, and destruction evidence; the
+  ignored raw manifest is preserved by hash in a compact reviewed evidence
+  artifact.
+- D1C scientific validation is not complete. No `pythia.next()` call, event,
+  dataset, consumer-envelope result, full neutral-current observable result,
+  or final PASS/FAIL/INCONCLUSIVE decision exists.
+- Issue #39 therefore remains in progress: PYTHIA consumer coverage,
+  generator-facing sign behavior, full neutral-current observables, and the
+  bounded study are still outstanding.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review ADR-007. A separate authorization would be required
-before creating or running the bounded persistent-APFEL and fail-closed PYTHIA
-consumer prototype described there.
+Continue issue #39 with the separately scoped fail-closed PYTHIA consumer
+instrumentation stage, preserving the fixed resource caps and without
+authorizing D2.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -165,9 +184,9 @@ unimplemented hypotheses.
   authorize production PYTHIA coupling or D2.
 - The D1A `INCONCLUSIVE` decision does not select direct APFEL transport; the
   custom 6x6 representation is rejected and D2 remains unauthorized.
-- ADR-007 recommends a separate bounded prototype but does not authorize it.
-  Do not implement a persistent APFEL adapter, execute PYTHIA, or begin D2
-  without a subsequent explicit authorization.
+- Issue #39 authorizes only the bounded D1C prototype. D1C-A does not authorize
+  production coupling, retained events, datasets, or D2, and it does not
+  complete the D1C scientific gate.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

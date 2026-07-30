@@ -16,8 +16,8 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 
 use super::{
-    evolve_grid_values_v2, ComputationalGridKind, ContinuousPdfContext, D1EvolutionConfigV2,
-    EvolvedGridV2, PdfTheta, D1_FLAVORS,
+    evolve_grid_values_v2, lock_apfel_process, ComputationalGridKind, ContinuousPdfContext,
+    D1EvolutionConfigV2, EvolvedGridV2, PdfTheta, D1_FLAVORS,
 };
 
 pub const DIRECT_APFEL_PROTOTYPE_VERSION: &str = "direct_apfel_transport_prototype_v1";
@@ -115,19 +115,27 @@ pub struct TransportValue {
 /// while holding the lock. Poisoning is reported as a typed lifetime error.
 #[derive(Debug)]
 pub struct DirectApfelEvaluator {
-    context: Mutex<ContinuousPdfContext>,
+    context: Mutex<Option<ContinuousPdfContext>>,
     config: D1EvolutionConfigV2,
     evaluator_policy_identity: String,
 }
 
 impl DirectApfelEvaluator {
     pub fn initialize() -> Result<Self, TransportPrototypeError> {
+        let _process = lock_apfel_process()
+            .map_err(|error| TransportPrototypeError::Lifetime(error.to_string()))?;
         let context = ContinuousPdfContext::load_ct18nlo_v2()
             .map_err(|error| TransportPrototypeError::Initialization(error.to_string()))?;
-        Self::from_context(context)
+        Self::from_context_locked(context)
     }
 
     pub fn from_context(context: ContinuousPdfContext) -> Result<Self, TransportPrototypeError> {
+        let _process = lock_apfel_process()
+            .map_err(|error| TransportPrototypeError::Lifetime(error.to_string()))?;
+        Self::from_context_locked(context)
+    }
+
+    fn from_context_locked(context: ContinuousPdfContext) -> Result<Self, TransportPrototypeError> {
         let config = D1EvolutionConfigV2::from_context(&context)
             .map_err(|error| TransportPrototypeError::Initialization(error.to_string()))?;
         let evaluator_policy_identity = hash_words(&[
@@ -138,7 +146,7 @@ impl DirectApfelEvaluator {
             &config.q_maximum_gev.to_bits().to_be_bytes(),
         ]);
         Ok(Self {
-            context: Mutex::new(context),
+            context: Mutex::new(Some(context)),
             config,
             evaluator_policy_identity,
         })
@@ -156,8 +164,13 @@ impl DirectApfelEvaluator {
         &self,
         theta: PdfTheta,
     ) -> Result<String, TransportPrototypeError> {
+        let _process = lock_apfel_process()
+            .map_err(|error| TransportPrototypeError::Lifetime(error.to_string()))?;
         let context = self.context.lock().map_err(|_| {
             TransportPrototypeError::Lifetime("direct APFEL context lock was poisoned".into())
+        })?;
+        let context = context.as_ref().ok_or_else(|| {
+            TransportPrototypeError::Lifetime("direct APFEL context is destroyed".into())
         })?;
         let parameter_identity = context
             .construct(theta)
@@ -189,15 +202,36 @@ impl DirectApfelEvaluator {
             self.config.q_minimum_gev,
             self.config.q_maximum_gev,
         );
+        let _process = lock_apfel_process()
+            .map_err(|error| TransportPrototypeError::Lifetime(error.to_string()))?;
         let context = self.context.lock().map_err(|_| {
             TransportPrototypeError::Lifetime("direct APFEL context lock was poisoned".into())
         })?;
-        let grid = evolve_grid_values_v2(&context, theta, &xs, &qs, ComputationalGridKind::Base)
+        let context = context.as_ref().ok_or_else(|| {
+            TransportPrototypeError::Lifetime("direct APFEL context is destroyed".into())
+        })?;
+        let grid = evolve_grid_values_v2(context, theta, &xs, &qs, ComputationalGridKind::Base)
             .map_err(|error| TransportPrototypeError::Evolution(error.to_string()))?;
         queries
             .iter()
             .map(|query| value_from_grid(&grid, *query, &self.config))
             .collect()
+    }
+}
+
+impl Drop for DirectApfelEvaluator {
+    fn drop(&mut self) {
+        let Ok(_process) = lock_apfel_process() else {
+            std::process::abort();
+        };
+        let Ok(context) = self.context.get_mut() else {
+            // A poisoned instance lock cannot be ignored during provider
+            // destruction without violating the process-wide safety model.
+            std::process::abort();
+        };
+        // Drop the LHAPDF-backed context while the process guard is still held;
+        // the Mutex then contains None when its automatic field Drop runs.
+        let _ = context.take();
     }
 }
 
@@ -1078,7 +1112,7 @@ mod tests {
             derive_prototype_decision(evidence.status(), CandidateStatus::Fail, false),
             PrototypeDecision::Inconclusive
         );
-        assert!(!D2_AUTHORIZED);
+        const { assert!(!D2_AUTHORIZED) };
     }
 
     #[test]
@@ -1189,7 +1223,7 @@ mod tests {
 
     #[test]
     fn prototype_pdf_transport_filter_covers_authorization_gate() {
-        assert!(!D2_AUTHORIZED);
+        const { assert!(!D2_AUTHORIZED) };
     }
 
     #[test]

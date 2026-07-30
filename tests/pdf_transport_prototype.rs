@@ -92,7 +92,7 @@ fn fixed_caps_anchors_and_d2_gate_are_immutable() {
     assert_eq!(contract.maximum_generated_bytes, 2 * 1024 * 1024 * 1024);
     assert!(StudyBudget::enforce_observed(Duration::ZERO, MAX_STUDY_BYTES).is_ok());
     assert!(StudyBudget::enforce_observed(Duration::ZERO, MAX_STUDY_BYTES + 1).is_err());
-    assert!(!D2_AUTHORIZED);
+    const { assert!(!D2_AUTHORIZED) };
     assert!(!contract.d2_authorized);
 }
 
