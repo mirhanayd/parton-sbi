@@ -13,6 +13,7 @@ pub mod pdf_artifact_v2;
 pub mod pdf_reweighting;
 pub mod pdf_transport_prototype;
 pub mod persistent_apfel;
+pub mod pythia_pdf_facade;
 pub mod structure_function_provider;
 pub mod structure_function_validation;
 pub mod structure_functions;
@@ -57,6 +58,7 @@ pub use pdf_reweighting::{
 };
 pub use pdf_transport_prototype::*;
 pub use persistent_apfel::*;
+pub use pythia_pdf_facade::*;
 pub use structure_function_provider::{
     DisProjectile, DisTarget, LoPdfStructureFunctionProvider, ParsePerturbativeOrderError,
     PerturbativeOrder, StructureFunctionBackend, StructureFunctionMetadata,

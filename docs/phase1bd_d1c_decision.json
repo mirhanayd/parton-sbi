@@ -1,0 +1,145 @@
+{
+  "schema_version": "partonsbi.phase1bd.d1c.final-decision.v1",
+  "phase": "Phase 1B-D1C",
+  "issue": 39,
+  "decision": "FAIL",
+  "decision_precedence": "BINDING_FAIL_PRECEDENCE",
+  "failed_gate": "generator_facing_signed_pdf_contract",
+  "tested_architecture": "persistent_in_process_apfel_plus_stock_pythia_8312_pdf_subclass",
+  "installed_pythia_version": "8.312",
+  "source_evidence": {
+    "installed_paths": {
+      "installed_pdf_header": ".external/pythia-8.3.12/include/Pythia8/PartonDistributions.h",
+      "matching_source_header": ".external/src/releases-pythia8312/include/Pythia8/PartonDistributions.h",
+      "pdf_source": ".external/src/releases-pythia8312/src/PartonDistributions.cc",
+      "installed_shared_pointer_header": ".external/pythia-8.3.12/include/Pythia8/SharedPointers.h",
+      "matching_source_shared_pointer_header": ".external/src/releases-pythia8312/include/Pythia8/SharedPointers.h",
+      "installed_beam_consumer_header": ".external/pythia-8.3.12/include/Pythia8/BeamParticle.h",
+      "matching_source_beam_consumer_header": ".external/src/releases-pythia8312/include/Pythia8/BeamParticle.h",
+      "pointer_setup_source": ".external/src/releases-pythia8312/src/BeamSetup.cc"
+    },
+    "affected_methods": [
+      {
+        "method": "PDF::xf",
+        "declaration": "double xf(int id, double x, double Q2)",
+        "declaration_location": "PartonDistributions.h:83",
+        "virtual": false,
+        "positivity_transformation": "max(0., cached_value)"
+      },
+      {
+        "method": "PDF::xfVal",
+        "declaration": "double xfVal(int id, double x, double Q2)",
+        "declaration_location": "PartonDistributions.h:86",
+        "virtual": false,
+        "positivity_transformation": "max(0., derived_valence), with abs in selected beam cases"
+      },
+      {
+        "method": "PDF::xfSea",
+        "declaration": "double xfSea(int id, double x, double Q2)",
+        "declaration_location": "PartonDistributions.h:87",
+        "virtual": false,
+        "positivity_transformation": "max(0., derived_sea)"
+      }
+    ],
+    "only_overridable_cache_fill_hook": {
+      "method": "PDF::xfUpdate",
+      "declaration": "virtual void xfUpdate(int id, double x, double Q2) = 0",
+      "location": "PartonDistributions.h:195"
+    },
+    "dispatch": {
+      "pointer_type": "typedef shared_ptr<PDF> PDFPtr",
+      "pointer_type_location": "SharedPointers.h:65",
+      "result": "calls through PDFPtr execute the non-virtual PDF base readers"
+    },
+    "hard_and_beam_consumer_call_sites": [
+      {
+        "symbol": "BeamParticle::xfHard",
+        "location": "BeamParticle.h:219-220",
+        "call": "pdfHardBeamPtr->xf(idIn, x, Q2)"
+      },
+      {
+        "symbol": "BeamParticle::xf",
+        "location": "BeamParticle.h:239-240",
+        "call": "pdfBeamPtr->xf(idIn, x, Q2)"
+      },
+      {
+        "symbol": "BeamParticle::xfVal",
+        "location": "BeamParticle.h:243-244",
+        "call": "pdfBeamPtr->xfVal(idIn, x, Q2)"
+      },
+      {
+        "symbol": "BeamParticle::xfSea",
+        "location": "BeamParticle.h:245-246",
+        "call": "pdfBeamPtr->xfSea(idIn, x, Q2)"
+      },
+      {
+        "symbol": "BeamParticle::xfISR",
+        "location": "BeamParticle.h:252-257",
+        "call": "xfModified(indexMPI, idIn, x, Q2, xfData)"
+      }
+    ],
+    "pointer_setup": "BeamSetup.cc:21-92 installs ordinary, hard, pomeron, photon, unresolved, and VMD PDF slots; BeamSetup.cc:1021-1068 may construct separate hard PDFs"
+  },
+  "deterministic_synthetic_evidence": {
+    "native_probe": "src/pythia_pdf_contract_audit.cpp",
+    "dispatch_type": "PDFPtr/shared_ptr<PDF>",
+    "inclusive": {
+      "raw_value": -1.0,
+      "raw_binary64_bits": "0xbff0000000000000",
+      "public_value": 0.0,
+      "public_binary64_bits": "0x0000000000000000"
+    },
+    "valence": {
+      "raw_value": -1.5,
+      "raw_binary64_bits": "0xbff8000000000000",
+      "public_value": 0.0,
+      "public_binary64_bits": "0x0000000000000000"
+    },
+    "sea": {
+      "raw_value": -0.5,
+      "raw_binary64_bits": "0xbfe0000000000000",
+      "public_value": 0.0,
+      "public_binary64_bits": "0x0000000000000000"
+    }
+  },
+  "accepted_apfel_evidence": {
+    "source_test": "tests/pythia_pdf_facade.rs::accepted_negative_apfel_probe_blocks_pythia_facade_selection",
+    "anchor": "center",
+    "flavor": 21,
+    "x": 0.999,
+    "x_binary64_bits": "0x3feff7ced916872b",
+    "Q_gev": 1.295,
+    "Q_binary64_bits": "0x3ff4b851eb851eb8",
+    "raw_apfel_result": "NEGATIVE",
+    "adaptive_negative_point_search": false
+  },
+  "compatibility": "INCOMPATIBLE_NONVIRTUAL_POSITIVITY_CLIPPING",
+  "facade_published": false,
+  "facade_transport_identity_published": false,
+  "pythia_initialized": false,
+  "pythia_next_executed": false,
+  "attempted_events": 0,
+  "successful_events": 0,
+  "saved_events": 0,
+  "production_events_authorized": false,
+  "runtime_consumer_attribution_complete": false,
+  "consumer_envelope_result_available": false,
+  "full_neutral_current_observable_result_available": false,
+  "performance_result_available": false,
+  "scientific_study_executed": false,
+  "unevaluated_gates": [
+    "zero-event initialization",
+    "post-init pointer substitution",
+    "runtime ISR/remnant attribution",
+    "complete consumer envelope",
+    "full neutral-current gamma/Z closure",
+    "operational performance",
+    "controlled event execution"
+  ],
+  "unevaluated_gates_required_for_decision": false,
+  "reason": "binding sign failure terminates the acceptance hierarchy before those gates",
+  "persistent_apfel_core_status": "engineering evidence retained; not selected for generator production",
+  "process_isolated_apfel_solves_failure": false,
+  "future_architecture_requires_new_reviewed_decision": true,
+  "D2_AUTHORIZED": false
+}

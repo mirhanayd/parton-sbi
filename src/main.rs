@@ -14,6 +14,7 @@ mod pdf_artifact_cli;
 mod pdf_reweighting_cli;
 mod pdf_transport_prototype_cli;
 mod persistent_apfel_cli;
+mod pythia_pdf_facade_cli;
 use continuous_pdf_cli::{
     parse_validate_continuous_pdf, run_validate_continuous_pdf, ContinuousPdfCliArgs,
     VALIDATE_CONTINUOUS_PDF_HELP,
@@ -34,6 +35,10 @@ use pdf_transport_prototype_cli::{
 use persistent_apfel_cli::{
     parse_prototype_persistent_apfel, run_prototype_persistent_apfel, PersistentApfelCliArgs,
     PROTOTYPE_PERSISTENT_APFEL_HELP,
+};
+use pythia_pdf_facade_cli::{
+    parse_prototype_pythia_pdf_facade, run_prototype_pythia_pdf_facade, PythiaPdfFacadeCliArgs,
+    PROTOTYPE_PYTHIA_PDF_FACADE_HELP,
 };
 
 const HELP: &str =
@@ -75,6 +80,9 @@ Commands:
 
   prototype-persistent-apfel [OPTIONS]
       Prepare the Phase 1B-D1C-A persistent APFEL core contract.
+
+  prototype-pythia-pdf-facade [OPTIONS]
+      Check D1C-B signed-value compatibility before facade publication.
 
   validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
@@ -205,6 +213,8 @@ enum Command {
     PrototypePdfTransportHelp,
     PrototypePersistentApfel(PersistentApfelCliArgs),
     PrototypePersistentApfelHelp,
+    PrototypePythiaPdfFacade(PythiaPdfFacadeCliArgs),
+    PrototypePythiaPdfFacadeHelp,
     StructureFunctions(StructureFunctionsCliArgs),
     ValidateHera(ValidateHeraCliArgs),
     TheoryUncertainties(TheoryUncertaintiesCliArgs),
@@ -381,6 +391,13 @@ fn main() -> Result<()> {
             print!("{PROTOTYPE_PERSISTENT_APFEL_HELP}");
             Ok(())
         }
+        Command::PrototypePythiaPdfFacade(arguments) => {
+            run_prototype_pythia_pdf_facade(arguments).map_err(Error::Msg)
+        }
+        Command::PrototypePythiaPdfFacadeHelp => {
+            print!("{PROTOTYPE_PYTHIA_PDF_FACADE_HELP}");
+            Ok(())
+        }
         Command::StructureFunctions(arguments) => run_structure_functions(arguments),
         Command::ValidateHera(arguments) => run_validate_hera(arguments),
         Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
@@ -446,6 +463,13 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
                 Ok(Command::PrototypePersistentApfelHelp)
             } else {
                 parse_prototype_persistent_apfel(remaining).map(Command::PrototypePersistentApfel)
+            }
+        }
+        [subcommand, remaining @ ..] if subcommand == "prototype-pythia-pdf-facade" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::PrototypePythiaPdfFacadeHelp)
+            } else {
+                parse_prototype_pythia_pdf_facade(remaining).map(Command::PrototypePythiaPdfFacade)
             }
         }
         [subcommand, remaining @ ..] if subcommand == "validate-hera" => {

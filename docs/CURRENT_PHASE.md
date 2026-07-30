@@ -152,21 +152,42 @@
   construction, metadata inspection, identity, and destruction evidence; the
   ignored raw manifest is preserved by hash in a compact reviewed evidence
   artifact.
-- D1C scientific validation is not complete. No `pythia.next()` call, event,
-  dataset, consumer-envelope result, full neutral-current observable result,
-  or final PASS/FAIL/INCONCLUSIVE decision exists.
-- Issue #39 therefore remains in progress: PYTHIA consumer coverage,
-  generator-facing sign behavior, full neutral-current observables, and the
-  bounded study are still outstanding.
+- The final issue #39 decision is `D1C_FINAL_DECISION = FAIL`. Its binding
+  generator-facing signed-PDF gate has FAIL precedence over every later
+  unevaluated gate.
+- The D1C-B source audit found a binding installed-interface incompatibility:
+  PYTHIA 8.312's public `PDF::xf`, `PDF::xfVal`, and `PDF::xfSea` readers are
+  non-virtual and apply positivity clipping. A subclass can fill signed cached
+  values through `xfUpdate`, but calls through `shared_ptr<PDF>` still execute
+  the clipping base readers.
+- D1C-B therefore publishes no facade or transport identity and does not call
+  `Pythia::init()` or `pythia.next()`. A deterministic native probe confirms
+  that signed inclusive, valence, and sea values become positive zero at the
+  public boundary. Runtime consumer attribution and pointer substitution
+  evidence remain unavailable.
+- Sixteen installed PDF pointer slots have a source-backed prospective
+  classification; no runtime installation or post-init substitution was
+  measured. Zero-event initialization, ISR/remnant attribution, complete
+  consumer-envelope closure, full neutral-current gamma/Z closure,
+  operational performance, and controlled event execution remain
+  unevaluated. They are not required for the final decision because the
+  binding sign failure terminates the acceptance hierarchy first. No full
+  numerical study was needed or permitted after that failure.
+- The failure is scoped to persistent in-process APFEL transport through the
+  installed stock PYTHIA 8.312 public PDF subclass boundary. D1C-A remains
+  engineering evidence but is not selected for production coupling. Other
+  modified or custom generator interfaces are neither rejected nor authorized
+  by issue #39.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Continue issue #39 with the separately scoped fail-closed PYTHIA consumer
-instrumentation stage, preserving the fixed resource caps and without
-authorizing D2.
+A new reviewed architecture decision is required before any further
+generator-coupling implementation. It may consider a versioned minimal PYTHIA
+fork or another signed-value generator interface, but must separately address
+reproducibility, upstream drift, CI, deployment, and validation.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -186,7 +207,11 @@ unimplemented hypotheses.
   custom 6x6 representation is rejected and D2 remains unauthorized.
 - Issue #39 authorizes only the bounded D1C prototype. D1C-A does not authorize
   production coupling, retained events, datasets, or D2, and it does not
-  complete the D1C scientific gate.
+  itself select production transport. The binding D1C-B sign failure completes
+  issue #39's scientific result as `FAIL`.
+- Do not proceed from D1C-B to runtime consumer instrumentation using the
+  installed `PDF` subclass boundary: its non-virtual positivity-clipping
+  readers violate the accepted signed-value contract.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
