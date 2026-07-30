@@ -34,6 +34,9 @@
   `INCONCLUSIVE` decision: the fixed custom interpolator failed, while direct
   APFEL transport remained unselected because required evidence was not
   measured.
+- Phase 1B-D1B source-level persistent-transport and PYTHIA-consumer audit
+  completed with a recommendation for a separately authorized bounded
+  prototype; this planning result does not itself authorize that prototype.
 
 # Current state
 
@@ -122,15 +125,29 @@
 - D1A is complete with `PROTOTYPE_DECISION = INCONCLUSIVE`,
   `DIRECT_CANDIDATE_STATUS = INCONCLUSIVE`, `CUSTOM_CANDIDATE_STATUS = FAIL`,
   and `D2_AUTHORIZED = false`.
+- The D1B source audit found that an owned APFEL `Dglap<Distribution>` can
+  outlive construction and answer repeated `Evaluate(Q)` calls, but neither
+  APFEL reentrancy nor thread safety is established. The prospective design is
+  one theta-specific in-process context with mutex-serialized access and a
+  fresh rebuild-per-batch reference.
+- Static source analysis and `Pythia::init()` cannot close the enabled ISR and
+  beam-remnant consumer envelope. A future bounded prototype would require
+  separately authorized, controlled non-production `pythia.next()` execution
+  with fail-closed PDF instrumentation; observed queries may validate but not
+  define the envelope.
+- The D1B planning decision is
+  `AUTHORIZE_SEPARATE_BOUNDED_PROTOTYPE`, while
+  `PROTOTYPE_AUTHORIZED = false` and `D2_AUTHORIZED = false`. No prototype
+  issue or implementation exists.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review the D1A prototype result. A separate future decision
-would be required to test a persistent direct APFEL-backed scalar adapter and
-instrument all enabled PYTHIA PDF consumers.
+Scientifically review ADR-007. A separate authorization would be required
+before creating or running the bounded persistent-APFEL and fail-closed PYTHIA
+consumer prototype described there.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -148,6 +165,9 @@ unimplemented hypotheses.
   authorize production PYTHIA coupling or D2.
 - The D1A `INCONCLUSIVE` decision does not select direct APFEL transport; the
   custom 6x6 representation is rejected and D2 remains unauthorized.
+- ADR-007 recommends a separate bounded prototype but does not authorize it.
+  Do not implement a persistent APFEL adapter, execute PYTHIA, or begin D2
+  without a subsequent explicit authorization.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
