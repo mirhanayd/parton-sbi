@@ -1078,7 +1078,7 @@ mod tests {
             derive_prototype_decision(evidence.status(), CandidateStatus::Fail, false),
             PrototypeDecision::Inconclusive
         );
-        assert!(!D2_AUTHORIZED);
+        const { assert!(!D2_AUTHORIZED) };
     }
 
     #[test]
@@ -1189,7 +1189,7 @@ mod tests {
 
     #[test]
     fn prototype_pdf_transport_filter_covers_authorization_gate() {
-        assert!(!D2_AUTHORIZED);
+        const { assert!(!D2_AUTHORIZED) };
     }
 
     #[test]

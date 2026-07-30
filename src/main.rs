@@ -13,6 +13,7 @@ mod continuous_pdf_cli;
 mod pdf_artifact_cli;
 mod pdf_reweighting_cli;
 mod pdf_transport_prototype_cli;
+mod persistent_apfel_cli;
 use continuous_pdf_cli::{
     parse_validate_continuous_pdf, run_validate_continuous_pdf, ContinuousPdfCliArgs,
     VALIDATE_CONTINUOUS_PDF_HELP,
@@ -29,6 +30,10 @@ use pdf_reweighting_cli::{
 use pdf_transport_prototype_cli::{
     parse_prototype_pdf_transport, run_prototype_pdf_transport, PdfTransportPrototypeCliArgs,
     PROTOTYPE_PDF_TRANSPORT_HELP,
+};
+use persistent_apfel_cli::{
+    parse_prototype_persistent_apfel, run_prototype_persistent_apfel, PersistentApfelCliArgs,
+    PROTOTYPE_PERSISTENT_APFEL_HELP,
 };
 
 const HELP: &str =
@@ -67,6 +72,9 @@ Commands:
 
   prototype-pdf-transport [OPTIONS]
       Prepare or run the bounded Phase 1B-D1A transport comparison prototype.
+
+  prototype-persistent-apfel [OPTIONS]
+      Prepare the Phase 1B-D1C-A persistent APFEL core contract.
 
   validate-hera [OPTIONS]
       Validate predictions against HERA inclusive DIS measurements.
@@ -195,6 +203,8 @@ enum Command {
     ValidatePdfArtifactHelp,
     PrototypePdfTransport(PdfTransportPrototypeCliArgs),
     PrototypePdfTransportHelp,
+    PrototypePersistentApfel(PersistentApfelCliArgs),
+    PrototypePersistentApfelHelp,
     StructureFunctions(StructureFunctionsCliArgs),
     ValidateHera(ValidateHeraCliArgs),
     TheoryUncertainties(TheoryUncertaintiesCliArgs),
@@ -364,6 +374,13 @@ fn main() -> Result<()> {
             print!("{PROTOTYPE_PDF_TRANSPORT_HELP}");
             Ok(())
         }
+        Command::PrototypePersistentApfel(arguments) => {
+            run_prototype_persistent_apfel(arguments).map_err(Error::Msg)
+        }
+        Command::PrototypePersistentApfelHelp => {
+            print!("{PROTOTYPE_PERSISTENT_APFEL_HELP}");
+            Ok(())
+        }
         Command::StructureFunctions(arguments) => run_structure_functions(arguments),
         Command::ValidateHera(arguments) => run_validate_hera(arguments),
         Command::TheoryUncertainties(arguments) => run_theory_uncertainties(arguments),
@@ -422,6 +439,13 @@ fn parse_command(args: impl IntoIterator<Item = String>) -> std::result::Result<
                 Ok(Command::PrototypePdfTransportHelp)
             } else {
                 parse_prototype_pdf_transport(remaining).map(Command::PrototypePdfTransport)
+            }
+        }
+        [subcommand, remaining @ ..] if subcommand == "prototype-persistent-apfel" => {
+            if matches!(remaining, [flag] if flag == "-h" || flag == "--help") {
+                Ok(Command::PrototypePersistentApfelHelp)
+            } else {
+                parse_prototype_persistent_apfel(remaining).map(Command::PrototypePersistentApfel)
             }
         }
         [subcommand, remaining @ ..] if subcommand == "validate-hera" => {
