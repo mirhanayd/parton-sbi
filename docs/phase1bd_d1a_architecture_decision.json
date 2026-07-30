@@ -1,0 +1,76 @@
+{
+  "schema_version": "partonsbi.phase1bd.d1a.architecture-decision.v1",
+  "decision_date": "2026-07-30",
+  "issue": 33,
+  "architecture_decision": "INCONCLUSIVE",
+  "selected_architecture": null,
+  "evidence": {
+    "d0r_boundary_family": "PASS",
+    "d1_artifact_contract": "FAIL",
+    "d1r_artifact_contract": "FAIL",
+    "exact_knot_serialization": "PASS",
+    "independent_lhapdf_interpolation_reproduction": "PASS",
+    "nlo_photon_f2_fl_closure": "PASS_DIAGNOSTIC_ONLY",
+    "global_direct_apfel_finite_lhapdf_pointwise_closure": "FAIL",
+    "finite_support_leakage_convergence": "FAIL",
+    "sign_topology_transport": "FAIL_AT_THREE_ANCHORS"
+  },
+  "requirements": {
+    "common_mathematical_pdf_definition": "REQUIRED",
+    "strict_support_and_no_extrapolation": "REQUIRED",
+    "global_exported_support_pointwise_identity": "STRONGER_IMPLEMENTATION_CHOICE",
+    "predeclared_all_consumer_reachable_domain_closure": "REQUIRED_BUT_NOT_YET_DEFINED",
+    "one_identical_serialized_evaluator": "STRONGER_IMPLEMENTATION_CHOICE",
+    "layered_physical_observable_closure": "REQUIRED"
+  },
+  "global_lhapdf_refinement": {
+    "decision": "REJECTED_AS_NEXT_PATH",
+    "reason": "The non-monotonic 641-by-149 D1R result retained millions of off-knot failures, exceeded its fixed refinement budget, and did not resolve leakage or sign topology."
+  },
+  "generator_reachable_domain": {
+    "decision": "INCONCLUSIVE_PENDING_ALL_CONSUMER_ENVELOPE",
+    "hard_process_envelope_predeclarable": true,
+    "all_pythia_pdf_consumers_enclosed": false,
+    "generated_events_may_define_acceptance_domain": false,
+    "global_closure_intrinsically_required": false
+  },
+  "acceptance_contract": {
+    "decision": "LAYERED",
+    "binding_layers": [
+      "metadata_support_finiteness_determinism_no_extrapolation",
+      "pdf_closure_on_predeclared_all_consumer_reachable_domain",
+      "full_neutral_current_gamma_z_structure_function_and_differential_cross_section_closure",
+      "later_d2_query_coverage_and_generated_event_distribution_closure"
+    ],
+    "global_pointwise_disagreement": "MANDATORY_DIAGNOSTIC",
+    "photon_only_f2_fl_sufficient_for_generator_compatibility": false
+  },
+  "prototype": {
+    "authorized": true,
+    "scope": "Compare direct APFEL-backed evaluation with a repository-owned deterministic precomputed interpolator; retain standard LHAPDF only as a diagnostic baseline.",
+    "maximum_implementation_pull_requests": 1,
+    "maximum_numerical_runtime_minutes": 30,
+    "maximum_generated_disk_gib": 2,
+    "maximum_anchors": 3,
+    "anchor_policy": "center_plus_at_most_two_predeclared_stress_anchors",
+    "nine_anchor_global_refinement": false,
+    "production_event_generation": false,
+    "may_select_production_architecture": false,
+    "may_authorize_d2": false
+  },
+  "authorization": {
+    "d1a_prototype_authorized": true,
+    "d2_authorization_candidate": false,
+    "d2_authorized": false,
+    "production_pythia_coupling_authorized": false,
+    "event_generation_authorized": false,
+    "dataset_generation_authorized": false,
+    "neural_inference_authorized": false
+  },
+  "reasons": [
+    "Committed evidence rejects unconstrained global standard-LHAPDF refinement as the next experiment.",
+    "Committed evidence does not establish APFEL evaluator lifetime, thread safety, throughput, or cache behavior under PYTHIA.",
+    "Committed evidence does not establish a conservative all-consumer PYTHIA x/Q envelope.",
+    "Photon-only F2/FL closure is not full neutral-current gamma/Z or generated-event closure."
+  ]
+}
