@@ -5,8 +5,10 @@ use parton_sbi::physics::{
     PdfTheta, PersistentApfelContext, PersistentApfelDiagnostics, PersistentApfelIdentities,
     PersistentApfelSupport, D1C_CONTROLLED_PYTHIA_NEXT_AUTHORIZED, D1C_D2_AUTHORIZED,
     D1C_PRODUCTION_EVENTS_AUTHORIZED, D1C_PROTOTYPE_AUTHORIZED, PERSISTENT_APFEL_ABI_VERSION,
-    PERSISTENT_APFEL_CACHE_POLICY_VERSION, PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
+    PERSISTENT_APFEL_CACHE_POLICY_VERSION, PERSISTENT_APFEL_GENERAL_THREAD_SAFETY_CLAIMED,
+    PERSISTENT_APFEL_LOCK_ACQUISITION_ORDER, PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
     PERSISTENT_APFEL_POLICY_VERSION, PERSISTENT_APFEL_PREPARATION_SCHEMA,
+    PERSISTENT_APFEL_PROCESS_SERIALIZATION_SCOPE,
 };
 use serde::Serialize;
 
@@ -79,6 +81,25 @@ struct PreparationLimits {
     saved_production_events: u64,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+struct PreparationPolicyEvidence {
+    bridge_abi_version: &'static str,
+    mutex_policy_version: &'static str,
+    lock_acquisition_order: &'static [&'static str],
+    process_serialization_scope: &'static [&'static str],
+    general_apfel_lhapdf_thread_safety_claimed: bool,
+}
+
+fn preparation_policy_evidence() -> PreparationPolicyEvidence {
+    PreparationPolicyEvidence {
+        bridge_abi_version: PERSISTENT_APFEL_ABI_VERSION,
+        mutex_policy_version: PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
+        lock_acquisition_order: &PERSISTENT_APFEL_LOCK_ACQUISITION_ORDER,
+        process_serialization_scope: &PERSISTENT_APFEL_PROCESS_SERIALIZATION_SCOPE,
+        general_apfel_lhapdf_thread_safety_claimed: PERSISTENT_APFEL_GENERAL_THREAD_SAFETY_CLAIMED,
+    }
+}
+
 #[derive(Debug, Serialize)]
 struct PreparationManifest {
     schema_version: &'static str,
@@ -87,8 +108,8 @@ struct PreparationManifest {
     apfelxx_version: &'static str,
     lhapdf_version: &'static str,
     evaluator_policy_version: &'static str,
-    bridge_abi_version: &'static str,
-    mutex_policy_version: &'static str,
+    #[serde(flatten)]
+    process_safety: PreparationPolicyEvidence,
     cache_policy_version: &'static str,
     anchors: Vec<PreparationAnchor>,
     limits: PreparationLimits,
@@ -128,8 +149,7 @@ pub fn run_prototype_persistent_apfel(arguments: PersistentApfelCliArgs) -> Resu
         apfelxx_version: "4.8.0",
         lhapdf_version: "6.5.6",
         evaluator_policy_version: PERSISTENT_APFEL_POLICY_VERSION,
-        bridge_abi_version: PERSISTENT_APFEL_ABI_VERSION,
-        mutex_policy_version: PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
+        process_safety: preparation_policy_evidence(),
         cache_policy_version: PERSISTENT_APFEL_CACHE_POLICY_VERSION,
         anchors,
         limits: fixed_limits(),
@@ -194,7 +214,53 @@ mod tests {
     #[test]
     fn prototype_persistent_apfel_contract_keeps_caps_and_d2_closed() {
         let limits = fixed_limits();
+        let policy = preparation_policy_evidence();
         assert_eq!(authorized_anchors().unwrap().len(), 3);
+        assert_eq!(
+            PERSISTENT_APFEL_PREPARATION_SCHEMA,
+            "partonsbi.d1c.persistent-apfel.preparation.v2"
+        );
+        assert_eq!(
+            policy.bridge_abi_version,
+            "partonsbi_persistent_apfel_abi_v2"
+        );
+        assert_eq!(
+            policy.mutex_policy_version,
+            "cross_language_recursive_process_mutex_v2"
+        );
+        assert_eq!(policy.lock_acquisition_order.len(), 3);
+        assert_eq!(policy.process_serialization_scope.len(), 5);
+        assert!(policy
+            .process_serialization_scope
+            .contains(&"lhapdf_loading_and_destruction"));
+        assert!(policy
+            .process_serialization_scope
+            .contains(&"direct_reference_apfel_calls"));
+        assert!(!policy.general_apfel_lhapdf_thread_safety_claimed);
+        let recorded = serde_json::to_value(policy).unwrap();
+        assert_eq!(
+            recorded["bridge_abi_version"],
+            "partonsbi_persistent_apfel_abi_v2"
+        );
+        assert_eq!(
+            recorded["mutex_policy_version"],
+            "cross_language_recursive_process_mutex_v2"
+        );
+        assert_eq!(
+            recorded["lock_acquisition_order"].as_array().unwrap().len(),
+            3
+        );
+        assert_eq!(
+            recorded["process_serialization_scope"]
+                .as_array()
+                .unwrap()
+                .len(),
+            5
+        );
+        assert_eq!(
+            recorded["general_apfel_lhapdf_thread_safety_claimed"],
+            false
+        );
         assert_eq!(limits.numerical_wall_time_seconds, 1800);
         assert_eq!(limits.internal_study_deadline_seconds, 1700);
         assert_eq!(limits.maximum_pythia_next_calls_per_anchor, 128);

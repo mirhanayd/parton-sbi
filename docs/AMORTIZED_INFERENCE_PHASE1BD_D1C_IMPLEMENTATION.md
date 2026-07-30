@@ -56,14 +56,17 @@ only the persistent native C ABI. Before entering it, independent Rust tests
 could concurrently load or destroy LHAPDF providers, integrate the projected
 boundary, and construct theta points. The fresh rebuild-per-batch reference
 used only a per-instance Rust mutex and could execute APFEL concurrently with
-those operations. This unsynchronized access to APFEL/LHAPDF process-global
-state is the demonstrated safety defect and the root cause addressed here.
+those operations. Source audit proved that the old implementation admitted
+these unsynchronized process-wide LHAPDF/APFEL call paths. That demonstrated
+defect was consistent with, and is the leading explanation for, the
+nondeterministic CI crash.
 
 The serial reproduction passed, as did three permitted local default-parallel
-repetitions. The CI crash is nondeterministic but is not dismissed as flaky.
-GitHub returned no usable stack trace or core for that job; the source audit
-nevertheless establishes that the pre-correction code admitted the unsafe
-concurrent call paths.
+repetitions. GitHub returned no usable stack trace or core for that job, so the
+exact crashing instruction and exclusive causal attribution were not
+established. The correction removes every demonstrated unsafe D1C concurrency
+path rather than treating the failure as flaky. Subsequent default-parallel
+workspace tests and CI run `30574399371` passed.
 
 The corrected authoritative boundary is one native `recursive_mutex` shared
 across Rust and C++. Persistent initialization acquires it before
@@ -138,6 +141,17 @@ one theta context, keyed by exact Q binary64 bits, and protected by the same
 native mutex. Hits and misses are counted. Cache-fill failure is typed and
 clears the invalid entry; it never silently falls back to a fresh evaluator.
 
+The safety correction is provenance-distinct:
+
+```text
+bridge ABI = partonsbi_persistent_apfel_abi_v2
+mutex policy = cross_language_recursive_process_mutex_v2
+```
+
+The scientific architecture name remains
+`persistent_in_process_apfel_serialized_v1`; only its corrected implementation
+contract receives new ABI and mutex-policy identities.
+
 ## Preparation-only CLI
 
 ```bash
@@ -151,6 +165,11 @@ The command initializes and destroys exactly `center`, `delta_min`, and
 `preparation_manifest.json`. It records identities, support, thresholds,
 versions, counters, issue #39 resource limits, and the authorization boundary.
 It has no study mode and cannot initialize PYTHIA or create events.
+
+Preparation schema v2,
+`partonsbi.d1c.persistent-apfel.preparation.v2`, additionally records the
+bridge ABI, mutex-policy version, lock acquisition order, complete serialized
+process scope, and `general_apfel_lhapdf_thread_safety_claimed=false`.
 
 ## Focused validation
 

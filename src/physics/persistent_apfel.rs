@@ -21,15 +21,28 @@ use super::{
     PROJECTED_BASELINE_VERSION_V2,
 };
 
-pub const PERSISTENT_APFEL_ABI_VERSION: &str = "partonsbi_persistent_apfel_abi_v1";
+pub const PERSISTENT_APFEL_ABI_VERSION: &str = "partonsbi_persistent_apfel_abi_v2";
 pub const PERSISTENT_APFEL_POLICY_VERSION: &str = "persistent_in_process_apfel_serialized_v1";
-pub const PERSISTENT_APFEL_MUTEX_POLICY_VERSION: &str = "single_native_process_mutex_v1";
+pub const PERSISTENT_APFEL_MUTEX_POLICY_VERSION: &str = "cross_language_recursive_process_mutex_v2";
 pub const PERSISTENT_APFEL_CACHE_POLICY_VERSION: &str =
     "theta_scoped_exact_q_bits_last_distribution_v1";
 pub const PERSISTENT_APFEL_FLAVOR_POLICY_VERSION: &str =
     "pdg_signed_xf_five_flavor_top_inactive_v1";
 pub const PERSISTENT_APFEL_PREPARATION_SCHEMA: &str =
-    "partonsbi.d1c.persistent-apfel.preparation.v1";
+    "partonsbi.d1c.persistent-apfel.preparation.v2";
+pub const PERSISTENT_APFEL_LOCK_ACQUISITION_ORDER: [&str; 3] = [
+    "cross_language_apfel_lhapdf_process_boundary",
+    "direct_apfel_evaluator_instance_mutex_when_applicable",
+    "recursive_persistent_native_c_abi_acquisition_same_thread",
+];
+pub const PERSISTENT_APFEL_PROCESS_SERIALIZATION_SCOPE: [&str; 5] = [
+    "lhapdf_loading_and_destruction",
+    "projected_boundary_and_theta_construction",
+    "persistent_apfel_calls",
+    "direct_reference_apfel_calls",
+    "context_destruction",
+];
+pub const PERSISTENT_APFEL_GENERAL_THREAD_SAFETY_CLAIMED: bool = false;
 pub const D1C_PROTOTYPE_AUTHORIZED: bool = true;
 pub const D1C_CONTROLLED_PYTHIA_NEXT_AUTHORIZED: bool = true;
 pub const D1C_PRODUCTION_EVENTS_AUTHORIZED: bool = false;
@@ -803,9 +816,47 @@ fn build_identities(
     parameter_identity: &str,
     projected_boundary_identity: &str,
 ) -> Result<PersistentApfelIdentities, PersistentApfelError> {
+    let policy = evaluator_policy_inputs(
+        context,
+        config,
+        PERSISTENT_APFEL_ABI_VERSION,
+        PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
+    );
+    let evaluator_policy_identity = hash_canonical_map(&policy)?;
+
+    let mut transport = BTreeMap::<String, String>::new();
+    transport.insert("delta_v_bits".into(), float_bits(theta.delta_v));
+    transport.insert(
+        "evaluator_policy_identity".into(),
+        evaluator_policy_identity.clone(),
+    );
+    transport.insert("lambda_sea_bits".into(), float_bits(theta.lambda_sea));
+    transport.insert("parameter_point_identity".into(), parameter_identity.into());
+    transport.insert(
+        "projected_boundary_identity".into(),
+        projected_boundary_identity.into(),
+    );
+    transport.insert(
+        "transport_schema".into(),
+        "theta_transport_identity_v1".into(),
+    );
+    let theta_transport_identity = hash_canonical_map(&transport)?;
+    Ok(PersistentApfelIdentities {
+        evaluator_policy_identity,
+        theta_transport_identity,
+        projected_boundary_identity: projected_boundary_identity.into(),
+    })
+}
+
+fn evaluator_policy_inputs(
+    context: &ContinuousPdfContext,
+    config: &D1EvolutionConfigV2,
+    abi_version: &str,
+    mutex_policy_version: &str,
+) -> BTreeMap<String, String> {
     let metadata = &context.metadata;
     let mut policy = BTreeMap::<String, String>::new();
-    policy.insert("abi_version".into(), PERSISTENT_APFEL_ABI_VERSION.into());
+    policy.insert("abi_version".into(), abi_version.into());
     policy.insert("alpha_s_mz_bits".into(), float_bits(config.alpha_s_mz));
     policy.insert("alpha_s_policy".into(), "apfel_alphaqcd_nlo_v1".into());
     policy.insert("apfelxx_version".into(), config.apfelxx_version.clone());
@@ -841,10 +892,7 @@ fn build_identities(
     policy.insert("flavor_scheme".into(), config.flavor_scheme.clone());
     policy.insert("grid_policy".into(), canonical_grid_policy(config));
     policy.insert("lhapdf_version".into(), metadata.lhapdf_version.clone());
-    policy.insert(
-        "mutex_policy".into(),
-        PERSISTENT_APFEL_MUTEX_POLICY_VERSION.into(),
-    );
+    policy.insert("mutex_policy".into(), mutex_policy_version.into());
     policy.insert("order_qcd".into(), config.perturbative_order.to_string());
     policy.insert(
         "policy_version".into(),
@@ -856,30 +904,7 @@ fn build_identities(
         "top_policy".into(),
         "inactive_above_exported_qmax_v1".into(),
     );
-    let evaluator_policy_identity = hash_canonical_map(&policy)?;
-
-    let mut transport = BTreeMap::<String, String>::new();
-    transport.insert("delta_v_bits".into(), float_bits(theta.delta_v));
-    transport.insert(
-        "evaluator_policy_identity".into(),
-        evaluator_policy_identity.clone(),
-    );
-    transport.insert("lambda_sea_bits".into(), float_bits(theta.lambda_sea));
-    transport.insert("parameter_point_identity".into(), parameter_identity.into());
-    transport.insert(
-        "projected_boundary_identity".into(),
-        projected_boundary_identity.into(),
-    );
-    transport.insert(
-        "transport_schema".into(),
-        "theta_transport_identity_v1".into(),
-    );
-    let theta_transport_identity = hash_canonical_map(&transport)?;
-    Ok(PersistentApfelIdentities {
-        evaluator_policy_identity,
-        theta_transport_identity,
-        projected_boundary_identity: projected_boundary_identity.into(),
-    })
+    policy
 }
 
 fn canonical_grid_policy(config: &D1EvolutionConfigV2) -> String {
@@ -985,6 +1010,69 @@ mod tests {
             context.ensure_transport_identity("sha256:wrong"),
             Err(PersistentApfelError::IdentityMismatch { .. })
         ));
+    }
+
+    #[test]
+    fn persistent_apfel_policy_identity_versions_and_sensitivity_are_explicit() {
+        let _process = lock_apfel_process().unwrap();
+        let context = ContinuousPdfContext::load_ct18nlo_v2().unwrap();
+        let config = D1EvolutionConfigV2::from_context(&context).unwrap();
+        let current = evaluator_policy_inputs(
+            &context,
+            &config,
+            PERSISTENT_APFEL_ABI_VERSION,
+            PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
+        );
+        assert_eq!(
+            current.get("abi_version").map(String::as_str),
+            Some("partonsbi_persistent_apfel_abi_v2")
+        );
+        assert_eq!(
+            current.get("mutex_policy").map(String::as_str),
+            Some("cross_language_recursive_process_mutex_v2")
+        );
+        let current_identity = hash_canonical_map(&current).unwrap();
+        let theta = PdfTheta::new(0.0, 0.0).unwrap();
+        let point_identity = context
+            .construct(theta)
+            .unwrap()
+            .canonical_identity()
+            .unwrap();
+        let projected = context.projected_baseline_manifest().unwrap();
+        let projected_identity = &projected.canonical_identity.sha256;
+        let actual = build_identities(
+            &context,
+            theta,
+            &config,
+            &point_identity.sha256,
+            projected_identity,
+        )
+        .unwrap();
+        assert_eq!(actual.evaluator_policy_identity, current_identity);
+
+        let historical_abi = evaluator_policy_inputs(
+            &context,
+            &config,
+            "partonsbi_persistent_apfel_abi_v1",
+            PERSISTENT_APFEL_MUTEX_POLICY_VERSION,
+        );
+        let historical_mutex = evaluator_policy_inputs(
+            &context,
+            &config,
+            PERSISTENT_APFEL_ABI_VERSION,
+            "single_native_process_mutex_v1",
+        );
+        assert_ne!(
+            current_identity,
+            hash_canonical_map(&historical_abi).unwrap()
+        );
+        assert_ne!(
+            current_identity,
+            hash_canonical_map(&historical_mutex).unwrap()
+        );
+        assert!(current
+            .keys()
+            .all(|key| !key.contains("counter") && !key.contains("tim")));
     }
 
     #[test]

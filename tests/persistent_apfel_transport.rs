@@ -285,6 +285,7 @@ fn persistent_apfel_identities_cache_and_threads_are_deterministic() {
         .is_err());
 
     let context = Arc::new(contexts.into_iter().next().unwrap());
+    let identities_before_runtime = context.identities().clone();
     let query = PersistentApfelQuery {
         flavor: 21,
         x: 0.01,
@@ -312,6 +313,7 @@ fn persistent_apfel_identities_cache_and_threads_are_deterministic() {
     let after = context.diagnostics().unwrap();
     assert_eq!(after.scalar_calls, before.scalar_calls + 16);
     assert_eq!(after.cache_hits, before.cache_hits + 16);
+    assert_eq!(context.identities(), &identities_before_runtime);
 }
 
 #[test]
