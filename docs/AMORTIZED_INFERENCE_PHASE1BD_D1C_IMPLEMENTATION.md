@@ -47,6 +47,51 @@ evaluation, cache mutation, diagnostics, and destruction. This is a
 conservative prototype boundary; it does not claim general APFEL++ or LHAPDF
 reentrancy or thread safety. There is no process-global scientific fallback.
 
+### CI SIGSEGV correction
+
+The first draft-PR CI run (`30565019373`, Rust Unit Tests job
+`90947257921`) terminated the default-parallel
+`persistent_apfel_transport` process with `SIGSEGV`. The original lock covered
+only the persistent native C ABI. Before entering it, independent Rust tests
+could concurrently load or destroy LHAPDF providers, integrate the projected
+boundary, and construct theta points. The fresh rebuild-per-batch reference
+used only a per-instance Rust mutex and could execute APFEL concurrently with
+those operations. This unsynchronized access to APFEL/LHAPDF process-global
+state is the demonstrated safety defect and the root cause addressed here.
+
+The serial reproduction passed, as did three permitted local default-parallel
+repetitions. The CI crash is nondeterministic but is not dismissed as flaky.
+GitHub returned no usable stack trace or core for that job; the source audit
+nevertheless establishes that the pre-correction code admitted the unsafe
+concurrent call paths.
+
+The corrected authoritative boundary is one native `recursive_mutex` shared
+across Rust and C++. Persistent initialization acquires it before
+`ContinuousPdfContext` loading, projected-boundary integration, theta
+construction, and identity work. Every persistent native operation acquires
+the same mutex. Fresh-reference initialization, identity construction, and
+evaluation acquire it before their per-instance Rust mutex and retain it
+through the APFEL bridge call. The only acquisition order is:
+
+```text
+native APFEL/LHAPDF process boundary
+  -> DirectApfelEvaluator instance mutex, when applicable
+    -> recursive native C ABI acquisition on the same thread
+```
+
+Rust instance-lock poisoning remains a typed lifetime error. Native lock
+acquisition failure is typed; an impossible unlock failure aborts instead of
+continuing without the declared safety boundary. This correction does not
+assert that APFEL++ or LHAPDF is generally thread safe.
+
+The official APFEL++ 4.8.0 `BuildDglap` implementation was audited directly.
+`InDistFunc` is consumed into a `DistributionMap` during construction and is
+not retained in `Dglap`. The persistent input lambda no longer captures the
+local create-function `context` variable by reference. The stored splitting
+function retains the alpha_s callable by value; that callable points to the
+context-owned `AlphaQCD`, and destruction releases `Dglap` before `AlphaQCD`.
+No retained callable refers to a short-lived stack object.
+
 ## Evaluation contract
 
 - Inputs use PDG flavors `-6..-1`, `1..6`, and `21`, finite `x`, and finite
@@ -72,11 +117,11 @@ token exactly once; explicit `close` uses the same path. Public scalar, batch,
 alpha_s, support, identity, and diagnostic operations return typed `Result`
 values.
 
-`Send` and `Sync` are justified only by the authoritative native mutex.
-Threaded focused checks therefore establish serialized deterministic access,
-not lock-free reentrancy. A subprocess smoke check independently constructs,
-queries, and destroys a context; it is not the process-isolated fallback from
-ADR-007.
+`Send` and `Sync` are justified only by the authoritative cross-language native
+mutex. Threaded focused checks therefore establish serialized deterministic
+access, not lock-free reentrancy. A subprocess smoke check independently
+constructs, queries, and destroys a context; it is not the process-isolated
+fallback from ADR-007.
 
 ## Identity and cache
 
@@ -116,6 +161,21 @@ flavors, charm/bottom threshold sides, identity separation, exact-Q cache,
 failed initialization, safe handle lifetime, serialized Rust-thread access,
 and independent subprocess construction/destruction.
 
+The correction additionally covers concurrent construction of all three
+authorized theta contexts, concurrent persistent/fresh-reference execution,
+default-parallel integration execution, direct RAII live-context accounting,
+explicit-close idempotence through subsequent Drop, unpublished failed native
+construction, deterministic rejected-query accounting with the exact failed
+batch index, and charm/bottom lower/exact/upper numerical closure at all three
+anchors. These checks establish serialized D1C access under the declared
+mutex; they do not establish lock-free APFEL/LHAPDF reentrancy.
+
+`rejected_calls` counts one rejected scalar PDF query or one failed batch call.
+A batch reports and counts its first rejected query index and does not count
+the remaining queries. Successful calls do not increment it. Alpha_s,
+identity/support/diagnostic API misuse, including invalid diagnostic buffers,
+is outside the physics-query rejection counter.
+
 The final commands for this stage are:
 
 ```bash
@@ -126,19 +186,23 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --lib persistent_apfel -- --nocapture
 cargo test --test persistent_apfel_transport -- --nocapture
 cargo test prototype_persistent_apfel -- --nocapture
+cargo test --workspace
 git diff --check
 ```
 
-All commands passed in WSL Ubuntu. The library filter ran 4 persistent-APFEL
-tests, the integration target ran 5 tests (including its independently spawned
-child process), and the CLI filter ran 2 command-contract tests. Formatting,
-workspace checking, Clippy with warnings denied, and diff whitespace checking
-all passed. Two pre-existing D1A constant assertions were expressed as
-compile-time assertions to satisfy Rust 1.97 Clippy without changing either
-authorization value or scientific behavior.
+The correcting commit passed this exact suite. The persistent library filter
+passed 7 tests, the default-parallel integration target passed 8 tests
+(including its independent child process), and the preparation-CLI filter
+passed 2 tests. `cargo test --workspace`, the exact CI command that previously
+failed, completed with exit status zero under its default parallel harness.
+Formatting, workspace checking, Clippy with warnings denied, and diff checking
+also passed. Existing dependency-gated ignored tests remained explicitly
+ignored. Two pre-existing D1A constant assertions remain compile-time
+assertions for Rust 1.97 Clippy; no authorization value or scientific behavior
+changed.
 
-No full workspace test, APFEL scan, D1A/D1C scientific study, observable scan,
-or CI watch loop is part of this stage.
+No APFEL scan, D1A/D1C scientific study, observable scan, or CI watch loop is
+part of this correction.
 
 ## Limitations and next step
 

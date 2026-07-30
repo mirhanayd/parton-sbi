@@ -8,8 +8,10 @@ use std::collections::BTreeMap;
 use std::error::Error;
 use std::ffi::{c_void, CStr, CString};
 use std::fmt;
+use std::marker::PhantomData;
 use std::os::raw::{c_char, c_int};
 use std::ptr::NonNull;
+use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -48,11 +50,25 @@ pub enum PersistentApfelError {
     Lifetime(String),
     UnsupportedFlavor(i32),
     InactiveFlavor(i32),
-    OutsideSupport { x: Option<f64>, q_gev: Option<f64> },
+    OutsideSupport {
+        x: Option<f64>,
+        q_gev: Option<f64>,
+    },
     NonFinite(String),
     Cache(String),
-    IdentityMismatch { expected: String, actual: String },
-    Native { status: i32, message: String },
+    BatchQuery {
+        index: usize,
+        query: PersistentApfelQuery,
+        source: Box<PersistentApfelError>,
+    },
+    IdentityMismatch {
+        expected: String,
+        actual: String,
+    },
+    Native {
+        status: i32,
+        message: String,
+    },
 }
 
 impl fmt::Display for PersistentApfelError {
@@ -71,6 +87,14 @@ impl fmt::Display for PersistentApfelError {
                     "strict support rejected x={x:?}, Q={q_gev:?} GeV"
                 )
             }
+            Self::BatchQuery {
+                index,
+                query,
+                source,
+            } => write!(
+                formatter,
+                "persistent APFEL batch query {index} ({query:?}) was rejected: {source}"
+            ),
             Self::IdentityMismatch { expected, actual } => {
                 write!(
                     formatter,
@@ -87,7 +111,58 @@ impl fmt::Display for PersistentApfelError {
     }
 }
 
-impl Error for PersistentApfelError {}
+impl Error for PersistentApfelError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match self {
+            Self::BatchQuery { source, .. } => Some(source.as_ref()),
+            _ => None,
+        }
+    }
+}
+
+/// RAII owner of the cross-language APFEL/LHAPDF process boundary.
+///
+/// D1C Rust code acquires this authoritative native recursive mutex before
+/// provider loading or any per-instance evaluator mutex. Nested persistent C
+/// ABI calls reacquire the same mutex on the same thread.
+pub(crate) struct ApfelProcessGuard {
+    held: bool,
+    _not_send_or_sync: PhantomData<Rc<()>>,
+}
+
+impl Drop for ApfelProcessGuard {
+    fn drop(&mut self) {
+        if !self.held {
+            return;
+        }
+        let mut error = [0 as c_char; 1024];
+        // SAFETY: only a successful matching lock call constructs this guard.
+        let status = unsafe { partonsbi_apfel_process_unlock(error.as_mut_ptr(), error.len()) };
+        if status != 0 {
+            // Continuing would silently invalidate the process-wide safety
+            // contract, so an impossible unlock failure is fail-closed.
+            std::process::abort();
+        }
+        self.held = false;
+    }
+}
+
+pub(crate) fn lock_apfel_process() -> Result<ApfelProcessGuard, PersistentApfelError> {
+    let mut error = [0 as c_char; 1024];
+    // SAFETY: the bounded error buffer remains valid until native acquisition
+    // returns with this thread owning the recursive process mutex.
+    let status = unsafe { partonsbi_apfel_process_lock(error.as_mut_ptr(), error.len()) };
+    if status != 0 {
+        return Err(PersistentApfelError::Lifetime(native_message(
+            &error,
+            "APFEL/LHAPDF process lock failed",
+        )));
+    }
+    Ok(ApfelProcessGuard {
+        held: true,
+        _not_send_or_sync: PhantomData,
+    })
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct PersistentApfelQuery {
@@ -158,6 +233,9 @@ pub struct PersistentApfelIdentities {
 }
 
 extern "C" {
+    fn partonsbi_apfel_process_lock(error_buffer: *mut c_char, error_buffer_size: usize) -> c_int;
+    fn partonsbi_apfel_process_unlock(error_buffer: *mut c_char, error_buffer_size: usize)
+        -> c_int;
     fn partonsbi_persistent_apfel_create(
         raw_set: *const c_char,
         raw_member: c_int,
@@ -210,6 +288,7 @@ extern "C" {
         count: usize,
         output_values: *mut f64,
         output_threshold_sides: *mut c_int,
+        rejected_index: *mut usize,
         error_buffer: *mut c_char,
         error_buffer_size: usize,
     ) -> c_int;
@@ -251,13 +330,16 @@ extern "C" {
         error_buffer: *mut c_char,
         error_buffer_size: usize,
     ) -> c_int;
+    fn partonsbi_persistent_apfel_live_contexts() -> usize;
 }
 
 /// Safe owner of one theta-specific native APFEL evolution context.
 ///
-/// `Send` and `Sync` are justified only by the native process-wide mutex that
-/// serializes all FFI access and destruction. They do not assert that APFEL or
-/// LHAPDF is independently thread safe.
+/// `Send` and `Sync` are justified only by the cross-language native
+/// process-wide mutex. Rust initialization takes it before LHAPDF loading and
+/// projected-boundary construction; every persistent FFI operation takes the
+/// same mutex. They do not assert that APFEL or LHAPDF is independently thread
+/// safe.
 pub struct PersistentApfelContext {
     handle: Option<NonNull<c_void>>,
     theta: PdfTheta,
@@ -288,12 +370,21 @@ impl fmt::Debug for PersistentApfelContext {
 
 impl PersistentApfelContext {
     pub fn initialize(theta: PdfTheta) -> Result<Self, PersistentApfelError> {
+        let _process = lock_apfel_process()?;
         let context = ContinuousPdfContext::load_ct18nlo_v2()
             .map_err(|error| PersistentApfelError::Initialization(error.to_string()))?;
-        Self::from_context(&context, theta)
+        Self::from_context_locked(&context, theta)
     }
 
     pub fn from_context(
+        context: &ContinuousPdfContext,
+        theta: PdfTheta,
+    ) -> Result<Self, PersistentApfelError> {
+        let _process = lock_apfel_process()?;
+        Self::from_context_locked(context, theta)
+    }
+
+    fn from_context_locked(
         context: &ContinuousPdfContext,
         theta: PdfTheta,
     ) -> Result<Self, PersistentApfelError> {
@@ -506,6 +597,7 @@ impl PersistentApfelContext {
         let qs = queries.iter().map(|query| query.q_gev).collect::<Vec<_>>();
         let mut values = vec![f64::NAN; queries.len()];
         let mut sides = vec![i32::MIN; queries.len()];
+        let mut rejected_index = usize::MAX;
         let mut error = [0 as c_char; 1024];
         // SAFETY: input/output slices have exactly count elements and remain
         // live for the native call; the handle is owned by self.
@@ -518,12 +610,22 @@ impl PersistentApfelContext {
                 queries.len(),
                 values.as_mut_ptr(),
                 sides.as_mut_ptr(),
+                &mut rejected_index,
                 error.as_mut_ptr(),
                 error.len(),
             )
         };
         if status != 0 {
-            return Err(native_error(status, &error, queries.first().copied()));
+            let query = queries.get(rejected_index).copied();
+            let source = native_error(status, &error, query);
+            if let Some(query) = query {
+                return Err(PersistentApfelError::BatchQuery {
+                    index: rejected_index,
+                    query,
+                    source: Box::new(source),
+                });
+            }
+            return Err(source);
         }
         queries
             .iter()
@@ -686,6 +788,14 @@ impl Drop for PersistentApfelContext {
     }
 }
 
+/// Process-safe provenance diagnostic for native RAII publication/release.
+/// This value is never an observed ML feature.
+pub fn persistent_apfel_live_context_count() -> usize {
+    // SAFETY: native code acquires the authoritative process mutex and returns
+    // only the current registry size.
+    unsafe { partonsbi_persistent_apfel_live_contexts() }
+}
+
 fn build_identities(
     context: &ContinuousPdfContext,
     theta: PdfTheta,
@@ -831,6 +941,19 @@ fn native_error(
     }
 }
 
+fn native_message(buffer: &[c_char], fallback: &str) -> String {
+    // The buffer is zero-initialized, hence remains a valid empty C string even
+    // if native lock acquisition cannot report a more specific message.
+    let message = unsafe { CStr::from_ptr(buffer.as_ptr()) }
+        .to_string_lossy()
+        .into_owned();
+    if message.is_empty() {
+        fallback.to_owned()
+    } else {
+        message
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -931,11 +1054,141 @@ mod tests {
 
     #[test]
     fn persistent_apfel_failed_initialization_never_returns_a_handle() {
+        let _process = lock_apfel_process().unwrap();
         let context = ContinuousPdfContext::load_ct18nlo_v1().unwrap();
         let theta = PdfTheta::new(0.0, 0.0).unwrap();
         assert!(matches!(
             PersistentApfelContext::from_context(&context, theta),
             Err(PersistentApfelError::Initialization(_))
         ));
+    }
+
+    #[test]
+    fn persistent_apfel_raii_and_explicit_close_publish_and_release_once() {
+        let _process = lock_apfel_process().unwrap();
+        let before = persistent_apfel_live_context_count();
+        {
+            let _context = center();
+            assert_eq!(persistent_apfel_live_context_count(), before + 1);
+        }
+        assert_eq!(persistent_apfel_live_context_count(), before);
+
+        let context = center();
+        assert_eq!(persistent_apfel_live_context_count(), before + 1);
+        context.close().unwrap();
+        // close consumes the wrapper; its subsequent Drop observes an empty
+        // handle and cannot destroy the native context twice.
+        assert_eq!(persistent_apfel_live_context_count(), before);
+    }
+
+    #[test]
+    fn persistent_apfel_failed_native_construction_is_never_published() {
+        let _process = lock_apfel_process().unwrap();
+        let before = persistent_apfel_live_context_count();
+        let mut handle = usize::MAX as *mut c_void;
+        let mut error = [0 as c_char; 1024];
+        let status = unsafe {
+            partonsbi_persistent_apfel_create(
+                std::ptr::null(),
+                0,
+                1.0,
+                1.0,
+                1.0,
+                2.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                3.0,
+                1,
+                0.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0e-11,
+                1.0e-9,
+                1.0,
+                std::ptr::null(),
+                std::ptr::null(),
+                std::ptr::null(),
+                &mut handle,
+                error.as_mut_ptr(),
+                error.len(),
+            )
+        };
+        assert_ne!(status, 0);
+        assert!(handle.is_null());
+        assert_eq!(persistent_apfel_live_context_count(), before);
+    }
+
+    #[test]
+    fn persistent_apfel_rejected_query_count_and_batch_index_are_deterministic() {
+        let context = center();
+        let support = context.support();
+        let valid = PersistentApfelQuery {
+            flavor: 21,
+            x: 0.01,
+            q_gev: 10.0,
+        };
+        let rejected = PersistentApfelQuery {
+            flavor: 21,
+            x: support.x_minimum / 2.0,
+            q_gev: 10.0,
+        };
+        let before = context.diagnostics().unwrap();
+        context.evaluate_scalar(valid).unwrap();
+        let successful = context.diagnostics().unwrap();
+        assert_eq!(successful.rejected_calls, before.rejected_calls);
+
+        assert!(matches!(
+            context.evaluate_scalar(rejected),
+            Err(PersistentApfelError::OutsideSupport { .. })
+        ));
+        let after_scalar = context.diagnostics().unwrap();
+        assert_eq!(after_scalar.rejected_calls, before.rejected_calls + 1);
+
+        let error = context
+            .evaluate_batch(&[valid, rejected, valid])
+            .unwrap_err();
+        assert!(matches!(
+            error,
+            PersistentApfelError::BatchQuery {
+                index: 1,
+                query,
+                source,
+            } if query == rejected
+                && matches!(*source, PersistentApfelError::OutsideSupport { .. })
+        ));
+        let after_batch = context.diagnostics().unwrap();
+        // A failed batch counts once, at its first rejected query, and does not
+        // increment successful batch-call/query counters.
+        assert_eq!(after_batch.rejected_calls, before.rejected_calls + 2);
+        assert_eq!(after_batch.batch_calls, after_scalar.batch_calls);
+        assert_eq!(after_batch.batch_queries, after_scalar.batch_queries);
+
+        let handle = context.handle().unwrap();
+        let mut scalar_calls = 0;
+        let mut error_buffer = [0 as c_char; 1024];
+        let status = unsafe {
+            partonsbi_persistent_apfel_diagnostics(
+                handle.as_ptr(),
+                &mut scalar_calls,
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                std::ptr::null_mut(),
+                error_buffer.as_mut_ptr(),
+                error_buffer.len(),
+            )
+        };
+        assert_eq!(status, STATUS_INVALID_ARGUMENT);
+        assert_eq!(
+            context.diagnostics().unwrap().rejected_calls,
+            after_batch.rejected_calls
+        );
     }
 }

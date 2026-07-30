@@ -78,6 +78,115 @@ fn persistent_apfel_matches_fresh_reference_for_fixed_anchors() {
 }
 
 #[test]
+fn persistent_apfel_concurrent_initialization_is_process_serialized() {
+    let threads = [(0.0, 0.0), (-0.2, 0.0), (-0.2, 0.25)]
+        .into_iter()
+        .map(|(delta_v, lambda_sea)| {
+            std::thread::spawn(move || {
+                let context =
+                    PersistentApfelContext::initialize(theta(delta_v, lambda_sea)).unwrap();
+                (
+                    context.identities().evaluator_policy_identity.clone(),
+                    context.identities().theta_transport_identity.clone(),
+                )
+            })
+        })
+        .collect::<Vec<_>>();
+    let identities = threads
+        .into_iter()
+        .map(|thread| thread.join().unwrap())
+        .collect::<Vec<_>>();
+    assert!(identities
+        .windows(2)
+        .all(|pair| pair[0].0 == pair[1].0 && pair[0].1 != pair[1].1));
+}
+
+#[test]
+fn persistent_and_fresh_reference_calls_are_process_serialized() {
+    let point = theta(0.0, 0.0);
+    let persistent = Arc::new(PersistentApfelContext::initialize(point).unwrap());
+    let fresh = Arc::new(DirectApfelEvaluator::initialize().unwrap());
+    let persistent_query = PersistentApfelQuery {
+        flavor: 21,
+        x: 0.01,
+        q_gev: 10.0,
+    };
+    let reference_query = TransportQuery {
+        flavor: persistent_query.flavor,
+        x: persistent_query.x,
+        q_gev: persistent_query.q_gev,
+    };
+    let persistent_thread = {
+        let persistent = Arc::clone(&persistent);
+        std::thread::spawn(move || persistent.evaluate_scalar(persistent_query).unwrap().xf)
+    };
+    let fresh_thread = {
+        let fresh = Arc::clone(&fresh);
+        std::thread::spawn(move || fresh.evaluate_batch(point, &[reference_query]).unwrap()[0].xf)
+    };
+    assert!(agrees(
+        persistent_thread.join().unwrap(),
+        fresh_thread.join().unwrap()
+    ));
+}
+
+#[test]
+fn persistent_apfel_one_sided_thresholds_close_against_fresh_reference() {
+    let fresh = DirectApfelEvaluator::initialize().unwrap();
+    for point in [theta(0.0, 0.0), theta(-0.2, 0.0), theta(-0.2, 0.25)] {
+        let persistent = PersistentApfelContext::initialize(point).unwrap();
+        let support = persistent.support();
+        let probes = [
+            (4, support.charm_threshold_gev.next_down()),
+            (4, support.charm_threshold_gev),
+            (4, support.charm_threshold_gev.next_up()),
+            (5, support.bottom_threshold_gev.next_down()),
+            (5, support.bottom_threshold_gev),
+            (5, support.bottom_threshold_gev.next_up()),
+        ]
+        .map(|(flavor, q_gev)| PersistentApfelQuery {
+            flavor,
+            x: 0.01,
+            q_gev,
+        });
+        let reference_queries = probes
+            .iter()
+            .map(|query| TransportQuery {
+                flavor: query.flavor,
+                x: query.x,
+                q_gev: query.q_gev,
+            })
+            .collect::<Vec<_>>();
+        let expected = fresh.evaluate_batch(point, &reference_queries).unwrap();
+        let actual = persistent.evaluate_batch(&probes).unwrap();
+        for (actual, expected) in actual.iter().zip(expected) {
+            assert!(
+                agrees(actual.xf, expected.xf),
+                "threshold closure failed for {point:?}: {actual:?} != {expected:?}"
+            );
+        }
+        assert_eq!(
+            actual[0].threshold_side,
+            PersistentThresholdSide::BelowCharm
+        );
+        assert_eq!(actual[1].threshold_side, PersistentThresholdSide::AtCharm);
+        assert_eq!(
+            actual[2].threshold_side,
+            PersistentThresholdSide::BetweenCharmAndBottom
+        );
+        assert_eq!(
+            actual[3].threshold_side,
+            PersistentThresholdSide::BetweenCharmAndBottom
+        );
+        assert_eq!(actual[4].threshold_side, PersistentThresholdSide::AtBottom);
+        assert_eq!(
+            actual[5].threshold_side,
+            PersistentThresholdSide::AboveBottom
+        );
+    }
+}
+
+#[test]
 fn persistent_apfel_enforces_support_flavors_thresholds_and_order() {
     let context = PersistentApfelContext::initialize(theta(0.0, 0.0)).unwrap();
     let support = context.support();

@@ -12,6 +12,7 @@
 #include <map>
 #include <memory>
 #include <mutex>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -235,7 +236,12 @@ struct PersistentApfelContext {
 // APFEL++/LHAPDF reentrancy is not established. This one boundary protects
 // construction, lookup, evaluation, cache mutation, diagnostics, and
 // destruction for every prototype context in the process.
-std::mutex persistent_apfel_mutex;
+// This recursive process boundary is also acquired by Rust before any D1C
+// LHAPDF-backed boundary construction or fresh-reference APFEL call. Native
+// persistent calls reacquire it on the same thread. The single acquisition
+// order is: process boundary, then any Rust evaluator-instance mutex, then a
+// nested native C ABI call.
+std::recursive_mutex persistent_apfel_mutex;
 std::unordered_map<std::uintptr_t, std::unique_ptr<PersistentApfelContext>>
     persistent_apfel_contexts;
 std::uintptr_t next_persistent_handle = 1;
@@ -387,6 +393,28 @@ int report_persistent_exception(char* error_buffer,
 }
 
 }  // namespace
+
+extern "C" int partonsbi_apfel_process_lock(char* error_buffer,
+                                             std::size_t error_buffer_size) {
+  try {
+    persistent_apfel_mutex.lock();
+    return kPersistentOk;
+  } catch (const std::exception& error) {
+    report_error(error, error_buffer, error_buffer_size);
+    return kPersistentInvalidHandle;
+  }
+}
+
+extern "C" int partonsbi_apfel_process_unlock(char* error_buffer,
+                                               std::size_t error_buffer_size) {
+  try {
+    persistent_apfel_mutex.unlock();
+    return kPersistentOk;
+  } catch (const std::exception& error) {
+    report_error(error, error_buffer, error_buffer_size);
+    return kPersistentInvalidHandle;
+  }
+}
 
 extern "C" int partonsbi_apfel_evolve_grid(
     const char* raw_set, int raw_member, double q0, double alpha_s_mz,
@@ -757,7 +785,7 @@ extern "C" int partonsbi_persistent_apfel_create(
     const char* projected_boundary_identity, void** output_handle,
     char* error_buffer, std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     if (output_handle == nullptr) {
       throw PersistentBridgeError(kPersistentInvalidArgument,
                                   "persistent APFEL output handle is required");
@@ -829,9 +857,14 @@ extern "C" int partonsbi_persistent_apfel_create(
         alpha_s_mz, mz, masses, thresholds, order);
     apfel::AlphaQCD* alpha = context->alpha.get();
     const auto alpha_function = [alpha](double q) { return alpha->Evaluate(q); };
-    const auto input = [&](double x, double) {
+    // APFEL 4.8.0 BuildDglap materializes InDistFunc into DistributionMap
+    // during this call; it does not store this input callback. Capture only
+    // owned/pod values anyway, never the local `context` variable by reference.
+    LHAPDF::PDF* raw_boundary = context->raw.get();
+    const auto input = [raw_boundary, q0, exported_xmin, delta_v, sea_scale,
+                        a_u, a_d, a_g](double x, double) {
       return apfel::PhysToQCDEv(boundary_values_v2(
-          *context->raw, q0, exported_xmin, x, delta_v, sea_scale, a_u, a_d,
+          *raw_boundary, q0, exported_xmin, x, delta_v, sea_scale, a_u, a_d,
           a_g));
     };
     context->evolved = apfel::BuildDglap(
@@ -858,7 +891,7 @@ extern "C" int partonsbi_persistent_apfel_create(
 extern "C" int partonsbi_persistent_apfel_destroy(
     void* handle, char* error_buffer, std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     const auto key = handle_key(handle);
     if (key == 0) {
       throw PersistentBridgeError(kPersistentInvalidHandle,
@@ -888,13 +921,18 @@ extern "C" int partonsbi_persistent_apfel_evaluate_scalar(
     int* output_threshold_side, char* error_buffer,
     std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     auto& context = lookup_persistent_context(handle);
     if (output_value == nullptr || output_threshold_side == nullptr) {
       throw PersistentBridgeError(kPersistentInvalidArgument,
                                   "persistent scalar outputs are required");
     }
-    *output_value = persistent_xf(context, flavor, x, q);
+    try {
+      *output_value = persistent_xf(context, flavor, x, q);
+    } catch (const PersistentBridgeError&) {
+      ++context.rejected_calls;
+      throw;
+    }
     *output_threshold_side = threshold_side(context, q);
     ++context.scalar_calls;
     return kPersistentOk;
@@ -906,22 +944,37 @@ extern "C" int partonsbi_persistent_apfel_evaluate_scalar(
 extern "C" int partonsbi_persistent_apfel_evaluate_batch(
     void* handle, const int* flavors, const double* xs, const double* qs,
     std::size_t count, double* output_values, int* output_threshold_sides,
-    char* error_buffer, std::size_t error_buffer_size) {
+    std::size_t* rejected_index, char* error_buffer,
+    std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     auto& context = lookup_persistent_context(handle);
-    if (count > 0 && (flavors == nullptr || xs == nullptr || qs == nullptr ||
-                      output_values == nullptr ||
-                      output_threshold_sides == nullptr)) {
+    if (rejected_index == nullptr ||
+        (count > 0 &&
+         (flavors == nullptr || xs == nullptr || qs == nullptr ||
+          output_values == nullptr || output_threshold_sides == nullptr))) {
       throw PersistentBridgeError(kPersistentInvalidArgument,
                                   "persistent batch buffers are required");
     }
+    *rejected_index = std::numeric_limits<std::size_t>::max();
     // Validate the whole batch before mutating cache or counters.
     for (std::size_t i = 0; i < count; ++i) {
-      validate_persistent_query(context, flavors[i], xs[i], qs[i]);
+      try {
+        validate_persistent_query(context, flavors[i], xs[i], qs[i]);
+      } catch (const PersistentBridgeError&) {
+        *rejected_index = i;
+        ++context.rejected_calls;
+        throw;
+      }
     }
     for (std::size_t i = 0; i < count; ++i) {
-      output_values[i] = persistent_xf(context, flavors[i], xs[i], qs[i]);
+      try {
+        output_values[i] = persistent_xf(context, flavors[i], xs[i], qs[i]);
+      } catch (const PersistentBridgeError&) {
+        *rejected_index = i;
+        ++context.rejected_calls;
+        throw;
+      }
       output_threshold_sides[i] = threshold_side(context, qs[i]);
     }
     ++context.batch_calls;
@@ -936,7 +989,7 @@ extern "C" int partonsbi_persistent_apfel_alpha_s(
     void* handle, double q, double* output_value, char* error_buffer,
     std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     auto& context = lookup_persistent_context(handle);
     if (output_value == nullptr || !std::isfinite(q)) {
       throw PersistentBridgeError(kPersistentInvalidArgument,
@@ -963,7 +1016,7 @@ extern "C" int partonsbi_persistent_apfel_identity(
     void* handle, int identity_kind, char* output, std::size_t output_size,
     char* error_buffer, std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     const auto& context = lookup_persistent_context(handle);
     if (identity_kind == 0) {
       copy_persistent_string(context.evaluator_policy_identity, output,
@@ -989,7 +1042,7 @@ extern "C" int partonsbi_persistent_apfel_support(
     double* charm_threshold, double* bottom_threshold, char* error_buffer,
     std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     const auto& context = lookup_persistent_context(handle);
     if (x_min == nullptr || x_max == nullptr || q_min == nullptr ||
         q_max == nullptr || charm_threshold == nullptr ||
@@ -1016,7 +1069,7 @@ extern "C" int partonsbi_persistent_apfel_diagnostics(
     std::uint64_t* rejected_calls, char* error_buffer,
     std::size_t error_buffer_size) {
   try {
-    std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+    std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
     const auto& context = lookup_persistent_context(handle);
     if (scalar_calls == nullptr || batch_calls == nullptr ||
         batch_queries == nullptr || alpha_s_calls == nullptr ||
@@ -1039,6 +1092,6 @@ extern "C" int partonsbi_persistent_apfel_diagnostics(
 }
 
 extern "C" std::size_t partonsbi_persistent_apfel_live_contexts() {
-  std::lock_guard<std::mutex> lock(persistent_apfel_mutex);
+  std::lock_guard<std::recursive_mutex> lock(persistent_apfel_mutex);
   return persistent_apfel_contexts.size();
 }
