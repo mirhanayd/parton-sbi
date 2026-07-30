@@ -178,16 +178,33 @@
   engineering evidence but is not selected for production coupling. Other
   modified or custom generator interfaces are neither rejected nor authorized
   by issue #39.
+- Issue #42 is active planning-only work. Its D1D-A installed-source audit
+  traces 30 downstream PDF call-site groups across 23 hash-inventoried PYTHIA
+  8.312 files and separates 17 prospective-HERA paths from 13 paths disabled
+  by that configuration. This is static reachability evidence, not runtime
+  coverage.
+- D1D-A finds that removing only the public `PDF::xf`, `PDF::xfVal`, and
+  `PDF::xfSea` positivity transformations is `INSUFFICIENT`: prospective-HERA
+  hard-process, ISR, and beam-remnant paths require nonnegative rates,
+  denominators, probabilities, maxima, or monotone cumulative weights.
+- An external signed event weight cannot preserve the stock internal target
+  measure where the PDF sign enters before hard-channel, shower, remnant, or
+  rejection-envelope decisions. Existing signed Les Houches event-weight
+  handling is not evidence for negative-PDF sampling.
+- The D1D-A result is `READY_FOR_ARCHITECTURE_COMPARISON`. No PYTHIA fork,
+  signed-weight design, alternate generator, implementation, or prototype is
+  selected or authorized; issue #42 remains planning only.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-A new reviewed architecture decision is required before any further
-generator-coupling implementation. It may consider a versioned minimal PYTHIA
-fork or another signed-value generator interface, but must separately address
-reproducibility, upstream drift, CI, deployment, and validation.
+A reviewed D1D architecture comparison is required before any further
+generator-coupling implementation. It may compare a versioned PYTHIA patch,
+a mathematically specified signed-weight/internal-sampling redesign, another
+generator interface, or stopping generator coupling. D1D-A selects and
+authorizes none of these paths.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -212,6 +229,9 @@ unimplemented hypotheses.
 - Do not proceed from D1C-B to runtime consumer instrumentation using the
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
+- Issue #42 and D1D-A are planning only. `READY_FOR_ARCHITECTURE_COMPARISON`
+  authorizes neither implementation nor a prototype; D2 remains blocked and
+  unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
