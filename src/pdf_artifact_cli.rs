@@ -5,10 +5,15 @@ use std::process::Command;
 use std::time::Instant;
 
 use parton_sbi::physics::{
-    build_or_load_artifact, default_cache_root, evaluate_artifact, evolve_grid, ArtifactGrid,
-    ContinuousPdfContext, EvolvedGrid, LhapdfProvider, PdfTheta, ALPHA_S_ABSOLUTE_TOLERANCE,
-    ALPHA_S_RELATIVE_TOLERANCE, BOUNDARY_ABSOLUTE_TOLERANCE, BOUNDARY_RELATIVE_TOLERANCE,
-    D1_FLAVORS, ROUND_TRIP_ABSOLUTE_TOLERANCE, ROUND_TRIP_RELATIVE_TOLERANCE,
+    build_or_load_artifact, build_or_load_artifact_v2, default_cache_root, default_cache_root_v2,
+    evaluate_artifact, evaluate_artifact_v2, evolve_grid, evolve_grid_v2,
+    mandatory_artifact_anchors_v2, refine_common_grid_v2, validate_moments_v2,
+    validate_photon_observables_v2, validate_raw_ct_fidelity_v2, validate_transport_v2,
+    ArtifactGrid, ArtifactGridV2, ComputationalGridKind, ContinuousPdfContext, EvolvedGrid,
+    LhapdfProvider, MomentClosureV2, PdfTheta, PhotonObservableClosureV2, RawCtFidelityV2,
+    RefinementTraceV2, TransportClosureV2, ALPHA_S_ABSOLUTE_TOLERANCE, ALPHA_S_RELATIVE_TOLERANCE,
+    BOUNDARY_ABSOLUTE_TOLERANCE, BOUNDARY_RELATIVE_TOLERANCE, D1_FLAVORS,
+    ROUND_TRIP_ABSOLUTE_TOLERANCE, ROUND_TRIP_RELATIVE_TOLERANCE,
 };
 use serde::{Deserialize, Serialize};
 
@@ -16,17 +21,18 @@ pub const VALIDATE_PDF_ARTIFACT_HELP: &str =
     "Validate the Phase 1B-D1 APFEL++/LHAPDF artifact contract
 
 Usage:
-  parton-sbi validate-pdf-artifact --delta-v <VALUE> --lambda-sea <VALUE>
-  parton-sbi validate-pdf-artifact --anchors
-  parton-sbi validate-pdf-artifact --study --study-id <ID> --output <DIRECTORY>
+  parton-sbi validate-pdf-artifact [--artifact-version v1|v2] --delta-v <VALUE> --lambda-sea <VALUE>
+  parton-sbi validate-pdf-artifact [--artifact-version v1|v2] --anchors
+  parton-sbi validate-pdf-artifact [--artifact-version v1|v2] --study --study-id <ID> --output <DIRECTORY>
 
 Modes:
   one point     Build and validate one approved D0R v2 parameter point.
   --anchors     Validate the center, four axis endpoints, and four corners.
   --study       Run the complete clean-provenance nine-anchor Stage 1 study.
 
-This command writes deterministic one-member LHAPDF6 artifacts to the ignored
-repository-local .external cache. It does not invoke PYTHIA or generate events.
+The historical v1 contract remains the default. Select v2 explicitly for the
+ADR-005 revised contract. Both write ignored deterministic LHAPDF6 artifacts.
+Neither invokes PYTHIA or generates events.
 ";
 
 #[derive(Debug, Clone, PartialEq)]
@@ -34,6 +40,7 @@ pub struct PdfArtifactCliArgs {
     mode: ArtifactCliMode,
     study_id: Option<String>,
     output: Option<PathBuf>,
+    artifact_version: ArtifactContractVersion,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -43,6 +50,12 @@ enum ArtifactCliMode {
     Study,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ArtifactContractVersion {
+    V1,
+    V2,
+}
+
 pub fn parse_validate_pdf_artifact(args: &[String]) -> Result<PdfArtifactCliArgs, String> {
     let mut delta_v = None;
     let mut lambda_sea = None;
@@ -50,6 +63,7 @@ pub fn parse_validate_pdf_artifact(args: &[String]) -> Result<PdfArtifactCliArgs
     let mut study = false;
     let mut study_id = None;
     let mut output = None;
+    let mut artifact_version = ArtifactContractVersion::V1;
     let mut index = 0;
     while index < args.len() {
         let flag = args[index].as_str();
@@ -62,7 +76,7 @@ pub fn parse_validate_pdf_artifact(args: &[String]) -> Result<PdfArtifactCliArgs
                 study = true;
                 index += 1;
             }
-            "--delta-v" | "--lambda-sea" | "--study-id" | "--output" => {
+            "--delta-v" | "--lambda-sea" | "--study-id" | "--output" | "--artifact-version" => {
                 let value = args
                     .get(index + 1)
                     .ok_or_else(|| format!("{flag} requires a value"))?;
@@ -83,6 +97,13 @@ pub fn parse_validate_pdf_artifact(args: &[String]) -> Result<PdfArtifactCliArgs
                     }
                     "--study-id" => study_id = Some(value.clone()),
                     "--output" => output = Some(PathBuf::from(value)),
+                    "--artifact-version" => {
+                        artifact_version = match value.as_str() {
+                            "v1" => ArtifactContractVersion::V1,
+                            "v2" => ArtifactContractVersion::V2,
+                            _ => return Err("--artifact-version must be v1 or v2".into()),
+                        }
+                    }
                     _ => unreachable!(),
                 }
                 index += 2;
@@ -116,6 +137,7 @@ pub fn parse_validate_pdf_artifact(args: &[String]) -> Result<PdfArtifactCliArgs
         mode,
         study_id,
         output,
+        artifact_version,
     })
 }
 
@@ -178,6 +200,9 @@ struct Stage1Report {
 }
 
 pub fn run_validate_pdf_artifact(args: PdfArtifactCliArgs) -> Result<(), String> {
+    if args.artifact_version == ArtifactContractVersion::V2 {
+        return run_validate_pdf_artifact_v2(args);
+    }
     let context = ContinuousPdfContext::load_ct18nlo_v2().map_err(|error| error.to_string())?;
     let grid = ArtifactGrid::from_context(&context).map_err(|error| error.to_string())?;
     let (commit, dirty) = git_state()?;
@@ -237,6 +262,316 @@ pub fn run_validate_pdf_artifact(args: PdfArtifactCliArgs) -> Result<(), String>
         serde_json::to_string_pretty(&report).map_err(|error| error.to_string())?
     );
     Ok(())
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "UPPERCASE")]
+enum RevisedStage1Decision {
+    Pass,
+    Fail,
+    Inconclusive,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct RevisedAnchorReport {
+    name: String,
+    theta: PdfTheta,
+    artifact_hash: String,
+    set_name: String,
+    artifact_bytes: u64,
+    moment_closure: MomentClosureV2,
+    transport_closure: TransportClosureV2,
+    observable_closure: PhotonObservableClosureV2,
+    strict_support_passed: bool,
+    threshold_subgrid_count: usize,
+    inactive_top_passed: bool,
+    manifest_byte_reproducible: bool,
+    passed: bool,
+    reasons: Vec<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct RevisedStage1Report {
+    schema_version: String,
+    study_id: String,
+    exact_command: Vec<String>,
+    git_commit: String,
+    git_dirty: bool,
+    baseline_version: String,
+    family_version: String,
+    artifact_schema_version: String,
+    evolution_policy_version: String,
+    grid_policy_version: String,
+    cache_policy_version: String,
+    computational_x_minimum: f64,
+    exported_x_minimum: f64,
+    zero_continuation_policy: String,
+    base_grid: Vec<(usize, f64, usize)>,
+    doubled_grid: Vec<(usize, f64, usize)>,
+    final_common_grid_hash: String,
+    final_x_knot_count: usize,
+    final_unique_q_knot_count: usize,
+    q_subgrids_gev: Vec<Vec<f64>>,
+    refinement_trace_hash: String,
+    refinement_trace: RefinementTraceV2,
+    raw_ct18_fidelity: RawCtFidelityV2,
+    anchor_count: usize,
+    anchors: Vec<RevisedAnchorReport>,
+    revised_stage1_decision: RevisedStage1Decision,
+    d2_authorization_candidate: bool,
+    d2_authorized: bool,
+    runtime_seconds: f64,
+    generated_artifacts_committed: bool,
+    limitations: Vec<String>,
+}
+
+fn run_validate_pdf_artifact_v2(args: PdfArtifactCliArgs) -> Result<(), String> {
+    let context = ContinuousPdfContext::load_ct18nlo_v2().map_err(|error| error.to_string())?;
+    let (commit, dirty) = git_state()?;
+    if matches!(args.mode, ArtifactCliMode::Study) && dirty {
+        return Err("revised Stage 1 study requires a clean committed implementation".into());
+    }
+    let started = Instant::now();
+    let all_anchors = mandatory_artifact_anchors_v2().map_err(|error| error.to_string())?;
+    let selected_anchors = match args.mode {
+        ArtifactCliMode::Point(theta) => vec![("point".to_owned(), theta)],
+        ArtifactCliMode::Anchors | ArtifactCliMode::Study => all_anchors.clone(),
+    };
+    eprintln!("revised-D1: constructing deterministic common grid");
+    let refinement = if matches!(args.mode, ArtifactCliMode::Anchors | ArtifactCliMode::Study) {
+        refine_common_grid_v2(&context, &all_anchors, &default_cache_root_v2())
+            .map_err(|error| error.to_string())?
+    } else {
+        let grid = ArtifactGridV2::initial(&context).map_err(|error| error.to_string())?;
+        parton_sbi::physics::RefinementResultV2 {
+            grid,
+            trace: RefinementTraceV2 {
+                policy_version: parton_sbi::physics::REFINEMENT_POLICY_VERSION_V2.into(),
+                iterations: Vec::new(),
+                complete: false,
+                failure_reason: Some(
+                    "single-point diagnostic does not run global refinement".into(),
+                ),
+            },
+        }
+    };
+    let trace_hash = refinement
+        .trace
+        .canonical_hash()
+        .map_err(|error| error.to_string())?;
+    let final_grid_hash = refinement
+        .grid
+        .canonical_hash()
+        .map_err(|error| error.to_string())?;
+    eprintln!("revised-D1: running mandatory raw-CT18 decomposition");
+    let raw_ct18_fidelity =
+        validate_raw_ct_fidelity_v2(&context).map_err(|error| error.to_string())?;
+    let mut anchors = Vec::new();
+    for (name, theta) in selected_anchors {
+        eprintln!("revised-D1: {name}: base/doubled full-domain moments");
+        let base = evolve_grid_v2(
+            &context,
+            theta,
+            &refinement.grid.x_knots,
+            &refinement.grid.unique_q_knots_gev,
+            ComputationalGridKind::Base,
+        )
+        .map_err(|error| error.to_string())?;
+        let doubled = evolve_grid_v2(
+            &context,
+            theta,
+            &refinement.grid.x_knots,
+            &refinement.grid.unique_q_knots_gev,
+            ComputationalGridKind::Doubled,
+        )
+        .map_err(|error| error.to_string())?;
+        let moment_closure =
+            validate_moments_v2(&base, &doubled).map_err(|error| error.to_string())?;
+        eprintln!("revised-D1: {name}: PDF transport and sign topology");
+        let (artifact, transport_closure) = validate_transport_v2(
+            &context,
+            theta,
+            &refinement.grid,
+            &trace_hash,
+            &default_cache_root_v2(),
+        )
+        .map_err(|error| error.to_string())?;
+        eprintln!("revised-D1: {name}: NLO photon F2/FL closure");
+        let observable_closure = validate_photon_observables_v2(&context, theta, &artifact)
+            .map_err(|error| error.to_string())?;
+        let strict_support_passed = strict_support_smoke_v2(&artifact, &refinement.grid);
+        let repeated = build_or_load_artifact_v2(
+            &context,
+            theta,
+            &refinement.grid,
+            &trace_hash,
+            &default_cache_root_v2(),
+        )
+        .map_err(|error| error.to_string())?;
+        let manifest_byte_reproducible = artifact.manifest == repeated.manifest;
+        let artifact_bytes = artifact
+            .manifest
+            .checksums
+            .iter()
+            .map(|entry| entry.byte_count)
+            .sum();
+        let mut reasons = Vec::new();
+        if !refinement.trace.complete {
+            reasons.push(
+                refinement
+                    .trace
+                    .failure_reason
+                    .clone()
+                    .unwrap_or_else(|| "global refinement did not complete".into()),
+            );
+        }
+        if !moment_closure.passed {
+            reasons.push("base/doubled full-domain moment or leakage gate failed".into());
+        }
+        if !transport_closure.passed {
+            reasons.push("revised direct/APFEL artifact transport gate failed".into());
+        }
+        if !observable_closure.passed {
+            reasons.push("NLO photon F2/FL or reduced-cross-section gate failed".into());
+        }
+        if !strict_support_passed {
+            reasons.push("strict artifact support gate failed".into());
+        }
+        if !manifest_byte_reproducible {
+            reasons.push("v2 artifact manifest was not byte reproducible".into());
+        }
+        anchors.push(RevisedAnchorReport {
+            name,
+            theta,
+            artifact_hash: artifact.manifest.artifact_hash.clone(),
+            set_name: artifact.manifest.set_name.clone(),
+            artifact_bytes,
+            moment_closure,
+            transport_closure,
+            observable_closure,
+            strict_support_passed,
+            threshold_subgrid_count: artifact.manifest.grid.q_subgrids_gev.len(),
+            inactive_top_passed: !artifact
+                .manifest
+                .grid
+                .unique_q_knots_gev
+                .iter()
+                .any(|q| q.to_bits() == context.metadata.top_threshold_gev.to_bits()),
+            manifest_byte_reproducible,
+            passed: reasons.is_empty(),
+            reasons,
+        });
+    }
+    let decision = aggregate_revised_stage1(anchors.iter().map(|anchor| anchor.passed), false);
+    let report = RevisedStage1Report {
+        schema_version: "partonsbi.phase1bd.d1r.study.v2".into(),
+        study_id: args.study_id.clone().unwrap_or_else(|| "v2-smoke".into()),
+        exact_command: std::env::args().collect(),
+        git_commit: commit,
+        git_dirty: dirty,
+        baseline_version: "ct18nlo_member0_sumrule_projected_boundary_v2".into(),
+        family_version: "ct18nlo_two_parameter_boundary_v2".into(),
+        artifact_schema_version: parton_sbi::physics::PDF_ARTIFACT_SCHEMA_VERSION_V2.into(),
+        evolution_policy_version: parton_sbi::physics::EVOLUTION_POLICY_VERSION_V2.into(),
+        grid_policy_version: parton_sbi::physics::ARTIFACT_GRID_POLICY_VERSION_V2.into(),
+        cache_policy_version: parton_sbi::physics::ARTIFACT_CACHE_POLICY_VERSION_V2.into(),
+        computational_x_minimum: parton_sbi::physics::COMPUTATIONAL_XMIN,
+        exported_x_minimum: parton_sbi::physics::EXPORTED_XMIN,
+        zero_continuation_policy: "exact_zero_on_[1e-11,1e-9)".into(),
+        base_grid: parton_sbi::physics::ComputationalGridDefinition::new(
+            ComputationalGridKind::Base,
+        )
+        .subgrids,
+        doubled_grid: parton_sbi::physics::ComputationalGridDefinition::new(
+            ComputationalGridKind::Doubled,
+        )
+        .subgrids,
+        final_common_grid_hash: final_grid_hash,
+        final_x_knot_count: refinement.grid.x_knots.len(),
+        final_unique_q_knot_count: refinement.grid.unique_q_knots_gev.len(),
+        q_subgrids_gev: refinement.grid.q_subgrids_gev.clone(),
+        refinement_trace_hash: trace_hash,
+        refinement_trace: refinement.trace,
+        raw_ct18_fidelity,
+        anchor_count: anchors.len(),
+        anchors,
+        revised_stage1_decision: decision,
+        d2_authorization_candidate: decision == RevisedStage1Decision::Pass,
+        d2_authorized: false,
+        runtime_seconds: started.elapsed().as_secs_f64(),
+        generated_artifacts_committed: false,
+        limitations: vec![
+            "The binding observable is NLO zero-mass photon exchange, not full gamma/Z neutral-current validation.".into(),
+            "Raw CT18 pointwise fidelity is mandatory but nonbinding because the evolution implementation is independent.".into(),
+            "A revised Stage 1 PASS is only a D2 authorization candidate pending separate scientific review.".into(),
+        ],
+    };
+    if let Some(output) = args.output {
+        fs::create_dir_all(&output).map_err(|error| error.to_string())?;
+        let target = output.join("stage1r_decision.json");
+        if target.exists() {
+            return Err(format!("refusing to overwrite {}", target.display()));
+        }
+        fs::write(
+            &target,
+            serde_json::to_vec_pretty(&report).map_err(|error| error.to_string())?,
+        )
+        .map_err(|error| error.to_string())?;
+    }
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&report).map_err(|error| error.to_string())?
+    );
+    Ok(())
+}
+
+fn aggregate_revised_stage1(
+    anchor_passes: impl IntoIterator<Item = bool>,
+    scientifically_unresolved: bool,
+) -> RevisedStage1Decision {
+    if scientifically_unresolved {
+        RevisedStage1Decision::Inconclusive
+    } else if anchor_passes.into_iter().all(|passed| passed) {
+        RevisedStage1Decision::Pass
+    } else {
+        RevisedStage1Decision::Fail
+    }
+}
+
+fn strict_support_smoke_v2(
+    artifact: &parton_sbi::physics::PdfArtifactV2,
+    grid: &ArtifactGridV2,
+) -> bool {
+    let xmin = grid.x_knots[0];
+    let xmax = *grid.x_knots.last().expect("nonempty x grid");
+    let qmin = grid.unique_q_knots_gev[0];
+    let qmax = *grid.unique_q_knots_gev.last().expect("nonempty Q grid");
+    let exact = evaluate_artifact_v2(artifact, &[xmin, xmax], &[qmin, qmax]).is_ok();
+    let below_x = evaluate_artifact_v2(
+        artifact,
+        &[f64::from_bits(xmin.to_bits() - 1), xmax],
+        &[qmin, qmax],
+    )
+    .is_err();
+    let above_x = evaluate_artifact_v2(
+        artifact,
+        &[xmin, f64::from_bits(xmax.to_bits() + 1)],
+        &[qmin, qmax],
+    )
+    .is_err();
+    let below_q = evaluate_artifact_v2(
+        artifact,
+        &[xmin, xmax],
+        &[f64::from_bits(qmin.to_bits() - 1), qmax],
+    )
+    .is_err();
+    let above_q = evaluate_artifact_v2(
+        artifact,
+        &[xmin, xmax],
+        &[qmin, f64::from_bits(qmax.to_bits() + 1)],
+    )
+    .is_err();
+    exact && below_x && above_x && below_q && above_q
 }
 
 fn mandatory_anchors() -> Result<Vec<(String, PdfTheta)>, String> {
@@ -565,5 +900,34 @@ mod tests {
     #[test]
     fn d2_is_never_actual_authorization_from_stage1_aggregation() {
         assert!(Stage1Decision::Pass != Stage1Decision::Fail);
+    }
+
+    #[test]
+    fn revised_stage1_aggregation_preserves_all_three_decisions() {
+        assert_eq!(
+            aggregate_revised_stage1([true; 9], false),
+            RevisedStage1Decision::Pass
+        );
+        assert_eq!(
+            aggregate_revised_stage1([true, false], false),
+            RevisedStage1Decision::Fail
+        );
+        assert_eq!(
+            aggregate_revised_stage1([true; 9], true),
+            RevisedStage1Decision::Inconclusive
+        );
+    }
+
+    #[test]
+    fn parser_selects_v2_without_reinterpreting_v1() {
+        let v1 = parse_validate_pdf_artifact(&["--anchors".into()]).unwrap();
+        let v2 = parse_validate_pdf_artifact(&[
+            "--artifact-version".into(),
+            "v2".into(),
+            "--anchors".into(),
+        ])
+        .unwrap();
+        assert_eq!(v1.artifact_version, ArtifactContractVersion::V1);
+        assert_eq!(v2.artifact_version, ArtifactContractVersion::V2);
     }
 }

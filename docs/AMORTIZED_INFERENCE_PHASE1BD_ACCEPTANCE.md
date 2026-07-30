@@ -120,6 +120,104 @@ and their scientific effect has not been bounded.
 Output: artifact manifest, round-trip report, central comparison, and Stage 1
 decision. Generated grids remain ignored.
 
+### ADR-005 revised Stage 1 contract
+
+ADR-005 authorizes a version-separated D1 revalidation; it does not alter the
+historical v1 result above. The revised contract uses:
+
+```text
+artifact_schema = partonsbi.lhapdf_artifact.v2
+evolution_policy = apfelxx_4.8.0_nlo_vfns_extended_x_v2
+artifact_grid_policy = threshold_subgrids_bounded_refinement_v2
+computational_xmin = 1e-11
+exported_xmin = 1e-9
+```
+
+The D0R boundary is exactly zero on the computational continuation
+`[1e-11,1e-9)`. APFEL++ evolves on both the accepted base grid
+`(400,250,180,160)` and its exact node-doubled grid
+`(800,500,360,320)`. Independent composite GL64 integration evaluates full
+computational-domain moments, retained exported-support moments, and the
+momentum below `1e-9` separately. Full-domain valence and momentum residuals
+must not exceed `1e-5`; base/doubled leakage must agree within `1e-7`.
+
+The LHAPDF artifact contains three official `lhagrid1` Q subgrids: Q0 through
+charm, charm through bottom, and bottom through Qmax. Shared threshold knots
+are repeated in adjacent blocks, top remains inactive, file Q values are
+unsquared, and the row order remains x-outer/Q-inner. One common grid is
+selected for all nine anchors. Starting from the authoritative knots and exact
+thresholds, every x/Q cell is probed at its logarithmic one-third, midpoint,
+and two-thirds points. Every failed interval under `1e-5` relative or `1e-9`
+absolute PDF closure is bisected using the global union across flavors,
+probes, and anchors. The fixed caps are four refinement iterations, 1,025 x
+knots, 257 unique Q knots, 256 MiB per member, and 600 seconds per anchor.
+Crossing any cap is a scientific `FAIL`, not permission to retune.
+
+Binding transport gates require:
+
+- exact loaded knots within `1e-12` relative or `1e-14` absolute;
+- independent LHAPDF 6.5.6 log-bicubic reconstruction within `1e-12`
+  relative or `1e-10` absolute;
+- direct APFEL/artifact fixed probes within `1e-5` relative or `1e-9`
+  absolute, including one-sided charm and bottom threshold probes;
+- `alpha_s` within `1e-8` relative or `1e-10` absolute;
+- identical transported sign-component counts without clipping;
+- exact support-boundary success and typed failure immediately outside.
+
+The binding observable is APFEL++ NLO zero-mass photon exchange only. Direct
+and artifact-backed F2 and FL use `mu_F = mu_R = Q` and must agree within
+`1e-4` relative or `1e-8` absolute over a committed deterministic grid
+covering `x=[1e-4,0.8]`, `Q2=[3.5,10000] GeV2`, the bottom-threshold
+neighborhood, and `y={0.01,0.5,0.95}`. The reduced photon cross section
+`F2-y^2/(1+(1-y)^2) FL` must be finite and at least `-1e-12`. This is not
+gamma/Z validation.
+
+Raw CT18 pointwise fidelity remains mandatory evidence but is nonbinding
+because PartonSBI evolves the projected boundary with an independent
+implementation. Artifact identities use exact binary64 fields, the complete
+versioned numerical contract, the final grid hash, and the refinement-trace
+hash. Repeated builds must be byte-identical; v1 and v2 cache objects cannot
+masquerade as one another; checksum corruption must be quarantined; concurrent
+same-hash publication must remain atomic.
+
+A revised Stage 1 `PASS` requires all nine anchors to satisfy every gate. A
+cap exceedance, conservation or leakage failure, unresolved transport error,
+threshold failure, negative/non-finite reduced cross section, cache-integrity
+failure, or identity/support mismatch is `FAIL`. Scientifically unequal
+coefficient paths, ambiguous threshold semantics, uncertifiable sign topology,
+or unresolved APFEL base/doubled behavior is `INCONCLUSIVE`. In every outcome:
+
+```text
+D2_AUTHORIZED = false
+```
+
+Only a reviewed revised Stage 1 `PASS` may set
+`D2_AUTHORIZATION_CANDIDATE = true`.
+
+### Recorded ADR-005 revised Stage 1 result (2026-07-29)
+
+The revised implementation evaluated all nine mandatory anchors from clean
+commit `de26c57066dc018b530963d25d9a547b4b650c67`.
+
+```text
+REVISED_STAGE1_DECISION = FAIL
+D2_AUTHORIZATION_CANDIDATE = false
+D2_AUTHORIZED = false
+```
+
+The study retained the fixed contract above. Global refinement reached a
+641-x by 149-unique-Q common grid but exceeded the 600-second-per-anchor cap.
+Exact-knot serialization and an independent LHAPDF log-bicubic reconstruction
+had zero tolerance failures. Direct APFEL-to-artifact off-knot transport still
+had `3,492,044` failures and a maximum absolute error of
+`1374.7964848542324`. The worst base/doubled leakage disagreement was
+`4.501148846980385e-7`, above the fixed `1e-7` convergence gate. All nine
+binding NLO photon F2/FL and reduced-cross-section closures passed, but that
+does not override failed transport, moment/leakage, or performance gates.
+
+No bound, tolerance, anchor, support range, or acceptance rule was changed
+after observation. See `AMORTIZED_INFERENCE_PHASE1BD_D1R.md`.
+
 ## Stage 2 — Pythia coupling and support
 
 Initialize controlled center-point probes with the declared neutral-current

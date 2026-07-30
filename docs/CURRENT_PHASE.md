@@ -23,6 +23,11 @@
 - Phase 1B-D1 negative decision: the fixed off-knot transport and evolved
   sum-rule gates failed across the complete nine-anchor study.
 - Phase 1B-D1 revision audit and ADR-005 proposal.
+- ADR-005 accepted and revised D1 threshold-separated artifact implementation
+  completed.
+- Phase 1B-D1R negative decision: deterministic refinement exceeded its fixed
+  performance cap, moment/leakage convergence failed, and direct off-knot
+  transport remained outside tolerance across all nine anchors.
 
 # Current state
 
@@ -66,17 +71,32 @@
   with evolution below `x=1e-9`. On an APFEL computational grid extending to
   `1e-11`, independently integrated full-domain moments meet the proposed
   `1e-5` gate while the lost exported-support momentum remains explicit.
-- ADR-005 proposes threshold-separated, deterministically refined artifacts,
+- ADR-005 defines threshold-separated, deterministically refined artifacts,
   computational-domain moment gates, raw-CT18 fidelity as a mandatory
   diagnostic, and NLO photon-exchange structure-function closure.
-- Revised D1 implementation is authorized only if ADR-005 is accepted.
+- The clean D1R study ran from commit
+  `de26c57066dc018b530963d25d9a547b4b650c67` with `dirty=false` and evaluated
+  all nine mandatory anchors on one common 641-x by 149-Q grid.
+- Exact-knot serialization and independent LHAPDF log-bicubic reconstruction
+  passed with zero tolerance failures, and all nine NLO photon F2/FL
+  observable closures passed.
+- The refinement trace stopped at `669.137992893 s` for its worst anchor,
+  above the fixed 600-second cap. It retained `3,492,044` direct off-knot
+  failures with maximum absolute error `1374.7964848542324`.
+- The worst base and doubled full-domain residuals were
+  `1.0118550574755858e-5` and `8.177903536354947e-6`; the maximum
+  base/doubled leakage disagreement was `4.501148846980385e-7`, above the
+  fixed `1e-7` gate.
+- Revised Stage 1 is complete with `FAIL`;
+  `D2_AUTHORIZATION_CANDIDATE = false` and `D2_AUTHORIZED = false`.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-Scientifically review ADR-005 and its revised Stage 1 acceptance contract.
+Scientifically review the completed negative D1R result and decide whether a
+new D1 architecture ADR is warranted.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -85,9 +105,11 @@ unimplemented hypotheses.
 # Gate
 
 - Do not reuse or reweight a nominal event pool.
-- Do not begin D2: Stage 1 failed and `D2_AUTHORIZATION_CANDIDATE = false`.
-- Do not implement revised D1 until ADR-005 is reviewed; its authorization is
-  limited to issue #30 and never authorizes D2.
+- Do not begin D2: revised Stage 1 failed and
+  `D2_AUTHORIZATION_CANDIDATE = false`.
+- Do not reinterpret exact-knot or photon-observable closure as qualification
+  of the failed direct off-knot transport contract.
+- Any additional D1 revision requires a new reviewed architecture decision.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

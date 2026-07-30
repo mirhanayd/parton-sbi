@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mirhanayd/parton-sbi/schemas/stage1_decision.schema.json",
+  "title": "PartonSBI Stage 1 decision",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "study_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "partonsbi.phase1bd.d1.study.v1",
+        "partonsbi.phase1bd.d1r.study.v2"
+      ]
+    },
+    "study_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "stage1_decision": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "INCONCLUSIVE"
+      ]
+    },
+    "revised_stage1_decision": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "INCONCLUSIVE"
+      ]
+    },
+    "d2_authorization_candidate": {
+      "type": "boolean"
+    },
+    "d2_authorized": {
+      "const": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schema_version": {
+            "const": "partonsbi.phase1bd.d1.study.v1"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "stage1_decision",
+          "d2_authorization_candidate",
+          "d2_authorized"
+        ]
+      },
+      "else": {
+        "required": [
+          "revised_stage1_decision",
+          "d2_authorization_candidate",
+          "d2_authorized"
+        ]
+      }
+    }
+  ]
+}
