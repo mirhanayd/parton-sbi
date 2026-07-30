@@ -25,6 +25,7 @@ pub const CUSTOM_INTERPOLATOR_PROTOTYPE_VERSION: &str =
     "threshold_piecewise_logx_logq_bilinear_prototype_v1";
 pub const QUERY_ENVELOPE_POLICY_VERSION: &str = "pythia_8.312_static_query_envelope_v1";
 pub const PROTOTYPE_STUDY_POLICY_VERSION: &str = "d1a_three_anchor_bounded_study_v1";
+pub const EVIDENCE_SERIALIZATION_POLICY_VERSION: &str = "serde_json_float_roundtrip_pretty_v1";
 pub const MAX_STUDY_RUNTIME: Duration = Duration::from_secs(30 * 60);
 pub const MAX_STUDY_BYTES: u64 = 2 * 1024 * 1024 * 1024;
 pub const PROTOTYPE_RELATIVE_TOLERANCE: f64 = 1.0e-5;
@@ -1083,8 +1084,17 @@ mod tests {
     #[test]
     fn reload_audit_uses_binary64_identity_and_canonical_bytes() {
         let mut original = synthetic_grid();
-        original.xf_values[0] = -0.0;
-        original.xf_values[1] = 1.0e-300;
+        original.xf_values = vec![
+            0.0,
+            -0.0,
+            f64::from_bits(1),
+            1.0e-300,
+            f64::MAX / 2.0,
+            0.24670503740118183,
+            0.48997239234966067,
+            0.000012362893414244047,
+            -1.0e150,
+        ];
         original.identity = original.recompute_identity();
         let bytes = serde_json::to_vec_pretty(&original).unwrap();
         let reloaded: DeterministicTransportGrid = serde_json::from_slice(&bytes).unwrap();
@@ -1093,8 +1103,46 @@ mod tests {
         assert_eq!(audit.binary64_identity_status, MeasurementStatus::Passed);
         assert_eq!(audit.canonical_bytes_status, MeasurementStatus::Passed);
         assert!(audit.first_mismatch.is_none());
-        assert_eq!(reloaded.xf_values[0].to_bits(), (-0.0_f64).to_bits());
-        assert_eq!(reloaded.xf_values[1].to_bits(), 1.0e-300_f64.to_bits());
+        assert_eq!(reloaded.identity, reloaded.recompute_identity());
+        for (left, right) in original.x_knots.iter().zip(&reloaded.x_knots) {
+            assert_eq!(left.to_bits(), right.to_bits());
+        }
+        for (left, right) in original.q_knots_gev.iter().zip(&reloaded.q_knots_gev) {
+            assert_eq!(left.to_bits(), right.to_bits());
+        }
+        for (left, right) in original.thresholds_gev.iter().zip(&reloaded.thresholds_gev) {
+            assert_eq!(left.to_bits(), right.to_bits());
+        }
+        for (left, right) in original.xf_values.iter().zip(&reloaded.xf_values) {
+            assert_eq!(left.to_bits(), right.to_bits());
+        }
+        assert_eq!(bytes, serde_json::to_vec_pretty(&reloaded).unwrap());
+
+        let mut mutated = reloaded.clone();
+        mutated.xf_values[5] = f64::from_bits(mutated.xf_values[5].to_bits() ^ 1);
+        let mutated_bytes = serde_json::to_vec_pretty(&mutated).unwrap();
+        let mutation_audit = audit_transport_reload(&original, &mutated, &mutated_bytes).unwrap();
+        assert_eq!(
+            mutation_audit.first_mismatch.as_deref(),
+            Some("xf_values[5]")
+        );
+        assert_eq!(
+            mutation_audit.binary64_identity_status,
+            MeasurementStatus::Failed
+        );
+    }
+
+    #[test]
+    fn reported_reload_values_round_trip_exactly() {
+        for original in [
+            0.24670503740118183_f64,
+            0.48997239234966067_f64,
+            0.000012362893414244047_f64,
+        ] {
+            let bytes = serde_json::to_vec_pretty(&original).unwrap();
+            let reloaded: f64 = serde_json::from_slice(&bytes).unwrap();
+            assert_eq!(original.to_bits(), reloaded.to_bits());
+        }
     }
 
     #[test]

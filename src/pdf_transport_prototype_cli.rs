@@ -6,7 +6,8 @@ use parton_sbi::physics::{
     audit_transport_reload, derive_prototype_decision, prototype_anchors, CandidateEvidence,
     CandidateStatus, ComparisonEvidence, DeterministicTransportGrid, DirectApfelEvaluator,
     HardProcessQueryEnvelope, MeasurementStatus, PrototypeDecision, PrototypeStudyContract,
-    ReloadAudit, StudyBudget, TransportQuery, D1_FLAVORS, MINIMUM_PROTOTYPE_CALLS_PER_SECOND,
+    ReloadAudit, StudyBudget, TransportQuery, D1_FLAVORS, EVIDENCE_SERIALIZATION_POLICY_VERSION,
+    MINIMUM_PROTOTYPE_CALLS_PER_SECOND,
 };
 use serde::{Deserialize, Serialize};
 
@@ -75,6 +76,7 @@ fn set_once<T>(slot: &mut Option<T>, value: T, name: &str) -> Result<(), String>
 #[derive(Debug, Serialize)]
 struct PreparationManifest {
     schema_version: &'static str,
+    evidence_serialization_policy: &'static str,
     git_commit: &'static str,
     git_dirty_at_build: bool,
     contract: PrototypeStudyContract,
@@ -106,6 +108,7 @@ struct AnchorStudySummary {
 #[derive(Debug, Serialize)]
 struct PrototypeStudySummary {
     schema_version: &'static str,
+    evidence_serialization_policy: &'static str,
     decision: PrototypeDecision,
     direct_candidate_status: CandidateStatus,
     custom_candidate_status: CandidateStatus,
@@ -128,7 +131,8 @@ pub fn run_prototype_pdf_transport(arguments: PdfTransportPrototypeCliArgs) -> R
     let contract = PrototypeStudyContract::fixed().map_err(|error| error.to_string())?;
     let envelope = HardProcessQueryEnvelope::hera_dis();
     let manifest = PreparationManifest {
-        schema_version: "partonsbi.d1a.transport-prototype.preparation.v1",
+        schema_version: "partonsbi.d1a.transport-prototype.preparation.v2",
+        evidence_serialization_policy: EVIDENCE_SERIALIZATION_POLICY_VERSION,
         git_commit: env!("GIT_HASH"),
         git_dirty_at_build: env!("GIT_DIRTY") == "true",
         contract,
@@ -393,7 +397,8 @@ fn run_bounded_study(
         all_consumer_envelope_complete,
     );
     let summary = PrototypeStudySummary {
-        schema_version: "partonsbi.d1a.transport-prototype.study.v2",
+        schema_version: "partonsbi.d1a.transport-prototype.study.v3",
+        evidence_serialization_policy: EVIDENCE_SERIALIZATION_POLICY_VERSION,
         decision,
         direct_candidate_status,
         custom_candidate_status,
