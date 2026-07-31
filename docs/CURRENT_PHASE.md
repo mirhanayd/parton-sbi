@@ -178,30 +178,44 @@
   engineering evidence but is not selected for production coupling. Other
   modified or custom generator interfaces are neither rejected nor authorized
   by issue #39.
-- Issue #42 is active planning-only work. Its corrected D1D-A audit searches
-  374 installed/release PYTHIA 8.312 header and source files with nine
-  header-derived patterns. All 2,778 raw matches are classified: 797 included,
-  1,981 excluded with reasons, and zero unclassified.
-- Audit v2 separates 137 call-site groups containing 672 concrete source uses
-  from two boundary nodes, sixteen static pointer-role records, and four
-  unresolved policy records. It no longer describes heterogeneous groups or
-  metadata as concrete runtime consumers.
-- Concrete static reachability is 212 prospective-HERA source-reachable, 436
-  source-capable but disabled by configuration, and 24 unresolved. Boundary
+- Issue #42 is active planning-only work. The independent integrity review
+  rejected the v2 `READY_FOR_ARCHITECTURE_COMPARISON` claim because stored
+  commands were not executable, the raw key and mappings were defective, 105
+  declaration-derived locations were missing or unresolved, and 74
+  classification defects plus one owning-symbol defect remained.
+- The corrected v3/v2 artifacts use a repository-owned static generator and
+  ten structured argument-array specifications over the same 374
+  installed/release PYTHIA 8.312 files. All 4,033 occurrence-level canonical
+  raw matches are classified: 1,109 included, 2,924 excluded with reasons,
+  and zero unclassified. Exact regenerated-set equality and deterministic
+  ordering pass.
+- Audit v3 separates 146 call-site groups containing 703 concrete source uses
+  from two boundary nodes, sixteen pointer-role records, five unresolved
+  policy records, and one signed-LHA policy record. Mapping validation reports
+  zero dangling targets, incompatible multi-target mappings, orphan
+  search-derived records, nonexistent coordinates, or invalid symbols.
+- Concrete static reachability is 226 prospective-HERA source-reachable, 444
+  source-capable but disabled by configuration, and 33 unresolved. Boundary
   and pointer metadata are explicitly not runtime paths. Static reachability
   remains distinct from runtime coverage.
 - Installed and extracted release copies of every cited installed PYTHIA
   header are byte-identical under independently recorded SHA-256 hashes. The
-  full search manifest and its hash are bound into the v2 audit artifact.
+  full search manifest and its hash are bound into the v3 audit artifact.
+- All 90 previously missed legitimate locations are now included as 31
+  material consumers, 32 boundary records, and 27 pointer/policy provenance
+  records. All 15 `getXPDF` locations remain explicit `UNRESOLVED` findings;
+  none is suppressed to earn readiness.
 - D1D-A finds that removing only the public `PDF::xf`, `PDF::xfVal`, and
   `PDF::xfSea` positivity transformations is `INSUFFICIENT`: prospective-HERA
   hard-process, ISR, and beam-remnant paths require nonnegative rates,
   denominators, probabilities, maxima, or monotone cumulative weights.
-- An external signed event weight cannot preserve the stock internal target
-  measure where the PDF sign enters before hard-channel, shower, remnant, or
-  rejection-envelope decisions. Existing signed Les Houches event-weight
-  handling is not evidence for negative-PDF sampling.
-- The D1D-A result is `READY_FOR_ARCHITECTURE_COMPARISON`. No PYTHIA fork,
+- For confirmed audited reachable paths, an external signed event weight
+  cannot repair a sign that already changed an internal selection
+  probability, veto, channel/remnant choice, maximum, or envelope. This claim
+  is not generalized to the unresolved `getXPDF` paths. Existing signed Les
+  Houches event-weight handling is not evidence for negative-PDF sampling.
+- The validator derives `D1D_A_RESULT = EVIDENCE_CORRECTION_REQUIRED` because
+  the 15 `getXPDF` semantic classifications remain unresolved. No PYTHIA fork,
   signed-weight design, alternate generator, implementation, or prototype is
   selected or authorized; issue #42 remains planning only.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
@@ -210,11 +224,10 @@
 # Next scientific action
 
 ```text
-A reviewed D1D architecture comparison is required before any further
-generator-coupling implementation. It may compare a versioned PYTHIA patch,
-a mathematically specified signed-weight/internal-sampling redesign, another
-generator interface, or stopping generator coupling. D1D-A selects and
-authorizes none of these paths.
+A separately reviewed static classification of the 15 unresolved getXPDF
+paths is required. Do not begin architecture comparison, any further
+generator-coupling implementation, or D2 until the current D1D-A acceptance
+conditions pass.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain
@@ -239,9 +252,9 @@ unimplemented hypotheses.
 - Do not proceed from D1C-B to runtime consumer instrumentation using the
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
-- Issue #42 and D1D-A are planning only. `READY_FOR_ARCHITECTURE_COMPARISON`
-  authorizes neither implementation nor a prototype; D2 remains blocked and
-  unauthorized.
+- Issue #42 and D1D-A are planning only. The current result is
+  `EVIDENCE_CORRECTION_REQUIRED`; architecture comparison, implementation,
+  prototypes, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
