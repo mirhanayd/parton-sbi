@@ -178,11 +178,21 @@
   engineering evidence but is not selected for production coupling. Other
   modified or custom generator interfaces are neither rejected nor authorized
   by issue #39.
-- Issue #42 is active planning-only work. Its D1D-A installed-source audit
-  traces 30 downstream PDF call-site groups across 23 hash-inventoried PYTHIA
-  8.312 files and separates 17 prospective-HERA paths from 13 paths disabled
-  by that configuration. This is static reachability evidence, not runtime
-  coverage.
+- Issue #42 is active planning-only work. Its corrected D1D-A audit searches
+  374 installed/release PYTHIA 8.312 header and source files with nine
+  header-derived patterns. All 2,778 raw matches are classified: 797 included,
+  1,981 excluded with reasons, and zero unclassified.
+- Audit v2 separates 137 call-site groups containing 672 concrete source uses
+  from two boundary nodes, sixteen static pointer-role records, and four
+  unresolved policy records. It no longer describes heterogeneous groups or
+  metadata as concrete runtime consumers.
+- Concrete static reachability is 212 prospective-HERA source-reachable, 436
+  source-capable but disabled by configuration, and 24 unresolved. Boundary
+  and pointer metadata are explicitly not runtime paths. Static reachability
+  remains distinct from runtime coverage.
+- Installed and extracted release copies of every cited installed PYTHIA
+  header are byte-identical under independently recorded SHA-256 hashes. The
+  full search manifest and its hash are bound into the v2 audit artifact.
 - D1D-A finds that removing only the public `PDF::xf`, `PDF::xfVal`, and
   `PDF::xfSea` positivity transformations is `INSUFFICIENT`: prospective-HERA
   hard-process, ISR, and beam-remnant paths require nonnegative rates,

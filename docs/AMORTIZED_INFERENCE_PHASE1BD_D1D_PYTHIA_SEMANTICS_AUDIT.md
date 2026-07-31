@@ -1,11 +1,12 @@
 # Phase 1B-D1D-A downstream PYTHIA signed-PDF semantics audit
 
-## Scope and authorization
+## Scope and immutable result
 
-This is the planning-only source audit tracked by issue #42. It inspects the
-installed PYTHIA 8.312 headers and matching source tree. It does not modify or
-execute PYTHIA, initialize a generator, evaluate APFEL, create events, select
-an architecture, or authorize a prototype. The immutable D1C result remains:
+This is the planning-only installed-source audit tracked by issue #42. It does
+not modify or execute PYTHIA, initialize a generator, evaluate APFEL or LHAPDF,
+create events, select an architecture, or authorize a prototype.
+
+The immutable D1C result remains:
 
 ```text
 D1C_FINAL_DECISION = FAIL
@@ -13,259 +14,314 @@ failed_gate = generator_facing_signed_pdf_contract
 D2_AUTHORIZED = false
 ```
 
-The machine-readable inventory is
-`docs/phase1bd_d1d_pythia_semantics_audit.json`. It records a SHA-256 for every
-cited source file and distinguishes direct source observations from
-mathematical inference.
-
-## Source identity and method boundary
-
-The installed headers are under
-`.external/pythia-8.3.12/include/Pythia8`; the matching implementation is under
-`.external/src/releases-pythia8312`. The source is the versioned 8.312 release
-archive `.external/downloads/releases-pythia8312.tar.gz`, SHA-256
-`c1a33aa5fa15e6b70d7946ce6d237246842887ec84ea0b35dfc2535c868a2770`.
-There is no independent Git commit in the extracted source directory, so the
-release archive and the 23-file hash inventory form its deterministic identity.
-
-Direct source evidence establishes the boundary:
-
-- `PDF::xf`, `PDF::xfVal`, and `PDF::xfSea` are non-virtual public readers;
-  `xfUpdate` is the protected virtual cache-fill hook
-  (`PartonDistributions.h:82-93,188-195`).
-- The public readers use `max(0., value)` and valence `abs` transformations
-  (`PartonDistributions.cc:122-229,272-394`).
-- `PDFPtr` is `shared_ptr<PDF>` (`SharedPointers.h:64-65`), so calls through the
-  installed pointer boundary execute those non-virtual readers.
-- `BeamParticle` forwards hard, ordinary, valence, sea, ISR/MPI, bounds, and
-  PDF-alpha_s calls through its selected PDF pointers
-  (`BeamParticle.h:218-267`).
-- `Pythia::setPDFPtr` accepts sixteen role-specific PDF pointers
-  (`Pythia.h:110-122`); source mapping is visible in
-  `BeamSetup.cc:1545-1575`. This is static role evidence, not runtime pointer
-  installation or post-initialization substitution evidence.
-
-## Prospective HERA configuration and reachability
-
-The prospective configuration is taken from accepted repository documents:
-27.5 GeV electron and 920 GeV proton beams, neutral-current gamma/Z DIS,
-`x in [1e-4,0.8]`, `Q2 in [3.5,10000] GeV^2`, and `y in [0.01,0.95]`.
-ISR and beam remnants are enabled. MPI, diffraction, resolved photons, photon
-fluxes, and merging/alternate showers are disabled. An alternate hard proton
-PDF is disabled or must be identical.
-
-The audit uses two exclusive static labels. `HERA` means source-reachable under
-that prospective configuration; `disabled` means source-capable but disabled
-there. Neither label is runtime coverage. Seventeen records are prospective
-HERA paths and thirteen are source-capable-but-disabled paths.
-
-## Downstream call-site inventory
-
-Each row has one primary semantic classification. Secondary classifications,
-zero/negative behavior, guards, risks, caller chains, and explicit inferences
-are retained in the JSON artifact.
-
-| ID | Source and lines | Consumer and arithmetic | Primary semantics | Reach | Reader-only patch | Signed-weight boundary |
-|---|---|---|---|---|---|---|
-| CS01 | `PartonDistributions.cc:122-229,272-394` | public `xf/xfVal/xfSea`; `max`/`abs` | `REQUIRES_NONNEGATIVE_DENSITY` | HERA | boundary only | unresolved |
-| CS02 | `BeamParticle.h:218-267` | role-specific pointer forwarding | `REQUIRES_NONNEGATIVE_DENSITY` | HERA | unresolved | unresolved |
-| CS03 | `BeamParticle.cc:350-425` | rescaled valence + sea + companion total | `REQUIRES_NONNEGATIVE_DENSITY` | HERA | insufficient | internal redesign |
-| CS04 | `BeamParticle.cc:474-514` | cumulative valence/sea/companion draw | `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | HERA | insufficient | internal redesign |
-| CS05 | `BeamRemnants.cc:196-209,287-300` | remnant construction from selected classes | `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | HERA | insufficient | incompatible kernel |
-| CS06 | `SigmaProcess.cc:414-473` | `sigmaHat * pdfA * pdfB` channel rates | `REQUIRES_NONNEGATIVE_RATE` | HERA | insufficient | internal redesign |
-| CS07 | `SigmaProcess.cc:479-500` | cumulative incoming-channel draw | `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | HERA | insufficient | internal redesign |
-| CS08 | `PhaseSpace.cc:585-650` | initialization maxima and envelopes | `REQUIRES_NONNEGATIVE_MAXIMUM_OR_ENVELOPE` | HERA | insufficient | incompatible kernel |
-| CS09 | `PhaseSpace.cc:1025-1130` | negative trial sigma warned then zeroed | `REQUIRES_NONNEGATIVE_RATE` | HERA | insufficient | incompatible kernel |
-| CS10 | `ProcessContainer.cc:190-250,330-430` | internal sigma handling; signed LHA is separate | `REQUIRES_NONNEGATIVE_RATE` | HERA | insufficient | incompatible kernel |
-| CS11 | `ProcessLevel.cc:640-715,775-840` | cumulative process-maximum choice | `REQUIRES_NONNEGATIVE_MAXIMUM_OR_ENVELOPE` | HERA | insufficient | incompatible kernel |
-| CS12 | `SimpleSpaceShower.cc:1070-1225` | ISR mother/daughter ratio in rate/Sudakov | `REQUIRES_NONNEGATIVE_RATE` | HERA | insufficient | internal redesign |
-| CS13 | `SimpleSpaceShower.cc:1495-1540` | ISR PDF-ratio veto weight | `REQUIRES_PROBABILITY_IN_ZERO_ONE` | HERA | insufficient | incompatible kernel |
-| CS14 | `SimpleSpaceShower.cc:1568-1660` | heavy-threshold old/new PDF ratio | `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | HERA | insufficient | internal redesign |
-| CS15 | `SimpleSpaceShower.cc:2335-2500` | optional weak-shower overestimate/flavor draw | `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | disabled | insufficient | internal redesign |
-| CS16 | `SimpleTimeShower.cc:2868-2900` | beam-recoiler PDF-ratio veto | `REQUIRES_PROBABILITY_IN_ZERO_ONE` | HERA | insufficient | incompatible kernel |
-| CS17 | `PartonLevel.cc:1475-1504` | incoming initiator valence/sea/companion draw | `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | HERA | insufficient | internal redesign |
-| CS18 | `MultipartonInteractions.cc:1930-1995,2140-2185,2245-2285` | MPI cumulative flavor draw | `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | disabled | insufficient | internal redesign |
-| CS19 | `MultipartonInteractions.cc:1045-1085` | MPI initiator categorical assignment | `REQUIRES_PROBABILITY_IN_ZERO_ONE` | disabled | insufficient | incompatible kernel |
-| CS20 | `History.cc:1260-1310,8880-8910` | merging PDF ratios with denominator floors | `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | disabled | insufficient | internal redesign |
-| CS21 | `DireHistory.cc:1304-1325,6740-6785` | Dire history PDF ratios | `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | disabled | insufficient | internal redesign |
-| CS22 | `VinciaISR.cc:4566-4579,4833-4854`; `VinciaEW.cc:3976-3984`; `VinciaQED.cc:1778-1784,2491-2513` | optional antenna/shower PDF ratios | `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | disabled | insufficient | internal redesign |
-| CS23 | `GammaKinematics.cc:285-312` | accurate/approximate photon-flux ratio | `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | disabled | insufficient | incompatible kernel |
-| CS24 | `BeamParticle.cc:702-747` | resolved-photon `xVal/(xVal+xSea)` choice | `REQUIRES_PROBABILITY_IN_ZERO_ONE` | disabled | insufficient | incompatible kernel |
-| CS25 | `BeamSetup.cc:980-1115` | pomeron/diffractive provider into standard rates | `REQUIRES_NONNEGATIVE_DENSITY` | disabled | insufficient | internal redesign |
-| CS26 | `BeamSetup.cc:980-1087,1545-1575` | alternate hard-PDF slot into hard rates | `REQUIRES_NONNEGATIVE_RATE` | disabled | insufficient | internal redesign |
-| CS27 | `SigmaProcess.h:196-202,622-627`; `ProcessContainer.cc:190-250,350-430` | explicit negative LHA event weights | `SUPPORTS_EXPLICIT_SIGNED_WEIGHT` | disabled | not applicable | possibly sufficient only after a positive history |
-| CS28 | `BeamParticle.h:262-270`; shower/MPI/hard sources in JSON | PDF alpha_s proxy versus component couplings | `SEMANTICS_UNRESOLVED` | disabled | unresolved | unresolved |
-| CS29 | `Pythia.h:110-122`; `SharedPointers.h:64-65`; `BeamSetup.cc:1545-1575` | sixteen static pointer roles | `SEMANTICS_UNRESOLVED` | HERA | unresolved | unresolved |
-| CS30 | `GammaKinematics.cc:450-485` | flux-ratio trial weight | `REQUIRES_PROBABILITY_IN_ZERO_ONE` | disabled | insufficient | incompatible kernel |
-
-Primary classification counts are:
-
-| Classification | Count |
-|---|---:|
-| `REQUIRES_NONNEGATIVE_DENSITY` | 4 |
-| `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | 5 |
-| `REQUIRES_NONNEGATIVE_RATE` | 5 |
-| `REQUIRES_PROBABILITY_IN_ZERO_ONE` | 5 |
-| `REQUIRES_NONNEGATIVE_MAXIMUM_OR_ENVELOPE` | 2 |
-| `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | 6 |
-| `SUPPORTS_EXPLICIT_SIGNED_WEIGHT` | 1 |
-| `SEMANTICS_UNRESOLVED` | 2 |
-| `SIGNED_VALUE_ALGEBRAICALLY_VALID` | 0 |
-
-## Direct source findings and mathematical inferences
-
-### Hard process
-
-Direct source evidence: `SigmaProcess::sigmaPDF` multiplies channel matrix
-elements by the two beam PDFs and sums the resulting `pdfSigma` values
-(`SigmaProcess.cc:414-473`). `pickInState` treats those channel values as a
-monotone cumulative distribution (`SigmaProcess.cc:479-500`). Phase-space
-initialization uses PDF-weighted trials to construct maxima
-(`PhaseSpace.cc:585-650`), and a negative trial cross section is later warned
-about and replaced by zero (`PhaseSpace.cc:1025-1130`). Process choice uses
-cumulative nonnegative maxima (`ProcessLevel.cc:640-715,775-840`).
-
-Inference: a negative PDF contribution reaches rate, channel-selection, and
-envelope construction before a complete event history exists. Removing only
-the public clipping readers would therefore create negative or nonmonotone
-inputs to algorithms whose stock mathematical meaning is positive sampling.
-
-### ISR and beam recoils
-
-Direct source evidence: the standard space shower forms mother/daughter PDF
-ratios inside its branching kernel, protects denominators with `TINYPDF`, and
-uses the result in Sudakov/trial evolution (`SimpleSpaceShower.cc:1070-1225`).
-Later veto steps compare a PDF-ratio weight with a uniform random number
-(`SimpleSpaceShower.cc:1495-1540`). Heavy-flavor threshold handling requires a
-strictly positive old PDF denominator (`SimpleSpaceShower.cc:1568-1660`). The
-time shower also applies a beam-recoiler PDF-ratio veto
-(`SimpleTimeShower.cc:2868-2900`).
-
-Inference: a negative PDF numerator is not an externally attachable sign in
-these paths. It changes or invalidates a branching rate, Sudakov integrand, or
-veto probability. A mathematically defined signed internal shower would be a
-new sampling architecture, not a minimal reader patch.
-
-### Valence, sea, companion, and remnants
-
-Direct source evidence: `xfModified` constructs a rescaled sum of valence,
-sea/gluon, and companion terms (`BeamParticle.cc:350-425`).
-`pickValSeaComp` multiplies that total by a uniform random number and traverses
-cumulative component weights (`BeamParticle.cc:474-514`). `PartonLevel`
-invokes this classification for incoming partons (`PartonLevel.cc:1475-1504`),
-and `BeamRemnants` consumes the resulting state (`BeamRemnants.cc:196-209`).
-
-Inference: signed components do not define a monotone categorical probability.
-An external final event sign cannot retrospectively correct which flavor or
-remnant state was sampled.
-
-### Disabled but source-capable consumers
-
-MPI repeats cumulative PDF flavor selection
-(`MultipartonInteractions.cc:1930-1995,2140-2185,2245-2285`). Merging, Dire,
-and Vincia form PDF ratios with positive floors or direct denominators. Photon
-flux and resolved-photon paths form flux ratios and valence probabilities.
-Diffraction and alternate hard PDFs feed the same hard-rate machinery. These
-paths are disabled in the prospective HERA configuration, but that is not a
-claim of global safety or unreachability.
-
-### alpha_s and pointer coverage
-
-`BeamParticle::alphaS` can forward the PDF provider's coupling
-(`BeamParticle.h:262-270`), while the standard hard, ISR, and MPI components in
-the cited sources use their own coupling objects. A future architecture must
-therefore prove coupling-policy consistency separately. The sixteen pointer
-slots have a static source mapping, but this audit performed no initialization
-and makes no runtime pointer-substitution claim.
-
-## Minimal-public-patch sufficiency
+The D1D-A correction preserves the already-supported conclusion:
 
 ```text
-remove/bypass positivity transforms in PDF::xf/xfVal/xfSea = INSUFFICIENT
+MINIMAL_PUBLIC_READER_PATCH = INSUFFICIENT
 ```
 
-The change is sufficient only to expose a signed cached value at that public
-boundary. It is insufficient for the generator because multiple prospective
-HERA paths then interpret the sign as a channel rate, cumulative probability,
-Sudakov/branching rate, positive denominator, veto probability, or rejection
-maximum. Any one of those reachable paths would disprove reader-only
-sufficiency; this audit identifies independent failures in the hard process,
-ISR, and remnant logic.
+Removing only the positivity transformations in `PDF::xf`, `PDF::xfVal`, and
+`PDF::xfSea` cannot give stock PYTHIA valid signed-PDF semantics. Multiple
+prospective-HERA paths consume PDF-derived values as nonnegative rates,
+positive denominators, probabilities, maxima, envelopes, or monotone
+cumulative weights.
 
-## Signed-weight feasibility boundary
+## Evidence artifacts and schemas
 
-The source supports explicitly signed Les Houches event weights when the LHA
-strategy declares them (`SigmaProcess.h:622-627`; `ProcessContainer.cc:350-430`).
-That is evidence only for a sign attached after an externally constructed event
-history. It is not evidence that a negative PDF can be passed through the
-internal generator.
+- `docs/phase1bd_d1d_pythia_semantics_search_manifest.json`
+  (`partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v1`) records the
+  reproducible full-tree search and classification of every raw match.
+- `docs/phase1bd_d1d_pythia_semantics_audit.json`
+  (`partonsbi.phase1bd.d1d.pythia-semantics-audit.v2`) records the refactored
+  boundary, pointer, policy, call-site-group, and concrete-member model.
 
-| Where the sign first enters | Classification |
+The audit v2 artifact binds the search manifest by SHA-256:
+
+```text
+a7aec222fdb75165733739624ae1b6db9782ded715bf5d03a7a8944b192656b5
+```
+
+## Source identity and header correspondence
+
+The searched roots are:
+
+```text
+.external/pythia-8.3.12/include/Pythia8
+.external/src/releases-pythia8312/include/Pythia8
+.external/src/releases-pythia8312/src
+```
+
+The versioned release archive is
+`.external/downloads/releases-pythia8312.tar.gz`, SHA-256
+`c1a33aa5fa15e6b70d7946ce6d237246842887ec84ea0b35dfc2535c868a2770`.
+The extracted directory is not an independent Git checkout, so the archive
+hash and deterministic searched-file inventory identify the source tree.
+
+The installed and extracted release copies of every cited installed header
+were compared independently:
+
+| Header | Installed versus release |
 |---|---|
-| After a complete positive-probability history | `EXTERNAL_SIGNED_WEIGHT_POSSIBLY_SUFFICIENT` |
-| Hard-process channel selection | `REQUIRES_SIGNED_INTERNAL_SAMPLING_REDESIGN` |
-| ISR backward evolution or Sudakov construction | `INCOMPATIBLE_WITH_CURRENT_PROBABILITY_KERNEL` |
-| Remnant or flavor selection | `REQUIRES_SIGNED_INTERNAL_SAMPLING_REDESIGN` |
-| Rejection maximum or envelope | `INCOMPATIBLE_WITH_CURRENT_PROBABILITY_KERNEL` |
+| `Pythia.h` | `IDENTICAL` |
+| `SharedPointers.h` | `IDENTICAL` |
+| `PartonDistributions.h` | `IDENTICAL` |
+| `BeamParticle.h` | `IDENTICAL` |
+| `SigmaProcess.h` | `IDENTICAL` |
 
-Therefore an external signed event weight is not sufficient for negative PDFs
-in stock internal generation: the sign changes sampling decisions before a
-complete positive-probability history exists. This conclusion does not design
-or authorize a signed-weight replacement.
+The aggregate correspondence result is `ALL_IDENTICAL`. Both paths and both
+hashes remain explicit in the search manifest and audit artifact; archive
+identity alone is not used as proof of correspondence.
+
+## Reproducible search closure
+
+Identifiers were derived first from the five installed headers above. Nine
+deterministic `LC_ALL=C grep -RInE` searches then covered:
+
+1. `PDFPtr`, `setPDFPtr`, `getPDFPtr`, and role-specific pointer fields;
+2. `xf`, `xfVal`, `xfSea`, `xfUpdate`, `xfHard`, `xfISR`, `xfMPI`,
+   `xfModified`, `xfMax`, `xfSame`, `insideBounds`, `xfFlux`, `xfApprox`, and
+   `xfGamma`;
+3. PDF-owned and component-owned `alphaS` access;
+4. valence, sea, companion, and rescaling caches;
+5. PDF numerator, denominator, and ratio identifiers;
+6. PDF-weighted sigma, rate, maximum, and negative-sigma policy identifiers;
+7. PDF and explicit event-weight identifiers;
+8. `TINYPDF` denominator/guard candidates;
+9. indirect remnant and resolved-photon handoffs.
+
+The exact commands and patterns are stored in the search manifest. The search
+covered 374 `.h`/`.cc` files. Its canonical sorted `{path,sha256,bytes}`
+inventory has a deterministic aggregate hash recorded in both evidence files.
+
+### Raw-match disposition
+
+```text
+pattern_count                 = 9
+raw_match_count               = 2778
+included_match_count          = 797
+excluded_match_count          = 1981
+unclassified_raw_match_count  = 0
+```
+
+Every included match maps to a boundary node, pointer role, policy record, or
+specific call-site group/member. Every excluded match records its file, exact
+line, symbol or matched identifier, exclusion class, and reason. Exclusions
+are divided among definitions, declarations, comments, false positives,
+duplicate aliases, and source-capable occurrences irrelevant to PDF semantics.
+No copied source blocks or large verbatim excerpts are stored.
+
+## Corrected evidence model
+
+The previous 30 records were heterogeneous groups and were incorrectly
+described as 30 concrete call sites. Audit v2 separates:
+
+```text
+call_site_group_count          = 137
+concrete_call_site_count       = 672
+boundary_node_count            = 2
+pointer_role_record_count      = 16
+unresolved_policy_record_count = 4
+policy_evidence_record_count   = 1
+```
+
+Each of the 137 call-site groups contains a nonempty `members` array. Every one
+of the 672 concrete members records the exact source file and line, enclosing
+symbol, PDF method/cache/ratio/field identifiers, concise arithmetic role,
+unique primary semantic classification, static reachability status, direct
+source status, and separately marked mathematical inference.
+
+The two boundary nodes are not counted as runtime consumer calls:
+
+1. the non-virtual public PDF readers and virtual `xfUpdate` cache-fill hook;
+2. generic `BeamParticle` forwarding to ordinary, hard, ISR/MPI, bounds, and
+   alpha_s PDF methods.
+
+The sixteen `setPDFPtr` roles are static pointer metadata, not sixteen runtime
+consumer call sites. Their source declarations, `BeamSetup::getPDFPtr` map
+keys, prospective role classifications, and lack of runtime installation
+verification are recorded independently.
+
+## Corrected reachability model
+
+The four permitted statuses are:
+
+```text
+PROSPECTIVE_HERA_SOURCE_REACHABLE
+SOURCE_CAPABLE_DISABLED_BY_CONFIGURATION
+HERA_REACHABILITY_UNRESOLVED
+BOUNDARY_OR_METADATA_NOT_A_RUNTIME_PATH
+```
+
+For the 672 concrete call sites:
+
+| Reachability | Count |
+|---|---:|
+| `PROSPECTIVE_HERA_SOURCE_REACHABLE` | 212 |
+| `SOURCE_CAPABLE_DISABLED_BY_CONFIGURATION` | 436 |
+| `HERA_REACHABILITY_UNRESOLVED` | 24 |
+| `BOUNDARY_OR_METADATA_NOT_A_RUNTIME_PATH` | 0 |
+
+The prospective HERA configuration remains 27.5 GeV electron on 920 GeV
+proton, neutral-current gamma/Z DIS, `x in [1e-4,0.8]`,
+`Q2 in [3.5,10000] GeV^2`, and `y in [0.01,0.95]`, with ISR and beam remnants
+enabled. MPI, diffraction, resolved photons, photon flux, and optional
+alternate shower/merging paths are disabled. Static source reachability is not
+runtime coverage.
+
+The 24 unresolved concrete sites are not counted as disabled merely to retain
+an old total. In particular, static inspection cannot close every
+beam-recoiler/time-shower path in the prospective configuration. PDF-owned
+alpha_s forwarding is a separate unresolved policy record: standard hard,
+ISR, and MPI components also own coupling objects, and source inspection alone
+does not prove one future routing policy. Runtime installation or substitution
+of the sixteen PDF roles likewise remains unresolved metadata rather than a
+consumer call.
+
+## Corrected semantic classifications
+
+Primary classifications are counted over concrete members, not groups or
+boundary metadata:
+
+| Primary classification | Count |
+|---|---:|
+| `REQUIRES_NONNEGATIVE_DENSITY` | 26 |
+| `REQUIRES_STRICTLY_POSITIVE_DENOMINATOR` | 375 |
+| `REQUIRES_NONNEGATIVE_RATE` | 66 |
+| `REQUIRES_PROBABILITY_IN_ZERO_ONE` | 40 |
+| `REQUIRES_NONNEGATIVE_MAXIMUM_OR_ENVELOPE` | 93 |
+| `REQUIRES_MONOTONE_CUMULATIVE_WEIGHT` | 72 |
+
+The high denominator count reflects full-tree coverage of standard, merging,
+Dire, and Vincia PDF-ratio paths rather than one representative record per
+file. Disabled paths remain source-capable evidence and are not described as
+enabled in the prospective HERA configuration.
+
+## Material source conclusions
+
+### Public boundary
+
+Direct source evidence: `PDF::xf`, `PDF::xfVal`, and `PDF::xfSea` are
+non-virtual; `xfUpdate` is the protected virtual cache-fill hook
+(`PartonDistributions.h:82-93,188-195`). The public readers apply `max` and
+`abs` positivity transformations (`PartonDistributions.cc:122-394`).
+
+Inference: bypassing these transformations exposes signed cached values, but
+does not make their consumers mathematically valid.
+
+### Hard process and rejection sampling
+
+Direct source evidence: `SigmaProcess::sigmaPDF` multiplies channel matrix
+elements by beam PDFs and accumulates channel rates
+(`SigmaProcess.cc:414-473`). `pickInState` performs a cumulative channel draw
+(`SigmaProcess.cc:479-500`). Phase-space setup constructs maxima from
+PDF-weighted trials (`PhaseSpace.cc:585-650`), and negative trial cross sections
+are warned about then replaced by zero (`PhaseSpace.cc:1025-1130`). Process
+selection consumes cumulative nonnegative maxima
+(`ProcessLevel.cc:640-715,775-840`).
+
+Inference: signed PDFs enter rates, categorical selection, and rejection
+envelopes before a complete event history exists.
+
+### ISR, Sudakov, and veto probabilities
+
+Direct source evidence: standard ISR uses mother/daughter PDF ratios in
+branching/Sudakov kernels (`SimpleSpaceShower.cc:1070-1225`), applies
+PDF-ratio veto probabilities (`SimpleSpaceShower.cc:1495-1540`), and requires
+positive old-PDF denominators in heavy-threshold corrections
+(`SimpleSpaceShower.cc:1568-1660`). The full search also classifies every
+matching standard, Dire, Vincia, merging, and beam-recoiler ratio site rather
+than treating a few examples as complete coverage.
+
+Inference: a negative PDF inside a rate, Sudakov integrand, denominator, or
+veto probability requires a new internal sampling contract. It is not an
+externally attachable final sign.
+
+### Valence, sea, companion, and remnant selection
+
+Direct source evidence: `BeamParticle::xfModified` forms rescaled component
+totals (`BeamParticle.cc:350-425`); `pickValSeaComp` draws from cumulative
+valence/sea/companion weights (`BeamParticle.cc:474-514`); incoming partons are
+classified in `PartonLevel` (`PartonLevel.cc:1475-1504`); and beam-remnant
+construction consumes those states (`BeamRemnants.cc:196-209,287-300`).
+
+Inference: negative component weights do not define a monotone categorical
+distribution. A final event sign cannot repair a flavor/remnant state sampled
+from invalid probabilities.
+
+## Minimal-reader-patch conclusion
+
+```text
+MINIMAL_PUBLIC_READER_PATCH = INSUFFICIENT
+```
+
+This conclusion is stronger after search closure, not weaker. Several
+independent prospective-HERA algorithms require nonnegative densities, rates,
+probabilities, denominators, maxima, or cumulative weights. A reader-only
+change cannot supply a mathematically defined replacement for any of those
+sampling kernels.
+
+## External signed-weight boundary
+
+PYTHIA has explicit negative Les Houches event-weight handling when the LHA
+strategy declares it (`SigmaProcess.h:622-627`; `ProcessContainer.cc:350-430`).
+That supports a sign attached after an externally constructed event history.
+It does not equate negative NLO contribution weights with negative PDFs inside
+hard-channel, ISR, remnant, or envelope sampling.
+
+Therefore:
+
+```text
+EXTERNAL_FINAL_SIGNED_WEIGHT_ALONE_CANNOT_REPAIR_SIGNS_ENTERING_
+STOCK_INTERNAL_HARD_ISR_REMNANT_OR_ENVELOPE_SAMPLING
+```
+
+No signed-weight implementation or internal sampling redesign is selected or
+authorized here.
 
 ## Unresolved evidence
 
-Four questions remain for a later architecture comparison:
+Four policy questions remain explicit:
 
-1. No accepted mathematical contract specifies a signed Markov/Sudakov or
-   alternative ISR kernel.
-2. No accepted contract reformulates hard-channel and remnant categorical
-   selection as an unbiased signed measure.
-3. A single alpha_s policy across PDF, hard, ISR, and MPI consumers is not
-   established by a reader patch.
-4. Static inspection cannot prove which of sixteen PDF pointer roles a future
-   initialized configuration installs or substitutes.
+1. no accepted signed Markov/Sudakov replacement exists for ISR;
+2. no accepted unbiased signed categorical contract exists for hard-channel
+   or remnant selection;
+3. one PDF/hard/ISR/MPI alpha_s routing policy is not established;
+4. static source cannot prove post-initialization identity or substitution of
+   every PDF pointer role.
 
-These questions prevent selection of a fork, signed-weight system, or alternate
-generator here. They do not prevent comparison of those architecture classes,
-because the material stock and minimal-patch source paths have been resolved.
+## D1D-A readiness rule and result
 
-## Conclusions
+`READY_FOR_ARCHITECTURE_COMPARISON` is returned only because all required
+conditions are true:
 
-1. Stock PYTHIA 8.312 does not support the accepted signed PDF contract. This
-   is the immutable D1C `FAIL`.
-2. Removing the three public positivity transformations is `INSUFFICIENT`.
-3. Prospective-HERA-reachable downstream nonnegative probability, rate,
-   denominator, maximum, and cumulative-weight assumptions exist.
-4. An external signed event weight cannot preserve the target measure without
-   changing internal sampling when the PDF sign enters these paths.
-5. The four unresolved questions above remain explicit.
-6. D1D-A result:
+- unclassified raw search matches are zero;
+- every included match maps to evidence;
+- every concrete member has an included raw match;
+- every group has at least one concrete member;
+- every cited file is present in the hashed inventory;
+- all cited installed/release header correspondences are resolved;
+- reachability counts are recomputed from the new enum;
+- direct source and mathematical inference remain separate;
+- every planning authorization flag remains false.
+
+Thus:
 
 ```text
-READY_FOR_ARCHITECTURE_COMPARISON
+D1D_A_RESULT = READY_FOR_ARCHITECTURE_COMPARISON
 ```
 
-This result selects no architecture and authorizes no implementation or
-prototype. It records only that the source audit is sufficiently complete for
-a later reviewed comparison.
+If any condition had failed, the result would be
+`SOURCE_AUDIT_INCOMPLETE`. The result selects no architecture and authorizes
+no implementation or prototype.
 
-## Validation and limits
+## Validation and next step
 
-The required validation is JSON parse/schema/authorization checking,
+Validation is limited to JSON parsing, evidence invariants,
 `cargo fmt --all -- --check`, and `git diff --check`. No repository binary,
-APFEL/LHAPDF command, PYTHIA initialization or event execution, numerical
-study, event, dataset, or observable scan is part of this audit.
+PYTHIA, APFEL, LHAPDF, event, observable, or numerical study is executed.
 
-All authorization flags remain false, including `IMPLEMENTATION_AUTHORIZED`,
-`PROTOTYPE_AUTHORIZED`, `PYTHIA_FORK_AUTHORIZED`,
-`SIGNED_WEIGHT_PROTOTYPE_AUTHORIZED`, `ALTERNATIVE_GENERATOR_AUTHORIZED`,
-`PYTHIA_INIT_AUTHORIZED`, `PYTHIA_NEXT_AUTHORIZED`,
-`EVENT_GENERATION_AUTHORIZED`, `DATASET_AUTHORIZED`, and `D2_AUTHORIZED`.
-
-## Next step
-
-A separately reviewed D1D architecture comparison may use this audit to assess
-a versioned PYTHIA patch, a mathematically specified signed-weight/internal
-sampling redesign, another generator interface, or stopping generator
-coupling. This document does not select or authorize any of them.
+A later reviewed D1D architecture comparison may use this closed source audit
+to assess a versioned PYTHIA patch, a mathematically specified signed internal
+sampling/weight design, another generator interface, or stopping generator
+coupling. This audit selects and authorizes none of those options, and
+`D2_AUTHORIZED=false` remains binding.
