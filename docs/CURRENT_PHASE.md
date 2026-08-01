@@ -219,6 +219,12 @@
   `PROVENANCE_SLICE_V1_DECISION = FAIL` and `D1D_A_FINAL_DECISION = FAIL` at
   failed gate `provenance_evidence_integrity`. Architecture comparison is not
   ready.
+- The evaluated audit-v5 input is bound by an immutable source-commit,
+  repository-path, Git-blob, schema, and content-SHA-256 tuple. The historical
+  source is commit `e197509928d5ccbbf7765956688522f919ccecec`, path
+  `docs/phase1bd_d1d_pythia_semantics_audit.json`, and blob
+  `b152650e4e21e4ac77cc5cbab2ca8d2c0aee1987`; the same live path now contains
+  audit v6 and is not used as the v5 identity.
 - D1D-A finds that removing only the public `PDF::xf`, `PDF::xfVal`, and
   `PDF::xfSea` positivity transformations is `INSUFFICIENT`: prospective-HERA
   hard-process, ISR, and beam-remnant paths require nonnegative rates,

@@ -31,13 +31,22 @@ kept byte-identical as historical evidence:
 |---|---|---|---|
 | Broad search manifest | `partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3` | `e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701` | Supported deterministic syntactic replay |
 | Provenance slice | `partonsbi.phase1bd.d1d.pythia-pdf-provenance-slice.v1` | `6641d6e2fb615780819bd957be2f942eab5f78f34828073eb66078088ef708c7` | Deterministic rejected diagnostic prototype |
-| Provenance decision | `partonsbi.phase1bd.d1d.pythia-provenance-slice-decision.v1` | `b872647ba1073e07262e95ceb70efe7c81c1165718b8d078867bf1e7918cf590` | Terminal integrity decision |
-| Semantics audit | `partonsbi.phase1bd.d1d.pythia-semantics-audit.v6` | `6022f377da6f9993e0d5e4966a6e23f65e3facea23f2b37675725198c5197163` | Final D1D-A negative record |
+| Provenance decision | `partonsbi.phase1bd.d1d.pythia-provenance-slice-decision.v1` | `f92958fe745d64c24cd6d12222537154af7d916f24a0c7362c460123d46e04d7` | Terminal integrity decision |
+| Semantics audit | `partonsbi.phase1bd.d1d.pythia-semantics-audit.v6` | `bd63eb4b779c8f6fa622b4a4111fa07a963303d7c80ba3761c339bb764a5b430` | Final D1D-A negative record |
 
-Audit v5 is retained by identity in the decision artifact at SHA-256
-`bfbe2020cffcfa3084f8109267c4e2ac2be2f165546fbdd9df35ecdde33b76ce`.
-Audit v6 references the broad manifest, rejected slice, and final decision by
-path, schema, and hash.
+Audit v5 is identified immutably in the decision artifact by the tuple:
+
+```text
+source commit   = e197509928d5ccbbf7765956688522f919ccecec
+repository path = docs/phase1bd_d1d_pythia_semantics_audit.json
+Git blob        = b152650e4e21e4ac77cc5cbab2ca8d2c0aee1987
+schema          = partonsbi.phase1bd.d1d.pythia-semantics-audit.v5
+SHA-256         = bfbe2020cffcfa3084f8109267c4e2ac2be2f165546fbdd9df35ecdde33b76ce
+```
+
+The source commit and Git blob remove the ambiguity of the repository path,
+which now names audit v6 in the current tree. Audit v6 references the broad
+manifest, rejected slice, and final decision by path, schema, and hash.
 
 ## Supported results that survive the provenance failure
 
@@ -211,7 +220,7 @@ hashes are verified before and after validation.
 | Rejected historical slice identity validator | PASS; deterministic serialized identity only, not scientific acceptance |
 | Final provenance decision validator | PASS; ten failed gates and all authorization flags false |
 | Four `json.tool` parses | PASS |
-| Focused Python tests | PASS; 42 passed |
+| Focused Python tests | PASS; 51 passed |
 | `cargo fmt --all -- --check` | PASS |
 | `git diff --check` | PASS |
 

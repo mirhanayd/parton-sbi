@@ -26,6 +26,8 @@ PROVENANCE_PATH = "docs/phase1bd_d1d_pythia_pdf_provenance_slice.json"
 DECISION_PATH = "docs/phase1bd_d1d_pythia_provenance_slice_decision.json"
 
 SEARCH_SHA256 = "e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701"
+AUDIT_V5_SOURCE_COMMIT_SHA = "e197509928d5ccbbf7765956688522f919ccecec"
+AUDIT_V5_GIT_BLOB_SHA = "b152650e4e21e4ac77cc5cbab2ca8d2c0aee1987"
 AUDIT_V5_SHA256 = "bfbe2020cffcfa3084f8109267c4e2ac2be2f165546fbdd9df35ecdde33b76ce"
 PROVENANCE_SHA256 = "6641d6e2fb615780819bd957be2f942eab5f78f34828073eb66078088ef708c7"
 
@@ -169,9 +171,11 @@ def build_decision() -> dict[str, Any]:
         "decision": "FAIL",
         "evaluated_artifact": {
             "audit_v5": {
-                "path": AUDIT_PATH,
+                "git_blob_sha": AUDIT_V5_GIT_BLOB_SHA,
+                "repository_path": AUDIT_PATH,
                 "schema_version": "partonsbi.phase1bd.d1d.pythia-semantics-audit.v5",
                 "sha256": AUDIT_V5_SHA256,
+                "source_commit_sha": AUDIT_V5_SOURCE_COMMIT_SHA,
             },
             "broad_search_manifest": {
                 "path": SEARCH_PATH,
@@ -256,9 +260,11 @@ def validate_payload(
     require(
         evaluated["audit_v5"]
         == {
-            "path": AUDIT_PATH,
+            "git_blob_sha": AUDIT_V5_GIT_BLOB_SHA,
+            "repository_path": AUDIT_PATH,
             "schema_version": "partonsbi.phase1bd.d1d.pythia-semantics-audit.v5",
             "sha256": AUDIT_V5_SHA256,
+            "source_commit_sha": AUDIT_V5_SOURCE_COMMIT_SHA,
         },
         "evaluated audit-v5 reference mismatch",
     )

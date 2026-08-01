@@ -576,3 +576,86 @@ def test_d1c_immutable_fail_remains_unchanged():
     audit["d1c_stock_boundary_decision"] = "PASS"
     with pytest.raises(DECISION.DecisionError, match="D1C"):
         validate_final_fixture(decision, audit)
+
+
+def test_audit_v5_historical_reference_requires_source_commit_sha():
+    decision, audit = final_decision_fixture()
+    decision["evaluated_artifact"]["audit_v5"].pop("source_commit_sha")
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_audit_v5_historical_reference_requires_git_blob_sha():
+    decision, audit = final_decision_fixture()
+    decision["evaluated_artifact"]["audit_v5"].pop("git_blob_sha")
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_current_v6_blob_cannot_satisfy_audit_v5_reference():
+    decision, audit = final_decision_fixture()
+    decision["evaluated_artifact"]["audit_v5"]["git_blob_sha"] = (
+        "da5d43038b598a90b92945a411c5edc847158dd1"
+    )
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_current_final_commit_cannot_replace_audit_v5_source_commit():
+    decision, audit = final_decision_fixture()
+    decision["evaluated_artifact"]["audit_v5"]["source_commit_sha"] = (
+        "6da31bf7c03b05885e8a353d2026bc08978ef096"
+    )
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_audit_v5_historical_reference_rejects_wrong_repository_path():
+    decision, audit = final_decision_fixture()
+    decision["evaluated_artifact"]["audit_v5"]["repository_path"] = (
+        "docs/phase1bd_d1d_pythia_semantics_audit_v5.json"
+    )
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_audit_v5_historical_reference_rejects_wrong_content_sha256():
+    decision, audit = final_decision_fixture()
+    decision["evaluated_artifact"]["audit_v5"]["sha256"] = "0" * 64
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_exact_audit_v5_historical_object_tuple_passes():
+    decision, audit = final_decision_fixture()
+    assert decision["evaluated_artifact"]["audit_v5"] == {
+        "git_blob_sha": DECISION.AUDIT_V5_GIT_BLOB_SHA,
+        "repository_path": DECISION.AUDIT_PATH,
+        "schema_version": "partonsbi.phase1bd.d1d.pythia-semantics-audit.v5",
+        "sha256": DECISION.AUDIT_V5_SHA256,
+        "source_commit_sha": DECISION.AUDIT_V5_SOURCE_COMMIT_SHA,
+    }
+    validate_final_fixture(decision, audit)
+
+
+def test_bare_live_path_is_not_a_valid_audit_v5_reference():
+    decision, audit = final_decision_fixture()
+    historical = decision["evaluated_artifact"]["audit_v5"]
+    historical["path"] = historical.pop("repository_path")
+    with pytest.raises(DECISION.DecisionError, match="audit-v5 reference"):
+        validate_final_fixture(decision, audit)
+
+
+def test_lineage_correction_preserves_all_final_fail_decisions():
+    decision, audit = final_decision_fixture()
+    assert decision["preserved_supported_results"]["D1C_FINAL_DECISION"] == "FAIL"
+    assert decision["decision"] == "FAIL"
+    assert audit["d1c_stock_boundary_decision"] == "FAIL"
+    assert audit["minimal_public_reader_patch"] == "INSUFFICIENT"
+    assert audit["provenance_slice_v1_decision"] == "FAIL"
+    assert audit["provenance_slice_v1_status"] == "REJECTED_DIAGNOSTIC"
+    assert audit["d1d_a_final_decision"] == "FAIL"
+    assert audit["failed_gate"] == "provenance_evidence_integrity"
+    assert audit["architecture_comparison_ready"] is False
+    assert audit["authorization"]["D2_AUTHORIZED"] is False
+    validate_final_fixture(decision, audit)
