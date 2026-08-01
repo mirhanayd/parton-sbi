@@ -37,6 +37,10 @@ def test_committed_artifact_is_valid_and_deterministic(record: dict) -> None:
     ) + "\n"
 
 
+def test_ignored_source_checkout_is_optional_in_clean_ci(tmp_path: Path) -> None:
+    assert d1e.verify_source_bytes_when_available(tmp_path, []) is False
+
+
 def test_feasible_without_pinned_toolchain_fails(record: dict) -> None:
     record["selected_toolchain"] = None
     rejected(record)

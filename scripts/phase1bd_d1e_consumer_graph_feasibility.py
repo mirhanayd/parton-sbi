@@ -183,6 +183,29 @@ def verified_source_hashes(repo_text: str) -> tuple[tuple[str, int, str], ...]:
     return tuple(result)
 
 
+def verify_source_bytes_when_available(
+    repo: Path, expected_inventory: list[dict[str, Any]]
+) -> bool:
+    """Verify ignored source bytes locally without requiring them in clean CI.
+
+    The committed broad manifest, pinned upstream tag/commit, and archive hash
+    are the portable contract.  The ignored release checkout is extra local
+    evidence and is checked whenever its authoritative root is present.
+    """
+    if not (repo / RELEASE_ROOT).is_dir():
+        return False
+    actual_source_rows = verified_source_hashes(str(repo.resolve()))
+    require(
+        actual_source_rows
+        == tuple(
+            (row["path"], row["bytes"], row["sha256"])
+            for row in expected_inventory
+        ),
+        "authoritative source bytes differ from the serialized inventory",
+    )
+    return True
+
+
 def load_release_inventory(repo: Path) -> tuple[list[dict[str, Any]], list[str], str]:
     manifest_path = repo / SEARCH_MANIFEST
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -775,12 +798,7 @@ def validate_record(record: dict[str, Any], repo: Path) -> None:
     require(source["installed_mirror"]["byte_identical_headers"] == 127, "all installed mirror headers must be identity-checked")
     require(source["installed_mirror"]["semantic_node_policy"] == "IDENTITY_EVIDENCE_ONLY_EXCLUDED_FROM_GRAPH_NODES", "installed mirror may not create duplicate graph nodes")
     require(source["prior_search_manifest"]["sha256"] == file_sha256(repo / SEARCH_MANIFEST), "broad manifest identity mismatch")
-    actual_source_rows = verified_source_hashes(str(repo.resolve()))
-    require(
-        actual_source_rows
-        == tuple((row["path"], row["bytes"], row["sha256"]) for row in expected_inventory),
-        "authoritative source bytes differ from the serialized inventory",
-    )
+    verify_source_bytes_when_available(repo, expected_inventory)
 
     compile_contract = record["compilation_database_contract"]
     require(compile_contract["strategy"] == "REPOSITORY_OWNED_SOURCE_ONLY_JSON_COMPILATION_DATABASE", "compile-command strategy is missing")
