@@ -47,7 +47,7 @@ def refresh_derived(value: dict) -> None:
     value["decision_rule"] = decision_module.recompute_decision_rule(value)
 
 
-def test_committed_v2_artifact_validates() -> None:
+def test_committed_v3_artifact_validates() -> None:
     value = artifact()
     assert value["schema_version"] == decision_module.SCHEMA
     decision_module.validate_decision(value)
@@ -88,6 +88,9 @@ def test_missing_evidence_rationale_cannot_be_relabelled_not_supported() -> None
     cell["status"] = "NOT_SUPPORTED"
     cell["epistemic_basis"] = "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE"
     cell["claim_keys"] = ["external_pdf_calculate_getxpdf_accessor_availability"]
+    cell["source_claim_bindings"] = {
+        "SHERPA_301_EXTERNAL_PDF_DOC": ["external_pdf_calculate_getxpdf_accessor_availability"]
+    }
     with pytest.raises(decision_module.DecisionError, match="only reports missing evidence"):
         decision_module.validate_decision(value)
 
@@ -236,3 +239,142 @@ def test_sherpa_dis_and_gamma_z_dispositions_are_conservative() -> None:
     sherpa = value["architecture_assessments"][decision_module.ARCH_C]["candidate_matrices"][decision_module.CANDIDATE_IDS[0]]
     assert sherpa["hard_process_coverage"]["status"] == "SUPPORTED_WITH_QUALIFICATION"
     assert sherpa["full_neutral_current_gamma_z_compatibility"]["status"] == "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+
+
+def test_valid_alternative_source_hash_and_matching_identifier_are_rejected() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["SHERPA_301_EXTERNAL_PDF_DOC"]
+    source["content_sha256"] = "0" * 64
+    source["immutable_identifier"] = f"sha256:{'0' * 64}"
+    with pytest.raises(decision_module.DecisionError, match="source identity registry differs"):
+        decision_module.validate_decision(value)
+
+
+def test_sha256_immutable_identifier_must_equal_content_hash() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["SHERPA_301_EXTERNAL_PDF_DOC"]
+    source["immutable_identifier"] = f"sha256:{'1' * 64}"
+    with pytest.raises(decision_module.DecisionError, match="immutable identifier/content hash mismatch"):
+        decision_module.validate_decision(value)
+
+
+def test_content_hash_must_equal_sha256_immutable_identifier() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["SHERPA_301_EXTERNAL_PDF_DOC"]
+    source["content_sha256"] = "2" * 64
+    with pytest.raises(decision_module.DecisionError, match="immutable identifier/content hash mismatch"):
+        decision_module.validate_decision(value)
+
+
+def test_arxiv_version_identity_is_exact() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["HERWIG_7_3"]
+    source["document_or_software_version"] = "v3"
+    with pytest.raises(decision_module.DecisionError, match="arXiv PDF URL/version mismatch"):
+        decision_module.validate_decision(value)
+
+
+def test_sherpa_source_commit_identity_is_exact() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["SHERPA_301_SOURCE_COMMIT"]
+    source["repository_commit_sha"] = "0" * 40
+    with pytest.raises(decision_module.DecisionError, match="source commit identity mismatch"):
+        decision_module.validate_decision(value)
+
+
+def test_pinned_sherpa_file_hash_is_exact() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["SHERPA_301_SOURCE_COMMIT"]
+    source["pinned_files"][0]["sha256"] = "0" * 64
+    with pytest.raises(decision_module.DecisionError, match="source identity registry differs"):
+        decision_module.validate_decision(value)
+
+
+@pytest.mark.parametrize("mutation", ["add", "remove"])
+def test_source_claim_scope_registry_is_exact(mutation: str) -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["HERWIG_7_0"]
+    if mutation == "add":
+        source["claim_scope"].append("invented_claim")
+    else:
+        source["claim_scope"].pop()
+    with pytest.raises(decision_module.DecisionError, match="source identity registry differs"):
+        decision_module.validate_decision(value)
+
+
+def test_claim_cannot_be_bound_to_a_different_cited_source() -> None:
+    value = artifact()
+    cell = value["architecture_assessments"][decision_module.ARCH_C]["candidate_matrices"][decision_module.CANDIDATE_IDS[2]]["event_weight_semantics"]
+    cell["source_claim_bindings"] = {
+        "LHEF_STANDARD": ["negative_complete_event_weights", "xwgtup_event_weight_field"]
+    }
+    with pytest.raises(decision_module.DecisionError, match="not supported by its bound source"):
+        decision_module.validate_decision(value)
+
+
+def test_evidence_claim_requires_source_specific_binding() -> None:
+    value = artifact()
+    cell = value["architecture_assessments"][decision_module.ARCH_C]["candidate_matrices"][decision_module.CANDIDATE_IDS[2]]["event_weight_semantics"]
+    del cell["source_claim_bindings"]["MCATNLO"]
+    with pytest.raises(decision_module.DecisionError, match="lacks a source-specific binding"):
+        decision_module.validate_decision(value)
+
+
+def test_overbroad_herwig_negative_weight_scope_is_rejected() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["HERWIG_7_0"]
+    source["claim_scope"].append("nlo_matching_negative_complete_event_weights")
+    with pytest.raises(decision_module.DecisionError, match="source identity registry differs"):
+        decision_module.validate_decision(value)
+
+
+def test_overbroad_lhef_signed_weight_scope_is_rejected() -> None:
+    value = artifact()
+    source = value["evaluated_evidence"]["primary_sources"]["LHEF_STANDARD"]
+    source["claim_scope"].append("signed_complete_event_weight_field")
+    with pytest.raises(decision_module.DecisionError, match="source identity registry differs"):
+        decision_module.validate_decision(value)
+
+
+@pytest.mark.parametrize("candidate_id", decision_module.CANDIDATE_IDS[:2])
+def test_build_deployment_scores_cannot_be_promoted(candidate_id: str) -> None:
+    value = artifact()
+    candidates = value["architecture_assessments"][decision_module.ARCH_C]["candidate_matrices"]
+    cell = candidates[candidate_id]["build_deployment_reproducibility"]
+    cell["status"] = "SUPPORTED"
+    cell["epistemic_basis"] = "DIRECT_SCOPE_EVIDENCE"
+    refresh_derived(value)
+    with pytest.raises(decision_module.DecisionError, match="build/deployment evidence is overstated"):
+        decision_module.validate_decision(value)
+
+
+@pytest.mark.parametrize("criterion", ["deterministic_identity_and_provenance", "event_weight_semantics"])
+def test_lhef_qualified_scores_cannot_be_promoted(criterion: str) -> None:
+    value = artifact()
+    candidates = value["architecture_assessments"][decision_module.ARCH_C]["candidate_matrices"]
+    cell = candidates[decision_module.CANDIDATE_IDS[2]][criterion]
+    cell["status"] = "SUPPORTED"
+    cell["epistemic_basis"] = "DIRECT_SCOPE_EVIDENCE"
+    refresh_derived(value)
+    with pytest.raises(decision_module.DecisionError, match="LHEF .* evidence is overstated"):
+        decision_module.validate_decision(value)
+
+
+def test_corrected_counts_routes_rules_and_decision_reproduce() -> None:
+    value = artifact()
+    candidates = value["architecture_assessments"][decision_module.ARCH_C]["candidate_matrices"]
+    expected_critical = {
+        decision_module.CANDIDATE_IDS[0]: {"PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": 6, "SUPPORTED_WITH_QUALIFICATION": 4},
+        decision_module.CANDIDATE_IDS[1]: {"PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": 6, "SUPPORTED_WITH_QUALIFICATION": 4},
+        decision_module.CANDIDATE_IDS[2]: {"NOT_SUPPORTED": 8, "SUPPORTED_WITH_QUALIFICATION": 2},
+    }
+    for candidate_id, expected in expected_critical.items():
+        actual = {key: count for key, count in decision_module.critical_status_counts(candidates[candidate_id]).items() if count}
+        assert actual == expected
+    states = decision_module.recompute_route_states(value)
+    assert states["architecture_route_states"] == value["route_states"]
+    assert states["candidate_route_states"] == value["architecture_assessments"][decision_module.ARCH_C]["candidate_route_states"]
+    rule = decision_module.recompute_decision_rule(value)
+    assert rule == value["decision_rule"]
+    assert decision_module.derive_decision(rule) == value["decision"] == "INCONCLUSIVE"
+    assert decision_module.policy_for_decision(value["decision"]) == value["current_operational_policy"]

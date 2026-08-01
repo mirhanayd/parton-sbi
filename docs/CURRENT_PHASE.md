@@ -241,24 +241,39 @@
   PYTHIA fork, signed-weight design, alternate generator, architecture,
   implementation, or prototype is selected or authorized. PR #43 is merged;
   issue #10 and D2 remain blocked.
-- Phase 1B-D1D-B v2 proposes the evidence-derived result `INCONCLUSIVE` for the
-  fixed signed-generator coupling contract. The validator recomputes candidate
-  and architecture route states, the Architecture C aggregate, all six rule
-  fields, the decision, and the operational policy from pinned evidence.
+- Phase 1B-D1D-B v3 proposes the evidence-derived result `INCONCLUSIVE` for the
+  fixed signed-generator coupling contract. The validator binds every external
+  source to the repository-owned exact identity registry, requires explicit
+  source-to-claim bindings for every evidence-bearing score, and independently
+  recomputes candidate and architecture route states, the Architecture C
+  aggregate, all six rule fields, the decision, and the operational policy.
 - Architecture A and the final-event-weight Architecture B are
   `COHERENT_BOUNDED_PATH_NOT_SUPPORTED`. Architecture C is
   `COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS`: Sherpa and Herwig each
   have six unavailable and four qualified critical criteria with zero
-  affirmative critical failures; LHEF has eight affirmative critical failures
-  and remains a boundary transport rather than a complete generator route.
+  affirmative critical failures; LHEF has eight affirmative and two qualified
+  critical criteria and remains a boundary transport rather than a complete
+  generator route.
 - Sherpa hard-process coverage is only `SUPPORTED_WITH_QUALIFICATION`. Its
   pinned HERA configuration does not prove complete gamma/Z/interference
   compatibility, which remains `PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE`. Negative
   MC@NLO complete-event weights are not evidence for signed internal PDF rates
   or signed Sudakov kernels.
+- All reviewed external byte representations and reported hashes were
+  independently reproduced on 2026-08-01. The hashes identify the reviewed
+  bytes, but those bytes are not vendored or archived here; future availability
+  still depends on the official hosts. This is not currently blocking because
+  every load-bearing identity reproduced.
 - Current policy is `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`. This is an
   interim pause under the failed readiness gate, not a selected terminal stop
   and not a universal impossibility theorem.
+- Generator coupling may be reconsidered only after one of these evidence
+  conditions is separately reviewed: (1) signed-kernel and signed-Sudakov
+  mathematics; (2) a pinned primary-source generator interface proving signed
+  scalar, rate, ISR, remnant, and event-weight semantics; (3) an independently
+  validated complete consumer/dataflow graph; or (4) a separately reviewed and
+  approved change to the PDF-family or inference contract. A reopen condition
+  is not an authorization.
 - All ten D1D-B authorization flags are false. Issue #42 remains open and in
   planning review; Project fields are unchanged. Architecture comparison was
   not promoted to readiness, issue #10 stays blocked, and D2 remains
@@ -272,7 +287,7 @@
 SCIENTIFIC_REVIEW_OF_EVIDENCE_DERIVED_D1D_B_DECISION
 ```
 
-This is review of corrected ADR-008 and the pinned, evidence-derived v2
+This is review of corrected ADR-008 and the pinned, evidence-derived v3
 planning artifact. It does not authorize implementation, a generator
 prototype, architecture selection, advancement of issue #10, or D2.
 

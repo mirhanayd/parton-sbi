@@ -4,7 +4,8 @@
 - Date: 2026-08-01
 - Phase: 1B-D1D-B
 - Decision artifact: `docs/phase1bd_d1d_terminal_decision.json`
-- Schema: `partonsbi.phase1bd.d1d.terminal-decision.v2`
+- Schema: `partonsbi.phase1bd.d1d.terminal-decision.v3`
+- Artifact SHA-256: `d310b452a5a80d5bd59a91af2787b795dba7da17eb5d684990d9b718373376a7`
 
 ## Immutable precedence and fixed scope
 
@@ -26,7 +27,7 @@ consistent hard-process, ISR/backward-evolution, and beam-remnant treatment.
 
 ## Epistemic score contract
 
-The v2 record separates five meanings:
+The v3 record separates five meanings:
 
 - `SUPPORTED`: direct primary or immutable repository evidence establishes the
   criterion for the stated scope.
@@ -38,8 +39,18 @@ The v2 record separates five meanings:
 - `NOT_APPLICABLE`: the criterion does not apply to the architecture.
 
 Every cell records a precise claim, evidence scope, rationale, source IDs,
-source-supported claim keys, epistemic basis, and any explicit
-disproportionate-cost evidence. The validator rejects epistemic relabeling.
+source-supported claim keys, source-specific claim bindings, epistemic basis,
+and any explicit disproportionate-cost evidence. Every claim key must be
+bound to a claim in the exact cited source rather than the union of all cited
+sources. The validator rejects epistemic relabeling.
+
+The validator also compares the complete serialized source-identity registry
+with the repository-owned `build_sources()` contract. A changed content hash,
+immutable identifier, URL, version, claim scope, repository commit, source
+path, Git blob, pinned-file set, or pinned-file hash fails even when the
+replacement value is syntactically well formed. This identity binding does not
+replace independent recomputation of candidate aggregation, route states,
+rule fields, the decision, or the operational policy.
 
 ## Evidence-derived decision
 
@@ -102,16 +113,19 @@ Candidate route states are computed from ten critical criteria:
 |---|---|---:|---:|---:|---:|
 | Sherpa external-PDF/full-DIS stack | `COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS` | 6 | 4 | 0 | 0 |
 | Herwig PDF/shower stack | `COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS` | 6 | 4 | 0 | 0 |
-| Les Houches signed hard-event transport | `COHERENT_BOUNDED_PATH_NOT_SUPPORTED` | 0 | 1 | 8 | 1 |
+| Les Houches signed hard-event transport | `COHERENT_BOUNDED_PATH_NOT_SUPPORTED` | 0 | 2 | 8 | 0 |
 
 Sherpa and Herwig have no affirmative critical incompatibility in this bounded
 desk review, but neither has complete signed scalar, rate, denominator,
 selection, envelope, or bounded-prototype evidence. They are possible only in
 the epistemic sense required by the rule; they are not selected or authorized.
 
-LHEF is a signed complete-event boundary. It affirmatively delegates or omits
-the provider, ISR, remnant, categorical, denominator, and sampling components
-required of a complete generator route.
+LHEF is a complete-event transport boundary with an `XWGTUP` event-weight
+field. MC@NLO separately establishes negative complete-event weights. That
+qualified combination does not establish signed internal PDF or shower
+semantics. LHEF affirmatively delegates or omits the provider, ISR, remnant,
+categorical, denominator, and sampling components required of a complete
+generator route.
 
 Architecture C is aggregated from the candidate matrices, never copied as a
 manual tuple. `NOT_SUPPORTED` requires every applicable candidate to fail;
@@ -146,10 +160,23 @@ the fixed complete signed-PDF or neutral-current component contract.
 Negative MC@NLO complete-event weights support only event-weight semantics.
 They are not used as evidence for signed internal PDF rates or Sudakov kernels.
 
+The Herwig 7.0 source scope is limited to `mcatnlo_matching_framework` and
+`subtractive_nlo_matching_integration`; negative complete-event weights are
+bound only to the MC@NLO paper. The LHEF source scope is limited to
+`xwgtup_event_weight_field`; negative-weight meaning is a qualified
+cross-source conclusion, not a claim made by the LHEF standard alone.
+
 ## Pinned external evidence
 
 All retrievals occurred on `2026-08-01` UTC. Mutable `master` identities are
 excluded from supporting evidence.
+
+The independent integrity audit reproduced every load-bearing external byte
+representation and hash. Those external bytes are not vendored or archived in
+this repository. Their hashes identify the reviewed byte representations, but
+future availability still depends on the official hosts. This is not currently
+a blocker because all load-bearing identities reproduced; a URL plus hash is
+not represented as a guarantee of future availability.
 
 | Source | Exact identity | Content SHA-256 |
 |---|---|---|
@@ -196,7 +223,7 @@ Legend: S = `SUPPORTED`; Q = `SUPPORTED_WITH_QUALIFICATION`; N =
 | 12 | Full neutral-current gamma/Z compatibility | U | U | U | A |
 | 13 | Deterministic identity/provenance | Q | Q | Q | S |
 | 14 | Thread/process safety | U | U | U | A |
-| 15 | Build/deployment reproducibility | Q | U | S | A |
+| 15 | Build/deployment reproducibility | Q | U | Q | A |
 | 16 | License/redistribution | U | A | Q | A |
 | 17 | Upstream maintenance burden | U | U | U | Q |
 | 18 | Bounded prototype falsifiability | N | N | U | A |
@@ -213,10 +240,16 @@ signed-kernel/Sudakov construction, incomplete signed semantics for Sherpa and
 Herwig, incomplete neutral-current component validation, and unbounded
 maintenance/concurrency/support evidence.
 
-Reconsideration requires independently reviewed new evidence: a mathematical
-signed-kernel formulation, a pinned generator interface proving complete
-signed semantics, an independently validated complete consumer graph, or a
-separately approved scientific-contract change. None is authorization.
+Reconsideration requires independently reviewed new evidence:
+
+1. reviewed signed-kernel and signed-Sudakov mathematics;
+2. a pinned primary-source generator interface proving signed scalar, rate,
+   ISR, remnant, and event-weight semantics;
+3. an independently validated complete consumer/dataflow graph; or
+4. a separately reviewed and approved change to the PDF-family or inference
+   contract.
+
+A reopen condition is not an authorization.
 
 ## Consequences
 
