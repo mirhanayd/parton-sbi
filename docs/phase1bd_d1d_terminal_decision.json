@@ -1,259 +1,912 @@
 {
   "architecture_assessments": {
     "A_REPOSITORY_OWNED_PYTHIA_FORK_OR_PATCH": {
-      "assessment": "NOT_SUPPORTED_FOR_A_BOUNDED_PROTOTYPE",
+      "assessment": "CURRENT_BOUNDED_FORK_PATH_NOT_SUPPORTED",
       "distinctions": {
         "bypass_reader_interface": "Does not resolve downstream sign-sensitive consumers or provide a validated dataflow contract.",
         "downstream_algorithm_redesign": "Would require reviewed semantics for hard-process, ISR, remnant, flavor selection, ratios, maxima, envelopes, and cumulative selection.",
         "public_reader_change": "Already established insufficient by D1C and D1D-A.",
-        "versioned_fork_maintenance": "Creates a continuing upstream-integration and scientific-validation burden."
-      },
-      "rationale": "The negative D1D-A record does not supply the complete consumer evidence required to bound a fork or redesign."
+        "versioned_fork_maintenance": "Requires a separately evidenced maintenance and redistribution assessment."
+      }
     },
     "B_SIGNED_WEIGHT_GENERATOR_ARCHITECTURE": {
-      "assessment": "NOT_SUPPORTED_FOR_THE_FIXED_CONTRACT",
+      "assessment": "FINAL_EVENT_WEIGHT_PATH_NOT_SUPPORTED",
       "distinctions": {
         "ordinary_positive_probability_generation": "Requires valid nonnegative sampling probabilities and rates.",
-        "signed_event_samples": "Can represent cancellations between complete weighted events but do not repair invalid internal sampling steps.",
-        "signed_final_event_weight": "Cannot retroactively repair negative probabilities, denominators, maxima, categorical choices, or rejection sampling.",
-        "signed_kernels_or_sudakovs": "Would require a reviewed mathematical formulation and a generator designed to sample it.",
-        "signed_matrix_element_contributions": "Are not equivalent to signed PDFs entering every internal generator consumer.",
-        "weighted_empirical_event_sets": "Are compatible with set inference only after a coherent event-generation measure exists."
-      },
-      "rationale": "No reviewed mathematical construction establishes valid signed internal sampling for the present PDF family and full generator path."
+        "signed_event_samples": "Represent cancellations between complete weighted histories.",
+        "signed_final_event_weight": "Cannot retroactively repair internal sampling decisions.",
+        "signed_kernels_or_sudakovs": "Require a reviewed mathematical formulation not present in this record.",
+        "signed_matrix_element_contributions": "Do not establish signed PDFs through all generator consumers.",
+        "weighted_empirical_event_sets": "Require a coherent event measure before set inference."
+      }
     },
     "C_ALTERNATIVE_GENERATOR_OR_TRANSPORT_INTERFACE": {
-      "assessment": "INCONCLUSIVE_PRIMARY_EVIDENCE_GAPS",
-      "bounded_candidate_count": 3,
-      "candidates": [
-        {
-          "candidate_id": "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK",
-          "evidence_requirements": {
-            "alpha_s_routing": {
-              "primary_source_ids": [
-                "SHERPA_ISR",
-                "SHERPA_DIS"
-              ],
-              "rationale": "The official ISR documentation exposes PDF and alpha_s routing, but not signed-PDF consistency across every consumer.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "beam_remnant_semantics": {
-              "primary_source_ids": [
-                "SHERPA_MANUAL",
-                "SHERPA_3"
-              ],
-              "rationale": "Beam-remnant machinery is documented; validity for signed internal PDF rates is not established.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "hard_process_semantics": {
-              "primary_source_ids": [
-                "SHERPA_DIS"
-              ],
-              "rationale": "The official examples include neutral-current lepton-proton DIS with gamma/Z exchange.",
-              "status": "SUPPORTED"
-            },
-            "isr_backward_evolution_semantics": {
-              "primary_source_ids": [
-                "SHERPA_ISR"
-              ],
-              "rationale": "ISR and PDF variation support are documented, but signed-kernel probability validity is not.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "license_redistribution": {
-              "primary_source_ids": [
-                "SHERPA_SOURCE"
-              ],
-              "rationale": "Source and license files are public; any redistributed modification would still require a dedicated license review.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "maintained_source_build_availability": {
-              "primary_source_ids": [
-                "SHERPA_SOURCE",
-                "SHERPA_3"
-              ],
-              "rationale": "An official maintained source repository and build documentation are available.",
-              "status": "SUPPORTED"
-            },
-            "negative_rate_or_signed_weight_treatment": {
-              "primary_source_ids": [
-                "SHERPA_3",
-                "MCATNLO"
-              ],
-              "rationale": "Primary literature supports negative final event weights in NLO matching, not negative PDFs inside all sampling kernels.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "pointer_provider_coverage": {
-              "primary_source_ids": [
-                "SHERPA_EXTERNAL_PDF"
-              ],
-              "rationale": "The external PDF API exposes scalar accessors and copies; complete internal consumer coverage is not proven.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "reproducibility": {
-              "primary_source_ids": [
-                "SHERPA_SOURCE",
-                "SHERPA_3"
-              ],
-              "rationale": "Versioned source and configuration are available, while the proposed signed contract has no validated identity record.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "signed_pdf_scalar_preservation": {
-              "primary_source_ids": [],
-              "rationale": "No reviewed primary source proves signed scalar preservation through hard, ISR, and remnant consumers.",
-              "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
-            }
-          },
-          "result": "POTENTIALLY_COHERENT_INTERFACE_WITH_UNRESOLVED_SIGNED_SEMANTICS"
+      "aggregate_rule": {
+        "NOT_APPLICABLE": "Return only when every candidate is NOT_APPLICABLE.",
+        "NOT_SUPPORTED": "Return only when every applicable candidate is NOT_SUPPORTED.",
+        "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": "Preserve an evidence gap whenever any candidate is unavailable and the all-supported/all-failed rules do not apply.",
+        "SUPPORTED": "Return only when every applicable candidate is SUPPORTED.",
+        "SUPPORTED_WITH_QUALIFICATION": "Return for remaining mixed supported, qualified, or incompatible evidence."
+      },
+      "candidate_critical_status_counts": {
+        "HERWIG_PDF_AND_SHOWER_STACK": {
+          "NOT_APPLICABLE": 0,
+          "NOT_SUPPORTED": 0,
+          "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": 6,
+          "SUPPORTED": 0,
+          "SUPPORTED_WITH_QUALIFICATION": 4
         },
-        {
-          "candidate_id": "HERWIG_PDF_AND_SHOWER_STACK",
-          "evidence_requirements": {
-            "alpha_s_routing": {
-              "primary_source_ids": [
-                "HERWIG_7_3"
-              ],
-              "rationale": "Herwig 7.3 documents separate ISR and FSR alpha_s controls; complete PDF-provider coupling is unproven.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "beam_remnant_semantics": {
-              "primary_source_ids": [
-                "HERWIGPP_MANUAL"
-              ],
-              "rationale": "The primary manual describes remnant construction, not signed-PDF validity.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "hard_process_semantics": {
-              "primary_source_ids": [
-                "HERWIGPP_MANUAL",
-                "HERWIG_7_0",
-                "HERWIG_7_3"
-              ],
-              "rationale": "Herwig is documented for lepton-hadron hard scattering, but this exact fixed contract is not validated.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "isr_backward_evolution_semantics": {
-              "primary_source_ids": [
-                "HERWIGPP_MANUAL",
-                "HERWIG_7_3"
-              ],
-              "rationale": "Backward-evolution shower semantics are documented; signed-kernel probability validity is not.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "license_redistribution": {
-              "primary_source_ids": [
-                "HERWIG_7_3"
-              ],
-              "rationale": "The current software paper identifies GPLv3 availability; redistribution details require a dedicated review.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "maintained_source_build_availability": {
-              "primary_source_ids": [
-                "HERWIG_7_3"
-              ],
-              "rationale": "The current software paper identifies maintained public source and build availability.",
-              "status": "SUPPORTED"
-            },
-            "negative_rate_or_signed_weight_treatment": {
-              "primary_source_ids": [
-                "HERWIG_7_0",
-                "MCATNLO"
-              ],
-              "rationale": "MC@NLO supports negative event weights, not negative probabilities in PDF-dependent shower/remnant steps.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "pointer_provider_coverage": {
-              "primary_source_ids": [],
-              "rationale": "No bounded primary-source audit establishes provider coverage for the present signed PDF contract.",
-              "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
-            },
-            "reproducibility": {
-              "primary_source_ids": [
-                "HERWIG_7_3"
-              ],
-              "rationale": "Versioned releases are documented, but no validated deterministic identity exists for this proposed coupling.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "signed_pdf_scalar_preservation": {
-              "primary_source_ids": [],
-              "rationale": "No reviewed primary source proves signed scalar preservation through hard, ISR, and remnant consumers.",
-              "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
-            }
-          },
-          "result": "POTENTIALLY_COHERENT_INTERFACE_WITH_UNRESOLVED_SIGNED_SEMANTICS"
+        "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": {
+          "NOT_APPLICABLE": 0,
+          "NOT_SUPPORTED": 8,
+          "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": 0,
+          "SUPPORTED": 1,
+          "SUPPORTED_WITH_QUALIFICATION": 1
         },
-        {
-          "candidate_id": "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT",
-          "evidence_requirements": {
-            "alpha_s_routing": {
-              "primary_source_ids": [],
-              "rationale": "The transport record does not own downstream alpha_s routing.",
-              "status": "NOT_APPLICABLE"
-            },
-            "beam_remnant_semantics": {
-              "primary_source_ids": [
-                "LHEF_STANDARD"
-              ],
-              "rationale": "Beam-remnant construction is delegated to the receiving generator.",
-              "status": "NOT_SUPPORTED"
-            },
-            "hard_process_semantics": {
-              "primary_source_ids": [
-                "LHEF_STANDARD"
-              ],
-              "rationale": "The standard transports hard parton-level configurations but does not validate this signed PDF contract.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "isr_backward_evolution_semantics": {
-              "primary_source_ids": [
-                "LHEF_STANDARD"
-              ],
-              "rationale": "Backward evolution is delegated and therefore cannot be repaired by the transported final weight.",
-              "status": "NOT_SUPPORTED"
-            },
-            "license_redistribution": {
-              "primary_source_ids": [],
-              "rationale": "This entry evaluates an interchange standard rather than redistributing a generator.",
-              "status": "NOT_APPLICABLE"
-            },
-            "maintained_source_build_availability": {
-              "primary_source_ids": [],
-              "rationale": "The interchange standard is not a generator implementation.",
-              "status": "NOT_APPLICABLE"
-            },
-            "negative_rate_or_signed_weight_treatment": {
-              "primary_source_ids": [
-                "LHEF_STANDARD",
-                "MCATNLO"
-              ],
-              "rationale": "The standard carries event weights and MC@NLO establishes signed hard-event samples.",
-              "status": "SUPPORTED"
-            },
-            "pointer_provider_coverage": {
-              "primary_source_ids": [],
-              "rationale": "A hard-event record is not a PDF provider interface.",
-              "status": "NOT_APPLICABLE"
-            },
-            "reproducibility": {
-              "primary_source_ids": [
-                "LHEF_STANDARD"
-              ],
-              "rationale": "The standardized record supports provenance fields, but downstream generator identity remains separate.",
-              "status": "SUPPORTED_WITH_QUALIFICATION"
-            },
-            "signed_pdf_scalar_preservation": {
-              "primary_source_ids": [],
-              "rationale": "The interface transports events, not the signed PDF scalar through generator internals.",
-              "status": "NOT_APPLICABLE"
-            }
-          },
-          "result": "BOUNDARY_ONLY_NOT_A_COMPLETE_GENERATOR_COUPLING"
+        "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": {
+          "NOT_APPLICABLE": 0,
+          "NOT_SUPPORTED": 0,
+          "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": 6,
+          "SUPPORTED": 0,
+          "SUPPORTED_WITH_QUALIFICATION": 4
         }
-      ],
-      "rationale": "Sherpa and Herwig expose potentially relevant full-generator interfaces, while LHEF transports signed complete-event weights only; none proves the fixed signed-PDF contract end to end."
+      },
+      "candidate_matrices": {
+        "HERWIG_PDF_AND_SHOWER_STACK": {
+          "alpha_s_consistency": {
+            "claim": "Herwig 7.3 documents separate ISR and FSR alpha_s controls.",
+            "claim_keys": [
+              "isr_fsr_alpha_s_controls"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "It does not prove consistency with the proposed signed custom provider across all consumers.",
+            "rationale": "The release paper supports only the exposed-control subset.",
+            "source_ids": [
+              "HERWIG_7_3"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "amortized_set_inference_compatibility": {
+            "claim": "Herwig can produce weighted complete histories suitable for event-set representation.",
+            "claim_keys": [
+              "nlo_matching_negative_complete_event_weights",
+              "negative_complete_event_weights"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "A coherent signed PDF generation measure is not established.",
+            "rationale": "The matching sources support only the weighted-event subset.",
+            "source_ids": [
+              "HERWIG_7_0",
+              "MCATNLO"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "authorization_hierarchy_compatibility": {
+            "claim": "A Herwig prototype is incompatible with the current authorization hierarchy.",
+            "claim_keys": [
+              "authorization_hierarchy_blocks_prototype"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "This applies at the current failed D1D-A readiness gate.",
+            "rationale": "The merged decision affirmatively blocks any alternative-generator prototype now.",
+            "source_ids": [
+              "D1D_DECISION"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "beam_remnant_coverage": {
+            "claim": "Herwig includes a beam-remnant model.",
+            "claim_keys": [
+              "beam_remnant_model"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The primary manual does not establish signed-PDF remnant semantics.",
+            "rationale": "The source supports only the ordinary-remnant subset.",
+            "source_ids": [
+              "HERWIGPP_MANUAL"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "bounded_prototype_falsifiability": {
+            "claim": "A complete bounded signed-PDF Herwig prototype is not yet defined.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "General PDF/shower interfaces exist, but complete signed-consumer gates are not bounded.",
+            "rationale": "The bounded review did not find sufficient primary evidence to specify the prototype.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "build_deployment_reproducibility": {
+            "claim": "Herwig 7.3 documents maintained public source and build availability.",
+            "claim_keys": [
+              "maintained_source_and_build_availability"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+            "evidence_scope": "The claim is limited to the official software, not a signed-provider modification.",
+            "rationale": "The versioned primary software paper directly establishes this scope.",
+            "source_ids": [
+              "HERWIG_7_3"
+            ],
+            "status": "SUPPORTED"
+          },
+          "denominator_ratio_validity": {
+            "claim": "PDF denominator and ratio validity under signed inputs is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "Backward-evolution documentation does not provide a signed replacement construction.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "HERWIGPP_MANUAL"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "deterministic_identity_and_provenance": {
+            "claim": "Versioned Herwig papers identify maintained release software.",
+            "claim_keys": [
+              "maintained_source_and_build_availability"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "No exact signed-provider source/configuration identity is defined.",
+            "rationale": "The primary release record supports only software-version provenance.",
+            "source_ids": [
+              "HERWIG_7_3"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "event_weight_semantics": {
+            "claim": "Herwig/MC@NLO supports negative complete-event weights.",
+            "claim_keys": [
+              "nlo_matching_negative_complete_event_weights",
+              "negative_complete_event_weights"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "This does not establish negative PDF probabilities or signed Sudakov kernels.",
+            "rationale": "The primary papers directly support only complete-event matching weights.",
+            "source_ids": [
+              "HERWIG_7_0",
+              "MCATNLO"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "flavor_categorical_selection": {
+            "claim": "Flavor and categorical selection validity under signed PDFs is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The bounded sources do not trace signed provider values through all choices.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "full_neutral_current_gamma_z_compatibility": {
+            "claim": "Complete neutral-current gamma/Z/interference compatibility is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "General lepton-hadron support does not prove the fixed component and convention checks.",
+            "rationale": "The bounded review did not find a primary validation of the complete contract.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "hard_process_coverage": {
+            "claim": "Herwig supports lepton-hadron hard scattering and an integrated hard-process stack.",
+            "claim_keys": [
+              "lepton_hadron_hard_process_capability",
+              "hard_process_and_shower_stack",
+              "lepton_hadron_support"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The papers do not validate the fixed signed-PDF neutral-current contract.",
+            "rationale": "The primary sources support only general lepton-hadron and hard-process coverage.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "isr_sudakov_coverage": {
+            "claim": "Herwig implements backward-evolution showers and current ISR controls.",
+            "claim_keys": [
+              "backward_evolution_shower",
+              "isr_fsr_alpha_s_controls"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The sources do not establish signed PDF ratios or signed Sudakov validity.",
+            "rationale": "The primary manual and release paper support only ordinary ISR coverage.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_3"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "license_redistribution": {
+            "claim": "Herwig 7.3 declares GPLv3 software availability.",
+            "claim_keys": [
+              "gplv3_license_declaration"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The declaration is established; modified redistribution obligations are not interpreted here.",
+            "rationale": "The primary release paper supports only the license declaration subset.",
+            "source_ids": [
+              "HERWIG_7_3"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "maximum_envelope_rejection_semantics": {
+            "claim": "Maximum, envelope, and rejection semantics under signed PDFs are undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The reviewed papers do not specify a signed internal sampler.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "nonnegative_probability_rate_validity": {
+            "claim": "Internal probability and rate validity for signed PDFs is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The reviewed papers describe ordinary shower and matching semantics, not signed PDF kernels.",
+            "rationale": "The bounded review did not find a mathematical replacement measure.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "signed_scalar_preservation": {
+            "claim": "Signed PDF scalar preservation through Herwig internals is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The primary manual documents PDF handlers but no end-to-end signed dataflow.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "strict_support_no_extrapolation": {
+            "claim": "Strict no-extrapolation behavior for a custom Herwig provider is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The primary papers do not specify the fixed support contract.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "thread_process_safety": {
+            "claim": "Thread and process safety of a custom signed provider is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The reviewed primary papers do not establish the proposed provider behavior.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "HERWIGPP_MANUAL",
+              "HERWIG_7_0",
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "upstream_maintenance_burden": {
+            "claim": "Maintenance burden for a signed Herwig provider is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "Maintained software availability does not quantify integration cost.",
+            "rationale": "The bounded review did not find a primary maintenance-cost record.",
+            "source_ids": [
+              "HERWIG_7_3"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          }
+        },
+        "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": {
+          "alpha_s_consistency": {
+            "claim": "alpha_s routing does not belong to the event-file boundary.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+            "evidence_scope": "Producer and receiver retain their own coupling configuration.",
+            "rationale": "This criterion is outside the transport-format scope.",
+            "source_ids": [],
+            "status": "NOT_APPLICABLE"
+          },
+          "amortized_set_inference_compatibility": {
+            "claim": "Signed LHEF event weights can represent a weighted empirical event set.",
+            "claim_keys": [
+              "signed_complete_event_weight_field",
+              "negative_complete_event_weights"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "Compatibility still requires a coherent producer and an inference method that consumes signed weights explicitly.",
+            "rationale": "The standard supports only the record-level subset.",
+            "source_ids": [
+              "LHEF_STANDARD",
+              "MCATNLO"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "authorization_hierarchy_compatibility": {
+            "claim": "An LHEF transport prototype is incompatible with the current authorization hierarchy.",
+            "claim_keys": [
+              "authorization_hierarchy_blocks_prototype"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "This applies at the current failed D1D-A readiness gate.",
+            "rationale": "The merged decision affirmatively blocks a transport prototype now.",
+            "source_ids": [
+              "D1D_DECISION"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "beam_remnant_coverage": {
+            "claim": "LHEF is not a complete beam-remnant implementation.",
+            "claim_keys": [
+              "downstream_shower_delegation"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "Remnant construction is delegated downstream.",
+            "rationale": "The standard affirmatively delegates this critical route component.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "bounded_prototype_falsifiability": {
+            "claim": "An LHEF-only prototype cannot falsify complete signed generator coupling.",
+            "claim_keys": [
+              "boundary_not_generator",
+              "downstream_shower_delegation"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "It tests a boundary after hard-event construction and delegates ISR/remnants.",
+            "rationale": "The standard affirmatively lacks the internal route being tested.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "build_deployment_reproducibility": {
+            "claim": "A file standard has no generator build or deployment.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+            "evidence_scope": "Producer and receiver builds are separate.",
+            "rationale": "This criterion is outside the transport-format scope.",
+            "source_ids": [],
+            "status": "NOT_APPLICABLE"
+          },
+          "denominator_ratio_validity": {
+            "claim": "LHEF cannot validate upstream PDF denominators or ratios.",
+            "claim_keys": [
+              "boundary_not_generator"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "The standard has no provider or backward-evolution arithmetic interface.",
+            "rationale": "The boundary format affirmatively lacks this complete-route component.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "deterministic_identity_and_provenance": {
+            "claim": "The versioned LHEF standard defines a deterministic interchange record structure.",
+            "claim_keys": [
+              "parton_level_event_transport"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+            "evidence_scope": "Generator and PDF identities still require explicit fields supplied by the producer.",
+            "rationale": "The standard directly establishes the interchange scope.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "SUPPORTED"
+          },
+          "event_weight_semantics": {
+            "claim": "LHEF directly carries signed complete-event weights.",
+            "claim_keys": [
+              "signed_complete_event_weight_field",
+              "negative_complete_event_weights"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+            "evidence_scope": "The claim is limited to complete parton-level event records.",
+            "rationale": "The standard and MC@NLO primary paper directly establish this scope.",
+            "source_ids": [
+              "LHEF_STANDARD",
+              "MCATNLO"
+            ],
+            "status": "SUPPORTED"
+          },
+          "flavor_categorical_selection": {
+            "claim": "LHEF cannot validate upstream flavor and categorical selection probabilities.",
+            "claim_keys": [
+              "boundary_not_generator"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "It records the selected hard event after those choices.",
+            "rationale": "The boundary position affirmatively precludes repair of upstream categories.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "full_neutral_current_gamma_z_compatibility": {
+            "claim": "LHEF cannot establish complete neutral-current gamma/Z/interference generation compatibility.",
+            "claim_keys": [
+              "boundary_not_generator"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "It transports whatever hard event the producer supplied.",
+            "rationale": "The boundary format affirmatively lacks the generator-level validation component.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "hard_process_coverage": {
+            "claim": "LHEF transports hard parton-level configurations and event weights.",
+            "claim_keys": [
+              "parton_level_event_transport",
+              "signed_complete_event_weight_field"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "It does not generate or validate the fixed signed hard process.",
+            "rationale": "The standard directly supports the transport subset only.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "isr_sudakov_coverage": {
+            "claim": "LHEF is not a complete ISR or Sudakov implementation.",
+            "claim_keys": [
+              "downstream_shower_delegation"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "Backward evolution is delegated to the receiving generator.",
+            "rationale": "The standard affirmatively delegates this critical route component.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "license_redistribution": {
+            "claim": "Generator software redistribution does not belong to the interchange-format candidate.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+            "evidence_scope": "Any implementation has its own license.",
+            "rationale": "This criterion is outside the transport-format scope.",
+            "source_ids": [],
+            "status": "NOT_APPLICABLE"
+          },
+          "maximum_envelope_rejection_semantics": {
+            "claim": "LHEF cannot validate upstream maxima, envelopes, vetoes, or rejection sampling.",
+            "claim_keys": [
+              "boundary_not_generator"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "Those decisions precede the serialized event.",
+            "rationale": "The boundary position affirmatively precludes repair of upstream sampling.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "nonnegative_probability_rate_validity": {
+            "claim": "LHEF cannot establish validity of upstream generator probabilities or rates.",
+            "claim_keys": [
+              "boundary_not_generator",
+              "downstream_shower_delegation"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "The file is written after those internal decisions.",
+            "rationale": "A downstream boundary affirmatively cannot repair an already constructed measure.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "signed_scalar_preservation": {
+            "claim": "LHEF cannot preserve a signed PDF scalar through generator internals.",
+            "claim_keys": [
+              "boundary_not_generator"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "The standard transports completed parton-level event records, not provider calls.",
+            "rationale": "The boundary format affirmatively does not carry the internal PDF scalar path.",
+            "source_ids": [
+              "LHEF_STANDARD"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "strict_support_no_extrapolation": {
+            "claim": "PDF support enforcement does not belong to the event-file boundary.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+            "evidence_scope": "It remains the responsibility of the event producer and receiving generator.",
+            "rationale": "This criterion is outside the transport-format scope.",
+            "source_ids": [],
+            "status": "NOT_APPLICABLE"
+          },
+          "thread_process_safety": {
+            "claim": "Generator concurrency does not belong to the serialized event format.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+            "evidence_scope": "It is an implementation concern of producer and receiver.",
+            "rationale": "This criterion is outside the transport-format scope.",
+            "source_ids": [],
+            "status": "NOT_APPLICABLE"
+          },
+          "upstream_maintenance_burden": {
+            "claim": "Generator maintenance burden does not belong to the interchange format alone.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+            "evidence_scope": "Producer and receiver maintenance remain separate.",
+            "rationale": "This criterion is outside the transport-format scope.",
+            "source_ids": [],
+            "status": "NOT_APPLICABLE"
+          }
+        },
+        "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": {
+          "alpha_s_consistency": {
+            "claim": "Sherpa exposes PDF-related alpha_s routing configuration.",
+            "claim_keys": [
+              "pdf_alpha_s_routing_option"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The documented option does not establish consistency for the proposed signed custom provider across every consumer.",
+            "rationale": "The versioned ISR documentation supports only the routing-option subset.",
+            "source_ids": [
+              "SHERPA_301_ISR_DOC"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "amortized_set_inference_compatibility": {
+            "claim": "Sherpa can produce weighted complete events that could form event sets.",
+            "claim_keys": [
+              "weighted_event_generation_modes",
+              "negative_complete_event_weights"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "Compatibility requires a coherent signed generation measure, which is not established.",
+            "rationale": "The sources support only the event-record subset.",
+            "source_ids": [
+              "SHERPA_301_MANUAL",
+              "MCATNLO"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "authorization_hierarchy_compatibility": {
+            "claim": "A Sherpa prototype is incompatible with the current authorization hierarchy.",
+            "claim_keys": [
+              "authorization_hierarchy_blocks_prototype"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+            "evidence_scope": "This applies at the current failed D1D-A readiness gate.",
+            "rationale": "The merged decision affirmatively blocks any alternative-generator prototype now.",
+            "source_ids": [
+              "D1D_DECISION"
+            ],
+            "status": "NOT_SUPPORTED"
+          },
+          "beam_remnant_coverage": {
+            "claim": "Sherpa includes a beam-remnant module in its event-generation stack.",
+            "claim_keys": [
+              "beam_remnant_module_exists"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The manual establishes module existence, not signed-PDF remnant semantics.",
+            "rationale": "The versioned manual supports only the ordinary-remnant subset.",
+            "source_ids": [
+              "SHERPA_301_MANUAL"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "bounded_prototype_falsifiability": {
+            "claim": "A complete bounded signed-PDF Sherpa prototype is not yet defined.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The loadable interface is source-backed, but the internal signed consumer and probability checks are not bounded.",
+            "rationale": "The bounded review did not find evidence sufficient to specify all falsification gates.",
+            "source_ids": [
+              "SHERPA_301_EXTERNAL_PDF_DOC",
+              "SHERPA_301_SOURCE_COMMIT",
+              "D1D_AUDIT_V6"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "build_deployment_reproducibility": {
+            "claim": "Sherpa 3.0.1 source and build instructions are pinned reproducibly.",
+            "claim_keys": [
+              "source_commit_availability",
+              "cmake_build_definition",
+              "versioned_build_instructions",
+              "maintained_sherpa3_software"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+            "evidence_scope": "The claim is limited to obtaining and building the official release, not the absent signed provider.",
+            "rationale": "The exact source commit, CMake file hash, and versioned build manual directly establish this scope.",
+            "source_ids": [
+              "SHERPA_301_SOURCE_COMMIT",
+              "SHERPA_301_MANUAL",
+              "SHERPA_3_PAPER"
+            ],
+            "status": "SUPPORTED"
+          },
+          "denominator_ratio_validity": {
+            "claim": "PDF denominator and ratio validity under signed inputs is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The reviewed sources do not specify every internal ratio consumer.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "SHERPA_301_EXTERNAL_PDF_DOC",
+              "SHERPA_301_ISR_DOC"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "deterministic_identity_and_provenance": {
+            "claim": "Sherpa release source and the reviewed HERA configuration have immutable identities.",
+            "claim_keys": [
+              "source_commit_availability",
+              "hera_example_source"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "Those identities do not define an absent signed custom provider and full configuration artifact.",
+            "rationale": "The pinned commit and file hashes support only source/configuration provenance.",
+            "source_ids": [
+              "SHERPA_301_SOURCE_COMMIT",
+              "SHERPA_301_HERA_YAML"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "event_weight_semantics": {
+            "claim": "Sherpa supports weighted complete events and MC@NLO configurations.",
+            "claim_keys": [
+              "weighted_event_generation_modes",
+              "mcatnlo_mode_configuration",
+              "complete_event_negative_weights",
+              "negative_complete_event_weights"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "This supports complete-event weights, not signed PDF probabilities inside the generator.",
+            "rationale": "The pinned manual, HERA YAML, and primary paper establish only the complete-event subset.",
+            "source_ids": [
+              "SHERPA_301_MANUAL",
+              "SHERPA_301_HERA_YAML",
+              "SHERPA_3_PAPER",
+              "MCATNLO"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "flavor_categorical_selection": {
+            "claim": "Flavor and categorical selection validity under signed PDFs is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The reviewed interface and manuals do not trace signed values into categorical choices.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "SHERPA_301_EXTERNAL_PDF_DOC",
+              "SHERPA_301_MANUAL"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "full_neutral_current_gamma_z_compatibility": {
+            "claim": "Complete neutral-current gamma/Z/interference compatibility is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The HERA example establishes an EW DIS configuration but does not separately validate gamma, Z, interference, and charge-sign conventions.",
+            "rationale": "The bounded review did not find a primary source proving the complete required contract.",
+            "source_ids": [
+              "SHERPA_301_HERA_YAML",
+              "SHERPA_301_MANUAL"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "hard_process_coverage": {
+            "claim": "Sherpa 3.0.1 provides a lepton-proton EW DIS hard-process configuration.",
+            "claim_keys": [
+              "hera_lepton_proton_dis_configuration",
+              "hera_ew_order_two_hard_process",
+              "lepton_hadron_dis_capability"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The HERA YAML fixes lepton/proton beams and an EW-order-two DIS process; it does not establish complete gamma/Z/interference closure.",
+            "rationale": "The pinned HERA source directly supports the configuration subset only.",
+            "source_ids": [
+              "SHERPA_301_HERA_YAML",
+              "SHERPA_301_MANUAL"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "isr_sudakov_coverage": {
+            "claim": "Sherpa documents initial-state PDF configuration and shower integration.",
+            "claim_keys": [
+              "initial_state_pdf_configuration",
+              "shower_pdf_variation_support",
+              "hera_shower_configuration"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "The sources establish ordinary ISR/shower plumbing but not valid signed Sudakov kernels.",
+            "rationale": "The pinned documentation and HERA YAML support only the ordinary-shower subset.",
+            "source_ids": [
+              "SHERPA_301_ISR_DOC",
+              "SHERPA_301_HERA_YAML"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "license_redistribution": {
+            "claim": "Sherpa 3.0.1 includes pinned license and copying files.",
+            "claim_keys": [
+              "license_files_present"
+            ],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+            "evidence_scope": "File identity is established; legal obligations for a redistributed modified integration are not interpreted here.",
+            "rationale": "The exact commit and file hashes support only license-text availability.",
+            "source_ids": [
+              "SHERPA_301_SOURCE_COMMIT"
+            ],
+            "status": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "maximum_envelope_rejection_semantics": {
+            "claim": "Maximum, envelope, and rejection semantics under signed PDFs are undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "Ordinary event-generation documentation does not define a signed replacement.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "SHERPA_301_MANUAL",
+              "SHERPA_3_PAPER"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "nonnegative_probability_rate_validity": {
+            "claim": "Validity of internal Sherpa probabilities and rates for signed PDFs is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The manual documents ordinary generator modules, not a signed internal measure.",
+            "rationale": "The bounded review did not find a signed-rate or signed-kernel formulation.",
+            "source_ids": [
+              "SHERPA_301_MANUAL",
+              "SHERPA_3_PAPER"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "signed_scalar_preservation": {
+            "claim": "Signed PDF scalar preservation through Sherpa internals is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The interface exposes Calculate/GetXPDF and runtime loading, but no sign-preservation dataflow.",
+            "rationale": "The bounded review did not find primary evidence covering hard, ISR, and remnant consumers.",
+            "source_ids": [
+              "SHERPA_301_EXTERNAL_PDF_DOC",
+              "SHERPA_301_SOURCE_COMMIT"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "strict_support_no_extrapolation": {
+            "claim": "Strict no-extrapolation enforcement for a custom Sherpa PDF is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The external-PDF API documents accessors and loading but no fixed strict-support contract.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "SHERPA_301_EXTERNAL_PDF_DOC"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "thread_process_safety": {
+            "claim": "Thread and process safety of a custom signed PDF provider is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "The reviewed API does not make a concurrency guarantee for the proposed provider.",
+            "rationale": "The bounded review did not find sufficient primary evidence.",
+            "source_ids": [
+              "SHERPA_301_EXTERNAL_PDF_DOC",
+              "SHERPA_301_SOURCE_COMMIT"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "upstream_maintenance_burden": {
+            "claim": "Maintenance burden for a custom signed provider is undecided.",
+            "claim_keys": [],
+            "disproportionate_cost_evidence": false,
+            "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+            "evidence_scope": "Pinned maintained source establishes availability, not integration cost across releases.",
+            "rationale": "The bounded review did not find a quantified maintenance record.",
+            "source_ids": [
+              "SHERPA_301_SOURCE_COMMIT",
+              "SHERPA_3_PAPER"
+            ],
+            "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          }
+        }
+      },
+      "candidate_route_states": {
+        "HERWIG_PDF_AND_SHOWER_STACK": "COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS",
+        "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "COHERENT_BOUNDED_PATH_NOT_SUPPORTED",
+        "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS"
+      }
     },
     "D_STOP_FURTHER_GENERATOR_COUPLING_WORK": {
-      "assessment": "SUPPORTED_WITH_QUALIFICATION_FOR_CURRENT_CONTRACT",
-      "rationale": "Stopping current generator-coupling work protects the fixed D0R signed binary64 contract, theta box, shape-only fixed-N MVP, and hard/ISR/remnant consistency requirement. This is not a universal impossibility theorem and can be reopened only on new reviewed evidence."
+      "assessment": "INTERIM_PAUSE_SUPPORTED_BY_FAILED_READINESS_GATE",
+      "interpretation": "This is an operational pause, not a selected terminal-stop decision."
     }
   },
   "authorization": {
@@ -268,6 +921,7 @@
     "PYTHIA_NEXT_AUTHORIZED": false,
     "SIGNED_WEIGHT_PROTOTYPE_AUTHORIZED": false
   },
+  "current_operational_policy": "PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION",
   "decision": "INCONCLUSIVE",
   "decision_criteria": {
     "criterion_order": [
@@ -292,479 +946,1269 @@
       "amortized_set_inference_compatibility",
       "authorization_hierarchy_compatibility"
     ],
+    "critical_criteria": [
+      "signed_scalar_preservation",
+      "nonnegative_probability_rate_validity",
+      "hard_process_coverage",
+      "isr_sudakov_coverage",
+      "beam_remnant_coverage",
+      "flavor_categorical_selection",
+      "denominator_ratio_validity",
+      "maximum_envelope_rejection_semantics",
+      "event_weight_semantics",
+      "bounded_prototype_falsifiability"
+    ],
     "matrix": {
       "A_REPOSITORY_OWNED_PYTHIA_FORK_OR_PATCH": {
         "alpha_s_consistency": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "alpha_s consistency for a proposed fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No complete fork routing record exists.",
+          "rationale": "The bounded review found no source-backed alpha_s consumer map for the redesign.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "amortized_set_inference_compatibility": {
-          "primary_source_ids": [
+          "claim": "A coherent generator could supply event sets to the fixed set-inference objective.",
+          "claim_keys": [
+            "fixed_signed_binary64_contract"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "This establishes the downstream data shape only, not a coherent generator measure.",
+          "rationale": "The fixed repository contract supports only that subset.",
+          "source_ids": [
             "D1C"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "authorization_hierarchy_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "A fork prototype is incompatible with the current authorization hierarchy.",
+          "claim_keys": [
+            "authorization_hierarchy_blocks_prototype"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "The statement is scoped to the current failed readiness gate, not every future review.",
+          "rationale": "The merged decision affirmatively blocks prototype authorization at this gate.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "beam_remnant_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "Beam-remnant coverage for a complete fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "The existing remnant evidence supports minimal-patch insufficiency only.",
+          "rationale": "The bounded review found no complete redesigned remnant path.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "bounded_prototype_falsifiability": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "The present evidence cannot define a bounded complete-fork prototype.",
+          "claim_keys": [
+            "current_bounded_fork_not_falsifiable",
+            "provenance_evidence_integrity_failure"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "The merged D1D-A integrity failure invalidates the consumer graph required to scope that prototype.",
+          "rationale": "The failed provenance-evidence gate affirmatively precludes a bounded complete-consumer prototype under the current record.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "build_deployment_reproducibility": {
-          "primary_source_ids": [
+          "claim": "A versioned repository fork can be built from an immutable source identity.",
+          "claim_keys": [
+            "provenance_evidence_integrity_failure"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "This establishes an identity mechanism, not a validated patched build or deployment.",
+          "rationale": "The repository lineage supports the subset while the proposed fork remains absent.",
+          "source_ids": [
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "denominator_ratio_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "deterministic_identity_and_provenance": {
-          "primary_source_ids": [
+          "claim": "Denominator and ratio validity for a fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Existing sign-sensitive denominators establish risk, not a redesigned solution.",
+          "rationale": "The bounded review found no complete replacement arithmetic contract.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "deterministic_identity_and_provenance": {
+          "claim": "Repository commits can identify a future patch deterministically.",
+          "claim_keys": [
+            "provenance_evidence_integrity_failure"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Commit identity covers source provenance, not the absent patch and build artifact.",
+          "rationale": "Immutable repository evidence establishes the identity mechanism only.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "event_weight_semantics": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "Final event-weight semantics for a redesigned fork are undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "D1D-A rejects final weights as repair of existing internal decisions, not every redesigned measure.",
+          "rationale": "No reviewed complete fork event measure is available.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "flavor_categorical_selection": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "Flavor and categorical selection validity for a fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No replacement categorical measure was proposed or reviewed.",
+          "rationale": "The bounded review found no primary or immutable complete selection construction.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "full_neutral_current_gamma_z_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "Complete neutral-current gamma/Z/interference compatibility for a fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No full observable contract was evaluated for a proposed fork.",
+          "rationale": "The bounded review found no source-backed complete compatibility result.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "hard_process_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "Hard-process coverage for a complete fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "D1D-A audited selected existing consumers, not a proposed redesigned hard-process implementation.",
+          "rationale": "The reviewed repository evidence does not establish the prospective fork behavior.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "isr_sudakov_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "ISR and Sudakov coverage for a complete fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "The current consumer graph is not independently valid and no replacement kernel is specified.",
+          "rationale": "The bounded review found no complete proposed ISR construction.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "license_redistribution": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "License and redistribution terms for a proposed PYTHIA fork are undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No pinned upstream license review is included in this bounded record.",
+          "rationale": "The bounded review did not establish the redistribution contract.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "maximum_envelope_rejection_semantics": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "nonnegative_probability_rate_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "signed_scalar_preservation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "strict_support_no_extrapolation": {
-          "primary_source_ids": [
-            "D1C",
+          "claim": "Maximum, envelope, and rejection semantics for a fork are undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "The current evidence identifies sign-sensitive uses but no replacement sampler.",
+          "rationale": "The bounded review found no complete bounded construction.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "nonnegative_probability_rate_validity": {
+          "claim": "Probability and rate validity for a redesigned fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No complete redesigned sampling measure or consumer graph was reviewed.",
+          "rationale": "The bounded review found no primary or immutable evidence deciding a full replacement construction.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "signed_scalar_preservation": {
+          "claim": "A full fork could change the public boundary, but end-to-end signed scalar preservation is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "The merged evidence proves the stock reader failure and minimal-patch insufficiency; it does not evaluate a complete fork.",
+          "rationale": "The bounded review did not find a source-backed complete fork dataflow.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "strict_support_no_extrapolation": {
+          "claim": "The upstream PDF transport contract can enforce strict support before generator consumption.",
+          "claim_keys": [
+            "fixed_signed_binary64_contract"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "This establishes the evaluator-side subset only; complete fork propagation is not established.",
+          "rationale": "The fixed repository contract directly supports strict evaluator rejection, while generator integration remains outside scope.",
+          "source_ids": [
+            "D1C"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "thread_process_safety": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "Thread and process safety for a future fork is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No proposed fork exists to test or inspect.",
+          "rationale": "The bounded review found no primary or immutable safety evidence.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "D1D_DECISION"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "upstream_maintenance_burden": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "The long-term maintenance burden of a complete fork is not quantified.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "A versioned fork implies work, but no primary evidence bounds or proves disproportionate cost.",
+          "rationale": "The bounded review did not establish a cost conclusion.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         }
       },
       "B_SIGNED_WEIGHT_GENERATOR_ARCHITECTURE": {
         "alpha_s_consistency": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "alpha_s consistency for a new signed-kernel generator is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Complete-event weight sources do not establish a signed PDF/alpha_s routing contract.",
+          "rationale": "The bounded review did not find sufficient primary evidence.",
+          "source_ids": [
+            "MCATNLO"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "amortized_set_inference_compatibility": {
-          "primary_source_ids": [
-            "D1C"
+          "claim": "Set inference can consume weighted complete histories if their measure is coherent.",
+          "claim_keys": [
+            "negative_complete_event_weights",
+            "signed_complete_event_weight_field"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "SUPPORTED_WITH_QUALIFICATION"
-        },
-        "authorization_hierarchy_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "beam_remnant_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "bounded_prototype_falsifiability": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "build_deployment_reproducibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "denominator_ratio_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "deterministic_identity_and_provenance": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
-        },
-        "event_weight_semantics": {
-          "primary_source_ids": [
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "No coherent signed internal generator measure is established here.",
+          "rationale": "Primary event-weight evidence supports only the downstream weighted-set subset.",
+          "source_ids": [
             "MCATNLO",
             "LHEF_STANDARD"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "authorization_hierarchy_compatibility": {
+          "claim": "A signed-weight prototype is incompatible with the current authorization hierarchy.",
+          "claim_keys": [
+            "authorization_hierarchy_blocks_prototype"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This applies at the current failed readiness gate.",
+          "rationale": "The merged decision affirmatively blocks prototype authorization.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
+          "status": "NOT_SUPPORTED"
+        },
+        "beam_remnant_coverage": {
+          "claim": "A final event weight does not replace beam-remnant selection semantics.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This covers remnant choices made while constructing the event.",
+          "rationale": "Post-hoc weighting affirmatively cannot repair an already selected remnant history.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
+          "status": "NOT_SUPPORTED"
+        },
+        "bounded_prototype_falsifiability": {
+          "claim": "The final-weight architecture is not a bounded test of internal signed sampling validity.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "A test of final event weights leaves the failing internal construction unchanged.",
+          "rationale": "The architecture therefore affirmatively fails to falsify the critical internal semantics it claims to repair.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
+          "status": "NOT_SUPPORTED"
+        },
+        "build_deployment_reproducibility": {
+          "claim": "Build and deployment reproducibility for a signed-kernel generator is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No implementation or source identity exists for this architecture.",
+          "rationale": "The bounded review did not find a reproducible implementation.",
+          "source_ids": [
+            "MCATNLO"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "denominator_ratio_validity": {
+          "claim": "A final event weight does not repair invalid PDF denominators or ratios.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This covers ratios used internally in sampling and evolution.",
+          "rationale": "The merged evidence places these computations before final weighting, so a final weight cannot change the invalid arithmetic.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
+          "status": "NOT_SUPPORTED"
+        },
+        "deterministic_identity_and_provenance": {
+          "claim": "Standardized event records can preserve complete-event weight provenance.",
+          "claim_keys": [
+            "signed_complete_event_weight_field"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "They do not identify an absent signed internal generator implementation.",
+          "rationale": "The LHEF standard supports only the boundary-record subset.",
+          "source_ids": [
+            "LHEF_STANDARD"
+          ],
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "event_weight_semantics": {
+          "claim": "Negative complete-event weights are established for NLO matching.",
+          "claim_keys": [
+            "negative_complete_event_weights",
+            "signed_complete_event_weight_field"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "They represent cancellations between complete histories, not signed internal PDF probabilities.",
+          "rationale": "The primary papers directly support only complete-event weight semantics.",
+          "source_ids": [
+            "MCATNLO",
+            "LHEF_STANDARD"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "flavor_categorical_selection": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "A final event weight does not make an invalid flavor probability valid.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This covers categorical choices made before event completion.",
+          "rationale": "Post-hoc weighting affirmatively cannot repair an already selected category.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "full_neutral_current_gamma_z_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "Complete gamma/Z/interference compatibility for a signed-kernel generator is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "The reviewed matching papers do not validate this fixed DIS contract.",
+          "rationale": "The bounded review did not find sufficient primary evidence.",
+          "source_ids": [
+            "MCATNLO"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "hard_process_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          "claim": "Signed complete-event weights can encode NLO hard-process cancellations.",
+          "claim_keys": [
+            "negative_complete_event_weights",
+            "nlo_matching_negative_complete_event_weights"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "MC@NLO establishes complete hard-event weights, not signed PDFs through all generator consumers.",
+          "rationale": "The primary papers support the hard-event subset only.",
+          "source_ids": [
+            "MCATNLO",
+            "HERWIG_7_0"
+          ],
+          "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "isr_sudakov_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "A final event weight does not replace ISR or Sudakov sampling kernels.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This covers standard backward evolution executed before the final weight exists.",
+          "rationale": "Post-hoc weighting affirmatively cannot repair an already sampled ISR history.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "license_redistribution": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "No software license criterion applies to the abstract mathematical architecture.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "A future implementation would require its own license review.",
+          "rationale": "This criterion is outside the current architecture scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "maximum_envelope_rejection_semantics": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "A final event weight does not repair maxima, envelopes, vetoes, or rejection probabilities.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This covers internal accept/reject construction.",
+          "rationale": "The event history is changed before a final weight exists, so the weight cannot repair the sampler.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "nonnegative_probability_rate_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "A signed final weight cannot make an invalid internal probability or rate valid.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "The claim covers decisions made before a complete event history exists.",
+          "rationale": "The merged evidence affirmatively shows that post-hoc weighting cannot repair those internal measures.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "signed_scalar_preservation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "An external signed final weight does not preserve signed PDF scalars inside generator consumers.",
+          "claim_keys": [
+            "external_final_weight_cannot_repair_internal_selection"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "This applies to the final-weight architecture, not an unformulated replacement signed-kernel generator.",
+          "rationale": "The weight is applied after internal consumers and therefore does not carry or preserve their signed scalar inputs.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "strict_support_no_extrapolation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "Strict support behavior for a new signed-kernel generator is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Complete-event weight papers do not specify this PDF transport contract.",
+          "rationale": "The bounded review did not find primary evidence for the proposed internal architecture.",
+          "source_ids": [
+            "MCATNLO",
+            "LHEF_STANDARD"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "thread_process_safety": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "Thread and process safety for a signed-kernel generator is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No implementation is identified.",
+          "rationale": "The bounded review did not find a primary implementation record.",
+          "source_ids": [
+            "MCATNLO"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "upstream_maintenance_burden": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "claim": "Maintenance burden for an unimplemented signed-kernel generator is undecided.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "No implementation scope exists to cost.",
+          "rationale": "The bounded review did not establish a maintenance conclusion.",
+          "source_ids": [
+            "MCATNLO"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         }
       },
       "C_ALTERNATIVE_GENERATOR_OR_TRANSPORT_INTERFACE": {
         "alpha_s_consistency": {
-          "primary_source_ids": [
-            "SHERPA_ISR",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_APPLICABLE",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of alpha_s_consistency, but support is not complete across candidates.",
+          "claim_keys": [
+            "isr_fsr_alpha_s_controls",
+            "pdf_alpha_s_routing_option"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "source_ids": [
+            "HERWIG_7_3",
+            "SHERPA_301_ISR_DOC"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "amortized_set_inference_compatibility": {
-          "primary_source_ids": [
-            "LHEF_STANDARD",
-            "MCATNLO"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "SUPPORTED_WITH_QUALIFICATION",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of amortized_set_inference_compatibility, but support is not complete across candidates.",
+          "claim_keys": [
+            "negative_complete_event_weights",
+            "nlo_matching_negative_complete_event_weights",
+            "signed_complete_event_weight_field",
+            "weighted_event_generation_modes"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED_WITH_QUALIFICATION.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED_WITH_QUALIFICATION.",
+          "source_ids": [
+            "HERWIG_7_0",
+            "LHEF_STANDARD",
+            "MCATNLO",
+            "SHERPA_301_MANUAL"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "authorization_hierarchy_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "NOT_SUPPORTED",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "NOT_SUPPORTED"
+          },
+          "claim": "Every applicable bounded candidate affirmatively fails authorization_hierarchy_compatibility.",
+          "claim_keys": [
+            "authorization_hierarchy_blocks_prototype"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "AFFIRMATIVE_INCOMPATIBILITY_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=NOT_SUPPORTED, HERWIG_PDF_AND_SHOWER_STACK=NOT_SUPPORTED, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Affirmative incompatibility is established because every applicable candidate is NOT_SUPPORTED: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=NOT_SUPPORTED, HERWIG_PDF_AND_SHOWER_STACK=NOT_SUPPORTED, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "D1D_DECISION"
+          ],
           "status": "NOT_SUPPORTED"
         },
         "beam_remnant_coverage": {
-          "primary_source_ids": [
-            "SHERPA_MANUAL",
-            "HERWIGPP_MANUAL"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of beam_remnant_coverage, but support is not complete across candidates.",
+          "claim_keys": [
+            "beam_remnant_model",
+            "beam_remnant_module_exists",
+            "downstream_shower_delegation"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "LHEF_STANDARD",
+            "SHERPA_301_MANUAL"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "bounded_prototype_falsifiability": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide bounded_prototype_falsifiability for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator",
+            "downstream_shower_delegation"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "D1D_AUDIT_V6",
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_EXTERNAL_PDF_DOC",
+            "SHERPA_301_SOURCE_COMMIT"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "build_deployment_reproducibility": {
-          "primary_source_ids": [
-            "SHERPA_SOURCE",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_APPLICABLE",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED"
+          },
+          "claim": "All applicable bounded candidates directly support build_deployment_reproducibility.",
+          "claim_keys": [
+            "cmake_build_definition",
+            "maintained_sherpa3_software",
+            "maintained_source_and_build_availability",
+            "source_commit_availability",
+            "versioned_build_instructions"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "SUPPORTED_WITH_QUALIFICATION"
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "rationale": "Conservative aggregation returns SUPPORTED because every applicable candidate is SUPPORTED: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "source_ids": [
+            "HERWIG_7_3",
+            "SHERPA_301_MANUAL",
+            "SHERPA_301_SOURCE_COMMIT",
+            "SHERPA_3_PAPER"
+          ],
+          "status": "SUPPORTED"
         },
         "denominator_ratio_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide denominator_ratio_validity for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "LHEF_STANDARD",
+            "SHERPA_301_EXTERNAL_PDF_DOC",
+            "SHERPA_301_ISR_DOC"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "deterministic_identity_and_provenance": {
-          "primary_source_ids": [
-            "LHEF_STANDARD",
-            "SHERPA_SOURCE",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of deterministic_identity_and_provenance, but support is not complete across candidates.",
+          "claim_keys": [
+            "hera_example_source",
+            "maintained_source_and_build_availability",
+            "parton_level_event_transport",
+            "source_commit_availability"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED.",
+          "source_ids": [
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_HERA_YAML",
+            "SHERPA_301_SOURCE_COMMIT"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "event_weight_semantics": {
-          "primary_source_ids": [
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of event_weight_semantics, but support is not complete across candidates.",
+          "claim_keys": [
+            "complete_event_negative_weights",
+            "mcatnlo_mode_configuration",
+            "negative_complete_event_weights",
+            "nlo_matching_negative_complete_event_weights",
+            "signed_complete_event_weight_field",
+            "weighted_event_generation_modes"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED.",
+          "source_ids": [
+            "HERWIG_7_0",
             "LHEF_STANDARD",
             "MCATNLO",
-            "SHERPA_3",
-            "HERWIG_7_0"
+            "SHERPA_301_HERA_YAML",
+            "SHERPA_301_MANUAL",
+            "SHERPA_3_PAPER"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "flavor_categorical_selection": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide flavor_categorical_selection for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_EXTERNAL_PDF_DOC",
+            "SHERPA_301_MANUAL"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "full_neutral_current_gamma_z_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide full_neutral_current_gamma_z_compatibility for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_HERA_YAML",
+            "SHERPA_301_MANUAL"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "hard_process_coverage": {
-          "primary_source_ids": [
-            "SHERPA_DIS",
-            "HERWIGPP_MANUAL",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "SUPPORTED_WITH_QUALIFICATION",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of hard_process_coverage, but support is not complete across candidates.",
+          "claim_keys": [
+            "hard_process_and_shower_stack",
+            "hera_ew_order_two_hard_process",
+            "hera_lepton_proton_dis_configuration",
+            "lepton_hadron_dis_capability",
+            "lepton_hadron_hard_process_capability",
+            "lepton_hadron_support",
+            "parton_level_event_transport",
+            "signed_complete_event_weight_field"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED_WITH_QUALIFICATION.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=SUPPORTED_WITH_QUALIFICATION.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_HERA_YAML",
+            "SHERPA_301_MANUAL"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "isr_sudakov_coverage": {
-          "primary_source_ids": [
-            "SHERPA_ISR",
-            "HERWIGPP_MANUAL",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of isr_sudakov_coverage, but support is not complete across candidates.",
+          "claim_keys": [
+            "backward_evolution_shower",
+            "downstream_shower_delegation",
+            "hera_shower_configuration",
+            "initial_state_pdf_configuration",
+            "isr_fsr_alpha_s_controls",
+            "shower_pdf_variation_support"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_HERA_YAML",
+            "SHERPA_301_ISR_DOC"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "license_redistribution": {
-          "primary_source_ids": [
-            "SHERPA_SOURCE",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "SUPPORTED_WITH_QUALIFICATION",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_APPLICABLE",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "SUPPORTED_WITH_QUALIFICATION"
+          },
+          "claim": "At least one bounded candidate supports a subset of license_redistribution, but support is not complete across candidates.",
+          "claim_keys": [
+            "gplv3_license_declaration",
+            "license_files_present"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "rationale": "Conservative aggregation returns SUPPORTED_WITH_QUALIFICATION for mixed supported, qualified, or incompatible evidence: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=SUPPORTED_WITH_QUALIFICATION, HERWIG_PDF_AND_SHOWER_STACK=SUPPORTED_WITH_QUALIFICATION, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "source_ids": [
+            "HERWIG_7_3",
+            "SHERPA_301_SOURCE_COMMIT"
+          ],
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "maximum_envelope_rejection_semantics": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide maximum_envelope_rejection_semantics for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_MANUAL",
+            "SHERPA_3_PAPER"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "nonnegative_probability_rate_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "NOT_SUPPORTED"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide nonnegative_probability_rate_validity for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator",
+            "downstream_shower_delegation"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_MANUAL",
+            "SHERPA_3_PAPER"
+          ],
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "signed_scalar_preservation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_SUPPORTED",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide signed_scalar_preservation for Architecture C.",
+          "claim_keys": [
+            "boundary_not_generator"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_SUPPORTED.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "LHEF_STANDARD",
+            "SHERPA_301_EXTERNAL_PDF_DOC",
+            "SHERPA_301_SOURCE_COMMIT"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "strict_support_no_extrapolation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_APPLICABLE",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide strict_support_no_extrapolation for Architecture C.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "SHERPA_301_EXTERNAL_PDF_DOC"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "thread_process_safety": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_APPLICABLE",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide thread_process_safety for Architecture C.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "source_ids": [
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_0",
+            "HERWIG_7_3",
+            "SHERPA_301_EXTERNAL_PDF_DOC",
+            "SHERPA_301_SOURCE_COMMIT"
+          ],
           "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         },
         "upstream_maintenance_burden": {
-          "primary_source_ids": [
-            "SHERPA_SOURCE",
-            "SHERPA_3",
-            "HERWIG_7_3"
+          "candidate_status_inputs": {
+            "HERWIG_PDF_AND_SHOWER_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE",
+            "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT": "NOT_APPLICABLE",
+            "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+          },
+          "claim": "The bounded candidate review cannot decide upstream_maintenance_burden for Architecture C.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "BOUNDED_REVIEW_EVIDENCE_GAP",
+          "evidence_scope": "Candidate-level inputs: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "rationale": "Conservative aggregation preserves an evidence gap because at least one candidate is PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE: SHERPA_EXTERNAL_PDF_FULL_DIS_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, HERWIG_PDF_AND_SHOWER_STACK=PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE, LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT=NOT_APPLICABLE.",
+          "source_ids": [
+            "HERWIG_7_3",
+            "SHERPA_301_SOURCE_COMMIT",
+            "SHERPA_3_PAPER"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "SUPPORTED_WITH_QUALIFICATION"
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
         }
       },
       "D_STOP_FURTHER_GENERATOR_COUPLING_WORK": {
         "alpha_s_consistency": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "alpha_s_consistency is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "amortized_set_inference_compatibility": {
-          "primary_source_ids": [
+          "claim": "The pause protects the fixed inference contract from an invalid generator measure.",
+          "claim_keys": [
+            "fixed_signed_binary64_contract",
+            "prototype_authorization_blocked"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "It leaves the generator-coupling dependency unresolved.",
+          "rationale": "The repository evidence supports preservation of the current boundary only.",
+          "source_ids": [
             "D1C",
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
           "status": "SUPPORTED_WITH_QUALIFICATION"
         },
         "authorization_hierarchy_compatibility": {
-          "primary_source_ids": [
+          "claim": "The interim pause exactly follows the current non-authorization hierarchy.",
+          "claim_keys": [
+            "authorization_hierarchy_blocks_prototype"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+          "evidence_scope": "It grants no implementation or reopen authority.",
+          "rationale": "The merged decision directly requires prototype blocking.",
+          "source_ids": [
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
           "status": "SUPPORTED"
         },
         "beam_remnant_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "beam_remnant_coverage is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "bounded_prototype_falsifiability": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "bounded_prototype_falsifiability is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "build_deployment_reproducibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "build_deployment_reproducibility is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "denominator_ratio_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "denominator_ratio_validity is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "deterministic_identity_and_provenance": {
-          "primary_source_ids": [
+          "claim": "The interim pause preserves the immutable negative evidence lineage.",
+          "claim_keys": [
+            "provenance_evidence_integrity_failure"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "DIRECT_SCOPE_EVIDENCE",
+          "evidence_scope": "It records no new architecture identity.",
+          "rationale": "The merged decision directly establishes the precedence record.",
+          "source_ids": [
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
           "status": "SUPPORTED"
         },
         "event_weight_semantics": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "event_weight_semantics is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "flavor_categorical_selection": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "flavor_categorical_selection is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "full_neutral_current_gamma_z_compatibility": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "full_neutral_current_gamma_z_compatibility is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "hard_process_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "hard_process_coverage is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "isr_sudakov_coverage": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "isr_sudakov_coverage is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "license_redistribution": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "license_redistribution is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "maximum_envelope_rejection_semantics": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "maximum_envelope_rejection_semantics is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "nonnegative_probability_rate_validity": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "nonnegative_probability_rate_validity is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "signed_scalar_preservation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "signed_scalar_preservation is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "strict_support_no_extrapolation": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "strict_support_no_extrapolation is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "thread_process_safety": {
-          "primary_source_ids": [],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "claim": "thread_process_safety is not decided by an interim operational pause.",
+          "claim_keys": [],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "CRITERION_OUTSIDE_ARCHITECTURE_SCOPE",
+          "evidence_scope": "The pause makes no generator-architecture claim.",
+          "rationale": "This criterion is outside the interim-policy scope.",
+          "source_ids": [],
           "status": "NOT_APPLICABLE"
         },
         "upstream_maintenance_burden": {
-          "primary_source_ids": [
+          "claim": "The interim pause avoids immediate generator-integration maintenance work.",
+          "claim_keys": [
+            "prototype_authorization_blocked"
+          ],
+          "disproportionate_cost_evidence": false,
+          "epistemic_basis": "SCOPED_SUBSET_EVIDENCE",
+          "evidence_scope": "It does not prove that every future route has disproportionate cost.",
+          "rationale": "The current failed readiness gate supports only pausing present work.",
+          "source_ids": [
             "D1D_DECISION"
           ],
-          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
-          "status": "SUPPORTED"
+          "status": "SUPPORTED_WITH_QUALIFICATION"
         }
       }
+    },
+    "score_semantics": {
+      "NOT_APPLICABLE": "The criterion does not apply to the architecture.",
+      "NOT_SUPPORTED": "Evidence affirmatively establishes incompatibility or failure for the stated scope.",
+      "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE": "The bounded review did not find sufficient primary evidence to decide.",
+      "SUPPORTED": "Direct primary or immutable repository evidence establishes the criterion for the stated scope.",
+      "SUPPORTED_WITH_QUALIFICATION": "Evidence establishes only a clearly stated subset of the criterion."
     }
   },
   "decision_rule": {
     "architecture_comparison_ready": false,
-    "derived_decision": "INCONCLUSIVE",
     "disproportionate_cost_supported_for_all_routes": false,
     "mandatory_d1d_a_gate_passed": false,
     "no_current_architecture_has_coherent_bounded_path": false,
@@ -779,71 +2223,273 @@
   "evaluated_evidence": {
     "primary_sources": {
       "D1C": {
-        "kind": "repository_evidence",
-        "path": "docs/phase1bd_d1c_decision.json",
-        "sha256": "1ce8a824175d078887bef6fc7c72bbccb2b7c8277cd9669c2a355ced42a6e41b"
+        "canonical_url": "repository://docs/phase1bd_d1c_decision.json",
+        "claim_scope": [
+          "stock_pythia_public_reader_signed_scalar_failure",
+          "fixed_signed_binary64_contract"
+        ],
+        "content_sha256": "1ce8a824175d078887bef6fc7c72bbccb2b7c8277cd9669c2a355ced42a6e41b",
+        "document_or_software_version": "MERGED_MAIN_AT_D1D_B_START",
+        "immutable_identifier": "sha256:1ce8a824175d078887bef6fc7c72bbccb2b7c8277cd9669c2a355ced42a6e41b",
+        "repository_path": "docs/phase1bd_d1c_decision.json",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "D1C",
+        "source_identity_status": "PINNED",
+        "source_kind": "IMMUTABLE_REPOSITORY_EVIDENCE"
       },
       "D1D_AUDIT_V6": {
-        "kind": "repository_evidence",
-        "path": "docs/phase1bd_d1d_pythia_semantics_audit.json",
-        "sha256": "bd63eb4b779c8f6fa622b4a4111fa07a963303d7c80ba3761c339bb764a5b430"
+        "canonical_url": "repository://docs/phase1bd_d1d_pythia_semantics_audit.json",
+        "claim_scope": [
+          "complete_consumer_graph_not_validated",
+          "provenance_evidence_integrity_failure",
+          "current_bounded_fork_not_falsifiable"
+        ],
+        "content_sha256": "bd63eb4b779c8f6fa622b4a4111fa07a963303d7c80ba3761c339bb764a5b430",
+        "document_or_software_version": "MERGED_MAIN_AT_D1D_B_START",
+        "immutable_identifier": "sha256:bd63eb4b779c8f6fa622b4a4111fa07a963303d7c80ba3761c339bb764a5b430",
+        "repository_path": "docs/phase1bd_d1d_pythia_semantics_audit.json",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "D1D_AUDIT_V6",
+        "source_identity_status": "PINNED",
+        "source_kind": "IMMUTABLE_REPOSITORY_EVIDENCE"
       },
       "D1D_DECISION": {
-        "kind": "repository_evidence",
-        "path": "docs/phase1bd_d1d_pythia_provenance_slice_decision.json",
-        "sha256": "f92958fe745d64c24cd6d12222537154af7d916f24a0c7362c460123d46e04d7"
+        "canonical_url": "repository://docs/phase1bd_d1d_pythia_provenance_slice_decision.json",
+        "claim_scope": [
+          "minimal_public_reader_patch_insufficient",
+          "external_final_weight_cannot_repair_internal_selection",
+          "architecture_comparison_not_ready",
+          "provenance_evidence_integrity_failure",
+          "prototype_authorization_blocked",
+          "authorization_hierarchy_blocks_prototype"
+        ],
+        "content_sha256": "f92958fe745d64c24cd6d12222537154af7d916f24a0c7362c460123d46e04d7",
+        "document_or_software_version": "MERGED_MAIN_AT_D1D_B_START",
+        "immutable_identifier": "sha256:f92958fe745d64c24cd6d12222537154af7d916f24a0c7362c460123d46e04d7",
+        "repository_path": "docs/phase1bd_d1d_pythia_provenance_slice_decision.json",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "D1D_DECISION",
+        "source_identity_status": "PINNED",
+        "source_kind": "IMMUTABLE_REPOSITORY_EVIDENCE"
       },
       "HERWIGPP_MANUAL": {
-        "kind": "primary_manual_paper",
-        "url": "https://arxiv.org/abs/0803.0883"
+        "arxiv_identifier": "0803.0883",
+        "canonical_abstract_url": "https://arxiv.org/abs/0803.0883v3",
+        "canonical_url": "https://arxiv.org/pdf/0803.0883v3",
+        "claim_scope": [
+          "lepton_hadron_hard_process_capability",
+          "backward_evolution_shower",
+          "beam_remnant_model",
+          "pdf_handler_interface"
+        ],
+        "content_sha256": "ea5fa4e0cd538b9eeb38ffb3ac2d825a5cae3780c33f1d8d6b22bafc4e921d93",
+        "document_or_software_version": "v3",
+        "immutable_identifier": "arxiv:0803.0883v3",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "HERWIGPP_MANUAL",
+        "source_identity_status": "PINNED",
+        "source_kind": "ARXIV_PRIMARY_PAPER"
       },
       "HERWIG_7_0": {
-        "kind": "primary_software_paper",
-        "url": "https://arxiv.org/abs/1512.01178"
+        "arxiv_identifier": "1512.01178",
+        "canonical_abstract_url": "https://arxiv.org/abs/1512.01178v1",
+        "canonical_url": "https://arxiv.org/pdf/1512.01178v1",
+        "claim_scope": [
+          "nlo_matching_negative_complete_event_weights",
+          "hard_process_and_shower_stack"
+        ],
+        "content_sha256": "fe7512b2939da056fea4fb34ad7fa8a6a425d4a38b5d04fe6fcc360d4704deb3",
+        "document_or_software_version": "v1",
+        "immutable_identifier": "arxiv:1512.01178v1",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "HERWIG_7_0",
+        "source_identity_status": "PINNED",
+        "source_kind": "ARXIV_PRIMARY_PAPER"
       },
       "HERWIG_7_3": {
-        "kind": "primary_software_paper",
-        "url": "https://arxiv.org/abs/2312.05175"
+        "arxiv_identifier": "2312.05175",
+        "canonical_abstract_url": "https://arxiv.org/abs/2312.05175v2",
+        "canonical_url": "https://arxiv.org/pdf/2312.05175v2",
+        "claim_scope": [
+          "maintained_source_and_build_availability",
+          "gplv3_license_declaration",
+          "isr_fsr_alpha_s_controls",
+          "lepton_hadron_support"
+        ],
+        "content_sha256": "028b0658f35ebac3dd24d96a6247653bb45725bfd9de53baa07151787fec7f9b",
+        "document_or_software_version": "v2",
+        "immutable_identifier": "arxiv:2312.05175v2",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "HERWIG_7_3",
+        "source_identity_status": "PINNED",
+        "source_kind": "ARXIV_PRIMARY_PAPER"
       },
       "LHEF_STANDARD": {
-        "kind": "primary_standard_paper",
-        "url": "https://arxiv.org/abs/hep-ph/0609017"
+        "arxiv_identifier": "hep-ph/0609017",
+        "canonical_abstract_url": "https://arxiv.org/abs/hep-ph/0609017v1",
+        "canonical_url": "https://arxiv.org/pdf/hep-ph/0609017v1",
+        "claim_scope": [
+          "signed_complete_event_weight_field",
+          "parton_level_event_transport",
+          "downstream_shower_delegation",
+          "boundary_not_generator"
+        ],
+        "content_sha256": "9509b8727dad8cecc1c467d91b25af540e663b2a744c4377f65618b523659330",
+        "document_or_software_version": "v1",
+        "immutable_identifier": "arxiv:hep-ph/0609017v1",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "LHEF_STANDARD",
+        "source_identity_status": "PINNED",
+        "source_kind": "ARXIV_PRIMARY_PAPER"
       },
       "MCATNLO": {
-        "kind": "primary_research_paper",
-        "url": "https://arxiv.org/abs/hep-ph/0204244"
+        "arxiv_identifier": "hep-ph/0204244",
+        "canonical_abstract_url": "https://arxiv.org/abs/hep-ph/0204244v2",
+        "canonical_url": "https://arxiv.org/pdf/hep-ph/0204244v2",
+        "claim_scope": [
+          "negative_complete_event_weights",
+          "nlo_matching_event_sample_semantics"
+        ],
+        "content_sha256": "a0b4c198461c324f28c5adb20f663982f4b89684f653beb07d746841c6975c81",
+        "document_or_software_version": "v2",
+        "immutable_identifier": "arxiv:hep-ph/0204244v2",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "MCATNLO",
+        "source_identity_status": "PINNED",
+        "source_kind": "ARXIV_PRIMARY_PAPER"
       },
-      "SHERPA_3": {
-        "kind": "primary_software_paper",
-        "url": "https://arxiv.org/abs/2410.22148"
+      "SHERPA_301_EXTERNAL_PDF_DOC": {
+        "canonical_url": "https://sherpa-team.gitlab.io/sherpa/v3.0.1/manual/customization/external-pdf.html",
+        "claim_scope": [
+          "external_pdf_calculate_getxpdf_accessor_availability",
+          "custom_pdf_runtime_library_loading"
+        ],
+        "content_sha256": "7b8936eac5ee66fa569fc64a0b027e692ad86de9f5979638373267ebf703fbaa",
+        "document_or_software_version": "Sherpa Manual 3.0.1",
+        "immutable_identifier": "sha256:7b8936eac5ee66fa569fc64a0b027e692ad86de9f5979638373267ebf703fbaa",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "SHERPA_301_EXTERNAL_PDF_DOC",
+        "source_identity_status": "PINNED",
+        "source_kind": "VERSIONED_OFFICIAL_DOCUMENTATION"
       },
-      "SHERPA_DIS": {
-        "kind": "official_documentation",
-        "url": "https://sherpa-team.gitlab.io/sherpa/master/examples.html"
+      "SHERPA_301_HERA_YAML": {
+        "canonical_url": "https://gitlab.com/sherpa-team/sherpa/-/raw/82ede7a88616eec1ca2ebf6ba3b7dde53fcb3f2c/Examples/Jets_in_DIS/HERA/Sherpa.yaml",
+        "claim_scope": [
+          "hera_lepton_proton_dis_configuration",
+          "hera_ew_order_two_hard_process",
+          "hera_shower_configuration",
+          "hera_pdf_configuration",
+          "mcatnlo_mode_configuration"
+        ],
+        "content_sha256": "2ee1d02489b061009c901bb5c30663d0d39bdb5c045c5041a6f67bd622bb98b1",
+        "document_or_software_version": "Sherpa 3.0.1",
+        "immutable_identifier": "git-blob:dfa23751d6bd6e28f202fe915ed666edf13e2aad",
+        "repository_commit_sha": "82ede7a88616eec1ca2ebf6ba3b7dde53fcb3f2c",
+        "repository_path": "Examples/Jets_in_DIS/HERA/Sherpa.yaml",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "SHERPA_301_HERA_YAML",
+        "source_identity_status": "PINNED",
+        "source_kind": "OFFICIAL_SOURCE_FILE_AT_COMMIT"
       },
-      "SHERPA_EXTERNAL_PDF": {
-        "kind": "official_documentation",
-        "url": "https://sherpa-team.gitlab.io/sherpa/v3.0.0alpha1/manual/customization/external-pdf.html"
+      "SHERPA_301_ISR_DOC": {
+        "canonical_url": "https://sherpa-team.gitlab.io/sherpa/v3.0.1/manual/parameters/isr.html",
+        "claim_scope": [
+          "initial_state_pdf_configuration",
+          "pdf_alpha_s_routing_option",
+          "shower_pdf_variation_support"
+        ],
+        "content_sha256": "e5b1f8d7c38ec2371333672c90bd80710a352d0806b032488bfecbbe4a744110",
+        "document_or_software_version": "Sherpa Manual 3.0.1",
+        "immutable_identifier": "sha256:e5b1f8d7c38ec2371333672c90bd80710a352d0806b032488bfecbbe4a744110",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "SHERPA_301_ISR_DOC",
+        "source_identity_status": "PINNED",
+        "source_kind": "VERSIONED_OFFICIAL_DOCUMENTATION"
       },
-      "SHERPA_ISR": {
-        "kind": "official_documentation",
-        "url": "https://sherpa-team.gitlab.io/sherpa/v3.0.1/manual/parameters/isr.html"
+      "SHERPA_301_MANUAL": {
+        "canonical_url": "https://sherpa-team.gitlab.io/sherpa/v3.0.1/index_single.html",
+        "claim_scope": [
+          "lepton_hadron_dis_capability",
+          "beam_remnant_module_exists",
+          "weighted_event_generation_modes",
+          "versioned_build_instructions"
+        ],
+        "content_sha256": "7f78e097a43d8c27f9b082a5e1919701aac955c7bf7db944e1e1b03709addcf5",
+        "document_or_software_version": "Sherpa Manual 3.0.1",
+        "immutable_identifier": "sha256:7f78e097a43d8c27f9b082a5e1919701aac955c7bf7db944e1e1b03709addcf5",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "SHERPA_301_MANUAL",
+        "source_identity_status": "PINNED",
+        "source_kind": "VERSIONED_OFFICIAL_DOCUMENTATION"
       },
-      "SHERPA_MANUAL": {
-        "kind": "official_documentation",
-        "url": "https://sherpa-team.gitlab.io/sherpa/master/index_single.html"
+      "SHERPA_301_SOURCE_COMMIT": {
+        "canonical_url": "https://gitlab.com/sherpa-team/sherpa/-/commit/82ede7a88616eec1ca2ebf6ba3b7dde53fcb3f2c",
+        "claim_scope": [
+          "source_commit_availability",
+          "pdf_base_interface_source",
+          "hera_example_source",
+          "cmake_build_definition",
+          "license_files_present"
+        ],
+        "content_sha256": null,
+        "document_or_software_version": "Sherpa 3.0.1",
+        "immutable_identifier": "git:82ede7a88616eec1ca2ebf6ba3b7dde53fcb3f2c",
+        "pinned_files": [
+          {
+            "path": "PDF/Main/PDF_Base.H",
+            "sha256": "a2e16eb17f1e19b9390140d0bc688fc1da175a3a7b460a68e801f39d7f30db9a"
+          },
+          {
+            "path": "PDF/Main/ISR_Handler.C",
+            "sha256": "1933b82a128a79e43ecfbcc1661ff008d279804b29cb4a51603ccfb5ddfcd38a"
+          },
+          {
+            "path": "Examples/Jets_in_DIS/HERA/Sherpa.yaml",
+            "sha256": "2ee1d02489b061009c901bb5c30663d0d39bdb5c045c5041a6f67bd622bb98b1"
+          },
+          {
+            "path": "CMakeLists.txt",
+            "sha256": "b82d719019060ba990583253bf422141365a716dcc562523e57d6912c65f3292"
+          },
+          {
+            "path": "LICENCE",
+            "sha256": "55a4562db3fe9920e7a2ad7405f00bb2207f53c5d51faf696361f9b33029749a"
+          },
+          {
+            "path": "COPYING",
+            "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+          }
+        ],
+        "repository_commit_sha": "82ede7a88616eec1ca2ebf6ba3b7dde53fcb3f2c",
+        "repository_url": "https://gitlab.com/sherpa-team/sherpa",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "SHERPA_301_SOURCE_COMMIT",
+        "source_identity_status": "PINNED",
+        "source_kind": "OFFICIAL_SOURCE_REPOSITORY_COMMIT"
       },
-      "SHERPA_SOURCE": {
-        "kind": "official_source_repository",
-        "url": "https://gitlab.com/sherpa-team/sherpa/-/tree/master"
+      "SHERPA_3_PAPER": {
+        "arxiv_identifier": "2410.22148",
+        "canonical_abstract_url": "https://arxiv.org/abs/2410.22148v1",
+        "canonical_url": "https://arxiv.org/pdf/2410.22148v1",
+        "claim_scope": [
+          "maintained_sherpa3_software",
+          "complete_event_negative_weights"
+        ],
+        "content_sha256": "5adefda595551caec2bb33f48eaaf6b4c67d343e398c7a5dec822242a7ac0447",
+        "document_or_software_version": "v1",
+        "immutable_identifier": "arxiv:2410.22148v1",
+        "retrieval_utc_date": "2026-08-01",
+        "source_id": "SHERPA_3_PAPER",
+        "source_identity_status": "PINNED",
+        "source_kind": "ARXIV_PRIMARY_PAPER"
       }
     },
-    "source_policy": "OFFICIAL_DOCUMENTATION_SOURCE_REPOSITORY_STANDARD_OR_PRIMARY_PAPER_ONLY"
+    "source_pinning_policy": "SUPPORTED, qualified support, and affirmative incompatibility require source identities pinned by immutable repository hash, versioned content SHA-256, arXiv version plus PDF hash, or exact Git commit plus file hashes."
   },
   "failure_scope": [
-    "No current architecture is authorized for the fixed signed D0R generator-coupling contract.",
+    "No generator architecture or prototype is authorized for the fixed current contract.",
     "The minimal public-reader patch remains insufficient.",
-    "The rejected provenance slice remains diagnostic rather than architecture evidence."
+    "The rejected provenance slice remains diagnostic rather than readiness evidence."
   ],
   "fixed_scientific_contract": {
     "amortized_objective": "p(theta_PDF | D) for a set of events D",
@@ -866,11 +2512,11 @@
       ]
     }
   },
-  "next_step": "SCIENTIFIC_REVIEW_OF_TERMINAL_D1D_B_DECISION",
+  "next_step": "SCIENTIFIC_REVIEW_OF_EVIDENCE_DERIVED_D1D_B_DECISION",
   "non_failure_scope": [
-    "This decision is not a universal impossibility theorem for signed event generators.",
-    "It does not reject weighted empirical sets after a coherent event measure exists.",
-    "It does not alter the fixed PDF-family or inference contracts."
+    "The interim pause is not a universal impossibility theorem.",
+    "Possible routes with evidence gaps are not treated as supported architectures.",
+    "Negative complete-event weights are not treated as signed internal PDF kernels."
   ],
   "precedence": {
     "ARCHITECTURE_COMPARISON_READY": false,
@@ -888,7 +2534,7 @@
     },
     {
       "authorization_granted": false,
-      "condition": "A primary-source generator interface with proven signed scalar, rate, ISR, remnant, and event-weight semantics."
+      "condition": "A pinned primary-source generator interface with proven signed scalar, rate, ISR, remnant, and event-weight semantics."
     },
     {
       "authorization_granted": false,
@@ -899,17 +2545,23 @@
       "condition": "A separately reviewed and approved change to the PDF-family or inference contract."
     }
   ],
-  "schema_version": "partonsbi.phase1bd.d1d.terminal-decision.v1",
+  "route_states": {
+    "A_REPOSITORY_OWNED_PYTHIA_FORK_OR_PATCH": "COHERENT_BOUNDED_PATH_NOT_SUPPORTED",
+    "B_SIGNED_WEIGHT_GENERATOR_ARCHITECTURE": "COHERENT_BOUNDED_PATH_NOT_SUPPORTED",
+    "C_ALTERNATIVE_GENERATOR_OR_TRANSPORT_INTERFACE": "COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS"
+  },
+  "schema_version": "partonsbi.phase1bd.d1d.terminal-decision.v2",
   "unresolved_evidence": [
     "No complete independently validated PDF-consumer graph is available.",
     "No reviewed signed-kernel or signed-Sudakov probability construction is available.",
-    "Sherpa and Herwig primary sources do not prove signed scalar preservation through hard process, ISR, and remnants.",
-    "Full neutral-current gamma/Z, strict-support, provider, alpha_s, and concurrency behavior remain unvalidated for candidate alternatives.",
-    "Maintenance and redistribution costs are not sufficiently bounded across every potentially coherent route."
+    "Sherpa and Herwig sources do not establish signed scalar preservation through hard process, ISR, and remnants.",
+    "Complete neutral-current gamma/Z/interference compatibility is not established for either full-generator candidate.",
+    "Maintenance, concurrency, strict-support, and bounded-prototype evidence remains incomplete for possible routes."
   ],
   "validation": {
     "artifact_is_deterministically_generated": true,
     "command": "python3 scripts/phase1bd_d1d_terminal_decision.py --validate",
+    "derivation_recomputed_from_serialized_evidence": true,
     "physics_execution_performed": false
   }
 }

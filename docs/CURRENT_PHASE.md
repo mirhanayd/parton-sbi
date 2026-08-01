@@ -241,16 +241,24 @@
   PYTHIA fork, signed-weight design, alternate generator, architecture,
   implementation, or prototype is selected or authorized. PR #43 is merged;
   issue #10 and D2 remain blocked.
-- Phase 1B-D1D-B proposes `INCONCLUSIVE` for the fixed signed-generator
-  coupling contract. A potentially coherent full-generator interface remains
-  identifiable, but primary-source and mathematical evidence does not establish
-  signed scalar and signed-rate validity through hard-process, ISR, and
-  beam-remnant paths. This prevents both prototype authorization and the
-  stronger terminal-stop claim.
-- The bounded desk review covers only Sherpa, Herwig, and Les Houches signed
-  hard-event transport. Negative complete-event weights do not repair invalid
-  internal probabilities or sampling decisions. Current coupling work stops
-  without claiming a universal impossibility theorem.
+- Phase 1B-D1D-B v2 proposes the evidence-derived result `INCONCLUSIVE` for the
+  fixed signed-generator coupling contract. The validator recomputes candidate
+  and architecture route states, the Architecture C aggregate, all six rule
+  fields, the decision, and the operational policy from pinned evidence.
+- Architecture A and the final-event-weight Architecture B are
+  `COHERENT_BOUNDED_PATH_NOT_SUPPORTED`. Architecture C is
+  `COHERENT_BOUNDED_PATH_POSSIBLE_WITH_EVIDENCE_GAPS`: Sherpa and Herwig each
+  have six unavailable and four qualified critical criteria with zero
+  affirmative critical failures; LHEF has eight affirmative critical failures
+  and remains a boundary transport rather than a complete generator route.
+- Sherpa hard-process coverage is only `SUPPORTED_WITH_QUALIFICATION`. Its
+  pinned HERA configuration does not prove complete gamma/Z/interference
+  compatibility, which remains `PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE`. Negative
+  MC@NLO complete-event weights are not evidence for signed internal PDF rates
+  or signed Sudakov kernels.
+- Current policy is `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`. This is an
+  interim pause under the failed readiness gate, not a selected terminal stop
+  and not a universal impossibility theorem.
 - All ten D1D-B authorization flags are false. Issue #42 remains open and in
   planning review; Project fields are unchanged. Architecture comparison was
   not promoted to readiness, issue #10 stays blocked, and D2 remains
@@ -261,12 +269,12 @@
 # Next scientific action
 
 ```text
-SCIENTIFIC_REVIEW_OF_TERMINAL_D1D_B_DECISION
+SCIENTIFIC_REVIEW_OF_EVIDENCE_DERIVED_D1D_B_DECISION
 ```
 
-This is review of ADR-008 and the deterministic terminal planning artifact. It
-does not authorize implementation, a generator prototype, architecture
-selection, advancement of issue #10, or D2.
+This is review of corrected ADR-008 and the pinned, evidence-derived v2
+planning artifact. It does not authorize implementation, a generator
+prototype, architecture selection, advancement of issue #10, or D2.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
@@ -291,8 +299,9 @@ unimplemented hypotheses.
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
 - Issue #42 remains planning only. D1D-A is final `FAIL`, D1D-B is proposed
-  `INCONCLUSIVE`, architecture-comparison readiness remains false, and all
-  implementations, prototypes, and D2 remain blocked and unauthorized.
+  `INCONCLUSIVE` with an interim non-authorizing pause,
+  architecture-comparison readiness remains false, and all implementations,
+  prototypes, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
