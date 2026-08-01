@@ -178,42 +178,47 @@
   engineering evidence but is not selected for production coupling. Other
   modified or custom generator interfaces are neither rejected nor authorized
   by issue #39.
-- Issue #42 remains planning-only work. The corrected v3/v2 evidence was still
-  insufficient: the recorded 779-identifier vocabulary was metadata rather
-  than P10 search input, path/line suppression hid additional identifiers,
-  semantic and reachability finals used name/path heuristics, owning-symbol
-  validation was not range-based, and readiness included constant booleans.
-- The hardened audit v4/search-manifest v3 artifacts use the sole authoritative
-  engine `PYTHON_REGEX_OCCURRENCE_ENGINE_V1` over the same 374 installed/release
-  PYTHIA 8.312 files. P10 now searches all 779 deterministically derived
-  identifiers, omits zero, and binds the sorted vocabulary hash. Exact replay
-  and deterministic ordering pass for all 67,375 raw occurrences.
-- The complete declaration-derived ledger retains 63,763 independent P10
-  occurrences, including 1,149 candidates on lines already matched by another
-  specification. It distinguishes 63,674 machine-unreviewed candidates, 15
-  policy-unresolved entries, 37 source-reviewed boundary entries, and 37
-  source-reviewed pointer/policy entries. Machine hints do not become final
-  materiality, semantic, reachability, or readiness decisions.
-- The nine v3 name/path-derived recall groups were returned to candidate status.
-  Audit v4 therefore retains 137 source-reviewed call-site groups containing
-  672 concrete source uses. All 672 pass brace-tracked function-range ownership;
-  mapping and source-coordinate validation report zero defects.
+- Issue #42 remains planning-only work. The byte-identical v3 broad search uses
+  `PYTHON_REGEX_OCCURRENCE_ENGINE_V1` over 374 installed/release PYTHIA 8.312
+  files. It searches all 779 derived identifiers, omits zero, and replays all
+  67,375 raw occurrences with exact deterministic set/order equality.
+- That vocabulary intentionally contains generic C++ names. Its 63,763 P10
+  occurrences, including 63,674 machine-unreviewed occurrences, are a broad
+  syntactic recall corpus and are not a coordinate-level scientific-review
+  queue.
+- Audit v5 binds the separate v1 PDF-provenance slice. The repository-owned
+  `PARTON_SBI_CPP_PROVENANCE_TOKENIZER_V1` version 1.0.0 derives 939 typed
+  provider/accessor/cache/pointer/boundary roots from source. Unsupported
+  aliases, dynamic targets, macros, templates, and overloads remain explicit
+  unresolved evidence; spelling alone never establishes a graph edge.
+- Every broad P10 occurrence has one structural disposition: 699 contributes
+  to a provenance unit, 352 is a duplicate in the same unit, 619 is an exact
+  root declaration/definition, 62,050 is structurally outside the slice, and
+  43 reaches unresolved dynamic/alias provenance.
+- The slice normalizes evidence into 867 review units: 832 have confirmed PDF
+  provenance and 35 remain provenance-unresolved. Of these, 669 retain
+  source-reviewed material evidence, 163 are machine-sliced and unreviewed,
+  and 35 are policy-unresolved. Machine slicing assigns no final scientific
+  semantic class or HERA reachability.
+- All 672 retained historical members are recovered with zero `NOT_RECOVERED`.
+  The historical 90-finding baseline reconciles as 31 recovered dataflow and
+  59 boundary/policy findings. Its separate 15 `getXPDF` baseline remains
+  unresolved. The 35 lexical `getXPDF` occurrences normalize to 35 unresolved
+  units rather than receiving a final classification.
+- Generic negative controls are admitted only with explicit root paths. For
+  example, all 2,824 `Vec4`, 3,130 `p`, and 4,563 `size` occurrences are
+  structurally outside; the few admitted `state`, `id`, and `push_back`
+  occurrences retain their source-backed paths.
+- The 672 retained source-reviewed uses still pass brace-tracked function-range
+  ownership, and all 66 denominator dispositions retain explicit curated
+  coordinates and rationales.
 - Concrete static reachability is 212 prospective-HERA source-reachable, 436
   source-capable but disabled by configuration, and 24 unresolved. Boundary
   and pointer metadata are explicitly not runtime paths. Static reachability
   remains distinct from runtime coverage.
 - Installed and extracted release copies of every cited installed PYTHIA
-  header remain byte-identical under recorded SHA-256 hashes. The v3 search
-  manifest and its hash are bound into the v4 audit artifact.
-- The historical 90 legitimate and 15 `getXPDF` findings remain integrity-review
-  baselines, not forced totals. The complete ledger exposes 35 unresolved
-  `getXPDF` occurrences: the preserved 15 policy-reviewed paths plus 20 other
-  unreviewed occurrences. It also exposes 63,654 unresolved/materiality-
-  unresolved occurrences across 778 other identifier families, so the next
-  step cannot be only `getXPDF` classification.
-- All 66 prior denominator repairs now have explicit curated source coordinates,
-  expressions, mathematical roles, dispositions, and rationales. Broad token
-  matching no longer assigns final denominator classes.
+  header remain byte-identical under recorded SHA-256 hashes. Audit v5 binds
+  the v3 search manifest and v1 provenance-slice hashes.
 - D1D-A finds that removing only the public `PDF::xf`, `PDF::xfVal`, and
   `PDF::xfSea` positivity transformations is `INSUFFICIENT`: prospective-HERA
   hard-process, ISR, and beam-remnant paths require nonnegative rates,
@@ -224,8 +229,8 @@
   is not generalized to any machine-unreviewed candidate. Existing signed Les
   Houches event-weight handling is not evidence for negative-PDF sampling.
 - The validator derives `D1D_A_RESULT = EVIDENCE_CORRECTION_REQUIRED` from the
-  actual replay/readiness table because machine-unreviewed material candidates,
-  unresolved materiality, and unresolved `getXPDF` candidates remain. No
+  actual replay/readiness table because 163 machine-sliced material units, 35
+  unresolved provenance units, and 35 unresolved `getXPDF` units remain. No
   PYTHIA fork, signed-weight design, alternate generator, architecture,
   implementation, or prototype is selected or authorized. PR #43 remains open
   and draft; issue #10 and D2 remain blocked.
@@ -235,11 +240,10 @@
 # Next scientific action
 
 ```text
-A coordinate-level source review of the full machine-unreviewed candidate
-ledger is required, first separating deterministic source boundaries and then
-reviewing remaining material candidates, including getXPDF. Do not begin
-architecture comparison, prototype work, issue #10, or D2 until the current
-D1D-A acceptance conditions pass.
+Source-review the normalized PDF-provenance units, including unresolved
+getXPDF, alias, pointer, and policy paths. Do not begin architecture comparison,
+prototype work, issue #10, or D2 until the current D1D-A acceptance conditions
+pass.
 ```
 
 The approved design's later APFEL and fixed-envelope proposals remain

@@ -15,6 +15,18 @@ D1D = importlib.util.module_from_spec(SPEC)
 assert SPEC.loader is not None
 SPEC.loader.exec_module(D1D)
 
+PROVENANCE_SCRIPT = (
+    Path(__file__).resolve().parents[2]
+    / "scripts"
+    / "phase1bd_d1d_pythia_pdf_provenance_slice.py"
+)
+PROVENANCE_SPEC = importlib.util.spec_from_file_location(
+    "d1d_pdf_provenance", PROVENANCE_SCRIPT
+)
+PROVENANCE = importlib.util.module_from_spec(PROVENANCE_SPEC)
+assert PROVENANCE_SPEC.loader is not None
+PROVENANCE_SPEC.loader.exec_module(PROVENANCE)
+
 
 def minimal_audit():
     return {
@@ -213,3 +225,240 @@ def test_candidate_ledger_compaction_round_trip():
         D1D.iter_structured_matches(specs, files, lines), []
     )
     assert D1D.unpack_candidate_ledger(D1D.pack_candidate_ledger(ledger)) == ledger
+
+
+def fixture_edge_kinds(source):
+    return {
+        edge["edge_kind"]
+        for edge in PROVENANCE.analyze_fixture(source, {"xf"})["edges"]
+    }
+
+
+def minimal_provenance_audit():
+    audit = minimal_audit()
+    audit.update(
+        {
+            "function_ownership_validation": {
+                "invalid_or_unresolved_final_evidence_count": 0
+            },
+            "mapping_integrity": {"nonexistent_source_coordinates": 0},
+            "readiness_evidence_results": {
+                "heuristic_only_final_reachability_count": 0,
+                "heuristic_only_final_semantic_count": 0,
+            },
+        }
+    )
+    return audit
+
+
+def minimal_provenance_artifact(units=None):
+    return {
+        "candidate_units": units or [],
+        "validation_results": {
+            "all_broad_occurrences_have_one_disposition": True,
+            "all_pdf_roots_accounted": True,
+            "broad_authoritative_occurrence_replay_passes": True,
+            "deterministic_generation": True,
+            "historical_final_evidence_recovery_counts": {
+                "RECOVERED_BY_PROVENANCE_SLICE": 672
+            },
+            "unexplained_graph_edge_count": 0,
+        },
+    }
+
+
+def test_generic_identifier_without_root_path_is_outside_slice():
+    analysis = PROVENANCE.analyze_fixture(
+        "void f() {\n  int state = 0;\n  state++;\n}\n", {"xf"}
+    )
+    assert analysis["admitted_lines"] == []
+
+
+def test_generic_identifier_receiving_xf_derived_argument_is_inside_slice():
+    source = (
+        "double helper(double state) { return state * 2.; }\n"
+        "void f(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, 0.1, 10.);\n"
+        "  helper(value);\n"
+        "}\n"
+    )
+    analysis = PROVENANCE.analyze_fixture(source, {"xf"})
+    assert analysis["tainted_parameters"]["helper"] == [0]
+    assert 1 in analysis["admitted_lines"]
+
+
+def test_assignment_propagates_from_accessor_call():
+    kinds = fixture_edge_kinds(
+        "void f(PDFPtr pdf) {\n  double value = pdf->xf(1, .1, 10.);\n}\n"
+    )
+    assert "ASSIGNED_FROM" in kinds
+
+
+def test_return_value_propagation():
+    source = (
+        "double source(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, .1, 10.);\n"
+        "  return value;\n"
+        "}\n"
+        "void sink(PDFPtr pdf) {\n"
+        "  double received = source(pdf);\n"
+        "}\n"
+    )
+    analysis = PROVENANCE.analyze_fixture(source, {"xf"})
+    assert "source" in analysis["tainted_returns"]
+    assert "received" in analysis["tainted_variables"]
+    assert "RETURNED_FROM" in {edge["edge_kind"] for edge in analysis["edges"]}
+
+
+def test_function_parameter_propagation():
+    source = (
+        "void sink(double input) { double used = input; }\n"
+        "void f(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, .1, 10.);\n"
+        "  sink(value);\n"
+        "}\n"
+    )
+    kinds = fixture_edge_kinds(source)
+    assert {"PASSED_AS_ARGUMENT", "RECEIVED_AS_PARAMETER"} <= kinds
+
+
+def test_arithmetic_dependency_propagation():
+    kinds = fixture_edge_kinds(
+        "void f(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, .1, 10.);\n"
+        "  double ratio = value / 2.;\n"
+        "}\n"
+    )
+    assert "ARITHMETICALLY_DEPENDS_ON" in kinds
+
+
+def test_condition_and_veto_dependency_propagation():
+    kinds = fixture_edge_kinds(
+        "void f(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, .1, 10.);\n"
+        "  if (value < 0.) return;\n"
+        "}\n"
+    )
+    assert "CONDITIONALLY_DEPENDS_ON" in kinds
+
+
+def test_accumulator_dependency_propagation():
+    kinds = fixture_edge_kinds(
+        "void f(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, .1, 10.);\n"
+        "  double total = 0.;\n"
+        "  total += value;\n"
+        "}\n"
+    )
+    assert "ACCUMULATES" in kinds
+
+
+def test_provider_pointer_assignment_propagation():
+    kinds = fixture_edge_kinds(
+        "void install(PDFPtr incoming) {\n  PDFPtr active = incoming;\n}\n"
+    )
+    assert "POINTS_TO" in kinds
+
+
+def test_unresolved_dynamic_dispatch_remains_unresolved():
+    analysis = PROVENANCE.analyze_fixture(
+        "void f(PDFPtr pdf) {\n  double value = pdf->xf(1, .1, 10.);\n}\n",
+        {"xf"},
+    )
+    assert analysis["unresolved_dynamic_lines"] == [2]
+
+
+def test_two_lexical_occurrences_in_one_expression_make_one_review_unit():
+    analysis = PROVENANCE.analyze_fixture(
+        "void f(PDFPtr pdf) {\n"
+        "  double value = pdf->xf(1, .1, 10.) + pdf->xf(2, .1, 10.);\n"
+        "}\n",
+        {"xf"},
+    )
+    units = PROVENANCE.normalize_fixture_units(analysis)
+    assert [unit["line"] for unit in units].count(2) == 1
+
+
+def test_all_broad_occurrences_receive_one_structural_disposition():
+    root = Path(__file__).resolve().parents[2]
+    artifact = PROVENANCE.load_json(
+        root / "docs" / "phase1bd_d1d_pythia_pdf_provenance_slice.json"
+    )
+    dispositions = PROVENANCE.unpack_dispositions(
+        artifact["broad_occurrence_dispositions"]
+    )
+    assert len(dispositions) == 63763
+    assert len({item["candidate_id"] for item in dispositions}) == 63763
+
+
+def test_all_672_historical_members_are_recovered_or_explicitly_exempt():
+    root = Path(__file__).resolve().parents[2]
+    artifact = PROVENANCE.load_json(
+        root / "docs" / "phase1bd_d1d_pythia_pdf_provenance_slice.json"
+    )
+    records = artifact["historical_recall_calibration"]["final_evidence_members"]
+    counts = PROVENANCE.validate_historical_recovery(
+        records, [item["member_id"] for item in records]
+    )
+    assert sum(counts.values()) == 672
+    assert counts.get("NOT_RECOVERED", 0) == 0
+
+
+def test_missing_historical_material_member_fails_validation():
+    records = [
+        {"member_id": "CSG001.M001", "status": "RECOVERED_BY_PROVENANCE_SLICE"}
+    ]
+    with pytest.raises(PROVENANCE.ProvenanceError, match="missing"):
+        PROVENANCE.validate_historical_recovery(
+            records, ["CSG001.M001", "CSG001.M002"]
+        )
+
+
+def test_unresolved_getxpdf_units_block_provenance_readiness():
+    unit = {
+        "candidate_materiality_status": "PROVENANCE_UNRESOLVED",
+        "review_state": "POLICY_UNRESOLVED",
+        "unit_family": "getXPDF",
+    }
+    readiness = PROVENANCE.provenance_readiness(
+        minimal_provenance_artifact([unit]), minimal_provenance_audit()
+    )
+    assert readiness["zero_unresolved_getxpdf_units"] is False
+
+
+def test_machine_sliced_material_units_block_provenance_readiness():
+    unit = {
+        "candidate_materiality_status": "PDF_PROVENANCE_CONFIRMED",
+        "review_state": "MACHINE_SLICED_UNREVIEWED",
+    }
+    readiness = PROVENANCE.provenance_readiness(
+        minimal_provenance_artifact([unit]), minimal_provenance_audit()
+    )
+    assert (
+        readiness["zero_machine_sliced_material_units_awaiting_source_review"]
+        is False
+    )
+
+
+def test_negative_controls_do_not_enter_queue_without_provenance():
+    for identifier in PROVENANCE.NEGATIVE_CONTROLS:
+        analysis = PROVENANCE.analyze_fixture(
+            f"void f() {{\n  int {identifier} = 0;\n}}\n", {"xf"}
+        )
+        assert analysis["admitted_lines"] == []
+
+
+def test_provenance_readiness_keeps_all_authorization_flags_false():
+    audit = minimal_provenance_audit()
+    readiness = PROVENANCE.provenance_readiness(
+        minimal_provenance_artifact(), audit
+    )
+    assert readiness["all_authorization_flags_false"] is True
+    changed = copy.deepcopy(audit)
+    changed["authorization"][D1D.AUTHORIZATION_FLAGS[0]] = True
+    assert (
+        PROVENANCE.provenance_readiness(
+            minimal_provenance_artifact(), changed
+        )["all_authorization_flags_false"]
+        is False
+    )

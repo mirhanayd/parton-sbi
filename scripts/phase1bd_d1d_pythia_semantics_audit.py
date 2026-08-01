@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import importlib.util
 import json
 import re
 import shlex
@@ -21,10 +22,13 @@ from typing import Any, Iterable
 
 AUDIT_SCHEMA_V3 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v3"
 AUDIT_SCHEMA_V4 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v4"
+AUDIT_SCHEMA_V5 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v5"
 SEARCH_SCHEMA_V2 = "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v2"
 SEARCH_SCHEMA_V3 = "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3"
 INVENTORY_ID = "PYTHIA_8_312_INSTALLED_RELEASE_H_CC_374"
 GENERATOR_PATH = "scripts/phase1bd_d1d_pythia_semantics_audit.py"
+PROVENANCE_PATH = "docs/phase1bd_d1d_pythia_pdf_provenance_slice.json"
+PROVENANCE_SCHEMA_V1 = "partonsbi.phase1bd.d1d.pythia-pdf-provenance-slice.v1"
 AUTHORITATIVE_ENGINE = "PYTHON_REGEX_OCCURRENCE_ENGINE_V1"
 ENGINE_FLAGS = ("ASCII",)
 DETERMINISTIC_ORDERING = (
@@ -288,6 +292,15 @@ def require(condition: bool, message: str) -> None:
 def repository_root(script_path: Path | None = None) -> Path:
     here = (script_path or Path(__file__)).resolve()
     return here.parent.parent
+
+
+def load_provenance_module(root: Path):
+    path = root / "scripts/phase1bd_d1d_pythia_pdf_provenance_slice.py"
+    spec = importlib.util.spec_from_file_location("d1d_pdf_provenance", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
 
 
 def _python_patterns(
@@ -1652,7 +1665,10 @@ def candidate_summary(ledger: list[dict[str, Any]]) -> dict[str, Any]:
 def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dict[str, Any]:
     audit = load_json(audit_path)
     manifest = load_json(manifest_path)
-    require(audit["schema_version"] == AUDIT_SCHEMA_V4, "audit schema is not v4")
+    require(
+        audit["schema_version"] in {AUDIT_SCHEMA_V4, AUDIT_SCHEMA_V5},
+        "audit schema is not v4 or v5",
+    )
     require(manifest["schema_version"] == SEARCH_SCHEMA_V3, "search schema is not v3")
     validate_inventory(root, manifest)
     require(
@@ -1909,12 +1925,57 @@ def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dic
             "invalid_or_unresolved_final_evidence_count"
         ],
     }
-    readiness = build_readiness(audit, ledger, evidence_results)
+    provenance_summary: dict[str, Any] | None = None
+    if audit["schema_version"] == AUDIT_SCHEMA_V5:
+        provenance_path = root / PROVENANCE_PATH
+        require(provenance_path.is_file(), "provenance-slice artifact is missing")
+        provenance_artifact = load_json(provenance_path)
+        require(
+            provenance_artifact["schema_version"] == PROVENANCE_SCHEMA_V1,
+            "provenance-slice schema mismatch",
+        )
+        require(
+            audit["provenance_slice"]["sha256"] == sha256_file(provenance_path),
+            "audit provenance-slice hash mismatch",
+        )
+        require(
+            provenance_artifact["broad_search_manifest"]["sha256"]
+            == sha256_file(manifest_path),
+            "provenance slice is not bound to the broad search manifest",
+        )
+        provenance = load_provenance_module(root)
+        readiness = provenance.provenance_readiness(provenance_artifact, audit)
+        provenance_summary = provenance_artifact["validation_results"]
+        require(
+            audit["provenance_candidate_unit_aggregates"]
+            == {
+                "candidate_unit_count": provenance_summary["candidate_unit_count"],
+                "materiality_counts": provenance_summary[
+                    "candidate_unit_materiality_counts"
+                ],
+                "review_state_counts": provenance_summary[
+                    "candidate_unit_review_state_counts"
+                ],
+            },
+            "stored provenance candidate-unit aggregates mismatch",
+        )
+        require(
+            audit["historical_recall_calibration"]
+            == provenance_summary["historical_final_evidence_recovery_counts"],
+            "stored historical recovery summary mismatch",
+        )
+        require(
+            audit["negative_control_results"]
+            == provenance_artifact["negative_controls"],
+            "stored negative-control results mismatch",
+        )
+    else:
+        readiness = build_readiness(audit, ledger, evidence_results)
     require(audit["readiness_rule"] == readiness, "stored readiness conditions are not derived validation results")
     require(audit["d1d_a_result"] == readiness_result(readiness), "D1D_A_RESULT is not derived from readiness conditions")
     require(
         audit["d1d_a_result"] == "EVIDENCE_CORRECTION_REQUIRED",
-        "v4 must remain evidence-correction-required",
+        "D1D-A must remain evidence-correction-required",
     )
     require(audit["minimal_public_reader_patch"] == "INSUFFICIENT", "minimal-reader conclusion changed")
     require(audit["architecture_selected"] is False, "architecture was selected")
@@ -1932,7 +1993,7 @@ def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dic
         "stored search validation snapshot was not produced by exact replay",
     )
 
-    return {
+    summary = {
         "authoritative_search_engine": AUTHORITATIVE_ENGINE,
         "canonical_raw_match_count": len(serialized_keys),
         "canonical_raw_match_ordering": "DETERMINISTIC_EXACT",
@@ -1949,6 +2010,9 @@ def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dic
         "searched_vocabulary_count": derivation["searched_vocabulary_count"],
         "structured_search_spec_count": len(manifest["structured_search_specs"]),
     }
+    if provenance_summary is not None:
+        summary["provenance_slice"] = provenance_summary
+    return summary
 
 
 def generate(root: Path, audit_path: Path, manifest_path: Path) -> dict[str, Any]:
@@ -1959,6 +2023,7 @@ def generate(root: Path, audit_path: Path, manifest_path: Path) -> dict[str, Any
     ) in {
         (AUDIT_SCHEMA_V3, SEARCH_SCHEMA_V2),
         (AUDIT_SCHEMA_V4, SEARCH_SCHEMA_V3),
+        (AUDIT_SCHEMA_V5, SEARCH_SCHEMA_V3),
     }
     require(supported, "unsupported audit/search input schema pair")
 
@@ -2160,6 +2225,58 @@ def generate(root: Path, audit_path: Path, manifest_path: Path) -> dict[str, Any
 
     write_json(manifest_path, manifest)
     audit["search_manifest"]["sha256"] = sha256_file(manifest_path)
+    provenance_path = root / PROVENANCE_PATH
+    require(
+        provenance_path.is_file(),
+        "generate the PDF provenance slice before generating audit v5",
+    )
+    provenance_artifact = load_json(provenance_path)
+    require(
+        provenance_artifact["schema_version"] == PROVENANCE_SCHEMA_V1,
+        "unsupported provenance-slice schema",
+    )
+    require(
+        provenance_artifact["broad_search_manifest"]["sha256"]
+        == sha256_file(manifest_path),
+        "provenance slice does not reference the generated broad manifest",
+    )
+    provenance = load_provenance_module(root)
+    audit["schema_version"] = AUDIT_SCHEMA_V5
+    audit["provenance_slice"] = {
+        "path": PROVENANCE_PATH,
+        "schema_version": PROVENANCE_SCHEMA_V1,
+        "sha256": sha256_file(provenance_path),
+        "slice_algorithm_identity": provenance_artifact[
+            "slice_algorithm_identity"
+        ],
+    }
+    provenance_results = provenance_artifact["validation_results"]
+    audit["provenance_candidate_unit_aggregates"] = {
+        "candidate_unit_count": provenance_results["candidate_unit_count"],
+        "materiality_counts": provenance_results[
+            "candidate_unit_materiality_counts"
+        ],
+        "review_state_counts": provenance_results[
+            "candidate_unit_review_state_counts"
+        ],
+    }
+    audit["historical_recall_calibration"] = provenance_results[
+        "historical_final_evidence_recovery_counts"
+    ]
+    audit["prior_recall_provenance_reconciliation"] = provenance_results[
+        "prior_recall_reconciliation_counts"
+    ]
+    audit["negative_control_results"] = provenance_artifact["negative_controls"]
+    audit["readiness_rule"] = provenance.provenance_readiness(
+        provenance_artifact, audit
+    )
+    audit["d1d_a_result"] = readiness_result(audit["readiness_rule"])
+    audit["semantic_audit_completeness"] = (
+        "NOT_COMPLETE_NORMALIZED_PROVENANCE_UNITS_AND_GETXPDF_UNRESOLVED"
+    )
+    audit["claim_scope"]["pdf_provenance_slice"] = (
+        "DETERMINISTIC_MACHINE_SLICE_SOURCE_REVIEW_INCOMPLETE"
+    )
     write_json(audit_path, audit)
     return validate_artifacts(root, audit_path, manifest_path)
 
