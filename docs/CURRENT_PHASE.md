@@ -40,6 +40,9 @@
 - Phase 1B-D1C-A persistent APFEL transport core implementation. This is an
   engineering milestone inside the authorized bounded prototype, not a
   completed scientific gate.
+- Phase 1B-D1D-A static evidence closure completed with a final `FAIL` at
+  `provenance_evidence_integrity`; provenance slice v1 is retained only as a
+  rejected diagnostic.
 
 # Current state
 
@@ -234,22 +237,36 @@
   probability, veto, channel/remnant choice, maximum, or envelope. This claim
   is not generalized to any machine-unreviewed candidate. Existing signed Les
   Houches event-weight handling is not evidence for negative-PDF sampling.
-- The final decision uses `EVIDENCE_INTEGRITY_FAIL_PRECEDENCE`. No
+- The final D1D-A decision uses `EVIDENCE_INTEGRITY_FAIL_PRECEDENCE`. No
   PYTHIA fork, signed-weight design, alternate generator, architecture,
-  implementation, or prototype is selected or authorized. PR #43 remains open
-  and draft; issue #10 and D2 remain blocked.
+  implementation, or prototype is selected or authorized. PR #43 is merged;
+  issue #10 and D2 remain blocked.
+- Phase 1B-D1D-B proposes `INCONCLUSIVE` for the fixed signed-generator
+  coupling contract. A potentially coherent full-generator interface remains
+  identifiable, but primary-source and mathematical evidence does not establish
+  signed scalar and signed-rate validity through hard-process, ISR, and
+  beam-remnant paths. This prevents both prototype authorization and the
+  stronger terminal-stop claim.
+- The bounded desk review covers only Sherpa, Herwig, and Les Houches signed
+  hard-event transport. Negative complete-event weights do not repair invalid
+  internal probabilities or sampling decisions. Current coupling work stops
+  without claiming a universal impossibility theorem.
+- All ten D1D-B authorization flags are false. Issue #42 remains open and in
+  planning review; Project fields are unchanged. Architecture comparison was
+  not promoted to readiness, issue #10 stays blocked, and D2 remains
+  unauthorized.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-SCIENTIFIC_REVIEW_AND_MERGE_NEGATIVE_D1D_A_RECORD
+SCIENTIFIC_REVIEW_OF_TERMINAL_D1D_B_DECISION
 ```
 
-This is review/merge of the negative record, not authorization to review the
-163 rejected-prototype units, compare architectures, implement a prototype,
-advance issue #10, or begin D2.
+This is review of ADR-008 and the deterministic terminal planning artifact. It
+does not authorize implementation, a generator prototype, architecture
+selection, advancement of issue #10, or D2.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
@@ -273,9 +290,9 @@ unimplemented hypotheses.
 - Do not proceed from D1C-B to runtime consumer instrumentation using the
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
-- Issue #42 and D1D-A are planning only. The current result is
-  `EVIDENCE_CORRECTION_REQUIRED`; architecture comparison, implementation,
-  prototypes, and D2 remain blocked and unauthorized.
+- Issue #42 remains planning only. D1D-A is final `FAIL`, D1D-B is proposed
+  `INCONCLUSIVE`, architecture-comparison readiness remains false, and all
+  implementations, prototypes, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

@@ -1,0 +1,915 @@
+{
+  "architecture_assessments": {
+    "A_REPOSITORY_OWNED_PYTHIA_FORK_OR_PATCH": {
+      "assessment": "NOT_SUPPORTED_FOR_A_BOUNDED_PROTOTYPE",
+      "distinctions": {
+        "bypass_reader_interface": "Does not resolve downstream sign-sensitive consumers or provide a validated dataflow contract.",
+        "downstream_algorithm_redesign": "Would require reviewed semantics for hard-process, ISR, remnant, flavor selection, ratios, maxima, envelopes, and cumulative selection.",
+        "public_reader_change": "Already established insufficient by D1C and D1D-A.",
+        "versioned_fork_maintenance": "Creates a continuing upstream-integration and scientific-validation burden."
+      },
+      "rationale": "The negative D1D-A record does not supply the complete consumer evidence required to bound a fork or redesign."
+    },
+    "B_SIGNED_WEIGHT_GENERATOR_ARCHITECTURE": {
+      "assessment": "NOT_SUPPORTED_FOR_THE_FIXED_CONTRACT",
+      "distinctions": {
+        "ordinary_positive_probability_generation": "Requires valid nonnegative sampling probabilities and rates.",
+        "signed_event_samples": "Can represent cancellations between complete weighted events but do not repair invalid internal sampling steps.",
+        "signed_final_event_weight": "Cannot retroactively repair negative probabilities, denominators, maxima, categorical choices, or rejection sampling.",
+        "signed_kernels_or_sudakovs": "Would require a reviewed mathematical formulation and a generator designed to sample it.",
+        "signed_matrix_element_contributions": "Are not equivalent to signed PDFs entering every internal generator consumer.",
+        "weighted_empirical_event_sets": "Are compatible with set inference only after a coherent event-generation measure exists."
+      },
+      "rationale": "No reviewed mathematical construction establishes valid signed internal sampling for the present PDF family and full generator path."
+    },
+    "C_ALTERNATIVE_GENERATOR_OR_TRANSPORT_INTERFACE": {
+      "assessment": "INCONCLUSIVE_PRIMARY_EVIDENCE_GAPS",
+      "bounded_candidate_count": 3,
+      "candidates": [
+        {
+          "candidate_id": "SHERPA_EXTERNAL_PDF_FULL_DIS_STACK",
+          "evidence_requirements": {
+            "alpha_s_routing": {
+              "primary_source_ids": [
+                "SHERPA_ISR",
+                "SHERPA_DIS"
+              ],
+              "rationale": "The official ISR documentation exposes PDF and alpha_s routing, but not signed-PDF consistency across every consumer.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "beam_remnant_semantics": {
+              "primary_source_ids": [
+                "SHERPA_MANUAL",
+                "SHERPA_3"
+              ],
+              "rationale": "Beam-remnant machinery is documented; validity for signed internal PDF rates is not established.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "hard_process_semantics": {
+              "primary_source_ids": [
+                "SHERPA_DIS"
+              ],
+              "rationale": "The official examples include neutral-current lepton-proton DIS with gamma/Z exchange.",
+              "status": "SUPPORTED"
+            },
+            "isr_backward_evolution_semantics": {
+              "primary_source_ids": [
+                "SHERPA_ISR"
+              ],
+              "rationale": "ISR and PDF variation support are documented, but signed-kernel probability validity is not.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "license_redistribution": {
+              "primary_source_ids": [
+                "SHERPA_SOURCE"
+              ],
+              "rationale": "Source and license files are public; any redistributed modification would still require a dedicated license review.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "maintained_source_build_availability": {
+              "primary_source_ids": [
+                "SHERPA_SOURCE",
+                "SHERPA_3"
+              ],
+              "rationale": "An official maintained source repository and build documentation are available.",
+              "status": "SUPPORTED"
+            },
+            "negative_rate_or_signed_weight_treatment": {
+              "primary_source_ids": [
+                "SHERPA_3",
+                "MCATNLO"
+              ],
+              "rationale": "Primary literature supports negative final event weights in NLO matching, not negative PDFs inside all sampling kernels.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "pointer_provider_coverage": {
+              "primary_source_ids": [
+                "SHERPA_EXTERNAL_PDF"
+              ],
+              "rationale": "The external PDF API exposes scalar accessors and copies; complete internal consumer coverage is not proven.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "reproducibility": {
+              "primary_source_ids": [
+                "SHERPA_SOURCE",
+                "SHERPA_3"
+              ],
+              "rationale": "Versioned source and configuration are available, while the proposed signed contract has no validated identity record.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "signed_pdf_scalar_preservation": {
+              "primary_source_ids": [],
+              "rationale": "No reviewed primary source proves signed scalar preservation through hard, ISR, and remnant consumers.",
+              "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+            }
+          },
+          "result": "POTENTIALLY_COHERENT_INTERFACE_WITH_UNRESOLVED_SIGNED_SEMANTICS"
+        },
+        {
+          "candidate_id": "HERWIG_PDF_AND_SHOWER_STACK",
+          "evidence_requirements": {
+            "alpha_s_routing": {
+              "primary_source_ids": [
+                "HERWIG_7_3"
+              ],
+              "rationale": "Herwig 7.3 documents separate ISR and FSR alpha_s controls; complete PDF-provider coupling is unproven.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "beam_remnant_semantics": {
+              "primary_source_ids": [
+                "HERWIGPP_MANUAL"
+              ],
+              "rationale": "The primary manual describes remnant construction, not signed-PDF validity.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "hard_process_semantics": {
+              "primary_source_ids": [
+                "HERWIGPP_MANUAL",
+                "HERWIG_7_0",
+                "HERWIG_7_3"
+              ],
+              "rationale": "Herwig is documented for lepton-hadron hard scattering, but this exact fixed contract is not validated.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "isr_backward_evolution_semantics": {
+              "primary_source_ids": [
+                "HERWIGPP_MANUAL",
+                "HERWIG_7_3"
+              ],
+              "rationale": "Backward-evolution shower semantics are documented; signed-kernel probability validity is not.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "license_redistribution": {
+              "primary_source_ids": [
+                "HERWIG_7_3"
+              ],
+              "rationale": "The current software paper identifies GPLv3 availability; redistribution details require a dedicated review.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "maintained_source_build_availability": {
+              "primary_source_ids": [
+                "HERWIG_7_3"
+              ],
+              "rationale": "The current software paper identifies maintained public source and build availability.",
+              "status": "SUPPORTED"
+            },
+            "negative_rate_or_signed_weight_treatment": {
+              "primary_source_ids": [
+                "HERWIG_7_0",
+                "MCATNLO"
+              ],
+              "rationale": "MC@NLO supports negative event weights, not negative probabilities in PDF-dependent shower/remnant steps.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "pointer_provider_coverage": {
+              "primary_source_ids": [],
+              "rationale": "No bounded primary-source audit establishes provider coverage for the present signed PDF contract.",
+              "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+            },
+            "reproducibility": {
+              "primary_source_ids": [
+                "HERWIG_7_3"
+              ],
+              "rationale": "Versioned releases are documented, but no validated deterministic identity exists for this proposed coupling.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "signed_pdf_scalar_preservation": {
+              "primary_source_ids": [],
+              "rationale": "No reviewed primary source proves signed scalar preservation through hard, ISR, and remnant consumers.",
+              "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+            }
+          },
+          "result": "POTENTIALLY_COHERENT_INTERFACE_WITH_UNRESOLVED_SIGNED_SEMANTICS"
+        },
+        {
+          "candidate_id": "LES_HOUCHES_SIGNED_HARD_EVENT_TRANSPORT",
+          "evidence_requirements": {
+            "alpha_s_routing": {
+              "primary_source_ids": [],
+              "rationale": "The transport record does not own downstream alpha_s routing.",
+              "status": "NOT_APPLICABLE"
+            },
+            "beam_remnant_semantics": {
+              "primary_source_ids": [
+                "LHEF_STANDARD"
+              ],
+              "rationale": "Beam-remnant construction is delegated to the receiving generator.",
+              "status": "NOT_SUPPORTED"
+            },
+            "hard_process_semantics": {
+              "primary_source_ids": [
+                "LHEF_STANDARD"
+              ],
+              "rationale": "The standard transports hard parton-level configurations but does not validate this signed PDF contract.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "isr_backward_evolution_semantics": {
+              "primary_source_ids": [
+                "LHEF_STANDARD"
+              ],
+              "rationale": "Backward evolution is delegated and therefore cannot be repaired by the transported final weight.",
+              "status": "NOT_SUPPORTED"
+            },
+            "license_redistribution": {
+              "primary_source_ids": [],
+              "rationale": "This entry evaluates an interchange standard rather than redistributing a generator.",
+              "status": "NOT_APPLICABLE"
+            },
+            "maintained_source_build_availability": {
+              "primary_source_ids": [],
+              "rationale": "The interchange standard is not a generator implementation.",
+              "status": "NOT_APPLICABLE"
+            },
+            "negative_rate_or_signed_weight_treatment": {
+              "primary_source_ids": [
+                "LHEF_STANDARD",
+                "MCATNLO"
+              ],
+              "rationale": "The standard carries event weights and MC@NLO establishes signed hard-event samples.",
+              "status": "SUPPORTED"
+            },
+            "pointer_provider_coverage": {
+              "primary_source_ids": [],
+              "rationale": "A hard-event record is not a PDF provider interface.",
+              "status": "NOT_APPLICABLE"
+            },
+            "reproducibility": {
+              "primary_source_ids": [
+                "LHEF_STANDARD"
+              ],
+              "rationale": "The standardized record supports provenance fields, but downstream generator identity remains separate.",
+              "status": "SUPPORTED_WITH_QUALIFICATION"
+            },
+            "signed_pdf_scalar_preservation": {
+              "primary_source_ids": [],
+              "rationale": "The interface transports events, not the signed PDF scalar through generator internals.",
+              "status": "NOT_APPLICABLE"
+            }
+          },
+          "result": "BOUNDARY_ONLY_NOT_A_COMPLETE_GENERATOR_COUPLING"
+        }
+      ],
+      "rationale": "Sherpa and Herwig expose potentially relevant full-generator interfaces, while LHEF transports signed complete-event weights only; none proves the fixed signed-PDF contract end to end."
+    },
+    "D_STOP_FURTHER_GENERATOR_COUPLING_WORK": {
+      "assessment": "SUPPORTED_WITH_QUALIFICATION_FOR_CURRENT_CONTRACT",
+      "rationale": "Stopping current generator-coupling work protects the fixed D0R signed binary64 contract, theta box, shape-only fixed-N MVP, and hard/ISR/remnant consistency requirement. This is not a universal impossibility theorem and can be reopened only on new reviewed evidence."
+    }
+  },
+  "authorization": {
+    "ALTERNATIVE_GENERATOR_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "PROTOTYPE_AUTHORIZED": false,
+    "PYTHIA_FORK_AUTHORIZED": false,
+    "PYTHIA_INIT_AUTHORIZED": false,
+    "PYTHIA_NEXT_AUTHORIZED": false,
+    "SIGNED_WEIGHT_PROTOTYPE_AUTHORIZED": false
+  },
+  "decision": "INCONCLUSIVE",
+  "decision_criteria": {
+    "criterion_order": [
+      "signed_scalar_preservation",
+      "nonnegative_probability_rate_validity",
+      "hard_process_coverage",
+      "isr_sudakov_coverage",
+      "beam_remnant_coverage",
+      "flavor_categorical_selection",
+      "denominator_ratio_validity",
+      "maximum_envelope_rejection_semantics",
+      "event_weight_semantics",
+      "strict_support_no_extrapolation",
+      "alpha_s_consistency",
+      "full_neutral_current_gamma_z_compatibility",
+      "deterministic_identity_and_provenance",
+      "thread_process_safety",
+      "build_deployment_reproducibility",
+      "license_redistribution",
+      "upstream_maintenance_burden",
+      "bounded_prototype_falsifiability",
+      "amortized_set_inference_compatibility",
+      "authorization_hierarchy_compatibility"
+    ],
+    "matrix": {
+      "A_REPOSITORY_OWNED_PYTHIA_FORK_OR_PATCH": {
+        "alpha_s_consistency": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "amortized_set_inference_compatibility": {
+          "primary_source_ids": [
+            "D1C"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "authorization_hierarchy_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "beam_remnant_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "bounded_prototype_falsifiability": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "build_deployment_reproducibility": {
+          "primary_source_ids": [
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "denominator_ratio_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "deterministic_identity_and_provenance": {
+          "primary_source_ids": [
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "event_weight_semantics": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "flavor_categorical_selection": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "full_neutral_current_gamma_z_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "hard_process_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "isr_sudakov_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "license_redistribution": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "maximum_envelope_rejection_semantics": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "nonnegative_probability_rate_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "signed_scalar_preservation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "strict_support_no_extrapolation": {
+          "primary_source_ids": [
+            "D1C",
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "thread_process_safety": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "upstream_maintenance_burden": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        }
+      },
+      "B_SIGNED_WEIGHT_GENERATOR_ARCHITECTURE": {
+        "alpha_s_consistency": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "amortized_set_inference_compatibility": {
+          "primary_source_ids": [
+            "D1C"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "authorization_hierarchy_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "beam_remnant_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "bounded_prototype_falsifiability": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "build_deployment_reproducibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "denominator_ratio_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "deterministic_identity_and_provenance": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "event_weight_semantics": {
+          "primary_source_ids": [
+            "MCATNLO",
+            "LHEF_STANDARD"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "flavor_categorical_selection": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "full_neutral_current_gamma_z_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "hard_process_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "isr_sudakov_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "license_redistribution": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "maximum_envelope_rejection_semantics": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "nonnegative_probability_rate_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "signed_scalar_preservation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "strict_support_no_extrapolation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "thread_process_safety": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "upstream_maintenance_burden": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        }
+      },
+      "C_ALTERNATIVE_GENERATOR_OR_TRANSPORT_INTERFACE": {
+        "alpha_s_consistency": {
+          "primary_source_ids": [
+            "SHERPA_ISR",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "amortized_set_inference_compatibility": {
+          "primary_source_ids": [
+            "LHEF_STANDARD",
+            "MCATNLO"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "authorization_hierarchy_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "beam_remnant_coverage": {
+          "primary_source_ids": [
+            "SHERPA_MANUAL",
+            "HERWIGPP_MANUAL"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "bounded_prototype_falsifiability": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "build_deployment_reproducibility": {
+          "primary_source_ids": [
+            "SHERPA_SOURCE",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "denominator_ratio_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "deterministic_identity_and_provenance": {
+          "primary_source_ids": [
+            "LHEF_STANDARD",
+            "SHERPA_SOURCE",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "event_weight_semantics": {
+          "primary_source_ids": [
+            "LHEF_STANDARD",
+            "MCATNLO",
+            "SHERPA_3",
+            "HERWIG_7_0"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "flavor_categorical_selection": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "full_neutral_current_gamma_z_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "hard_process_coverage": {
+          "primary_source_ids": [
+            "SHERPA_DIS",
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "isr_sudakov_coverage": {
+          "primary_source_ids": [
+            "SHERPA_ISR",
+            "HERWIGPP_MANUAL",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "license_redistribution": {
+          "primary_source_ids": [
+            "SHERPA_SOURCE",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "maximum_envelope_rejection_semantics": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "nonnegative_probability_rate_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_SUPPORTED"
+        },
+        "signed_scalar_preservation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "strict_support_no_extrapolation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "thread_process_safety": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "PRIMARY_SOURCE_EVIDENCE_UNAVAILABLE"
+        },
+        "upstream_maintenance_burden": {
+          "primary_source_ids": [
+            "SHERPA_SOURCE",
+            "SHERPA_3",
+            "HERWIG_7_3"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        }
+      },
+      "D_STOP_FURTHER_GENERATOR_COUPLING_WORK": {
+        "alpha_s_consistency": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "amortized_set_inference_compatibility": {
+          "primary_source_ids": [
+            "D1C",
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "authorization_hierarchy_compatibility": {
+          "primary_source_ids": [
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED"
+        },
+        "beam_remnant_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "bounded_prototype_falsifiability": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "build_deployment_reproducibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "denominator_ratio_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "deterministic_identity_and_provenance": {
+          "primary_source_ids": [
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED"
+        },
+        "event_weight_semantics": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "flavor_categorical_selection": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "full_neutral_current_gamma_z_compatibility": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "hard_process_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "isr_sudakov_coverage": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "license_redistribution": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "maximum_envelope_rejection_semantics": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "nonnegative_probability_rate_validity": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "signed_scalar_preservation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "strict_support_no_extrapolation": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "thread_process_safety": {
+          "primary_source_ids": [],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "NOT_APPLICABLE"
+        },
+        "upstream_maintenance_burden": {
+          "primary_source_ids": [
+            "D1D_DECISION"
+          ],
+          "rationale": "See the corresponding architecture assessment and primary-source limitations.",
+          "status": "SUPPORTED"
+        }
+      }
+    }
+  },
+  "decision_rule": {
+    "architecture_comparison_ready": false,
+    "derived_decision": "INCONCLUSIVE",
+    "disproportionate_cost_supported_for_all_routes": false,
+    "mandatory_d1d_a_gate_passed": false,
+    "no_current_architecture_has_coherent_bounded_path": false,
+    "potentially_coherent_route_remains": true,
+    "primary_or_mathematical_evidence_insufficient": true
+  },
+  "dependencies": {
+    "blocked_issue": 10,
+    "planning_issue": 42,
+    "project_fields_must_remain_unchanged": true
+  },
+  "evaluated_evidence": {
+    "primary_sources": {
+      "D1C": {
+        "kind": "repository_evidence",
+        "path": "docs/phase1bd_d1c_decision.json",
+        "sha256": "1ce8a824175d078887bef6fc7c72bbccb2b7c8277cd9669c2a355ced42a6e41b"
+      },
+      "D1D_AUDIT_V6": {
+        "kind": "repository_evidence",
+        "path": "docs/phase1bd_d1d_pythia_semantics_audit.json",
+        "sha256": "bd63eb4b779c8f6fa622b4a4111fa07a963303d7c80ba3761c339bb764a5b430"
+      },
+      "D1D_DECISION": {
+        "kind": "repository_evidence",
+        "path": "docs/phase1bd_d1d_pythia_provenance_slice_decision.json",
+        "sha256": "f92958fe745d64c24cd6d12222537154af7d916f24a0c7362c460123d46e04d7"
+      },
+      "HERWIGPP_MANUAL": {
+        "kind": "primary_manual_paper",
+        "url": "https://arxiv.org/abs/0803.0883"
+      },
+      "HERWIG_7_0": {
+        "kind": "primary_software_paper",
+        "url": "https://arxiv.org/abs/1512.01178"
+      },
+      "HERWIG_7_3": {
+        "kind": "primary_software_paper",
+        "url": "https://arxiv.org/abs/2312.05175"
+      },
+      "LHEF_STANDARD": {
+        "kind": "primary_standard_paper",
+        "url": "https://arxiv.org/abs/hep-ph/0609017"
+      },
+      "MCATNLO": {
+        "kind": "primary_research_paper",
+        "url": "https://arxiv.org/abs/hep-ph/0204244"
+      },
+      "SHERPA_3": {
+        "kind": "primary_software_paper",
+        "url": "https://arxiv.org/abs/2410.22148"
+      },
+      "SHERPA_DIS": {
+        "kind": "official_documentation",
+        "url": "https://sherpa-team.gitlab.io/sherpa/master/examples.html"
+      },
+      "SHERPA_EXTERNAL_PDF": {
+        "kind": "official_documentation",
+        "url": "https://sherpa-team.gitlab.io/sherpa/v3.0.0alpha1/manual/customization/external-pdf.html"
+      },
+      "SHERPA_ISR": {
+        "kind": "official_documentation",
+        "url": "https://sherpa-team.gitlab.io/sherpa/v3.0.1/manual/parameters/isr.html"
+      },
+      "SHERPA_MANUAL": {
+        "kind": "official_documentation",
+        "url": "https://sherpa-team.gitlab.io/sherpa/master/index_single.html"
+      },
+      "SHERPA_SOURCE": {
+        "kind": "official_source_repository",
+        "url": "https://gitlab.com/sherpa-team/sherpa/-/tree/master"
+      }
+    },
+    "source_policy": "OFFICIAL_DOCUMENTATION_SOURCE_REPOSITORY_STANDARD_OR_PRIMARY_PAPER_ONLY"
+  },
+  "failure_scope": [
+    "No current architecture is authorized for the fixed signed D0R generator-coupling contract.",
+    "The minimal public-reader patch remains insufficient.",
+    "The rejected provenance slice remains diagnostic rather than architecture evidence."
+  ],
+  "fixed_scientific_contract": {
+    "amortized_objective": "p(theta_PDF | D) for a set of events D",
+    "event_sampling": "shape-only fixed-N conditional event distribution",
+    "generator_consistency": [
+      "hard_process",
+      "ISR_backward_evolution",
+      "beam_remnant"
+    ],
+    "pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "scalar_contract": "signed binary64 x*f with strict support and no extrapolation",
+    "theta_box": {
+      "delta_v": [
+        -0.2,
+        0.2
+      ],
+      "lambda_sea": [
+        -0.25,
+        0.25
+      ]
+    }
+  },
+  "next_step": "SCIENTIFIC_REVIEW_OF_TERMINAL_D1D_B_DECISION",
+  "non_failure_scope": [
+    "This decision is not a universal impossibility theorem for signed event generators.",
+    "It does not reject weighted empirical sets after a coherent event measure exists.",
+    "It does not alter the fixed PDF-family or inference contracts."
+  ],
+  "precedence": {
+    "ARCHITECTURE_COMPARISON_READY": false,
+    "D1C_FINAL_DECISION": "FAIL",
+    "D1D_A_FAILED_GATE": "provenance_evidence_integrity",
+    "D1D_A_FINAL_DECISION": "FAIL",
+    "MINIMAL_PUBLIC_READER_PATCH": "INSUFFICIENT",
+    "PROVENANCE_SLICE_V1_DECISION": "FAIL",
+    "PROVENANCE_SLICE_V1_STATUS": "REJECTED_DIAGNOSTIC"
+  },
+  "reopen_conditions": [
+    {
+      "authorization_granted": false,
+      "condition": "A reviewed mathematical signed-kernel and signed-Sudakov formulation covering all internal sampling decisions."
+    },
+    {
+      "authorization_granted": false,
+      "condition": "A primary-source generator interface with proven signed scalar, rate, ISR, remnant, and event-weight semantics."
+    },
+    {
+      "authorization_granted": false,
+      "condition": "An independently validated complete consumer and dataflow graph for the proposed coupling."
+    },
+    {
+      "authorization_granted": false,
+      "condition": "A separately reviewed and approved change to the PDF-family or inference contract."
+    }
+  ],
+  "schema_version": "partonsbi.phase1bd.d1d.terminal-decision.v1",
+  "unresolved_evidence": [
+    "No complete independently validated PDF-consumer graph is available.",
+    "No reviewed signed-kernel or signed-Sudakov probability construction is available.",
+    "Sherpa and Herwig primary sources do not prove signed scalar preservation through hard process, ISR, and remnants.",
+    "Full neutral-current gamma/Z, strict-support, provider, alpha_s, and concurrency behavior remain unvalidated for candidate alternatives.",
+    "Maintenance and redistribution costs are not sufficiently bounded across every potentially coherent route."
+  ],
+  "validation": {
+    "artifact_is_deterministically_generated": true,
+    "command": "python3 scripts/phase1bd_d1d_terminal_decision.py --validate",
+    "physics_execution_performed": false
+  }
+}
