@@ -27,6 +27,18 @@ PROVENANCE = importlib.util.module_from_spec(PROVENANCE_SPEC)
 assert PROVENANCE_SPEC.loader is not None
 PROVENANCE_SPEC.loader.exec_module(PROVENANCE)
 
+DECISION_SCRIPT = (
+    Path(__file__).resolve().parents[2]
+    / "scripts"
+    / "phase1bd_d1d_pythia_provenance_decision.py"
+)
+DECISION_SPEC = importlib.util.spec_from_file_location(
+    "d1d_provenance_decision", DECISION_SCRIPT
+)
+DECISION = importlib.util.module_from_spec(DECISION_SPEC)
+assert DECISION_SPEC.loader is not None
+DECISION_SPEC.loader.exec_module(DECISION)
+
 
 def minimal_audit():
     return {
@@ -462,3 +474,105 @@ def test_provenance_readiness_keeps_all_authorization_flags_false():
         )["all_authorization_flags_false"]
         is False
     )
+
+
+def final_decision_fixture():
+    root = Path(__file__).resolve().parents[2]
+    return (
+        DECISION.load_json(
+            root / "docs" / "phase1bd_d1d_pythia_provenance_slice_decision.json"
+        ),
+        DECISION.load_json(
+            root / "docs" / "phase1bd_d1d_pythia_semantics_audit.json"
+        ),
+    )
+
+
+def validate_final_fixture(decision, audit):
+    DECISION.validate_payload(
+        decision,
+        audit,
+        DECISION.SEARCH_SHA256,
+        DECISION.PROVENANCE_SHA256,
+    )
+
+
+def test_final_decision_cannot_pass_with_required_failed_gates():
+    decision, audit = final_decision_fixture()
+    decision["decision"] = "PASS"
+    with pytest.raises(DECISION.DecisionError, match="must be FAIL"):
+        validate_final_fixture(decision, audit)
+
+
+def test_final_decision_cannot_omit_required_failed_gate():
+    decision, audit = final_decision_fixture()
+    decision["failed_gates"].remove("typed_root_integrity")
+    with pytest.raises(DECISION.DecisionError, match="failed-gate"):
+        validate_final_fixture(decision, audit)
+
+
+def test_final_decision_rejects_broad_manifest_hash_drift():
+    decision, _ = final_decision_fixture()
+    with pytest.raises(DECISION.DecisionError, match="broad-manifest hash drift"):
+        DECISION.validate_payload(
+            decision, None, "0" * 64, DECISION.PROVENANCE_SHA256
+        )
+
+
+def test_final_decision_rejects_provenance_slice_hash_drift():
+    decision, _ = final_decision_fixture()
+    with pytest.raises(DECISION.DecisionError, match="provenance-slice hash drift"):
+        DECISION.validate_payload(
+            decision, None, DECISION.SEARCH_SHA256, "0" * 64
+        )
+
+
+def test_final_audit_cannot_claim_architecture_readiness():
+    decision, audit = final_decision_fixture()
+    audit["architecture_comparison_ready"] = True
+    with pytest.raises(DECISION.DecisionError, match="architecture-comparison"):
+        validate_final_fixture(decision, audit)
+
+
+def test_final_audit_cannot_claim_independent_historical_recovery():
+    decision, audit = final_decision_fixture()
+    audit["historical_recall_calibration"] = {
+        "RECOVERED_BY_PROVENANCE_SLICE": 672
+    }
+    with pytest.raises(DECISION.DecisionError, match="independent 672/672"):
+        validate_final_fixture(decision, audit)
+
+
+def test_rejected_slice_cannot_supply_readiness_conditions():
+    decision, audit = final_decision_fixture()
+    audit["readiness_rule"] = {"all_pdf_roots_are_accounted_for": True}
+    with pytest.raises(DECISION.DecisionError, match="supplies readiness"):
+        validate_final_fixture(decision, audit)
+
+
+def test_final_decision_and_audit_keep_all_authorization_flags_false():
+    decision, audit = final_decision_fixture()
+    for flag in DECISION.AUTHORIZATION_FLAGS:
+        changed_decision = copy.deepcopy(decision)
+        changed_decision["authorization"][flag] = True
+        with pytest.raises(DECISION.DecisionError, match="authorization"):
+            validate_final_fixture(changed_decision, audit)
+        changed_audit = copy.deepcopy(audit)
+        changed_audit["authorization"][flag] = True
+        with pytest.raises(DECISION.DecisionError, match="authorization"):
+            validate_final_fixture(decision, changed_audit)
+
+
+def test_minimal_reader_conclusion_remains_independently_supported():
+    decision, audit = final_decision_fixture()
+    assert audit["minimal_public_reader_patch_basis"]
+    audit["minimal_public_reader_patch"] = "SUFFICIENT"
+    with pytest.raises(DECISION.DecisionError, match="minimal reader"):
+        validate_final_fixture(decision, audit)
+
+
+def test_d1c_immutable_fail_remains_unchanged():
+    decision, audit = final_decision_fixture()
+    audit["d1c_stock_boundary_decision"] = "PASS"
+    with pytest.raises(DECISION.DecisionError, match="D1C"):
+        validate_final_fixture(decision, audit)

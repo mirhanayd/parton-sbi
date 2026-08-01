@@ -23,12 +23,17 @@ from typing import Any, Iterable
 AUDIT_SCHEMA_V3 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v3"
 AUDIT_SCHEMA_V4 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v4"
 AUDIT_SCHEMA_V5 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v5"
+AUDIT_SCHEMA_V6 = "partonsbi.phase1bd.d1d.pythia-semantics-audit.v6"
 SEARCH_SCHEMA_V2 = "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v2"
 SEARCH_SCHEMA_V3 = "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3"
 INVENTORY_ID = "PYTHIA_8_312_INSTALLED_RELEASE_H_CC_374"
 GENERATOR_PATH = "scripts/phase1bd_d1d_pythia_semantics_audit.py"
 PROVENANCE_PATH = "docs/phase1bd_d1d_pythia_pdf_provenance_slice.json"
 PROVENANCE_SCHEMA_V1 = "partonsbi.phase1bd.d1d.pythia-pdf-provenance-slice.v1"
+PROVENANCE_DECISION_PATH = "docs/phase1bd_d1d_pythia_provenance_slice_decision.json"
+PROVENANCE_DECISION_SCHEMA_V1 = (
+    "partonsbi.phase1bd.d1d.pythia-provenance-slice-decision.v1"
+)
 AUTHORITATIVE_ENGINE = "PYTHON_REGEX_OCCURRENCE_ENGINE_V1"
 ENGINE_FLAGS = ("ASCII",)
 DETERMINISTIC_ORDERING = (
@@ -297,6 +302,15 @@ def repository_root(script_path: Path | None = None) -> Path:
 def load_provenance_module(root: Path):
     path = root / "scripts/phase1bd_d1d_pythia_pdf_provenance_slice.py"
     spec = importlib.util.spec_from_file_location("d1d_pdf_provenance", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_provenance_decision_module(root: Path):
+    path = root / "scripts/phase1bd_d1d_pythia_provenance_decision.py"
+    spec = importlib.util.spec_from_file_location("d1d_provenance_decision", path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -1666,8 +1680,8 @@ def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dic
     audit = load_json(audit_path)
     manifest = load_json(manifest_path)
     require(
-        audit["schema_version"] in {AUDIT_SCHEMA_V4, AUDIT_SCHEMA_V5},
-        "audit schema is not v4 or v5",
+        audit["schema_version"] in {AUDIT_SCHEMA_V4, AUDIT_SCHEMA_V5, AUDIT_SCHEMA_V6},
+        "audit schema is not v4, v5, or v6",
     )
     require(manifest["schema_version"] == SEARCH_SCHEMA_V3, "search schema is not v3")
     validate_inventory(root, manifest)
@@ -1969,14 +1983,54 @@ def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dic
             == provenance_artifact["negative_controls"],
             "stored negative-control results mismatch",
         )
+    elif audit["schema_version"] == AUDIT_SCHEMA_V6:
+        decision_path = root / PROVENANCE_DECISION_PATH
+        require(decision_path.is_file(), "provenance decision artifact is missing")
+        decision_artifact = load_json(decision_path)
+        require(
+            decision_artifact["schema_version"] == PROVENANCE_DECISION_SCHEMA_V1,
+            "provenance decision schema mismatch",
+        )
+        decision = load_provenance_decision_module(root)
+        decision.validate_payload(
+            decision_artifact,
+            audit,
+            sha256_file(manifest_path),
+            sha256_file(root / PROVENANCE_PATH),
+            sha256_file(decision_path),
+        )
+        readiness = audit["final_gate_assessment"]
+        require(
+            readiness
+            == {
+                "architecture_comparison_ready": False,
+                "failed_gate": "provenance_evidence_integrity",
+                "provenance_evidence_integrity": False,
+            },
+            "v6 final gate assessment mismatch",
+        )
+        provenance_summary = audit["rejected_provenance_slice_v1_diagnostics"]
     else:
         readiness = build_readiness(audit, ledger, evidence_results)
-    require(audit["readiness_rule"] == readiness, "stored readiness conditions are not derived validation results")
-    require(audit["d1d_a_result"] == readiness_result(readiness), "D1D_A_RESULT is not derived from readiness conditions")
-    require(
-        audit["d1d_a_result"] == "EVIDENCE_CORRECTION_REQUIRED",
-        "D1D-A must remain evidence-correction-required",
-    )
+    if audit["schema_version"] == AUDIT_SCHEMA_V6:
+        require("readiness_rule" not in audit, "rejected slice still supplies readiness")
+        require(audit["d1d_a_result"] == "FAIL", "D1D-A result is not final FAIL")
+        require(audit["d1d_a_final_decision"] == "FAIL", "D1D-A final decision changed")
+        require(
+            audit["provenance_slice_v1_decision"] == "FAIL",
+            "provenance-slice v1 decision changed",
+        )
+        require(
+            audit["architecture_comparison_ready"] is False,
+            "architecture comparison was made ready",
+        )
+    else:
+        require(audit["readiness_rule"] == readiness, "stored readiness conditions are not derived validation results")
+        require(audit["d1d_a_result"] == readiness_result(readiness), "D1D_A_RESULT is not derived from readiness conditions")
+        require(
+            audit["d1d_a_result"] == "EVIDENCE_CORRECTION_REQUIRED",
+            "D1D-A must remain evidence-correction-required",
+        )
     require(audit["minimal_public_reader_patch"] == "INSUFFICIENT", "minimal-reader conclusion changed")
     require(audit["architecture_selected"] is False, "architecture was selected")
     expected_snapshot = {
@@ -2012,12 +2066,110 @@ def validate_artifacts(root: Path, audit_path: Path, manifest_path: Path) -> dic
     }
     if provenance_summary is not None:
         summary["provenance_slice"] = provenance_summary
+    if audit["schema_version"] == AUDIT_SCHEMA_V6:
+        summary["final_gate_assessment"] = summary.pop("readiness_rule")
+        summary["d1d_a_final_decision"] = audit["d1d_a_final_decision"]
+        summary["failed_gate"] = audit["failed_gate"]
+        summary["provenance_slice_v1_status"] = audit[
+            "provenance_slice_v1_status"
+        ]
     return summary
+
+
+def finalize_v6(
+    root: Path,
+    input_audit: dict[str, Any],
+    audit_path: Path,
+    manifest_path: Path,
+) -> dict[str, Any]:
+    """Finalize v5 as a negative v6 record without rewriting frozen artifacts."""
+
+    decision_path = root / PROVENANCE_DECISION_PATH
+    provenance_path = root / PROVENANCE_PATH
+    require(decision_path.is_file(), "generate the provenance decision first")
+    decision_artifact = load_json(decision_path)
+    decision = load_provenance_decision_module(root)
+    decision.validate_payload(
+        decision_artifact,
+        None,
+        sha256_file(manifest_path),
+        sha256_file(provenance_path),
+    )
+
+    audit = copy.deepcopy(input_audit)
+    for rejected_readiness_field in (
+        "historical_recall_calibration",
+        "negative_control_results",
+        "prior_recall_provenance_reconciliation",
+        "provenance_candidate_unit_aggregates",
+        "readiness_rule",
+    ):
+        audit.pop(rejected_readiness_field, None)
+    if "readiness_evidence_results" in audit:
+        audit["static_evidence_validation_results"] = audit.pop(
+            "readiness_evidence_results"
+        )
+
+    audit["schema_version"] = AUDIT_SCHEMA_V6
+    audit["d1d_a_result"] = "FAIL"
+    audit["d1d_a_final_decision"] = "FAIL"
+    audit["failed_gate"] = "provenance_evidence_integrity"
+    audit["provenance_slice_v1_decision"] = "FAIL"
+    audit["provenance_slice_v1_status"] = "REJECTED_DIAGNOSTIC"
+    audit["architecture_comparison_ready"] = False
+    audit["architecture_selected"] = False
+    audit["provenance_slice"] = {
+        "path": PROVENANCE_PATH,
+        "role": "REJECTED_DIAGNOSTIC_NOT_READINESS_EVIDENCE",
+        "schema_version": PROVENANCE_SCHEMA_V1,
+        "sha256": sha256_file(provenance_path),
+        "status": "REJECTED_DIAGNOSTIC",
+    }
+    audit["provenance_slice_decision"] = {
+        "path": PROVENANCE_DECISION_PATH,
+        "schema_version": PROVENANCE_DECISION_SCHEMA_V1,
+        "sha256": sha256_file(decision_path),
+    }
+    audit["rejected_provenance_slice_v1_diagnostics"] = {
+        "decision": "FAIL",
+        "integrity_review_counts": copy.deepcopy(
+            decision_artifact["integrity_review_counts"]
+        ),
+        "role": "REJECTED_DIAGNOSTIC_NOT_READINESS_EVIDENCE",
+    }
+    audit["final_gate_assessment"] = {
+        "architecture_comparison_ready": False,
+        "failed_gate": "provenance_evidence_integrity",
+        "provenance_evidence_integrity": False,
+    }
+    audit["semantic_audit_completeness"] = (
+        "FINAL_NEGATIVE_PROVENANCE_EVIDENCE_INTEGRITY_FAIL"
+    )
+    audit["claim_scope"]["pdf_provenance_slice"] = (
+        "REJECTED_DIAGNOSTIC_NO_READINESS_EVIDENCE"
+    )
+    audit["next_step"] = (
+        "SCIENTIFIC_REVIEW_AND_MERGE_NEGATIVE_D1D_A_RECORD"
+    )
+    audit["preserved_supported_results"] = copy.deepcopy(
+        decision_artifact["preserved_supported_results"]
+    )
+    audit["unsupported_provenance_slice_v1_claims"] = copy.deepcopy(
+        decision_artifact["unsupported_claims"]
+    )
+    require(
+        all(audit["authorization"].get(flag) is False for flag in AUTHORIZATION_FLAGS),
+        "v6 finalization encountered an authorization",
+    )
+    write_json(audit_path, audit)
+    return validate_artifacts(root, audit_path, manifest_path)
 
 
 def generate(root: Path, audit_path: Path, manifest_path: Path) -> dict[str, Any]:
     input_audit = load_json(audit_path)
     previous_manifest = load_json(manifest_path)
+    if input_audit["schema_version"] == AUDIT_SCHEMA_V5:
+        return finalize_v6(root, input_audit, audit_path, manifest_path)
     supported = (
         input_audit["schema_version"], previous_manifest["schema_version"]
     ) in {

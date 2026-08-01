@@ -1,183 +1,183 @@
-# Phase 1B-D1D-A2 typed PDF-provenance slicing report
+# Phase 1B-D1D-A final negative static-evidence report
 
-## Completion status and boundary
-
-This phase adds a conservative static PDF-provenance slice over the complete
-PYTHIA 8.312 occurrence corpus. It does not execute PYTHIA, APFEL, LHAPDF, a
-repository physics binary, `Pythia::init()`, or `Pythia::next()`. It creates no
-events or datasets, performs no observable scan or numerical physics work,
-selects no architecture, authorizes no prototype, and does no D2 work.
-
-The preserved decisions are:
+## Final decisions and boundary
 
 ```text
 D1C_FINAL_DECISION = FAIL
 MINIMAL_PUBLIC_READER_PATCH = INSUFFICIENT
-D1D_A_RESULT = EVIDENCE_CORRECTION_REQUIRED
+PROVENANCE_SLICE_V1_DECISION = FAIL
+PROVENANCE_SLICE_V1_STATUS = REJECTED_DIAGNOSTIC
+D1D_A_FINAL_DECISION = FAIL
+failed_gate = provenance_evidence_integrity
+ARCHITECTURE_COMPARISON_READY = false
+D2_AUTHORIZED = false
 ```
 
-All ten authorization flags remain false. Issue #10 and D2 remain blocked, and
-PR #43 remains open and draft.
+All ten authorization flags remain false. PR #43 remains open and draft;
+issue #10 and D2 remain blocked. No architecture comparison, implementation,
+prototype, generator patch, or later phase is authorized.
 
-## Three evidence layers
+This finalization records a failed evidence prototype. It does not attempt a
+new parser, AST, root-discovery pass, provenance algorithm, dataflow engine, or
+manual review of the 867 serialized units.
 
-The evidence now keeps three meanings separate:
+## Artifact precedence and identity
 
-1. `BROAD_SYNTACTIC_OCCURRENCE_CORPUS` is the immutable authoritative search:
-   779/779 derived identifiers, 67,375 raw occurrences, and 63,763 independent
-   P10 candidates.
-2. `PDF_PROVENANCE_SLICE` contains source statements connected to a typed PDF
-   provider, accessor, cache, pointer installation, or propagated PDF-derived
-   value by a source-supported edge.
-3. `SOURCE_REVIEWED_SCIENTIFIC_EVIDENCE` contains only curated semantic and
-   reachability conclusions. Machine slicing never promotes a unit to this
-   layer.
+The final decision artifact has
+`EVIDENCE_INTEGRITY_FAIL_PRECEDENCE`. The broad manifest and rejected slice are
+kept byte-identical as historical evidence:
 
-The prior 63,674 machine-unreviewed count arose because the broad vocabulary
-deliberately contains generic C++ identifiers such as `state`, `size`, `id`,
-`push_back`, `p`, and `Vec4`. It is a syntactic recall corpus, not a PDF
-dependency graph, and it is not a coordinate-level manual-review queue.
+| Artifact | Schema | SHA-256 | Role |
+|---|---|---|---|
+| Broad search manifest | `partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3` | `e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701` | Supported deterministic syntactic replay |
+| Provenance slice | `partonsbi.phase1bd.d1d.pythia-pdf-provenance-slice.v1` | `6641d6e2fb615780819bd957be2f942eab5f78f34828073eb66078088ef708c7` | Deterministic rejected diagnostic prototype |
+| Provenance decision | `partonsbi.phase1bd.d1d.pythia-provenance-slice-decision.v1` | `b872647ba1073e07262e95ceb70efe7c81c1165718b8d078867bf1e7918cf590` | Terminal integrity decision |
+| Semantics audit | `partonsbi.phase1bd.d1d.pythia-semantics-audit.v6` | `6022f377da6f9993e0d5e4966a6e23f65e3facea23f2b37675725198c5197163` | Final D1D-A negative record |
 
-## Artifact identity
+Audit v5 is retained by identity in the decision artifact at SHA-256
+`bfbe2020cffcfa3084f8109267c4e2ac2be2f165546fbdd9df35ecdde33b76ce`.
+Audit v6 references the broad manifest, rejected slice, and final decision by
+path, schema, and hash.
 
-| Artifact | Schema | SHA-256 |
-|---|---|---|
-| Broad search manifest | `partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3` | `e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701` |
-| Audit (v4 to v5) | `partonsbi.phase1bd.d1d.pythia-semantics-audit.v5` | `bfbe2020cffcfa3084f8109267c4e2ac2be2f165546fbdd9df35ecdde33b76ce` |
-| PDF-provenance slice | `partonsbi.phase1bd.d1d.pythia-pdf-provenance-slice.v1` | `6641d6e2fb615780819bd957be2f942eab5f78f34828073eb66078088ef708c7` |
+## Supported results that survive the provenance failure
 
-The v3 manifest retains its byte-identical schema, hash, source inventory, and
-`PYTHON_REGEX_OCCURRENCE_ENGINE_V1` meaning. The v5 audit binds both other
-artifacts by path, schema, and SHA-256.
-
-## Static analyzer and typed roots
-
-WSL contained no Clang, ctags, or tree-sitter executable. The selected allowed
-approach is the repository-owned conservative tokenizer
-`PARTON_SBI_CPP_PROVENANCE_TOKENIZER_V1` version `1.0.0`, used by slice
-algorithm `PARTON_SBI_TYPED_PDF_PROVENANCE_SLICE_V1`. It masks comments and
-strings, uses brace-tracked function ranges, derives declarations and
-definitions from the installed source, and records exact coordinates. It does
-not infer types, aliases, overloads, templates, macros, or dynamic targets from
-spelling alone; unsupported cases remain unresolved.
-
-The 939 source-derived typed roots are:
-
-| Root category | Count |
-|---|---:|
-| `PDF_PROVIDER_TYPE` | 46 |
-| `PDF_PROVIDER_POINTER` | 37 |
-| `PDF_PROVIDER_FIELD` | 168 |
-| `PDF_ACCESSOR_METHOD` | 155 |
-| `BEAM_PDF_FORWARDER` | 62 |
-| `PDF_DERIVED_CACHE` | 274 |
-| `PDF_COUPLING_ACCESSOR` | 2 |
-| `CONFIGURATION_POINTER_INSTALLATION` | 114 |
-| `EXPLICIT_EVENT_OR_LHA_WEIGHT_BOUNDARY` | 81 |
-
-Each root records its declared type, owning class/namespace, coordinate,
-direct-source rationale, prospective-HERA status, disabled-source capability,
-and unresolved reachability status. The graph serializes every required node
-and edge kind; kinds absent from directly established corpus edges have count
-zero rather than invented evidence. It contains 1,841 nodes and 1,221 edges,
-with zero unexplained edges and 35 explicitly unresolved dynamic/alias edges.
-
-## Broad-corpus dispositions and review units
-
-Every P10 occurrence has exactly one occurrence-level structural disposition:
-
-| Disposition | Count |
-|---|---:|
-| `CONTRIBUTES_TO_PROVENANCE_UNIT` | 699 |
-| `ROOT_DECLARATION_OR_DEFINITION` | 619 |
-| `OUTSIDE_PDF_PROVENANCE_SLICE` | 62,050 |
-| `DUPLICATE_OCCURRENCE_OF_SAME_UNIT` | 352 |
-| `DYNAMIC_OR_ALIAS_PROVENANCE_UNRESOLVED` | 43 |
-
-The graph normalizes admitted expressions and paths into 867 scientific review
-units rather than one unit per lexical identifier:
-
-| Materiality | Count |
-|---|---:|
-| `PDF_PROVENANCE_CONFIRMED` | 832 |
-| `PDF_PROVENANCE_POSSIBLE` | 0 |
-| `PROVENANCE_UNRESOLVED` | 35 |
-| `OUTSIDE_PDF_PROVENANCE_SLICE` | 0 |
-
-| Review state | Count |
-|---|---:|
-| `SOURCE_REVIEWED_MATERIAL` | 669 |
-| `MACHINE_SLICED_UNREVIEWED` | 163 |
-| `POLICY_UNRESOLVED` | 35 |
-| all other allowed reviewed states | 0 |
-
-Thus 62,050 broad occurrences are structurally removed from scientific review.
-The 163 machine-sliced confirmed units and 35 unresolved units remain blocked;
-machine slicing assigns neither a final scientific semantic class nor final
-HERA reachability.
-
-## Calibration and controls
-
-All 672 retained final-evidence members are
-`RECOVERED_BY_PROVENANCE_SLICE`; `NOT_RECOVERED=0` and
-`RECOVERY_UNRESOLVED=0`. The prior 90-finding baseline reconciles as 31
-recovered dataflow findings and 59 boundary/policy findings not expected in
-dataflow. Its separate 15 `getXPDF` baseline remains `RECOVERY_UNRESOLVED`.
-All 16 provider-pointer records are root-accounted; both boundary records are
-explicit exemptions; policy records contain two boundary exemptions and three
-explicit unresolved policies.
-
-The 35 lexical `getXPDF` occurrences normalize to 35 unresolved units. They
-record declarations, definitions, calls/downstream uses, provider/caller
-context, and unresolved dynamic targets, but receive no final scientific
-classification.
-
-Generic-name negative controls reconcile exactly:
-
-| Identifier | Broad | Admitted with root path | Structurally excluded | Unresolved |
-|---|---:|---:|---:|---:|
-| `state` | 6,003 | 4 | 5,999 | 0 |
-| `size` | 4,563 | 0 | 4,563 | 0 |
-| `id` | 3,932 | 46 | 3,882 | 4 |
-| `push_back` | 3,198 | 6 | 3,192 | 0 |
-| `p` | 3,130 | 0 | 3,130 | 0 |
-| `Vec4` | 2,824 | 0 | 2,824 | 0 |
-
-Every admitted generic occurrence carries an explicit root path. No generic
-identifier is admitted merely because it is common or appears on a root line.
-
-## Derived readiness
-
-| Readiness condition | Actual result |
-|---|---|
-| broad authoritative occurrence replay passes | `true` |
-| provenance-slice generation is deterministic | `true` |
-| all broad occurrences have one structural disposition | `true` |
-| all PDF roots are accounted for | `true` |
-| historical final evidence has zero `NOT_RECOVERED` | `true` |
-| zero unexplained graph edges | `true` |
-| zero unresolved material provenance units | `false` |
-| zero machine-sliced material units awaiting review | `false` |
-| zero unresolved `getXPDF` units | `false` |
-| final reviewed evidence has valid coordinates and ownership | `true` |
-| zero heuristic-only final semantic/reachability results | `true` |
-| all authorization flags false | `true` |
-
-The broad 63,674 machine-occurrence count is no longer a readiness input once
-each occurrence has a structural disposition. The three false normalized-unit
-conditions derive:
+The broad syntactic search remains valid within its declared meaning:
 
 ```text
-D1D_A_RESULT = EVIDENCE_CORRECTION_REQUIRED
+source files              = 374
+searched identifiers      = 779
+broad raw occurrences     = 67,375
+P10 occurrences           = 63,763
+authoritative replay      = exact deterministic equality
 ```
 
-The minimal public reader patch remains `INSUFFICIENT` based only on retained
-source-reviewed internal sampling consumers; the conclusion is not generalized
-to machine-sliced units.
+Deterministic JSON regeneration also remains supported. Neither establishes a
+typed dependency graph.
 
-## Static-only validation record
+The immutable D1C result remains `FAIL`. The minimal public-reader patch remains
+`INSUFFICIENT` independently of provenance slice v1. That conclusion rests on
+the retained direct source-reviewed evidence that internal hard-process, ISR,
+remnant, probability, denominator, maximum, envelope, veto, and cumulative
+selection operations consume nonnegative PDF-derived quantities before an
+external final event weight could act. Audit v6 preserves all 672 direct
+source-reviewed members and all 66 curated denominator dispositions.
 
-The exact allowed checks are:
+Modified/forked-generator and alternative-generator possibilities remain not
+reviewed; the provenance failure neither rejects nor authorizes them.
+
+## Why provenance slice v1 failed
+
+The independent integrity review reproduced the serialized totals—939 roots,
+867 units, 1,841 nodes, and 1,221 edges—but rejected their scientific
+interpretation.
+
+### Root integrity
+
+| Finding | Count |
+|---|---:|
+| Syntactically confirmed roots | 720 |
+| Ordinary uses promoted to roots | 162 |
+| Call sites promoted to roots | 43 |
+| Unresolved roots | 14 |
+| Misclassified or unresolved | 219 |
+| Owner fields containing function symbols | 401 |
+| Generic rather than recovered declared types | 722 |
+| Reachability flags assigned by symbol/path substrings | 939 |
+
+Consequently, category non-emptiness is not proof of root completeness or
+typing. Reachability flags are heuristic diagnostics, not final configuration
+or call-path evidence.
+
+### Construction-circular historical calibration
+
+With global `xf`, `PDF`, and `PDFPtr` recovery disabled:
+
+```text
+LOCAL_TYPED_RECOVERED             = 0
+FALLBACK_XF_PDF_PDFPTR_ONLY       = 669
+NOT_RECOVERED                     = 3
+```
+
+The three dangling members are `CSG034.M006`, `CSG034.M007`, and
+`CSG034.M014`. All other historical paths select the same global `class PDF`
+root at `PartonDistributions.h:49`. Historical members are inserted before
+recovery is measured, historical names seed discovery, the same global-root
+selection assigns recovery status, and the v1 validator did not check the
+calibration unit references. The prior 672/672 figure is therefore a rejected,
+construction-circular diagnostic—not independent recovery.
+
+### Graph and edge support
+
+All 867 paths have length two. There are zero explicit multi-edge production
+dataflow paths. The rejected graph contains 669 historical global-root
+attachments, 103 synthetic root-to-unit paths, and 35 unresolved dynamic/alias
+paths.
+
+Production has zero `ASSIGNED_FROM`, `PASSED_AS_ARGUMENT`,
+`RECEIVED_AS_PARAMETER`, `FORWARDED_TO`, `CALLS`, or `MAY_ALIAS` edges; zero
+cache write/read chains; and zero caller-return propagation. Fixture behavior
+does not establish corpus production support.
+
+| Edge support finding | Count |
+|---|---:|
+| Source-supported | 314 |
+| Source supports target only | 33 |
+| Synthetic root attachment | 658 |
+| Wrong edge kind | 181 |
+| Unresolved support | 35 |
+
+The v1 endpoint/enum/nonempty-file checks were insufficient to validate the
+source meaning of an edge.
+
+### Occurrence and recall integrity
+
+Coordinate-level attribution admitted 209 same-line unrelated occurrences and
+11 declaration/comment occurrences. Negative-control wrong dispositions
+included four `state` and 28 `id` occurrences.
+
+The outside-slice challenge found 46 legitimate missed provenance occurrences
+at 32 coordinates and 189 provenance-unresolved occurrences at 139
+coordinates. Therefore 62,050 is retained only as the rejected prototype's
+outside disposition count; it is not a proven scientific exclusion total.
+
+### getXPDF and validator soundness
+
+The 35 `getXPDF` lexical occurrences comprise four mirrored inline wrapper
+definitions and 31 direct calls, normalizing to 33 semantic source units after
+mirror deduplication. They remain scientifically unresolved. Treating all 35
+as separate unresolved dynamic targets is not supported.
+
+Seven of eight adversarial fixtures were incorrectly accepted by v1. The
+accepted defects covered global fallback recovery, ordinary-use roots,
+unsupported root-to-unit edges, unresolved recovery, category-nonempty
+completeness, same-line contamination, and fixture-only interprocedural
+support. Only deterministic serialized drift was rejected.
+
+## Failed gates and removed claims
+
+The terminal failed gates are:
+
+```text
+typed_root_integrity
+local_provenance_recovery
+graph_path_support
+edge_source_support
+historical_calibration_independence
+occurrence_disposition_integrity
+outside_slice_recall
+reachability_evidence
+validator_soundness
+getxpdf_normalization
+```
+
+Audit v6 removes v1 readiness conditions and does not claim that all roots are
+typed, paths establish dataflow, historical evidence was independently
+recovered, outside occurrences were scientifically excluded, negative controls
+prove occurrence attribution, or the 163 machine units form a valid review
+queue. The v1 totals remain only under
+`REJECTED_DIAGNOSTIC_NOT_READINESS_EVIDENCE`.
+
+## Static-only validation
 
 ```text
 python3 scripts/phase1bd_d1d_pythia_semantics_audit.py \
@@ -186,35 +186,45 @@ python3 scripts/phase1bd_d1d_pythia_semantics_audit.py \
   --output-search-manifest \
     docs/phase1bd_d1d_pythia_semantics_search_manifest.json
 
-python3 scripts/phase1bd_d1d_pythia_pdf_provenance_slice.py \
-  --validate \
-  --input-audit docs/phase1bd_d1d_pythia_semantics_audit.json \
-  --input-search-manifest \
-    docs/phase1bd_d1d_pythia_semantics_search_manifest.json \
-  --output docs/phase1bd_d1d_pythia_pdf_provenance_slice.json
+python3 scripts/phase1bd_d1d_pythia_pdf_provenance_slice.py --validate
+
+python3 scripts/phase1bd_d1d_pythia_provenance_decision.py --validate
 
 python3 -m json.tool docs/phase1bd_d1d_pythia_semantics_audit.json >/dev/null
 python3 -m json.tool \
   docs/phase1bd_d1d_pythia_semantics_search_manifest.json >/dev/null
 python3 -m json.tool \
   docs/phase1bd_d1d_pythia_pdf_provenance_slice.json >/dev/null
+python3 -m json.tool \
+  docs/phase1bd_d1d_pythia_provenance_slice_decision.json >/dev/null
 python3 -m pytest -q analysis/tests/test_d1d_semantics_audit.py
 cargo fmt --all -- --check
 git diff --check
 ```
 
-These checks are static only. No native physics validation is relevant or
-permitted for this evidence-framework task.
+These checks are static only. The frozen broad-manifest and provenance-slice
+hashes are verified before and after validation.
 
-## Unresolved limitations and one next step
+| Check | Result |
+|---|---|
+| Semantics audit replay/validator | PASS; 374 files, 779 searched identifiers, 67,375 raw occurrences, exact set/order equality |
+| Rejected historical slice identity validator | PASS; deterministic serialized identity only, not scientific acceptance |
+| Final provenance decision validator | PASS; ten failed gates and all authorization flags false |
+| Four `json.tool` parses | PASS |
+| Focused Python tests | PASS; 42 passed |
+| `cargo fmt --all -- --check` | PASS |
+| `git diff --check` | PASS |
 
-The tokenizer deliberately leaves 35 dynamic/alias graph edges and the 35
-`getXPDF` units unresolved. Source review is still required for 163 normalized
-machine-sliced confirmed units plus the unresolved units. Runtime PDF-pointer
-identity and alpha_s routing remain policy-deferred. There is no runtime
-consumer coverage.
+The WSL system Python did not provide pytest, so pytest 9.1.1 was installed to
+an isolated `/tmp` target and exposed through `PYTHONPATH` only for the exact
+`python3 -m pytest` invocation. No repository or system package was changed.
 
-The one next phase-scoped action is source review of the normalized provenance
-units, including the unresolved `getXPDF`, alias, pointer, and policy paths.
-Do not begin architecture comparison, prototype work, issue #10, or D2 until
-the D1D-A acceptance conditions pass.
+## Next step
+
+```text
+SCIENTIFIC_REVIEW_AND_MERGE_NEGATIVE_D1D_A_RECORD
+```
+
+This is a review/merge step for the negative record, not authorization for
+architecture comparison or another prototype. Issue #10 remains blocked and
+D2 remains unauthorized.
