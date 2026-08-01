@@ -178,17 +178,78 @@
   engineering evidence but is not selected for production coupling. Other
   modified or custom generator interfaces are neither rejected nor authorized
   by issue #39.
+- Issue #42 remains planning-only work. The byte-identical v3 broad search uses
+  `PYTHON_REGEX_OCCURRENCE_ENGINE_V1` over 374 installed/release PYTHIA 8.312
+  files. It searches all 779 derived identifiers and replays 67,375 raw and
+  63,763 P10 syntactic occurrences with exact deterministic equality. This
+  syntactic closure remains supported.
+- The separate provenance slice v1 is now a deterministic rejected diagnostic
+  prototype. Its independent integrity review found 720 syntactically
+  confirmed roots, 162 ordinary uses promoted to roots, 43 calls promoted to
+  roots, and 14 unresolved roots. All 939 reachability flags came from
+  symbol/filename heuristics.
+- With global fallback disabled, zero historical members had locally typed
+  recovery: 669 paths selected the same global `class PDF` root and three
+  calibration records (`CSG034.M006`, `CSG034.M007`, `CSG034.M014`) referenced
+  absent units. The former 672/672 claim was construction-circular and is not
+  readiness evidence.
+- All 867 serialized paths have length two. Production contains no explicit
+  multi-edge dataflow, assignment, argument/parameter, caller-return, cache
+  write/read, forwarding, call, or alias propagation. Of 1,221 edges, only 314
+  had source-supported meaning; 658 were synthetic root attachments, 181 had
+  the wrong kind, 33 supported only the target, and 35 remained unresolved.
+- Coordinate-level attribution admitted 209 same-line unrelated and 11
+  declaration/comment occurrences, including wrong dispositions for four
+  `state` and 28 `id` controls. The outside-slice challenge found 46 missed
+  provenance occurrences at 32 coordinates and 189 unresolved occurrences at
+  139 coordinates.
+- The 35 lexical `getXPDF` occurrences are four mirrored inline definitions and
+  31 direct calls, giving 33 mirror-deduplicated semantic source units. They
+  remain scientifically unresolved; 35 separate dynamic-target claims are not
+  supported.
+- Seven of eight adversarial validator cases were incorrectly accepted. Audit
+  v6 therefore removes v1 readiness, independent-recovery, outside-closure,
+  negative-control, and valid-review-queue claims. V1 totals remain only under
+  `REJECTED_DIAGNOSTIC_NOT_READINESS_EVIDENCE`.
+- The 672 retained direct source-reviewed uses still pass brace-tracked
+  function ownership, and all 66 denominator dispositions retain explicit
+  curated coordinates and rationales. Those records—not provenance slice
+  v1—support the minimal-reader conclusion.
+- Audit v6 and the v1 decision artifact finalize
+  `PROVENANCE_SLICE_V1_DECISION = FAIL` and `D1D_A_FINAL_DECISION = FAIL` at
+  failed gate `provenance_evidence_integrity`. Architecture comparison is not
+  ready.
+- The evaluated audit-v5 input is bound by an immutable source-commit,
+  repository-path, Git-blob, schema, and content-SHA-256 tuple. The historical
+  source is commit `e197509928d5ccbbf7765956688522f919ccecec`, path
+  `docs/phase1bd_d1d_pythia_semantics_audit.json`, and blob
+  `b152650e4e21e4ac77cc5cbab2ca8d2c0aee1987`; the same live path now contains
+  audit v6 and is not used as the v5 identity.
+- D1D-A finds that removing only the public `PDF::xf`, `PDF::xfVal`, and
+  `PDF::xfSea` positivity transformations is `INSUFFICIENT`: prospective-HERA
+  hard-process, ISR, and beam-remnant paths require nonnegative rates,
+  denominators, probabilities, maxima, or monotone cumulative weights.
+- For confirmed audited reachable paths, an external signed event weight
+  cannot repair a sign that already changed an internal selection
+  probability, veto, channel/remnant choice, maximum, or envelope. This claim
+  is not generalized to any machine-unreviewed candidate. Existing signed Les
+  Houches event-weight handling is not evidence for negative-PDF sampling.
+- The final decision uses `EVIDENCE_INTEGRITY_FAIL_PRECEDENCE`. No
+  PYTHIA fork, signed-weight design, alternate generator, architecture,
+  implementation, or prototype is selected or authorized. PR #43 remains open
+  and draft; issue #10 and D2 remain blocked.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-A new reviewed architecture decision is required before any further
-generator-coupling implementation. It may consider a versioned minimal PYTHIA
-fork or another signed-value generator interface, but must separately address
-reproducibility, upstream drift, CI, deployment, and validation.
+SCIENTIFIC_REVIEW_AND_MERGE_NEGATIVE_D1D_A_RECORD
 ```
+
+This is review/merge of the negative record, not authorization to review the
+163 rejected-prototype units, compare architectures, implement a prototype,
+advance issue #10, or begin D2.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
@@ -212,6 +273,9 @@ unimplemented hypotheses.
 - Do not proceed from D1C-B to runtime consumer instrumentation using the
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
+- Issue #42 and D1D-A are planning only. The current result is
+  `EVIDENCE_CORRECTION_REQUIRED`; architecture comparison, implementation,
+  prototypes, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
