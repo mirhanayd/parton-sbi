@@ -274,22 +274,50 @@
   validated complete consumer/dataflow graph; or (4) a separately reviewed and
   approved change to the PDF-family or inference contract. A reopen condition
   is not an authorization.
-- All ten D1D-B authorization flags are false. Issue #42 remains open and in
-  planning review; Project fields are unchanged. Architecture comparison was
-  not promoted to readiness, issue #10 stays blocked, and D2 remains
-  unauthorized.
+- All ten D1D-B authorization flags are false. Issue #42 is closed as completed
+  planning work. Architecture comparison was not promoted to readiness, issue
+  #10 stays blocked, and D2 remains unauthorized.
+- Phase 1B-D1E records the planning-only result
+  `FEASIBLE_FOR_SEPARATE_STATIC_EVIDENCE_TASK` for a separately reviewed
+  AST-grounded PDF-consumer graph. The selected feasibility reference is
+  LLVM/Clang LibTooling 18.1.8 at commit
+  `3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff`; this is not permission to
+  acquire, install, or run it.
+- The authoritative future source contract has one semantic tree,
+  `.external/src/releases-pythia8312`, with 127 headers and 120 core
+  translation units. The 127 byte-identical installed headers are identity
+  evidence only and cannot create duplicate semantic nodes. A future
+  repository-owned source-only compilation database must use deterministic
+  argv arrays and fail closed on every missing or unparsable translation unit.
+- Typed declarations, definitions, assignments, call/parameter/return flow,
+  member/cache flow, and explicit unresolved states replace every prohibited
+  identifier, filename, historical, global, or synthetic fallback. The 672
+  historical records remain post-construction holdout evidence only; `state`,
+  `size`, `id`, `push_back`, `p`, and `Vec4` remain mandatory exact-occurrence
+  negative controls.
+- Static evidence cannot establish runtime pointer installation, post-init
+  substitution, configuration-selected targets, query envelopes, or
+  thread/process behavior. It also cannot solve signed-rate or signed-Sudakov
+  mathematics. All 18 future acceptance gates must pass before a graph can
+  claim completeness.
+- The bounded future estimate is 7.0 implementation person-weeks under an
+  8.0-week cap, plus 2.0 independent-review person-weeks under a 2.0-week cap.
+  No parser or graph was implemented, no compilation database or production
+  nodes/edges were generated, and no static-evidence implementation task is
+  authorized by D1E. New issue #45 remains open, `Planning Only` work.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-SCIENTIFIC_REVIEW_OF_EVIDENCE_DERIVED_D1D_B_DECISION
+REVIEW_D1E_AST_CONSUMER_GRAPH_FEASIBILITY_CONTRACT
 ```
 
-This is review of corrected ADR-008 and the pinned, evidence-derived v3
-planning artifact. It does not authorize implementation, a generator
-prototype, architecture selection, advancement of issue #10, or D2.
+This is review of ADR-009 and the v1 planning artifact. Only a later explicit
+decision may open a separate static-evidence implementation task. This review
+does not authorize tool installation, parser or graph implementation, a
+generator prototype, architecture selection, advancement of issue #10, or D2.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
@@ -313,10 +341,11 @@ unimplemented hypotheses.
 - Do not proceed from D1C-B to runtime consumer instrumentation using the
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
-- Issue #42 remains planning only. D1D-A is final `FAIL`, D1D-B is proposed
-  `INCONCLUSIVE` with an interim non-authorizing pause,
-  architecture-comparison readiness remains false, and all implementations,
-  prototypes, and D2 remain blocked and unauthorized.
+- Issue #42 is closed as completed D1D planning. D1D-A is final `FAIL`, D1D-B
+  is final `INCONCLUSIVE` with an interim non-authorizing pause, and D1E is a
+  feasibility result only. Architecture-comparison readiness remains false;
+  issue #45 authorizes planning only, while all implementations, prototypes,
+  issue #10, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is

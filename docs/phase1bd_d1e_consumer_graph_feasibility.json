@@ -1,0 +1,2630 @@
+{
+  "acceptance_gates": [
+    {
+      "binding": true,
+      "gate_id": "G01_AUTHORITATIVE_CORPUS_IDENTITY_COMPLETE",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Authoritative source identity, inventory, mirrors, and exclusions reproduce exactly."
+    },
+    {
+      "binding": true,
+      "gate_id": "G02_EVERY_REQUIRED_TRANSLATION_UNIT_PARSED",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "All 120 required translation units parse; one miss is a blocking failure."
+    },
+    {
+      "binding": true,
+      "gate_id": "G03_COMPILE_COMMAND_REPLAY_DETERMINISTIC",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Canonical compile argv and environment replay with exact set and byte equality."
+    },
+    {
+      "binding": true,
+      "gate_id": "G04_TYPED_ROOTS_COMPLETE",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "All required roots arise from typed declarations, definitions, or assignments."
+    },
+    {
+      "binding": true,
+      "gate_id": "G05_NO_NAME_OR_HISTORICAL_FALLBACK",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Identifier, filename, historical, global, and synthetic fallback counts are zero."
+    },
+    {
+      "binding": true,
+      "gate_id": "G06_EVERY_EDGE_SOURCE_SUPPORTED",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Every graph edge has exact source support and the required evidence fields."
+    },
+    {
+      "binding": true,
+      "gate_id": "G07_INTERPROCEDURAL_ARGUMENT_PARAMETER_RETURN_FLOW",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Argument-to-parameter and return-to-caller flows are implemented and tested on corpus code."
+    },
+    {
+      "binding": true,
+      "gate_id": "G08_MEMBER_CACHE_WRITE_READ_FLOW",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Member and cache writes connect to reads across functions without spelling inference."
+    },
+    {
+      "binding": true,
+      "gate_id": "G09_ALIAS_AND_VIRTUAL_TARGETS_RESOLVED_OR_BLOCKING",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Unresolved aliases and virtual targets either resolve or block completeness."
+    },
+    {
+      "binding": true,
+      "gate_id": "G10_SIXTEEN_POINTER_ROLES_LOCALLY_ACCOUNTED",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "All sixteen BeamSetup PDF pointer roles have local typed installation/accounting paths."
+    },
+    {
+      "binding": true,
+      "gate_id": "G11_ALPHA_S_ROUTING_ACCOUNTED",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "PDF-object alpha_s providers and routing paths are represented or block closure."
+    },
+    {
+      "binding": true,
+      "gate_id": "G12_HARD_ISR_REMNANT_PATHS_REPRESENTED",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Hard-process NC, ISR/backward-evolution, and remnant paths are represented."
+    },
+    {
+      "binding": true,
+      "gate_id": "G13_HOLDOUT_RECOVERY_ZERO_UNRESOLVED_OR_NOT_RECOVERED",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "The 672-member holdout has zero binding UNRESOLVED and NOT_RECOVERED entries."
+    },
+    {
+      "binding": true,
+      "gate_id": "G14_NEGATIVE_CONTROLS_PASS",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "All generic-name and co-located-occurrence controls pass."
+    },
+    {
+      "binding": true,
+      "gate_id": "G15_FALSE_NEGATIVE_CHALLENGE_NO_MATERIAL_MISS",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Independent neutral-name/interprocedural recall challenge finds no material miss."
+    },
+    {
+      "binding": true,
+      "gate_id": "G16_GRAPH_GENERATION_SERIALIZATION_DETERMINISTIC",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Two independent graph generations serialize byte-identically."
+    },
+    {
+      "binding": true,
+      "gate_id": "G17_INDEPENDENT_REVIEW_REPRODUCES",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "An independent reviewer reproduces source, commands, graph, and calibration."
+    },
+    {
+      "binding": true,
+      "gate_id": "G18_RUNTIME_LIMITATIONS_NOT_STATIC_CLOSURE",
+      "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
+      "requirement": "Runtime-only properties remain explicitly unresolved and never satisfy a static gate."
+    }
+  ],
+  "authoritative_source_contract": {
+    "archive_sha256": "c1a33aa5fa15e6b70d7946ce6d237246842887ec84ea0b35dfc2535c868a2770",
+    "archive_url": "https://gitlab.com/Pythia8/releases/-/archive/pythia8312/releases-pythia8312.tar.gz",
+    "authoritative_source_root": ".external/src/releases-pythia8312",
+    "cxx_standard": "c++11",
+    "file_inventory": [
+      {
+        "bytes": 17627,
+        "evidence_file_id": "F0128",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Analysis.h",
+        "semantic_file_id": "PY8312-0001",
+        "sha256": "72625c2acf206ea7c01138f35a0660eda8b30bbfd949fcacfe9d7d35de850ed6"
+      },
+      {
+        "bytes": 31970,
+        "evidence_file_id": "F0129",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Basics.h",
+        "semantic_file_id": "PY8312-0002",
+        "sha256": "cab0d583f0423bfe530b3bd412036e18e7dfc42eda7792a2ae50605ae6825e5c"
+      },
+      {
+        "bytes": 22866,
+        "evidence_file_id": "F0130",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/BeamParticle.h",
+        "semantic_file_id": "PY8312-0003",
+        "sha256": "e3000aaa936892f8807deacfc993abc40d9d8cfc51ed218fae921232f3593b37"
+      },
+      {
+        "bytes": 4514,
+        "evidence_file_id": "F0131",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/BeamRemnants.h",
+        "semantic_file_id": "PY8312-0004",
+        "sha256": "3baa0854f2c62df229360b7c6329a90b0a07482e5eaa73a5aaf93d6014045081"
+      },
+      {
+        "bytes": 7310,
+        "evidence_file_id": "F0132",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/BeamSetup.h",
+        "semantic_file_id": "PY8312-0005",
+        "sha256": "035564629890e34f947c68d67020abd7edcb9ca04ad0b442d0c10743a3fee1f6"
+      },
+      {
+        "bytes": 2310,
+        "evidence_file_id": "F0133",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/BeamShape.h",
+        "semantic_file_id": "PY8312-0006",
+        "sha256": "fadcb861ff69199ac432b0ec252ab61a7b4932839040fe4152978b2d91c42e8d"
+      },
+      {
+        "bytes": 2857,
+        "evidence_file_id": "F0134",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/BoseEinstein.h",
+        "semantic_file_id": "PY8312-0007",
+        "sha256": "70eba30ca65d86d6ff6dc5b635500f6d1d38bff82341cc27f16d7c52cef72e04"
+      },
+      {
+        "bytes": 16022,
+        "evidence_file_id": "F0135",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ColourReconnection.h",
+        "semantic_file_id": "PY8312-0008",
+        "sha256": "16c4eb1ac5cbe47b9ac0df1163f782ba522083096e3eff0c19ab3514aa2b8eb5"
+      },
+      {
+        "bytes": 1672,
+        "evidence_file_id": "F0136",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ColourTracing.h",
+        "semantic_file_id": "PY8312-0009",
+        "sha256": "4bf52f02f0f20cdaee4fbecf0434fb477f0fd79d6a666849f04163957437bcd3"
+      },
+      {
+        "bytes": 2851,
+        "evidence_file_id": "F0137",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DeuteronProduction.h",
+        "semantic_file_id": "PY8312-0010",
+        "sha256": "a0ce8cfd19c99070f9d0b44bf70d85a07d3db99d4cca5eb02eccbdba5210e939"
+      },
+      {
+        "bytes": 5459,
+        "evidence_file_id": "F0138",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Dire.h",
+        "semantic_file_id": "PY8312-0011",
+        "sha256": "c5e7ce72937afe18c0adf3ce3c064010aa28c8fc29b01376a01ddf9ef091b769"
+      },
+      {
+        "bytes": 12497,
+        "evidence_file_id": "F0139",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireBasics.h",
+        "semantic_file_id": "PY8312-0012",
+        "sha256": "c253423743703e7830ec17faeb0b44c6c7538080ba66ddc9bfe245546b0c4a83"
+      },
+      {
+        "bytes": 40512,
+        "evidence_file_id": "F0140",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireHistory.h",
+        "semantic_file_id": "PY8312-0013",
+        "sha256": "9c2e40f6ee60bfdd172660464c0736b7c1b036279ed9a2050548a4c19251e838"
+      },
+      {
+        "bytes": 3472,
+        "evidence_file_id": "F0141",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireHooks.h",
+        "semantic_file_id": "PY8312-0014",
+        "sha256": "0ed66c9b9c38ef71cb4f9ea480fdf988391576c25cf1c037dd97fea948f49d28"
+      },
+      {
+        "bytes": 8237,
+        "evidence_file_id": "F0142",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireMerging.h",
+        "semantic_file_id": "PY8312-0015",
+        "sha256": "084b3b6af16142b74632fbe2a68a3ecfca48a2a16bfdb00f4f4227b342671093"
+      },
+      {
+        "bytes": 5879,
+        "evidence_file_id": "F0143",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireMergingHooks.h",
+        "semantic_file_id": "PY8312-0016",
+        "sha256": "833528358f5338012c0ed1381486ea4eaab35cd894f1c5992bb90f8f30ce3fcb"
+      },
+      {
+        "bytes": 32205,
+        "evidence_file_id": "F0144",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSpace.h",
+        "semantic_file_id": "PY8312-0017",
+        "sha256": "252348dbb932df4f224fea4590c4f61449c2e23db882ab9e31fbec3e7cdaf1ae"
+      },
+      {
+        "bytes": 18603,
+        "evidence_file_id": "F0145",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplitInfo.h",
+        "semantic_file_id": "PY8312-0018",
+        "sha256": "b8038c3126bf26022ae75db515121f17753cd9fdc1d92b97465849e88f2780ce"
+      },
+      {
+        "bytes": 7101,
+        "evidence_file_id": "F0146",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplittingLibrary.h",
+        "semantic_file_id": "PY8312-0019",
+        "sha256": "5f6e6f162bb80080b1e474c3a5e70371f5069acb9b43c3acb9ffa21fd4ca00c0"
+      },
+      {
+        "bytes": 10648,
+        "evidence_file_id": "F0147",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplittings.h",
+        "semantic_file_id": "PY8312-0020",
+        "sha256": "5395d2b391e6e5a7c2c16d2ef7bc91dceaae386a10f067eac99a1a5736cecf08"
+      },
+      {
+        "bytes": 22865,
+        "evidence_file_id": "F0148",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplittingsEW.h",
+        "semantic_file_id": "PY8312-0021",
+        "sha256": "224572c4a2b9b4df0ca16235bec22cfb9896a2f17e8bfa1ee0f2826372be8706"
+      },
+      {
+        "bytes": 52522,
+        "evidence_file_id": "F0149",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplittingsQCD.h",
+        "semantic_file_id": "PY8312-0022",
+        "sha256": "2e71047a3248f64ed6b61e54409d8862f054974de129a2ede1115ed3e73954be"
+      },
+      {
+        "bytes": 33619,
+        "evidence_file_id": "F0150",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplittingsQED.h",
+        "semantic_file_id": "PY8312-0023",
+        "sha256": "adf54915baf31d46305074a9a17bd55676f9c226c532599f7ccde53fb363bd04"
+      },
+      {
+        "bytes": 29019,
+        "evidence_file_id": "F0151",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireSplittingsU1new.h",
+        "semantic_file_id": "PY8312-0024",
+        "sha256": "02c2e4a5fba6cbdcf8f9f1f6289d32adf960b51ce45231a973e6cb85c8a13a16"
+      },
+      {
+        "bytes": 32032,
+        "evidence_file_id": "F0152",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireTimes.h",
+        "semantic_file_id": "PY8312-0025",
+        "sha256": "af8e86bf5b323aeb3a139a629260f4a0302b1f91efa0efb2a619f92bb37eb0fb"
+      },
+      {
+        "bytes": 7768,
+        "evidence_file_id": "F0153",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/DireWeightContainer.h",
+        "semantic_file_id": "PY8312-0026",
+        "sha256": "0920c47f34706d05b661971064d566352837d4643080065985bbc2cda7596885"
+      },
+      {
+        "bytes": 31805,
+        "evidence_file_id": "F0154",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Event.h",
+        "semantic_file_id": "PY8312-0027",
+        "sha256": "84bbfb76506e3dd9e30e0fb7461ba30119d5e036890d95077ae33dd33fd2fe97"
+      },
+      {
+        "bytes": 5132,
+        "evidence_file_id": "F0155",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ExternalMEs.h",
+        "semantic_file_id": "PY8312-0028",
+        "sha256": "e88344409f596270af674609a1401e4b431c464a3da3e7a94422beb851e50a36"
+      },
+      {
+        "bytes": 84542,
+        "evidence_file_id": "F0156",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/FJcore.h",
+        "semantic_file_id": "PY8312-0029",
+        "sha256": "8f95ea23af09123d79f5cec0d7a87a121f50cd5a71aa1bab6ad0d474e07d15b5"
+      },
+      {
+        "bytes": 14772,
+        "evidence_file_id": "F0157",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/FragmentationFlavZpT.h",
+        "semantic_file_id": "PY8312-0030",
+        "sha256": "2bcefc9440140ef2c628c7b9192196df7434ad21cf45142fc585500a514a4b5e"
+      },
+      {
+        "bytes": 8733,
+        "evidence_file_id": "F0158",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/FragmentationSystems.h",
+        "semantic_file_id": "PY8312-0031",
+        "sha256": "eac4d121aac724a0f07d27d3e770bc40ea5d084a4d8015b3c9ff49b1bc312d58"
+      },
+      {
+        "bytes": 3286,
+        "evidence_file_id": "F0159",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/GammaKinematics.h",
+        "semantic_file_id": "PY8312-0032",
+        "sha256": "7c959758ff0122ea9d29c6437013b62169b5954aa69c7bae12713f8368d4f546"
+      },
+      {
+        "bytes": 2086,
+        "evidence_file_id": "F0160",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HIBasics.h",
+        "semantic_file_id": "PY8312-0033",
+        "sha256": "8e7efcc22ea2b2f5e8af4bb161a37fb32404083d960aa485fa774f86d5818549"
+      },
+      {
+        "bytes": 10157,
+        "evidence_file_id": "F0161",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HIInfo.h",
+        "semantic_file_id": "PY8312-0034",
+        "sha256": "aa9efc2d9b9f3fdae1f4becd91e2c2f7b1dcc22810c79647598631c8e0fd9b63"
+      },
+      {
+        "bytes": 13745,
+        "evidence_file_id": "F0162",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HINucleusModel.h",
+        "semantic_file_id": "PY8312-0035",
+        "sha256": "37cba3bb0e9acc06926694faca8c5cd066874f3e98262f6d7f315e89345c367c"
+      },
+      {
+        "bytes": 18735,
+        "evidence_file_id": "F0163",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HISubCollisionModel.h",
+        "semantic_file_id": "PY8312-0036",
+        "sha256": "d3aa33fb921c4a03b54cf7bb3934b73cad8df4543c58b662b5755d4fe91dc6a9"
+      },
+      {
+        "bytes": 7466,
+        "evidence_file_id": "F0164",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HadronLevel.h",
+        "semantic_file_id": "PY8312-0037",
+        "sha256": "b540a64a80b529460223224aa0541bd4c6ddcd3a2a66c9d9b86378fc9b2f4677"
+      },
+      {
+        "bytes": 4796,
+        "evidence_file_id": "F0165",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HadronWidths.h",
+        "semantic_file_id": "PY8312-0038",
+        "sha256": "aec90595a93a3f99691ae9e4d33cd68a209b2d345d1dd80abd92d2a80e4d49bd"
+      },
+      {
+        "bytes": 3221,
+        "evidence_file_id": "F0166",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HardDiffraction.h",
+        "semantic_file_id": "PY8312-0039",
+        "sha256": "a5e95331cd70bba7ccac31882182e0e264add89ef477c127171837496e9789df"
+      },
+      {
+        "bytes": 15235,
+        "evidence_file_id": "F0167",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HeavyIons.h",
+        "semantic_file_id": "PY8312-0040",
+        "sha256": "ddb3c952e210539c7002aa116e7cafb934cf7e1ed357e3bec0162a39d2c14ec4"
+      },
+      {
+        "bytes": 8013,
+        "evidence_file_id": "F0168",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HelicityBasics.h",
+        "semantic_file_id": "PY8312-0041",
+        "sha256": "e772cd9b2072b6fc8cfe8d35f653abd39a45b47f05d4266999a37053272f5f1d"
+      },
+      {
+        "bytes": 17696,
+        "evidence_file_id": "F0169",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HelicityMatrixElements.h",
+        "semantic_file_id": "PY8312-0042",
+        "sha256": "556739e1a4c0566be1e6033e224aef1ad1946657c42404e60847f35bb930bdf5"
+      },
+      {
+        "bytes": 5044,
+        "evidence_file_id": "F0170",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/HiddenValleyFragmentation.h",
+        "semantic_file_id": "PY8312-0043",
+        "sha256": "33b8e17e362bbb48c34f5500034fa2458831acbeac11d5f9275ee55d53683c89"
+      },
+      {
+        "bytes": 41353,
+        "evidence_file_id": "F0171",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/History.h",
+        "semantic_file_id": "PY8312-0044",
+        "sha256": "bb7a70619dea181101c3ea913e0cc24d498c6d65d47cfd279879a1c2783a7d20"
+      },
+      {
+        "bytes": 32945,
+        "evidence_file_id": "F0172",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Info.h",
+        "semantic_file_id": "PY8312-0045",
+        "sha256": "119c5bacfe55f722d4cdb2c129405d06e24c93e145a1d6371755371838614005"
+      },
+      {
+        "bytes": 3128,
+        "evidence_file_id": "F0173",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/JunctionSplitting.h",
+        "semantic_file_id": "PY8312-0046",
+        "sha256": "9b6d6c4c63d7d83c92e0bbd78ce5fda70c062762cb198d0d4654ce43520d8fd9"
+      },
+      {
+        "bytes": 30002,
+        "evidence_file_id": "F0174",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/LHEF3.h",
+        "semantic_file_id": "PY8312-0047",
+        "sha256": "d5a61fc6853c1457e07997a6e380197fc29e6ced5dca36a94dbe42c8b97261a2"
+      },
+      {
+        "bytes": 21282,
+        "evidence_file_id": "F0175",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/LesHouches.h",
+        "semantic_file_id": "PY8312-0048",
+        "sha256": "32097db512b0833ff5974e4b86ba0bf1f01d16763bd66f43dbac47135eb7dbe6"
+      },
+      {
+        "bytes": 6362,
+        "evidence_file_id": "F0176",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Logger.h",
+        "semantic_file_id": "PY8312-0049",
+        "sha256": "85b5de0dfa7d211632ad0963ff0f845358a336d9b04f5902d6cff6acddb0c9bf"
+      },
+      {
+        "bytes": 4566,
+        "evidence_file_id": "F0177",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/LowEnergyProcess.h",
+        "semantic_file_id": "PY8312-0050",
+        "sha256": "a6e0fa863a459823d75191e8e06c526833469b424221b3958633072cf23159c1"
+      },
+      {
+        "bytes": 8906,
+        "evidence_file_id": "F0178",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/MathTools.h",
+        "semantic_file_id": "PY8312-0051",
+        "sha256": "09368b95c9794c0ba9517903e819b6acfbec47e9835e997527a683f771eb0044"
+      },
+      {
+        "bytes": 4445,
+        "evidence_file_id": "F0179",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Merging.h",
+        "semantic_file_id": "PY8312-0052",
+        "sha256": "2b6710d76a727915eb7f583c41a7ad75217c4f5d5284e664a24036055dd2643b"
+      },
+      {
+        "bytes": 36858,
+        "evidence_file_id": "F0180",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/MergingHooks.h",
+        "semantic_file_id": "PY8312-0053",
+        "sha256": "14e84193269ce4cd4c157f98bda93d83d00aba55d70cb3576dcea7d3e8a290e8"
+      },
+      {
+        "bytes": 5039,
+        "evidence_file_id": "F0181",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/MiniStringFragmentation.h",
+        "semantic_file_id": "PY8312-0054",
+        "sha256": "8c0ed4e2a1ea1f3e74d561a5075b72673072575dee43508a94c56b0775f3eb05"
+      },
+      {
+        "bytes": 15391,
+        "evidence_file_id": "F0182",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/MultipartonInteractions.h",
+        "semantic_file_id": "PY8312-0055",
+        "sha256": "fcb76298f3d93055f5d15fafcd4b11d578fffd9046a39c5fb55925714b4be10b"
+      },
+      {
+        "bytes": 3565,
+        "evidence_file_id": "F0183",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/NucleonExcitations.h",
+        "semantic_file_id": "PY8312-0056",
+        "sha256": "6b55abc71275e7d06e08022a8a84fa5b9e3bb14d7ebaa31ed33555ebd228997f"
+      },
+      {
+        "bytes": 39794,
+        "evidence_file_id": "F0184",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ParticleData.h",
+        "semantic_file_id": "PY8312-0057",
+        "sha256": "15a47e89ebe302a81ad501df83628e819191c0dccf25b39aaa04d552d29ed453"
+      },
+      {
+        "bytes": 5331,
+        "evidence_file_id": "F0185",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ParticleDecays.h",
+        "semantic_file_id": "PY8312-0058",
+        "sha256": "969a9d904dad5d57ec39d308311c10be58abf5d4ed7b3573627ef14c1e615d76"
+      },
+      {
+        "bytes": 38376,
+        "evidence_file_id": "F0186",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PartonDistributions.h",
+        "semantic_file_id": "PY8312-0059",
+        "sha256": "1659e3506bacdea51c5e3ac2edfafe92b05acd1805caaf0604b051f9458e34fd"
+      },
+      {
+        "bytes": 9668,
+        "evidence_file_id": "F0187",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PartonLevel.h",
+        "semantic_file_id": "PY8312-0060",
+        "sha256": "7a2c0b9464b91223d39955eb5c782ac11e72151ea8f590df7a01c792a1f3f448"
+      },
+      {
+        "bytes": 3939,
+        "evidence_file_id": "F0188",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PartonSystems.h",
+        "semantic_file_id": "PY8312-0061",
+        "sha256": "fc87fdce6bdc317c21f54c9f6f90eb56453031949aedda7128b865cb7984e584"
+      },
+      {
+        "bytes": 2005,
+        "evidence_file_id": "F0189",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PartonVertex.h",
+        "semantic_file_id": "PY8312-0062",
+        "sha256": "ca07f80496b2ffadfaf51b964fce1924f487f535dfd9de61fb2d1f900e77f5b3"
+      },
+      {
+        "bytes": 23934,
+        "evidence_file_id": "F0190",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PhaseSpace.h",
+        "semantic_file_id": "PY8312-0063",
+        "sha256": "c34e0205fb86aa87d2bf2e3b5af8c88500ca6013e9f2a7b4ecbca592ec8c4f50"
+      },
+      {
+        "bytes": 4885,
+        "evidence_file_id": "F0191",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PhysicsBase.h",
+        "semantic_file_id": "PY8312-0064",
+        "sha256": "f5bac5dbddd46bb5e5f6c04de235e45c4981eaa0a776f4b23a1c1dbf717179d3"
+      },
+      {
+        "bytes": 7665,
+        "evidence_file_id": "F0192",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Plugins.h",
+        "semantic_file_id": "PY8312-0065",
+        "sha256": "aea8fa972b94d913aa922b08cf895d9cc981fe9fe5071ca49c40dd0e6ce2abfe"
+      },
+      {
+        "bytes": 9888,
+        "evidence_file_id": "F0193",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ProcessContainer.h",
+        "semantic_file_id": "PY8312-0066",
+        "sha256": "60ca3be6f9e682229220b998638c0748ce6c6b9fc51fe7a655419caecbe987c8"
+      },
+      {
+        "bytes": 4829,
+        "evidence_file_id": "F0194",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ProcessLevel.h",
+        "semantic_file_id": "PY8312-0067",
+        "sha256": "3debc983df5f915cd538b9975bd8894f9f2229140219ad03a2dd21da2a69cd83"
+      },
+      {
+        "bytes": 21298,
+        "evidence_file_id": "F0195",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Pythia.h",
+        "semantic_file_id": "PY8312-0068",
+        "sha256": "b628b0f1fd7cc1dfa36c17ad343329ba9b69b4c9ea1d8dc69de322f6036f45be"
+      },
+      {
+        "bytes": 714,
+        "evidence_file_id": "F0196",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PythiaComplex.h",
+        "semantic_file_id": "PY8312-0069",
+        "sha256": "d576f86611f0aa8586f7c6e2648bfbe3f6b3450ffacc1f4450a60f80ff14bd82"
+      },
+      {
+        "bytes": 2959,
+        "evidence_file_id": "F0197",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PythiaParallel.h",
+        "semantic_file_id": "PY8312-0070",
+        "sha256": "912005d5afaad8baae1a266aca28df686023d3d2841fa2ac4a85fc3bd706e411"
+      },
+      {
+        "bytes": 9917,
+        "evidence_file_id": "F0198",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/PythiaStdlib.h",
+        "semantic_file_id": "PY8312-0071",
+        "sha256": "f827b9701811760a188e43d427bd6df11f079d41eb2e9167d642c2c23a367174"
+      },
+      {
+        "bytes": 4131,
+        "evidence_file_id": "F0199",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/RHadrons.h",
+        "semantic_file_id": "PY8312-0072",
+        "sha256": "0e8a089650c535a589af5bfabf00920512ae7598b61d36ca81fc9b3b5336191b"
+      },
+      {
+        "bytes": 2015,
+        "evidence_file_id": "F0200",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ResonanceDecays.h",
+        "semantic_file_id": "PY8312-0073",
+        "sha256": "f3e496a3ace80e063f78c7cf89100301d436a5cac174bbb84dfcae6102ac580c"
+      },
+      {
+        "bytes": 20568,
+        "evidence_file_id": "F0201",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ResonanceWidths.h",
+        "semantic_file_id": "PY8312-0074",
+        "sha256": "f52f49c88acb0fd5a8c4b09fe86beefa79586370c17dc0bc7a62a6658d6c34dd"
+      },
+      {
+        "bytes": 5034,
+        "evidence_file_id": "F0202",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ResonanceWidthsDM.h",
+        "semantic_file_id": "PY8312-0075",
+        "sha256": "d4abcddc8a974ab8659586e874b91525b1af4c133d3efcddef3931db5337ae17"
+      },
+      {
+        "bytes": 614,
+        "evidence_file_id": "F0203",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/RngDebug.h",
+        "semantic_file_id": "PY8312-0076",
+        "sha256": "70a98aaabb4bf14b880eb5da31303e2916ebe52101e97ae3f7c2a8f524dc84d7"
+      },
+      {
+        "bytes": 14486,
+        "evidence_file_id": "F0204",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Ropewalk.h",
+        "semantic_file_id": "PY8312-0077",
+        "sha256": "fee604ac6a20059a054ea2ea6bfc2e14967abe1f1971c105f8ea1fa430d1c46e"
+      },
+      {
+        "bytes": 2390,
+        "evidence_file_id": "F0205",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SLHAinterface.h",
+        "semantic_file_id": "PY8312-0078",
+        "sha256": "b6f96eb0b1dc6b5d467e9aa2eb8e4c62ad5ab9bccf26a0a6d4d2b527c0e5c55f"
+      },
+      {
+        "bytes": 13659,
+        "evidence_file_id": "F0206",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Settings.h",
+        "semantic_file_id": "PY8312-0079",
+        "sha256": "e1e054ca0734c9fac257f3237066d61a477e11c0e2aead7490f5d28917fa1696"
+      },
+      {
+        "bytes": 2714,
+        "evidence_file_id": "F0207",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SharedPointers.h",
+        "semantic_file_id": "PY8312-0080",
+        "sha256": "049ad1355ac042a840e251ca218f137c7ae1ab40a55fb32c031255b94c36842b"
+      },
+      {
+        "bytes": 3815,
+        "evidence_file_id": "F0208",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/ShowerModel.h",
+        "semantic_file_id": "PY8312-0081",
+        "sha256": "c47cddb27bc6678ce69b27933b771fba3a47dbedd2548a9027f728e25b9de361"
+      },
+      {
+        "bytes": 10975,
+        "evidence_file_id": "F0209",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaCompositeness.h",
+        "semantic_file_id": "PY8312-0082",
+        "sha256": "c5c6db0e4f475e26641abff39e8a22a7084fd0524276e1de9dd74ba5957cde42"
+      },
+      {
+        "bytes": 9248,
+        "evidence_file_id": "F0210",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaDM.h",
+        "semantic_file_id": "PY8312-0083",
+        "sha256": "e45a164aba5891a9e5fe18854c8bae0701a13efaf9e5cd14515f71f2b7d96064"
+      },
+      {
+        "bytes": 34917,
+        "evidence_file_id": "F0211",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaEW.h",
+        "semantic_file_id": "PY8312-0084",
+        "sha256": "efa6133653c29ff6493fae7e626d63f054d602f6c722e30d98ebc614ab7fad1c"
+      },
+      {
+        "bytes": 31532,
+        "evidence_file_id": "F0212",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaExtraDim.h",
+        "semantic_file_id": "PY8312-0085",
+        "sha256": "956e42d5699ddb2fb99bcb74d4d036528031475b781be051660175d0ffa22701"
+      },
+      {
+        "bytes": 5888,
+        "evidence_file_id": "F0213",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaGeneric.h",
+        "semantic_file_id": "PY8312-0086",
+        "sha256": "dffe1ef8ae69a4e901af2a399e5c3fd00f9533eff4d972f3274247ff81d106d4"
+      },
+      {
+        "bytes": 24875,
+        "evidence_file_id": "F0214",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaHiggs.h",
+        "semantic_file_id": "PY8312-0087",
+        "sha256": "842ef7919a070df87f1e6970ac03cdbebd816d84069c09a9d84b1a831559202e"
+      },
+      {
+        "bytes": 8321,
+        "evidence_file_id": "F0215",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaLeftRightSym.h",
+        "semantic_file_id": "PY8312-0088",
+        "sha256": "d4d6207a7678b437afd3e2ff80d4419a055ef416ebef5d13c99d4bde9aee561e"
+      },
+      {
+        "bytes": 5139,
+        "evidence_file_id": "F0216",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaLeptoquark.h",
+        "semantic_file_id": "PY8312-0089",
+        "sha256": "c7c26879966ee04b40d44173a9e89f6425783dba4121735a32e64f1ccba89585"
+      },
+      {
+        "bytes": 5803,
+        "evidence_file_id": "F0217",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaLowEnergy.h",
+        "semantic_file_id": "PY8312-0090",
+        "sha256": "cb0cc283e767923bb46070d92748829ce2b8a4319e72c5a697c4a239433d8a86"
+      },
+      {
+        "bytes": 5855,
+        "evidence_file_id": "F0218",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaNewGaugeBosons.h",
+        "semantic_file_id": "PY8312-0091",
+        "sha256": "d31f4b7cc704db3ef2b80adecb895e861189ee4b786f28389d252338da456ff3"
+      },
+      {
+        "bytes": 13902,
+        "evidence_file_id": "F0219",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaOnia.h",
+        "semantic_file_id": "PY8312-0092",
+        "sha256": "252f95b8bbb8c176ddf58a0f5f334a8207427ddcc1ae25d526088c3ea45dfcb3"
+      },
+      {
+        "bytes": 23939,
+        "evidence_file_id": "F0220",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaProcess.h",
+        "semantic_file_id": "PY8312-0093",
+        "sha256": "9c0b263c3f3cf091a9e1c99810911e471c071464d1da7d5ff4d9355393813208"
+      },
+      {
+        "bytes": 22994,
+        "evidence_file_id": "F0221",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaQCD.h",
+        "semantic_file_id": "PY8312-0094",
+        "sha256": "38bfd62dab40bba2499936565dcb410c823333215543e771ad1021da973eea62"
+      },
+      {
+        "bytes": 23470,
+        "evidence_file_id": "F0222",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaSUSY.h",
+        "semantic_file_id": "PY8312-0095",
+        "sha256": "6fce9ed9a6a28a806233e1cc33f7edadde89a367f77c913301b7daedcf16fa6b"
+      },
+      {
+        "bytes": 21643,
+        "evidence_file_id": "F0223",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SigmaTotal.h",
+        "semantic_file_id": "PY8312-0096",
+        "sha256": "bf1b465940c5e7fac1dbf95886ced7e317769bdc889312bc0e9004b3d2430608"
+      },
+      {
+        "bytes": 12000,
+        "evidence_file_id": "F0224",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SimpleSpaceShower.h",
+        "semantic_file_id": "PY8312-0097",
+        "sha256": "01463712ebb5d1f5b4e6a4d4168096fbc1769a059834d0ae08eda0e2dad03ff3"
+      },
+      {
+        "bytes": 16638,
+        "evidence_file_id": "F0225",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SimpleTimeShower.h",
+        "semantic_file_id": "PY8312-0098",
+        "sha256": "69fe6c570bb9d4a49439cbaa1518efc95fc826d6d19d26d0c99759c941785c39"
+      },
+      {
+        "bytes": 2387,
+        "evidence_file_id": "F0226",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SimpleWeakShowerMEs.h",
+        "semantic_file_id": "PY8312-0099",
+        "sha256": "25562237e8f8717cd0178763493abcb6b888a8ebf1869dbf050c14b20cf2a438"
+      },
+      {
+        "bytes": 7276,
+        "evidence_file_id": "F0227",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SpaceShower.h",
+        "semantic_file_id": "PY8312-0100",
+        "sha256": "d50015433b925f89d074b9ac2a88347643b21d9b266146951875b04d38a47d61"
+      },
+      {
+        "bytes": 19333,
+        "evidence_file_id": "F0228",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SplittingsOnia.h",
+        "semantic_file_id": "PY8312-0101",
+        "sha256": "f40e041b18aeb3b4c83b740e7210d46bd03e0ad37ee15ce20fe15b4d75c392fb"
+      },
+      {
+        "bytes": 9148,
+        "evidence_file_id": "F0229",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/StandardModel.h",
+        "semantic_file_id": "PY8312-0102",
+        "sha256": "e6f6c120596dbea1bb977dacc1f96a221f69155a3888f701df53657a4c5b0b5c"
+      },
+      {
+        "bytes": 4207,
+        "evidence_file_id": "F0230",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Streams.h",
+        "semantic_file_id": "PY8312-0103",
+        "sha256": "df68c71987b6607ae363b0d0e174a63cb19562adfc1f4ffb2678103f9fb4ae28"
+      },
+      {
+        "bytes": 10620,
+        "evidence_file_id": "F0231",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/StringFragmentation.h",
+        "semantic_file_id": "PY8312-0104",
+        "sha256": "de4406fe065f4ec2d4d047ad3d15c2b2f0411a12773f167cf5a5c37fd98dd241"
+      },
+      {
+        "bytes": 6816,
+        "evidence_file_id": "F0232",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/StringInteractions.h",
+        "semantic_file_id": "PY8312-0105",
+        "sha256": "476c8c7818443129e976595949909f20eb14ba3627ee0658589eec5c4014b509"
+      },
+      {
+        "bytes": 2656,
+        "evidence_file_id": "F0233",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/StringLength.h",
+        "semantic_file_id": "PY8312-0106",
+        "sha256": "363439a3d995a1216e3ca11f423f8fa75bdec87dac894ac01be4452b702cba9d"
+      },
+      {
+        "bytes": 5477,
+        "evidence_file_id": "F0234",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SusyCouplings.h",
+        "semantic_file_id": "PY8312-0107",
+        "sha256": "2e919636589b07f75bc9dc697c8fd5964a757f434d12fae10ac28218b7face13"
+      },
+      {
+        "bytes": 29704,
+        "evidence_file_id": "F0235",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SusyLesHouches.h",
+        "semantic_file_id": "PY8312-0108",
+        "sha256": "5730563337731693f73c2df139a9e91affa54fc67e0faea1a9f461ee3a20e852"
+      },
+      {
+        "bytes": 5101,
+        "evidence_file_id": "F0236",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SusyResonanceWidths.h",
+        "semantic_file_id": "PY8312-0109",
+        "sha256": "ec75c037ce6c2367990f449dba7668875649baee1f0daf07e9ad7f59b0b39c48"
+      },
+      {
+        "bytes": 2092,
+        "evidence_file_id": "F0237",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/SusyWidthFunctions.h",
+        "semantic_file_id": "PY8312-0110",
+        "sha256": "a0c7030144786bb34299debeb2dd215323caaf2c38d7532160eb06014cf81aeb"
+      },
+      {
+        "bytes": 3744,
+        "evidence_file_id": "F0238",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/TauDecays.h",
+        "semantic_file_id": "PY8312-0111",
+        "sha256": "87ff13c3088965cd21e845a942ef12b986dd69c8995ff4edde88cb971a28079e"
+      },
+      {
+        "bytes": 9074,
+        "evidence_file_id": "F0239",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/TimeShower.h",
+        "semantic_file_id": "PY8312-0112",
+        "sha256": "93c6c2530b8b19edf00d3c7b0b7a0fc5176e928445bf63299da5735d9e09adb1"
+      },
+      {
+        "bytes": 27607,
+        "evidence_file_id": "F0240",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/UserHooks.h",
+        "semantic_file_id": "PY8312-0113",
+        "sha256": "7203e5b1f6a484010f083baecf9e7eeac404149eb80fd53f73425e11c64a36d9"
+      },
+      {
+        "bytes": 3938,
+        "evidence_file_id": "F0241",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Vincia.h",
+        "semantic_file_id": "PY8312-0114",
+        "sha256": "19fe64e815a3004b8d251e945add7e847c59439406d06eb0096e40d4dd3a01f1"
+      },
+      {
+        "bytes": 47700,
+        "evidence_file_id": "F0242",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaAntennaFunctions.h",
+        "semantic_file_id": "PY8312-0115",
+        "sha256": "ffceac1990cee50ad7aa32037693bfa6f4ad606897cb0ac2e2db4f9159ea4c52"
+      },
+      {
+        "bytes": 25250,
+        "evidence_file_id": "F0243",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaCommon.h",
+        "semantic_file_id": "PY8312-0116",
+        "sha256": "135f4a8688c0cbcb3661ab1114dd9d007f3a0af2f8a9b91379a4a47addd31001"
+      },
+      {
+        "bytes": 1346,
+        "evidence_file_id": "F0244",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaDiagnostics.h",
+        "semantic_file_id": "PY8312-0117",
+        "sha256": "09d10735eb472b1b8d85236351ee80a7893e1ddcc87e6e60f7a9aa45b252fd45"
+      },
+      {
+        "bytes": 44798,
+        "evidence_file_id": "F0245",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaEW.h",
+        "semantic_file_id": "PY8312-0118",
+        "sha256": "410be747d7b479b738834512ef95f976fd489b18e774aff42da3902360c89f74"
+      },
+      {
+        "bytes": 39422,
+        "evidence_file_id": "F0246",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaFSR.h",
+        "semantic_file_id": "PY8312-0119",
+        "sha256": "92844dd789fde5d5d3fef6e05f322b1a22447a63eb282938215c2200e42a511d"
+      },
+      {
+        "bytes": 12638,
+        "evidence_file_id": "F0247",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaHistory.h",
+        "semantic_file_id": "PY8312-0120",
+        "sha256": "05646e1081f2bd8a75ede189b541c899a61b71022d710b7c9b47b8ebde16d4ed"
+      },
+      {
+        "bytes": 51366,
+        "evidence_file_id": "F0248",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaISR.h",
+        "semantic_file_id": "PY8312-0121",
+        "sha256": "f518f370fb9d9cfd24d1c0f1823ea38a954e40ba7d7c4ede73406e495e6c3e70"
+      },
+      {
+        "bytes": 1770,
+        "evidence_file_id": "F0249",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaMerging.h",
+        "semantic_file_id": "PY8312-0122",
+        "sha256": "96a6de4d3cc14eb565a4d356076fb34476ecb1bb768a7551871a70a1460d4dfd"
+      },
+      {
+        "bytes": 18562,
+        "evidence_file_id": "F0250",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaMergingHooks.h",
+        "semantic_file_id": "PY8312-0123",
+        "sha256": "1edf30d1507769afe3c6a891686eee0cbc7b882f6b9cad84d0c5ae10f1581c2f"
+      },
+      {
+        "bytes": 17383,
+        "evidence_file_id": "F0251",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaQED.h",
+        "semantic_file_id": "PY8312-0124",
+        "sha256": "b7a21796dc206c518f10907cdca9b7f5e2845e13f4ae0c7e09342c5f07b8303c"
+      },
+      {
+        "bytes": 31104,
+        "evidence_file_id": "F0252",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaTrialGenerators.h",
+        "semantic_file_id": "PY8312-0125",
+        "sha256": "f61244981cf71fee3a71c7c115b75e621d60521fc67b4c08b2b1fb46dc2d39d6"
+      },
+      {
+        "bytes": 2814,
+        "evidence_file_id": "F0253",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/VinciaWeights.h",
+        "semantic_file_id": "PY8312-0126",
+        "sha256": "318eaf56a73a67eb232f52ae185955c2d6962c41e93f8adac712a44501ba1e4e"
+      },
+      {
+        "bytes": 16269,
+        "evidence_file_id": "F0254",
+        "path": ".external/src/releases-pythia8312/include/Pythia8/Weights.h",
+        "semantic_file_id": "PY8312-0127",
+        "sha256": "d67f17a437c36e74eb71897f7e19b7a2330cb1b03d6a069f6a2a21e75e4cafbb"
+      },
+      {
+        "bytes": 40441,
+        "evidence_file_id": "F0255",
+        "path": ".external/src/releases-pythia8312/src/Analysis.cc",
+        "semantic_file_id": "PY8312-0128",
+        "sha256": "8500b797c59eba65f660acfa82fb10d17241d8cece20a6807a2dc2c5871390d3"
+      },
+      {
+        "bytes": 81967,
+        "evidence_file_id": "F0256",
+        "path": ".external/src/releases-pythia8312/src/Basics.cc",
+        "semantic_file_id": "PY8312-0129",
+        "sha256": "f5e272aebae47c3844edeae5f65022f27cceadb5236a4da4ef8f93ccb534215e"
+      },
+      {
+        "bytes": 71823,
+        "evidence_file_id": "F0257",
+        "path": ".external/src/releases-pythia8312/src/BeamParticle.cc",
+        "semantic_file_id": "PY8312-0130",
+        "sha256": "250d03de0025cfdbc0b7ac934ab9e37d7d1b2824d3c1cd343e61e52274db7fb4"
+      },
+      {
+        "bytes": 56808,
+        "evidence_file_id": "F0258",
+        "path": ".external/src/releases-pythia8312/src/BeamRemnants.cc",
+        "semantic_file_id": "PY8312-0131",
+        "sha256": "29337faa4d6994df991cfe1b63942036e0b9ac3f6c9bb92635025a612ad438a2"
+      },
+      {
+        "bytes": 54042,
+        "evidence_file_id": "F0259",
+        "path": ".external/src/releases-pythia8312/src/BeamSetup.cc",
+        "semantic_file_id": "PY8312-0132",
+        "sha256": "a0cc811163f50532fcaac84ad01d43d8439e1914729f287bedb507f1d44cb7cf"
+      },
+      {
+        "bytes": 4827,
+        "evidence_file_id": "F0260",
+        "path": ".external/src/releases-pythia8312/src/BeamShape.cc",
+        "semantic_file_id": "PY8312-0133",
+        "sha256": "d53848abcaec80230f83f0469be6fc2c8e92dd69af12e490663e3e6ce71a57aa"
+      },
+      {
+        "bytes": 10252,
+        "evidence_file_id": "F0261",
+        "path": ".external/src/releases-pythia8312/src/BoseEinstein.cc",
+        "semantic_file_id": "PY8312-0134",
+        "sha256": "fa7b69174dc786b19cdf97b7963c2916074b5df5ca4700ccadcd8e89ce98b9d0"
+      },
+      {
+        "bytes": 151347,
+        "evidence_file_id": "F0262",
+        "path": ".external/src/releases-pythia8312/src/ColourReconnection.cc",
+        "semantic_file_id": "PY8312-0135",
+        "sha256": "896e0683f1c888dd34b5ca9a35ee65fa04e14022e436046a3b5916f530333c3d"
+      },
+      {
+        "bytes": 10595,
+        "evidence_file_id": "F0263",
+        "path": ".external/src/releases-pythia8312/src/ColourTracing.cc",
+        "semantic_file_id": "PY8312-0136",
+        "sha256": "599d50494e4b761b9dce379a22830492eb187d904a55baaac1672f65138d2a4c"
+      },
+      {
+        "bytes": 15934,
+        "evidence_file_id": "F0264",
+        "path": ".external/src/releases-pythia8312/src/DeuteronProduction.cc",
+        "semantic_file_id": "PY8312-0137",
+        "sha256": "a9abc73d6dc7f7a5d1e9d2c0d37784cf6f113cef22ffc5c2cbfd4954cca8bfc8"
+      },
+      {
+        "bytes": 10323,
+        "evidence_file_id": "F0265",
+        "path": ".external/src/releases-pythia8312/src/Dire.cc",
+        "semantic_file_id": "PY8312-0138",
+        "sha256": "254f25294d67a584bc3393d269e65d3e676164fbad7a6f0cacea57de66ab9ca9"
+      },
+      {
+        "bytes": 4100,
+        "evidence_file_id": "F0266",
+        "path": ".external/src/releases-pythia8312/src/DireBasics.cc",
+        "semantic_file_id": "PY8312-0139",
+        "sha256": "b4cab59080029d4de6a1522c3088459eee4bc4dd2cc1dac230f111e4ac4d11d4"
+      },
+      {
+        "bytes": 275119,
+        "evidence_file_id": "F0267",
+        "path": ".external/src/releases-pythia8312/src/DireHistory.cc",
+        "semantic_file_id": "PY8312-0140",
+        "sha256": "34e300e377022d2a53bf55db6586f51fed8186fcf8dc652ece618c7f17d52120"
+      },
+      {
+        "bytes": 86044,
+        "evidence_file_id": "F0268",
+        "path": ".external/src/releases-pythia8312/src/DireMerging.cc",
+        "semantic_file_id": "PY8312-0141",
+        "sha256": "ebf995c73a796b50faab02ccce5a20d50eda3b730f659f199bf9575c5561e6b0"
+      },
+      {
+        "bytes": 93525,
+        "evidence_file_id": "F0269",
+        "path": ".external/src/releases-pythia8312/src/DireMergingHooks.cc",
+        "semantic_file_id": "PY8312-0142",
+        "sha256": "eaecaabc18a7f3c3b46d373e99708f478c2002efb0d906b4667939c1805ee149"
+      },
+      {
+        "bytes": 292624,
+        "evidence_file_id": "F0270",
+        "path": ".external/src/releases-pythia8312/src/DireSpace.cc",
+        "semantic_file_id": "PY8312-0143",
+        "sha256": "2a89b13a3f1a6a2e5557a293b6773441b70ce7c95044b9697bb6944400c636f7"
+      },
+      {
+        "bytes": 16937,
+        "evidence_file_id": "F0271",
+        "path": ".external/src/releases-pythia8312/src/DireSplitInfo.cc",
+        "semantic_file_id": "PY8312-0144",
+        "sha256": "8066e117641df018c5e8416b696010a5118306109d121f9aa59884846e5b1a62"
+      },
+      {
+        "bytes": 33214,
+        "evidence_file_id": "F0272",
+        "path": ".external/src/releases-pythia8312/src/DireSplittingLibrary.cc",
+        "semantic_file_id": "PY8312-0145",
+        "sha256": "f58c2137c650845c25f5cc423b3b9577b404055f08afb4498255e407a758f206"
+      },
+      {
+        "bytes": 1670,
+        "evidence_file_id": "F0273",
+        "path": ".external/src/releases-pythia8312/src/DireSplittings.cc",
+        "semantic_file_id": "PY8312-0146",
+        "sha256": "a32fcd536bb811c4b2725061f61e2e0a6fe933bdc0ac452e249b919bf3ef7e8b"
+      },
+      {
+        "bytes": 55805,
+        "evidence_file_id": "F0274",
+        "path": ".external/src/releases-pythia8312/src/DireSplittingsEW.cc",
+        "semantic_file_id": "PY8312-0147",
+        "sha256": "714bb6331045bfe3884606d5eee778920873dcde6af5594f6c6f5449b1a40e6c"
+      },
+      {
+        "bytes": 273469,
+        "evidence_file_id": "F0275",
+        "path": ".external/src/releases-pythia8312/src/DireSplittingsQCD.cc",
+        "semantic_file_id": "PY8312-0148",
+        "sha256": "f7b8ff7f6ec73b815a3c0aabf19ba3131e90f834c45b191e3b020334a74c7677"
+      },
+      {
+        "bytes": 73237,
+        "evidence_file_id": "F0276",
+        "path": ".external/src/releases-pythia8312/src/DireSplittingsQED.cc",
+        "semantic_file_id": "PY8312-0149",
+        "sha256": "c4731b059e62550eed917d69cf6264bbae70025ff33a4a7bda9f55799ff07fea"
+      },
+      {
+        "bytes": 59352,
+        "evidence_file_id": "F0277",
+        "path": ".external/src/releases-pythia8312/src/DireSplittingsU1new.cc",
+        "semantic_file_id": "PY8312-0150",
+        "sha256": "5de298e99187282a58a71eec8d6915ec8b70384d11d02f69934d9af98fcda926"
+      },
+      {
+        "bytes": 304850,
+        "evidence_file_id": "F0278",
+        "path": ".external/src/releases-pythia8312/src/DireTimes.cc",
+        "semantic_file_id": "PY8312-0151",
+        "sha256": "f99dbda05c703735ba55f80f7e450f389bdeba35cbc5c3a22505b7316b0e73a1"
+      },
+      {
+        "bytes": 18130,
+        "evidence_file_id": "F0279",
+        "path": ".external/src/releases-pythia8312/src/DireWeightContainer.cc",
+        "semantic_file_id": "PY8312-0152",
+        "sha256": "c824bbf53fb7a78eb61b658ddf08e54395f4ee191d942155c05727498e6bb956"
+      },
+      {
+        "bytes": 32771,
+        "evidence_file_id": "F0280",
+        "path": ".external/src/releases-pythia8312/src/Event.cc",
+        "semantic_file_id": "PY8312-0153",
+        "sha256": "e14be2fd509dfe2931a9bfc4722bde3118a8c4425c709eb57c57319f43622aeb"
+      },
+      {
+        "bytes": 5459,
+        "evidence_file_id": "F0281",
+        "path": ".external/src/releases-pythia8312/src/ExternalMEs.cc",
+        "semantic_file_id": "PY8312-0154",
+        "sha256": "fc4beb5e3d598dd74fbdc9948539e9605de1fa40396d71ef26d2efc1bc84cafc"
+      },
+      {
+        "bytes": 237748,
+        "evidence_file_id": "F0282",
+        "path": ".external/src/releases-pythia8312/src/FJcore.cc",
+        "semantic_file_id": "PY8312-0155",
+        "sha256": "dca37f70a7e77717d9c9b2951b254b1001b86d26a6ff495fc976fefe83fdbd76"
+      },
+      {
+        "bytes": 80830,
+        "evidence_file_id": "F0283",
+        "path": ".external/src/releases-pythia8312/src/FragmentationFlavZpT.cc",
+        "semantic_file_id": "PY8312-0156",
+        "sha256": "98e855ab8a150f91e6f0c3a3fe877748e905cad961af7449828090388c05a794"
+      },
+      {
+        "bytes": 23442,
+        "evidence_file_id": "F0284",
+        "path": ".external/src/releases-pythia8312/src/FragmentationSystems.cc",
+        "semantic_file_id": "PY8312-0157",
+        "sha256": "df34f269cc9b7384f4dd0314a1a46eef1acb8cf6fcc3b91a984e908c6dd306ad"
+      },
+      {
+        "bytes": 16586,
+        "evidence_file_id": "F0285",
+        "path": ".external/src/releases-pythia8312/src/GammaKinematics.cc",
+        "semantic_file_id": "PY8312-0158",
+        "sha256": "4e669c21075bee71b8355e78cb882c027fc1fa23c329f11cb02f96459c40bbe9"
+      },
+      {
+        "bytes": 3030,
+        "evidence_file_id": "F0286",
+        "path": ".external/src/releases-pythia8312/src/HIInfo.cc",
+        "semantic_file_id": "PY8312-0159",
+        "sha256": "db36b045459013bab8862ace522f157bc361aaf9892b0592a76ee462154e0d01"
+      },
+      {
+        "bytes": 20475,
+        "evidence_file_id": "F0287",
+        "path": ".external/src/releases-pythia8312/src/HINucleusModel.cc",
+        "semantic_file_id": "PY8312-0160",
+        "sha256": "421da9ca1a9b041dede4f398a12fdaffc5794fb9c503c8d25726ae72bd145eaf"
+      },
+      {
+        "bytes": 32693,
+        "evidence_file_id": "F0288",
+        "path": ".external/src/releases-pythia8312/src/HISubCollisionModel.cc",
+        "semantic_file_id": "PY8312-0161",
+        "sha256": "23a874c92b400dbb3d516dc32842153619216da0c09bb8f3d919f9a026bfe19d"
+      },
+      {
+        "bytes": 28701,
+        "evidence_file_id": "F0289",
+        "path": ".external/src/releases-pythia8312/src/HadronLevel.cc",
+        "semantic_file_id": "PY8312-0162",
+        "sha256": "ca7658d11285a7030c14f43e3b7b7fc9d963a541e7721b413d01f4d4b7a37404"
+      },
+      {
+        "bytes": 38099,
+        "evidence_file_id": "F0290",
+        "path": ".external/src/releases-pythia8312/src/HadronWidths.cc",
+        "semantic_file_id": "PY8312-0163",
+        "sha256": "5ea9d4221d3ebf82447802ae8948b1aef8aec8fd56a4354b3eb61f9b45273de8"
+      },
+      {
+        "bytes": 17986,
+        "evidence_file_id": "F0291",
+        "path": ".external/src/releases-pythia8312/src/HardDiffraction.cc",
+        "semantic_file_id": "PY8312-0164",
+        "sha256": "18f4fcb2534eb66f63773d302e6105415b856514eb183c67b9560caef4394651"
+      },
+      {
+        "bytes": 64802,
+        "evidence_file_id": "F0292",
+        "path": ".external/src/releases-pythia8312/src/HeavyIons.cc",
+        "semantic_file_id": "PY8312-0165",
+        "sha256": "2dc4d912ccbad80ba10be0ce1791805f166ec32e73500aa5de84639db84aa7d2"
+      },
+      {
+        "bytes": 10859,
+        "evidence_file_id": "F0293",
+        "path": ".external/src/releases-pythia8312/src/HelicityBasics.cc",
+        "semantic_file_id": "PY8312-0166",
+        "sha256": "c5725667e63d05ff04a73daa7bf6bde6a6a81a57f4dee8cf3dc9186bae4e357e"
+      },
+      {
+        "bytes": 90336,
+        "evidence_file_id": "F0294",
+        "path": ".external/src/releases-pythia8312/src/HelicityMatrixElements.cc",
+        "semantic_file_id": "PY8312-0167",
+        "sha256": "68f7c97e4ec3f4212e83d3e6a6f60ef03ecab56e96d083d61dfce037fe7bf154"
+      },
+      {
+        "bytes": 17613,
+        "evidence_file_id": "F0295",
+        "path": ".external/src/releases-pythia8312/src/HiddenValleyFragmentation.cc",
+        "semantic_file_id": "PY8312-0168",
+        "sha256": "0f82ccde7d42de831978c8122aa06b3ba0d6b67e1f47ca645c482bd6b1724e7d"
+      },
+      {
+        "bytes": 351963,
+        "evidence_file_id": "F0296",
+        "path": ".external/src/releases-pythia8312/src/History.cc",
+        "semantic_file_id": "PY8312-0169",
+        "sha256": "a7d39b9a4794b261a351e3349b35d38fe1e02ef1bcd4bad274e7a1eb66faf09d"
+      },
+      {
+        "bytes": 19048,
+        "evidence_file_id": "F0297",
+        "path": ".external/src/releases-pythia8312/src/Info.cc",
+        "semantic_file_id": "PY8312-0170",
+        "sha256": "a357b79ed5e02173418d94f70d9b4f4ca15b407995abb39a4e9be1bdb8bf9956"
+      },
+      {
+        "bytes": 32469,
+        "evidence_file_id": "F0298",
+        "path": ".external/src/releases-pythia8312/src/JunctionSplitting.cc",
+        "semantic_file_id": "PY8312-0171",
+        "sha256": "44c83b7646b28e7c64da827d42aaf447b42bb678bb501feb62935b8ad7e7eec5"
+      },
+      {
+        "bytes": 33519,
+        "evidence_file_id": "F0299",
+        "path": ".external/src/releases-pythia8312/src/LHEF3.cc",
+        "semantic_file_id": "PY8312-0172",
+        "sha256": "95254599fa00fd3a3c8b859de4dce5a21b93acd42a83b6addf854fafde5dcf30"
+      },
+      {
+        "bytes": 55401,
+        "evidence_file_id": "F0300",
+        "path": ".external/src/releases-pythia8312/src/LesHouches.cc",
+        "semantic_file_id": "PY8312-0173",
+        "sha256": "f48aa32f56ee400c8d1557697b0b46c196fc8dd71d78979fd1664bca63fec619"
+      },
+      {
+        "bytes": 4931,
+        "evidence_file_id": "F0301",
+        "path": ".external/src/releases-pythia8312/src/Logger.cc",
+        "semantic_file_id": "PY8312-0174",
+        "sha256": "7c2b4db278f65a99b6dc6749b3cdf2cc4fa655437c1c340a49471a6e935adcbf"
+      },
+      {
+        "bytes": 44048,
+        "evidence_file_id": "F0302",
+        "path": ".external/src/releases-pythia8312/src/LowEnergyProcess.cc",
+        "semantic_file_id": "PY8312-0175",
+        "sha256": "3311cd18d3071c97feecf4d3b86f5b64f8452ecfdfff53738c03c1aa252a8034"
+      },
+      {
+        "bytes": 29884,
+        "evidence_file_id": "F0303",
+        "path": ".external/src/releases-pythia8312/src/MathTools.cc",
+        "semantic_file_id": "PY8312-0176",
+        "sha256": "8657fb5c28cfe78504195d55c53fd15186eb9815879ec35e5e85b5db7890ba02"
+      },
+      {
+        "bytes": 64185,
+        "evidence_file_id": "F0304",
+        "path": ".external/src/releases-pythia8312/src/Merging.cc",
+        "semantic_file_id": "PY8312-0177",
+        "sha256": "b8138d8a0679e93d6a10792d75c8cd93a350adf4e538de96898346bd6f7df839"
+      },
+      {
+        "bytes": 147665,
+        "evidence_file_id": "F0305",
+        "path": ".external/src/releases-pythia8312/src/MergingHooks.cc",
+        "semantic_file_id": "PY8312-0178",
+        "sha256": "3a5ec1dd5d64688b75e5d5efe4491500f771d40b71ff46ffedeb9c690b1533f9"
+      },
+      {
+        "bytes": 32055,
+        "evidence_file_id": "F0306",
+        "path": ".external/src/releases-pythia8312/src/MiniStringFragmentation.cc",
+        "semantic_file_id": "PY8312-0179",
+        "sha256": "fe63be0b876c783c9be69b32f8ab06f5078630274695732a25fdcc6376ffe9cb"
+      },
+      {
+        "bytes": 111616,
+        "evidence_file_id": "F0307",
+        "path": ".external/src/releases-pythia8312/src/MultipartonInteractions.cc",
+        "semantic_file_id": "PY8312-0180",
+        "sha256": "7908d9de67299b8058c19a5c39f4599d6fe5272804cd1b566f4b4d98620d4293"
+      },
+      {
+        "bytes": 18079,
+        "evidence_file_id": "F0308",
+        "path": ".external/src/releases-pythia8312/src/NucleonExcitations.cc",
+        "semantic_file_id": "PY8312-0181",
+        "sha256": "e671100a3038d03715058748c2537a761583a2ad7571107d282837a0d59986a6"
+      },
+      {
+        "bytes": 80513,
+        "evidence_file_id": "F0309",
+        "path": ".external/src/releases-pythia8312/src/ParticleData.cc",
+        "semantic_file_id": "PY8312-0182",
+        "sha256": "8442673bcf6e10d899d51dff6862941c17190b349596fbd72aa0e638ef6cd4c5"
+      },
+      {
+        "bytes": 45675,
+        "evidence_file_id": "F0310",
+        "path": ".external/src/releases-pythia8312/src/ParticleDecays.cc",
+        "semantic_file_id": "PY8312-0183",
+        "sha256": "a481f12afe1b6da476ba2dba414a225bec09ab58583e1e6dfb4ffd93f8b749ce"
+      },
+      {
+        "bytes": 135032,
+        "evidence_file_id": "F0311",
+        "path": ".external/src/releases-pythia8312/src/PartonDistributions.cc",
+        "semantic_file_id": "PY8312-0184",
+        "sha256": "75dd8f717bb1583fef13808cd4ee342f644bfe37e0069d09e9b444af3c47a852"
+      },
+      {
+        "bytes": 127568,
+        "evidence_file_id": "F0312",
+        "path": ".external/src/releases-pythia8312/src/PartonLevel.cc",
+        "semantic_file_id": "PY8312-0185",
+        "sha256": "ae2f22ded1b5c420dad2a2b44514292e4435d53973cae4126206d3cbadec3f73"
+      },
+      {
+        "bytes": 4375,
+        "evidence_file_id": "F0313",
+        "path": ".external/src/releases-pythia8312/src/PartonSystems.cc",
+        "semantic_file_id": "PY8312-0186",
+        "sha256": "78564670c82a536066a76cf495d545957d3321451828957f0f7219fd01152edd"
+      },
+      {
+        "bytes": 12566,
+        "evidence_file_id": "F0314",
+        "path": ".external/src/releases-pythia8312/src/PartonVertex.cc",
+        "semantic_file_id": "PY8312-0187",
+        "sha256": "e331dd719591a673831e24fa85b80ca10b89fafb8775a921c5076e814eb80235"
+      },
+      {
+        "bytes": 146738,
+        "evidence_file_id": "F0315",
+        "path": ".external/src/releases-pythia8312/src/PhaseSpace.cc",
+        "semantic_file_id": "PY8312-0188",
+        "sha256": "1fab7108ba3b541bc9130d52dd3bf57d7e6a665c6bf59b07911006fd411b661c"
+      },
+      {
+        "bytes": 2967,
+        "evidence_file_id": "F0316",
+        "path": ".external/src/releases-pythia8312/src/PhysicsBase.cc",
+        "semantic_file_id": "PY8312-0189",
+        "sha256": "80fa7916f3c29916c62537776afc9474ae767f90764fea4896e5c56e808cd58f"
+      },
+      {
+        "bytes": 4463,
+        "evidence_file_id": "F0317",
+        "path": ".external/src/releases-pythia8312/src/Plugins.cc",
+        "semantic_file_id": "PY8312-0190",
+        "sha256": "1b82f14edde7497119c8940782bf857de997badcb1bb679b1f29779b293b5ae9"
+      },
+      {
+        "bytes": 132107,
+        "evidence_file_id": "F0318",
+        "path": ".external/src/releases-pythia8312/src/ProcessContainer.cc",
+        "semantic_file_id": "PY8312-0191",
+        "sha256": "9aae3740ad91ef82a619d20de213b1ca068b0e11fbee89ffda52bf31f459ed80"
+      },
+      {
+        "bytes": 69910,
+        "evidence_file_id": "F0319",
+        "path": ".external/src/releases-pythia8312/src/ProcessLevel.cc",
+        "semantic_file_id": "PY8312-0192",
+        "sha256": "30c495ecffab43946a88d4bacf2674a5d4e2530247a3df9ab4bf3c221ed64465"
+      },
+      {
+        "bytes": 78989,
+        "evidence_file_id": "F0320",
+        "path": ".external/src/releases-pythia8312/src/Pythia.cc",
+        "semantic_file_id": "PY8312-0193",
+        "sha256": "aa238570b793da537d739a6e5f4b0c4a9cb607e2936857179eebaf3a5923b4a4"
+      },
+      {
+        "bytes": 8387,
+        "evidence_file_id": "F0321",
+        "path": ".external/src/releases-pythia8312/src/PythiaParallel.cc",
+        "semantic_file_id": "PY8312-0194",
+        "sha256": "7e7d5173d2a5d134e184fb02800b530221368a59bdc3a5b8d5de8e847d57ac00"
+      },
+      {
+        "bytes": 1933,
+        "evidence_file_id": "F0322",
+        "path": ".external/src/releases-pythia8312/src/PythiaStdlib.cc",
+        "semantic_file_id": "PY8312-0195",
+        "sha256": "a34faa1e5e49a5387553fe86270c86f4c834a91f1adc488fceb02272f48d9982"
+      },
+      {
+        "bytes": 49056,
+        "evidence_file_id": "F0323",
+        "path": ".external/src/releases-pythia8312/src/RHadrons.cc",
+        "semantic_file_id": "PY8312-0196",
+        "sha256": "fb83c95b0c8158eda12b2a8e22ef1994ca2bfe860a49c1e9e814fcbca7f27896"
+      },
+      {
+        "bytes": 28956,
+        "evidence_file_id": "F0324",
+        "path": ".external/src/releases-pythia8312/src/ResonanceDecays.cc",
+        "semantic_file_id": "PY8312-0197",
+        "sha256": "684398ec45f226708eb3441100bf7035c051ac9aacb73b1f6db584ff10dad8bd"
+      },
+      {
+        "bytes": 79559,
+        "evidence_file_id": "F0325",
+        "path": ".external/src/releases-pythia8312/src/ResonanceWidths.cc",
+        "semantic_file_id": "PY8312-0198",
+        "sha256": "1be75fc19ccdfaa9ee0a86fe103e8a5086be18d3987aa40f056b5cbaf65e3060"
+      },
+      {
+        "bytes": 11512,
+        "evidence_file_id": "F0326",
+        "path": ".external/src/releases-pythia8312/src/ResonanceWidthsDM.cc",
+        "semantic_file_id": "PY8312-0199",
+        "sha256": "27b1d4613f83f0597be68baa8ce62999206feaf9c38ca46c8c0424c0b5a0dbcf"
+      },
+      {
+        "bytes": 45173,
+        "evidence_file_id": "F0327",
+        "path": ".external/src/releases-pythia8312/src/Ropewalk.cc",
+        "semantic_file_id": "PY8312-0200",
+        "sha256": "d54cccefbbce48f4eb1e51e7ae21eb0589f1f81321b76dc1bcf777597ea1b1fa"
+      },
+      {
+        "bytes": 32011,
+        "evidence_file_id": "F0328",
+        "path": ".external/src/releases-pythia8312/src/SLHAinterface.cc",
+        "semantic_file_id": "PY8312-0201",
+        "sha256": "f85ca42929156d96ef39d85a75b26762f852df53187680f0a5b7725c96bce4eb"
+      },
+      {
+        "bytes": 132470,
+        "evidence_file_id": "F0329",
+        "path": ".external/src/releases-pythia8312/src/Settings.cc",
+        "semantic_file_id": "PY8312-0202",
+        "sha256": "3a19aeeb53b64a4cbf693d03699855cdaedaf968ee91d7f2affe3815f25a9c97"
+      },
+      {
+        "bytes": 1256,
+        "evidence_file_id": "F0330",
+        "path": ".external/src/releases-pythia8312/src/ShowerModel.cc",
+        "semantic_file_id": "PY8312-0203",
+        "sha256": "c21a880f3f39702843e9d4b705c474302840ea7b1210ef7ab285bd125eb994f5"
+      },
+      {
+        "bytes": 28936,
+        "evidence_file_id": "F0331",
+        "path": ".external/src/releases-pythia8312/src/SigmaCompositeness.cc",
+        "semantic_file_id": "PY8312-0204",
+        "sha256": "cf21318bcd92da1cb881127ba6954c3c78aaaf1d3e7f4844bb505c8b0c973360"
+      },
+      {
+        "bytes": 19420,
+        "evidence_file_id": "F0332",
+        "path": ".external/src/releases-pythia8312/src/SigmaDM.cc",
+        "semantic_file_id": "PY8312-0205",
+        "sha256": "46f1fc358312505cfaf3320d051b53ed7bddcb02fb1405f747f97771ea25beeb"
+      },
+      {
+        "bytes": 105733,
+        "evidence_file_id": "F0333",
+        "path": ".external/src/releases-pythia8312/src/SigmaEW.cc",
+        "semantic_file_id": "PY8312-0206",
+        "sha256": "30cef37b23c664dc304ce06052787dcd3c743b2e7ec94443b76409337df4678d"
+      },
+      {
+        "bytes": 104940,
+        "evidence_file_id": "F0334",
+        "path": ".external/src/releases-pythia8312/src/SigmaExtraDim.cc",
+        "semantic_file_id": "PY8312-0207",
+        "sha256": "252d036ea685ca98627aaa36727f9c4828b22b7f186c0c498b8005eecd602434"
+      },
+      {
+        "bytes": 13983,
+        "evidence_file_id": "F0335",
+        "path": ".external/src/releases-pythia8312/src/SigmaGeneric.cc",
+        "semantic_file_id": "PY8312-0208",
+        "sha256": "99e7b2bdc32a59c278c44674db447909e562c127d081b67c934f44f094ab8cdd"
+      },
+      {
+        "bytes": 78581,
+        "evidence_file_id": "F0336",
+        "path": ".external/src/releases-pythia8312/src/SigmaHiggs.cc",
+        "semantic_file_id": "PY8312-0209",
+        "sha256": "7726717588012598d3cc093a267b1e923ce77792f0053ac766c060cea6a4c828"
+      },
+      {
+        "bytes": 26166,
+        "evidence_file_id": "F0337",
+        "path": ".external/src/releases-pythia8312/src/SigmaLeftRightSym.cc",
+        "semantic_file_id": "PY8312-0210",
+        "sha256": "9323fb83d1808091386c561160136744c2d05d8d72583346feb6e0f907f83a93"
+      },
+      {
+        "bytes": 9027,
+        "evidence_file_id": "F0338",
+        "path": ".external/src/releases-pythia8312/src/SigmaLeptoquark.cc",
+        "semantic_file_id": "PY8312-0211",
+        "sha256": "56d5226da18ec9759739059743622310083806a3e105d609c54599813f0c6b99"
+      },
+      {
+        "bytes": 60622,
+        "evidence_file_id": "F0339",
+        "path": ".external/src/releases-pythia8312/src/SigmaLowEnergy.cc",
+        "semantic_file_id": "PY8312-0212",
+        "sha256": "225fd03198171f0edc2477a3dac42978612cc85d6361cffdee2627a56e42e3f9"
+      },
+      {
+        "bytes": 27088,
+        "evidence_file_id": "F0340",
+        "path": ".external/src/releases-pythia8312/src/SigmaNewGaugeBosons.cc",
+        "semantic_file_id": "PY8312-0213",
+        "sha256": "713ebd6a40c2581c9bb331110adf1171f845f16b2251161270a9705833e2dbde"
+      },
+      {
+        "bytes": 48232,
+        "evidence_file_id": "F0341",
+        "path": ".external/src/releases-pythia8312/src/SigmaOnia.cc",
+        "semantic_file_id": "PY8312-0214",
+        "sha256": "ae88b6070402718a3e73a7661774cfdd77fc48ab8827308cd7c69ea74df72824"
+      },
+      {
+        "bytes": 49899,
+        "evidence_file_id": "F0342",
+        "path": ".external/src/releases-pythia8312/src/SigmaProcess.cc",
+        "semantic_file_id": "PY8312-0215",
+        "sha256": "42440c64b809e632d14b77ab9905dc8a2ed9ff15a52bfe5329e2fdf2f53f62dd"
+      },
+      {
+        "bytes": 47064,
+        "evidence_file_id": "F0343",
+        "path": ".external/src/releases-pythia8312/src/SigmaQCD.cc",
+        "semantic_file_id": "PY8312-0216",
+        "sha256": "72c10a2dd112c754e13556749bf6051fb6688f88a6ef171c77765e0bd900a0a1"
+      },
+      {
+        "bytes": 96685,
+        "evidence_file_id": "F0344",
+        "path": ".external/src/releases-pythia8312/src/SigmaSUSY.cc",
+        "semantic_file_id": "PY8312-0217",
+        "sha256": "abc40a4d75e124e0f9d84b4cd36abb232291197db86357885df3088cfd3d2e26"
+      },
+      {
+        "bytes": 106952,
+        "evidence_file_id": "F0345",
+        "path": ".external/src/releases-pythia8312/src/SigmaTotal.cc",
+        "semantic_file_id": "PY8312-0218",
+        "sha256": "d4875e0ac4d92adb0f26352c712dab7aacda21e9783d508c9e8e3f86cc6554f4"
+      },
+      {
+        "bytes": 158580,
+        "evidence_file_id": "F0346",
+        "path": ".external/src/releases-pythia8312/src/SimpleSpaceShower.cc",
+        "semantic_file_id": "PY8312-0219",
+        "sha256": "8598c091488154ddf2ee9780d78d00ed724ff032e279274458c0d834f6384528"
+      },
+      {
+        "bytes": 270967,
+        "evidence_file_id": "F0347",
+        "path": ".external/src/releases-pythia8312/src/SimpleTimeShower.cc",
+        "semantic_file_id": "PY8312-0220",
+        "sha256": "f4bbdff781f110f822c9cf7644c18180b3ce7ad0e686a6f5c098d8321e290803"
+      },
+      {
+        "bytes": 17157,
+        "evidence_file_id": "F0348",
+        "path": ".external/src/releases-pythia8312/src/SimpleWeakShowerMEs.cc",
+        "semantic_file_id": "PY8312-0221",
+        "sha256": "b35d15e9ead397df3daef72631b7fe721cd1e5a97eceabdeea4164eda45b34c1"
+      },
+      {
+        "bytes": 40367,
+        "evidence_file_id": "F0349",
+        "path": ".external/src/releases-pythia8312/src/SplittingsOnia.cc",
+        "semantic_file_id": "PY8312-0222",
+        "sha256": "ff228e56407da06ea8c5200037c41b42f283e23d268e1345738e14077dc455d6"
+      },
+      {
+        "bytes": 25472,
+        "evidence_file_id": "F0350",
+        "path": ".external/src/releases-pythia8312/src/StandardModel.cc",
+        "semantic_file_id": "PY8312-0223",
+        "sha256": "d9f765e83b07c6e4f30124df6772f83b8fdcaad38e7ebd6dd88857957821b42f"
+      },
+      {
+        "bytes": 4921,
+        "evidence_file_id": "F0351",
+        "path": ".external/src/releases-pythia8312/src/Streams.cc",
+        "semantic_file_id": "PY8312-0224",
+        "sha256": "89cc38eef502d66d47214c4ad3332241569cba3df91fbebc19bf46f1cf3d0d8a"
+      },
+      {
+        "bytes": 131053,
+        "evidence_file_id": "F0352",
+        "path": ".external/src/releases-pythia8312/src/StringFragmentation.cc",
+        "semantic_file_id": "PY8312-0225",
+        "sha256": "a8bdd0cd152e30954bb6cbdef37efe2ff39059dcd71ab595608881454f96f62c"
+      },
+      {
+        "bytes": 1336,
+        "evidence_file_id": "F0353",
+        "path": ".external/src/releases-pythia8312/src/StringInteractions.cc",
+        "semantic_file_id": "PY8312-0226",
+        "sha256": "a06f4f02f4c268066f77e6fd5e63e493df57a6499f04fb033552a50b11c2a167"
+      },
+      {
+        "bytes": 6912,
+        "evidence_file_id": "F0354",
+        "path": ".external/src/releases-pythia8312/src/StringLength.cc",
+        "semantic_file_id": "PY8312-0227",
+        "sha256": "bdbfd6174c6b8259218ee1a75ad0bf867209673a31fa2434b0cd9d702c02ed7b"
+      },
+      {
+        "bytes": 38487,
+        "evidence_file_id": "F0355",
+        "path": ".external/src/releases-pythia8312/src/SusyCouplings.cc",
+        "semantic_file_id": "PY8312-0228",
+        "sha256": "e04a61f4762d981b67b5b8690e7306b60fc720a84747f5dbc2ab3fad4361e42e"
+      },
+      {
+        "bytes": 69033,
+        "evidence_file_id": "F0356",
+        "path": ".external/src/releases-pythia8312/src/SusyLesHouches.cc",
+        "semantic_file_id": "PY8312-0229",
+        "sha256": "15800d44676c33b8000c0a7fecc978a01492cb9d73b6585af541d7d6a1108e17"
+      },
+      {
+        "bytes": 59398,
+        "evidence_file_id": "F0357",
+        "path": ".external/src/releases-pythia8312/src/SusyResonanceWidths.cc",
+        "semantic_file_id": "PY8312-0230",
+        "sha256": "1520e525ef2b0404c762d51c6e3169a14f47a28a911f11f0b1558c043fb888b3"
+      },
+      {
+        "bytes": 4806,
+        "evidence_file_id": "F0358",
+        "path": ".external/src/releases-pythia8312/src/SusyWidthFunctions.cc",
+        "semantic_file_id": "PY8312-0231",
+        "sha256": "79cfba931580afa3400020836e28a1cf1a4302b430b022feab121605280e79ad"
+      },
+      {
+        "bytes": 24954,
+        "evidence_file_id": "F0359",
+        "path": ".external/src/releases-pythia8312/src/TauDecays.cc",
+        "semantic_file_id": "PY8312-0232",
+        "sha256": "840b2391d7b5becb0d6aa9f314502e448271ec5fa4d27f598838a015158308b2"
+      },
+      {
+        "bytes": 9969,
+        "evidence_file_id": "F0360",
+        "path": ".external/src/releases-pythia8312/src/UserHooks.cc",
+        "semantic_file_id": "PY8312-0233",
+        "sha256": "527fd6ad5fc43e6a2fadc40de2ef8f4b109cc937f3c21699fd112ac6a5aa6246"
+      },
+      {
+        "bytes": 14438,
+        "evidence_file_id": "F0361",
+        "path": ".external/src/releases-pythia8312/src/Vincia.cc",
+        "semantic_file_id": "PY8312-0234",
+        "sha256": "ec897aca2ddd62e82cb238f1a7543406184f2f65fed5d19a61b0690acf3f4035"
+      },
+      {
+        "bytes": 149726,
+        "evidence_file_id": "F0362",
+        "path": ".external/src/releases-pythia8312/src/VinciaAntennaFunctions.cc",
+        "semantic_file_id": "PY8312-0235",
+        "sha256": "6055cf2778c00047b76c4195c502d72008dc80a53af088d22d0df049ddf914af"
+      },
+      {
+        "bytes": 162800,
+        "evidence_file_id": "F0363",
+        "path": ".external/src/releases-pythia8312/src/VinciaCommon.cc",
+        "semantic_file_id": "PY8312-0236",
+        "sha256": "876a34716be23e4958d4c6b39f4dabdcd0d920b7dbc17b51d3b678c72170bf96"
+      },
+      {
+        "bytes": 4437,
+        "evidence_file_id": "F0364",
+        "path": ".external/src/releases-pythia8312/src/VinciaDiagnostics.cc",
+        "semantic_file_id": "PY8312-0237",
+        "sha256": "5865f9029759bcce8b226beaa609b73c9823590e7e8733049c91feefa2e6af2b"
+      },
+      {
+        "bytes": 197338,
+        "evidence_file_id": "F0365",
+        "path": ".external/src/releases-pythia8312/src/VinciaEW.cc",
+        "semantic_file_id": "PY8312-0238",
+        "sha256": "a3f382b96a9d21314c1d9d13705889274b5ee3a656e4dec181251462cbb3bd8e"
+      },
+      {
+        "bytes": 210690,
+        "evidence_file_id": "F0366",
+        "path": ".external/src/releases-pythia8312/src/VinciaFSR.cc",
+        "semantic_file_id": "PY8312-0239",
+        "sha256": "dfccff73c8bf21e37fd7e1ed10a9376d6ad2b035ce691ba47091fe3cc898b261"
+      },
+      {
+        "bytes": 97603,
+        "evidence_file_id": "F0367",
+        "path": ".external/src/releases-pythia8312/src/VinciaHistory.cc",
+        "semantic_file_id": "PY8312-0240",
+        "sha256": "f32b530eb4ae2d186179a600aed13a4a6a5e470671aeb246b3d14002fa4273cd"
+      },
+      {
+        "bytes": 205475,
+        "evidence_file_id": "F0368",
+        "path": ".external/src/releases-pythia8312/src/VinciaISR.cc",
+        "semantic_file_id": "PY8312-0241",
+        "sha256": "3d575f4abdd11a6d5fc042a53bde21efac28140d724457dfde31a7c8847d62ad"
+      },
+      {
+        "bytes": 17321,
+        "evidence_file_id": "F0369",
+        "path": ".external/src/releases-pythia8312/src/VinciaMerging.cc",
+        "semantic_file_id": "PY8312-0242",
+        "sha256": "3b1b6e68501c5c64fc8eeb11c1456a59b2fc106c8f8186dca2ed1613d63614f1"
+      },
+      {
+        "bytes": 41908,
+        "evidence_file_id": "F0370",
+        "path": ".external/src/releases-pythia8312/src/VinciaMergingHooks.cc",
+        "semantic_file_id": "PY8312-0243",
+        "sha256": "9e7598c2312b6723981afdb5b868a61d9b986db4c680d0905b9ac7ca775b7d4a"
+      },
+      {
+        "bytes": 93425,
+        "evidence_file_id": "F0371",
+        "path": ".external/src/releases-pythia8312/src/VinciaQED.cc",
+        "semantic_file_id": "PY8312-0244",
+        "sha256": "37b7489309530cc701cd1701de85cdae1497b68ec960ff687f07e65de99edf2f"
+      },
+      {
+        "bytes": 54951,
+        "evidence_file_id": "F0372",
+        "path": ".external/src/releases-pythia8312/src/VinciaTrialGenerators.cc",
+        "semantic_file_id": "PY8312-0245",
+        "sha256": "529e550378cf9aa576c586a0da6e51f9753e63055633aeced8e2563ed5e1ecc4"
+      },
+      {
+        "bytes": 8914,
+        "evidence_file_id": "F0373",
+        "path": ".external/src/releases-pythia8312/src/VinciaWeights.cc",
+        "semantic_file_id": "PY8312-0246",
+        "sha256": "1429a521113b5b25ca3307cf538f64b4454da5d2e1909eb11ca90215eb36face"
+      },
+      {
+        "bytes": 36040,
+        "evidence_file_id": "F0374",
+        "path": ".external/src/releases-pythia8312/src/Weights.cc",
+        "semantic_file_id": "PY8312-0247",
+        "sha256": "41dbdf4ef6be090dd701c655b8e8b5ebf67f5c7401d21004432179a73d9887bb"
+      }
+    ],
+    "generated_configuration_note": "Upstream configure materializes Makefile.inc, not a required core parse header; a future task must fail if an include is missing.",
+    "header_count": 127,
+    "include_paths": [
+      "${PYTHIA_SOURCE_ROOT}/include"
+    ],
+    "installed_mirror": {
+      "byte_identical_headers": 127,
+      "release_headers_compared": 127,
+      "root": ".external/pythia-8.3.12/include/Pythia8",
+      "semantic_node_policy": "IDENTITY_EVIDENCE_ONLY_EXCLUDED_FROM_GRAPH_NODES"
+    },
+    "intentional_exclusions": [
+      {
+        "reason": "BYTE_IDENTICAL_INSTALLED_HEADER_MIRROR",
+        "scope": ".external/pythia-8.3.12/include/Pythia8"
+      },
+      {
+        "reason": "NOT_CORE_LIBRARY_TRANSLATION_UNITS",
+        "scope": "examples/"
+      },
+      {
+        "reason": "OPTIONAL_EXTERNAL_DEPENDENCIES_DISABLED_FOR_FIXED_CORE_CONTRACT",
+        "scope": "plugins/"
+      },
+      {
+        "reason": "NON_CXX_SOURCE_INPUT",
+        "scope": "share/ and documentation"
+      },
+      {
+        "reason": "NOT_AUTHORITATIVE_CORE_CXX_SOURCE",
+        "scope": "non-.h/.cc files"
+      }
+    ],
+    "inventory_count": 247,
+    "inventory_identity": "PYTHIA_8_312_RELEASE_CORE_H_CC_247_V1",
+    "inventory_sha256": "bd93a3956f1fbb0ae54555d5a899e64ef3c4236af68d68f83eba6ed60e384e6b",
+    "optional_feature_configuration": {
+      "core_source": "ENABLED",
+      "external_plugins": "DISABLED",
+      "hepmc_and_fastjet_plugins": "DISABLED",
+      "lhapdf_linkage": "DISABLED",
+      "policy": "Expand and re-review the corpus before claiming a path that depends on a disabled module."
+    },
+    "preprocessor_definitions": [],
+    "prior_search_manifest": {
+      "path": "docs/phase1bd_d1d_pythia_semantics_search_manifest.json",
+      "prior_inventory_count": 374,
+      "schema_version": "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3",
+      "sha256": "e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701"
+    },
+    "pythia_version": "8.312",
+    "required_generated_headers": [],
+    "translation_unit_count": 120,
+    "translation_unit_semantic_file_ids": [
+      "PY8312-0128",
+      "PY8312-0129",
+      "PY8312-0130",
+      "PY8312-0131",
+      "PY8312-0132",
+      "PY8312-0133",
+      "PY8312-0134",
+      "PY8312-0135",
+      "PY8312-0136",
+      "PY8312-0137",
+      "PY8312-0138",
+      "PY8312-0139",
+      "PY8312-0140",
+      "PY8312-0141",
+      "PY8312-0142",
+      "PY8312-0143",
+      "PY8312-0144",
+      "PY8312-0145",
+      "PY8312-0146",
+      "PY8312-0147",
+      "PY8312-0148",
+      "PY8312-0149",
+      "PY8312-0150",
+      "PY8312-0151",
+      "PY8312-0152",
+      "PY8312-0153",
+      "PY8312-0154",
+      "PY8312-0155",
+      "PY8312-0156",
+      "PY8312-0157",
+      "PY8312-0158",
+      "PY8312-0159",
+      "PY8312-0160",
+      "PY8312-0161",
+      "PY8312-0162",
+      "PY8312-0163",
+      "PY8312-0164",
+      "PY8312-0165",
+      "PY8312-0166",
+      "PY8312-0167",
+      "PY8312-0168",
+      "PY8312-0169",
+      "PY8312-0170",
+      "PY8312-0171",
+      "PY8312-0172",
+      "PY8312-0173",
+      "PY8312-0174",
+      "PY8312-0175",
+      "PY8312-0176",
+      "PY8312-0177",
+      "PY8312-0178",
+      "PY8312-0179",
+      "PY8312-0180",
+      "PY8312-0181",
+      "PY8312-0182",
+      "PY8312-0183",
+      "PY8312-0184",
+      "PY8312-0185",
+      "PY8312-0186",
+      "PY8312-0187",
+      "PY8312-0188",
+      "PY8312-0189",
+      "PY8312-0190",
+      "PY8312-0191",
+      "PY8312-0192",
+      "PY8312-0193",
+      "PY8312-0194",
+      "PY8312-0195",
+      "PY8312-0196",
+      "PY8312-0197",
+      "PY8312-0198",
+      "PY8312-0199",
+      "PY8312-0200",
+      "PY8312-0201",
+      "PY8312-0202",
+      "PY8312-0203",
+      "PY8312-0204",
+      "PY8312-0205",
+      "PY8312-0206",
+      "PY8312-0207",
+      "PY8312-0208",
+      "PY8312-0209",
+      "PY8312-0210",
+      "PY8312-0211",
+      "PY8312-0212",
+      "PY8312-0213",
+      "PY8312-0214",
+      "PY8312-0215",
+      "PY8312-0216",
+      "PY8312-0217",
+      "PY8312-0218",
+      "PY8312-0219",
+      "PY8312-0220",
+      "PY8312-0221",
+      "PY8312-0222",
+      "PY8312-0223",
+      "PY8312-0224",
+      "PY8312-0225",
+      "PY8312-0226",
+      "PY8312-0227",
+      "PY8312-0228",
+      "PY8312-0229",
+      "PY8312-0230",
+      "PY8312-0231",
+      "PY8312-0232",
+      "PY8312-0233",
+      "PY8312-0234",
+      "PY8312-0235",
+      "PY8312-0236",
+      "PY8312-0237",
+      "PY8312-0238",
+      "PY8312-0239",
+      "PY8312-0240",
+      "PY8312-0241",
+      "PY8312-0242",
+      "PY8312-0243",
+      "PY8312-0244",
+      "PY8312-0245",
+      "PY8312-0246",
+      "PY8312-0247"
+    ],
+    "upstream_commit_sha": "cf0823ace0e2ebc2435f3f614e0926e9b381e21f",
+    "upstream_core_compiler_flags": [
+      "-O2",
+      "-std=c++11",
+      "-pedantic",
+      "-W",
+      "-Wall",
+      "-Wshadow",
+      "-fPIC",
+      "-pthread"
+    ],
+    "upstream_repository": "https://gitlab.com/Pythia8/releases",
+    "upstream_tag": "pythia8312"
+  },
+  "authorization": {
+    "ALTERNATIVE_GENERATOR_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "PROTOTYPE_AUTHORIZED": false,
+    "PYTHIA_FORK_AUTHORIZED": false,
+    "PYTHIA_INIT_AUTHORIZED": false,
+    "PYTHIA_NEXT_AUTHORIZED": false,
+    "SIGNED_WEIGHT_PROTOTYPE_AUTHORIZED": false
+  },
+  "calibration_contract": {
+    "acceptance_zero_counts": [
+      "GLOBAL_NAME_FALLBACK",
+      "SYNTHETIC_ROOT_ATTACHMENT",
+      "DANGLING_CALIBRATION_REFERENCE",
+      "UNRESOLVED_BINDING_MEMBER",
+      "NOT_RECOVERED_BINDING_MEMBER"
+    ],
+    "historical_member_count": 672,
+    "may_define_edges": false,
+    "may_define_reachability": false,
+    "may_influence_fallback": false,
+    "may_seed_identifiers": false,
+    "may_seed_roots": false,
+    "report_states": [
+      "LOCALLY_RECOVERED",
+      "EXPLICIT_BOUNDARY_OR_POLICY_EXEMPTION",
+      "UNRESOLVED",
+      "NOT_RECOVERED"
+    ],
+    "use": "POST_CONSTRUCTION_HOLDOUT_ONLY"
+  },
+  "compilation_database_contract": {
+    "canonical_argv_template": [
+      "${PINNED_LLVM_18_1_8_ROOT}/bin/clang++",
+      "-std=c++11",
+      "-pedantic",
+      "-W",
+      "-Wall",
+      "-Wshadow",
+      "-fPIC",
+      "-pthread",
+      "-I${PYTHIA_SOURCE_ROOT}/include",
+      "-fsyntax-only",
+      "${SOURCE_FILE}"
+    ],
+    "canonicalization": [
+      "Store argv arrays, never shell command strings.",
+      "Normalize paths to repository-relative POSIX paths and stable root placeholders.",
+      "Sort entries by semantic_file_id and reject duplicate or omitted translation units.",
+      "Exclude output paths, wall-clock values, host paths, and non-allowlisted environment.",
+      "Hash canonical compact JSON for the command set and environment separately."
+    ],
+    "compile_commands_present_at_review": false,
+    "compiler": {
+      "executable": "${PINNED_LLVM_18_1_8_ROOT}/bin/clang++",
+      "llvm_commit_sha": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
+      "version": "18.1.8"
+    },
+    "database_generated_in_this_task": false,
+    "environment_allowlist": {
+      "LC_ALL": "C",
+      "TZ": "UTC"
+    },
+    "inspected_existing_build_tools": {
+      "clang": "NOT_INSTALLED",
+      "clang_query": "NOT_INSTALLED",
+      "cmake": "/usr/bin/cmake 3.28.3",
+      "codeql": "NOT_INSTALLED",
+      "gcc": "/usr/bin/gcc 13.3.0",
+      "gxx": "/usr/bin/g++ 13.3.0"
+    },
+    "link_or_generator_execution_required": false,
+    "missing_or_unparsable_policy": "FAIL_CLOSED",
+    "optional_modules": "All external plugins disabled; core 120 translation units required.",
+    "required_future_identities": [
+      "canonical_compile_command_set_sha256",
+      "canonical_environment_sha256",
+      "compiler_binary_sha256",
+      "toolchain_release_commit_sha"
+    ],
+    "source_only_configuration_sufficient": true,
+    "strategy": "REPOSITORY_OWNED_SOURCE_ONLY_JSON_COMPILATION_DATABASE",
+    "upstream_build_system": "configure plus GNU Makefile",
+    "upstream_cmake_can_emit_for_this_corpus": false
+  },
+  "cost_bound": {
+    "corpus_execution_person_weeks": 0.25,
+    "estimate_scope": "One pinned toolchain, the 247-file/120-TU core corpus, fail-closed graph relations, calibration, controls, and static evidence only.",
+    "evidence_normalization_person_weeks": 0.75,
+    "graph_implementation_person_weeks": 4.25,
+    "implementation_cap_person_weeks": 8.0,
+    "implementation_total_person_weeks": 7.0,
+    "independent_review_cap_person_weeks": 2.0,
+    "independent_review_person_weeks": 2.0,
+    "tests_person_weeks": 1.0,
+    "toolchain_preparation_person_weeks": 0.75
+  },
+  "decision": "FEASIBLE_FOR_SEPARATE_STATIC_EVIDENCE_TASK",
+  "dependencies": {
+    "blocked_downstream_issue": {
+      "authorization": "NOT_AUTHORIZED",
+      "gate_decision": "NOT_EVALUATED",
+      "number": 10,
+      "state": "OPEN_BLOCKED"
+    },
+    "completed_d1d_issue": {
+      "number": 42,
+      "state": "CLOSED"
+    },
+    "planning_issue": {
+      "authorization": "PLANNING_ONLY",
+      "number": 45,
+      "state": "OPEN"
+    }
+  },
+  "failure_scope": "Failure would reject this bounded Clang-18.1.8 static consumer-graph plan; it would not prove all future source-analysis methods impossible.",
+  "false_negative_challenge": {
+    "acceptance": "ZERO_MATERIAL_MISSES_AND_ZERO_UNRESOLVED_BINDING_CHALLENGES",
+    "independent_from_graph_construction": true,
+    "required_classes": [
+      "NEUTRAL_NAME_ALIASES",
+      "MEMBER_WRITES_READ_IN_ANOTHER_FUNCTION",
+      "PARAMETER_PROPAGATION",
+      "RETURN_TO_CALLER_PROPAGATION",
+      "REFERENCES_AND_POINTERS",
+      "TEMPLATES",
+      "MACROS",
+      "VIRTUAL_DISPATCH",
+      "HELPER_WRAPPERS",
+      "NEUTRAL_NAME_CACHE_VARIABLES"
+    ]
+  },
+  "graph_edge_contract": {
+    "direct_root_to_unit_synthetic_edge_allowed": false,
+    "edge_kinds": [
+      "DECLARES",
+      "HAS_STATIC_TYPE",
+      "POINTS_TO",
+      "ASSIGNED_FROM",
+      "MAY_ALIAS",
+      "PASSED_AS_ARGUMENT",
+      "RECEIVED_AS_PARAMETER",
+      "RETURNS",
+      "RETURN_VALUE_CONSUMED_BY",
+      "CALLS",
+      "VIRTUAL_DISPATCH_CANDIDATE",
+      "READS_FIELD",
+      "WRITES_FIELD",
+      "CACHE_WRITE",
+      "CACHE_READ",
+      "ARITHMETIC_DEPENDENCY",
+      "CONDITION_DEPENDENCY",
+      "CATEGORICAL_SELECTION_DEPENDENCY",
+      "DENOMINATOR_DEPENDENCY",
+      "MAXIMUM_OR_ENVELOPE_DEPENDENCY",
+      "EVENT_WEIGHT_DEPENDENCY"
+    ],
+    "required_fields": [
+      "exact_source_coordinate",
+      "enclosing_function_or_declaration",
+      "source_static_type",
+      "target_static_type",
+      "derivation_rule",
+      "confidence_or_evidence_state",
+      "translation_unit_identity"
+    ],
+    "source_support_required": true
+  },
+  "graph_root_contract": {
+    "prohibitions": {
+      "filename_substring_roots": false,
+      "global_xf_pdf_pdfptr_fallback": false,
+      "historical_member_seeded_roots": false,
+      "identifier_name_roots": false,
+      "synthetic_root_without_source_coordinate": false
+    },
+    "required_root_classes": [
+      "PYTHIA8_PDF_PROVIDER_TYPE_AND_ACTUAL_DERIVED_TYPES",
+      "PDF_POINTER_DECLARATIONS_AND_FIELDS",
+      "SIXTEEN_PDF_POINTER_ROLES",
+      "POINTER_CONSTRUCTION_ASSIGNMENT_AND_INSTALLATION",
+      "BEAM_PARTICLE_FORWARDING_INTERFACES",
+      "PUBLIC_XF_XFVAL_XFSEA_READERS",
+      "PROTECTED_OR_VIRTUAL_PROVIDER_UPDATE_INTERFACES",
+      "PDF_DERIVED_CACHES",
+      "ALPHA_S_PROVIDERS_AND_ROUTING",
+      "HARD_PROCESS_NEUTRAL_CURRENT_CONSUMERS",
+      "ISR_BACKWARD_EVOLUTION_CONSUMERS",
+      "BEAM_REMNANT_CONSUMERS",
+      "EXPLICIT_LHA_COMPLETE_EVENT_WEIGHT_BOUNDARIES"
+    ],
+    "root_basis": "TYPED_SOURCE_DECLARATION_DEFINITION_OR_ASSIGNMENT_COORDINATE_ONLY",
+    "sixteen_pointer_roles": [
+      "pdfAPtr",
+      "pdfBPtr",
+      "pdfHardAPtr",
+      "pdfHardBPtr",
+      "pdfPomAPtr",
+      "pdfPomBPtr",
+      "pdfGamAPtr",
+      "pdfGamBPtr",
+      "pdfHardGamAPtr",
+      "pdfHardGamBPtr",
+      "pdfUnresAPtr",
+      "pdfUnresBPtr",
+      "pdfUnresGamAPtr",
+      "pdfUnresGamBPtr",
+      "pdfVMDAPtr",
+      "pdfVMDBPtr"
+    ]
+  },
+  "negative_controls": {
+    "co_located_line_admission_allowed": false,
+    "identifiers": [
+      "state",
+      "size",
+      "id",
+      "push_back",
+      "p",
+      "Vec4"
+    ],
+    "lexical_name_admission_allowed": false,
+    "required_proof": "The exact lexical occurrence must lie on a typed, source-backed provenance path."
+  },
+  "next_step": {
+    "action": "SEPARATE_REVIEW_OF_D1E_FEASIBILITY_AND_ACCEPTANCE_CONTRACT",
+    "condition": "Only a later explicit decision may open a separately scoped static-evidence implementation task.",
+    "implementation_authorized": false
+  },
+  "non_failure_scope": "Feasibility does not establish graph completeness, signed-rate mathematics, runtime reachability, generator compatibility, or permission to implement.",
+  "objective": {
+    "planning_only": true,
+    "production_graph_constructed": false,
+    "scientific_objective_unchanged": "p(theta_PDF | D), where D is a set of events",
+    "task": "Decide whether a separately reviewed AST-grounded PYTHIA PDF-consumer graph task is technically bounded and scientifically useful."
+  },
+  "precedence": {
+    "ARCHITECTURE_COMPARISON_READY": false,
+    "CURRENT_OPERATIONAL_POLICY": "PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION",
+    "D1C_FINAL_DECISION": "FAIL",
+    "D1D_A_FAILED_GATE": "provenance_evidence_integrity",
+    "D1D_A_FINAL_DECISION": "FAIL",
+    "D1D_B_FINAL_DECISION": "INCONCLUSIVE",
+    "D2_AUTHORIZED": false,
+    "MINIMAL_PUBLIC_READER_PATCH": "INSUFFICIENT",
+    "PROVENANCE_SLICE_V1_DECISION": "FAIL",
+    "PROVENANCE_SLICE_V1_STATUS": "REJECTED_DIAGNOSTIC"
+  },
+  "schema_version": "partonsbi.phase1bd.d1e.consumer-graph-feasibility.v1",
+  "scientific_decisiveness": {
+    "cannot_establish": [
+      "SIGNED_PROBABILITY_OR_RATE_VALIDITY",
+      "SIGNED_SUDAKOV_MATHEMATICS",
+      "RUNTIME_POINTER_IDENTITY",
+      "ACTUAL_GENERATOR_QUERY_ENVELOPES"
+    ],
+    "could_materially_repair_failed_gate": "provenance_evidence_integrity",
+    "not_merely_lexical_reason": "LibTooling can anchor typed declarations, calls, assignments, parameters, returns, and fields; repository logic must connect only source-supported relations and fail closed.",
+    "repair_is_conditional_on_all_binding_gates": true,
+    "scientific_contract_changed": false,
+    "stop_conditions": [
+      "Any required translation unit cannot be parsed reproducibly.",
+      "Interprocedural or member flow cannot be source-backed within the implementation cap.",
+      "The holdout or independent challenge exposes a material missed path that cannot be bounded.",
+      "The result degenerates into identifier, filename, global, historical, or synthetic fallback."
+    ]
+  },
+  "selected_toolchain": {
+    "candidate_id": "LLVM_CLANG_LIBTOOLING_18_1_8",
+    "reason": "The pinned API exposes typed AST and source locations while permitting repository-owned fail-closed interprocedural normalization within the cost cap.",
+    "selection_scope": "FEASIBILITY_REFERENCE_ONLY_NOT_AUTHORIZATION_FOR_ACQUISITION_OR_IMPLEMENTATION"
+  },
+  "static_runtime_boundary": {
+    "runtime_evidence_may_satisfy_static_gate": false,
+    "runtime_only_properties": [
+      {
+        "later_evidence": "Separately authorized configuration-specific runtime pointer identity trace.",
+        "property": "actual_runtime_pointer_installation",
+        "statically_proven": false
+      },
+      {
+        "later_evidence": "Separately authorized post-init mutation trace over the selected configuration.",
+        "property": "post_init_pointer_substitution",
+        "statically_proven": false
+      },
+      {
+        "later_evidence": "Reviewed configuration plus runtime target observation for every dynamic dispatch site.",
+        "property": "configuration_selected_dynamic_targets",
+        "statically_proven": false
+      },
+      {
+        "later_evidence": "Separately authorized bounded query-envelope measurement with support checks.",
+        "property": "runtime_query_envelopes",
+        "statically_proven": false
+      },
+      {
+        "later_evidence": "Separately authorized concurrency and lifecycle validation.",
+        "property": "thread_and_process_behavior",
+        "statically_proven": false
+      }
+    ],
+    "static_graph_can_authorize_issue_10_or_d2": false
+  },
+  "toolchain_candidates": [
+    {
+      "acquisition_and_pinning_strategy": {
+        "installation_performed_in_this_task": false,
+        "method": "Future task obtains official llvm-project tag llvmorg-18.1.8 and verifies peeled commit before a separate reviewed installation/build step.",
+        "pin_is_immutable": true
+      },
+      "candidate_feasibility": "PINNABLE_AND_RELATIONS_TECHNICALLY_REPRESENTABLE",
+      "candidate_id": "LLVM_CLANG_LIBTOOLING_18_1_8",
+      "capabilities": {
+        "alias_pointer_analysis": {
+          "future_requirement": "Resolve only source-supported points-to/assignment facts; serialize every remainder as blocking.",
+          "limitation": "General C++ alias closure and runtime pointer replacement are not guaranteed.",
+          "primary_evidence": "Typed pointer/reference assignments can be extracted from the AST.",
+          "support": "PARTIAL_FAIL_CLOSED"
+        },
+        "cxx_language_and_templates": {
+          "future_requirement": "Fail closed on a required template use without a materialized specialization.",
+          "limitation": "Only materialized instantiations in the fixed translation-unit set are visible.",
+          "primary_evidence": "Clang 18.1.8 parses C++11 templates and exposes typed AST declarations and instantiations.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "deterministic_serialization": {
+          "future_requirement": "Sort canonical source-backed keys and hash normalized records.",
+          "limitation": "Raw traversal order and compiler-internal IDs are not a stable artifact contract.",
+          "primary_evidence": "USR/type/coordinate anchors can be normalized independently of traversal order.",
+          "support": "SUPPORTED_WITH_REPOSITORY_NORMALIZER"
+        },
+        "dynamic_dispatch": {
+          "future_requirement": "Emit candidate targets and block closure when the target set is not closed.",
+          "limitation": "Runtime-selected concrete targets cannot be proven statically.",
+          "primary_evidence": "Typed virtual call sites and class hierarchies are representable.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "field_member_dataflow": {
+          "future_requirement": "Index field identity and all writes/reads across the authoritative corpus.",
+          "limitation": "Cross-function write/read flow requires repository-owned indexing.",
+          "primary_evidence": "Member expressions and field declarations carry static type and coordinates.",
+          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+        },
+        "interprocedural_call_and_return": {
+          "future_requirement": "Implement deterministic call-site/parameter/return matching and fail on unresolved callees.",
+          "limitation": "Clang AST traversal alone does not construct whole-program value flow.",
+          "primary_evidence": "AST call expressions, function declarations, parameters, and returns expose the required anchors.",
+          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+        },
+        "macro_handling": {
+          "future_requirement": "Serialize both spelling and expansion ranges or emit MACRO_GENERATED_USE_UNRESOLVED.",
+          "limitation": "Macro-generated semantics need an explicit expansion policy.",
+          "primary_evidence": "Clang source locations distinguish spelling and expansion coordinates.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "source_coordinate_stability": {
+          "future_requirement": "Bind every coordinate to source SHA-256 and canonical compile-command identity.",
+          "limitation": "Coordinates change if source bytes or flags change.",
+          "primary_evidence": "Pinned bytes plus Clang spelling/expansion offsets provide deterministic coordinates.",
+          "support": "SUPPORTED"
+        }
+      },
+      "ci_availability": "NOT_IN_CURRENT_WORKFLOW; FUTURE_PINNED_TOOLCHAIN_JOB_FEASIBLE",
+      "compilation_database_requirements": "A deterministic repository-owned JSON Compilation Database containing all 120 release translation units and exact Clang argv arrays.",
+      "exact_tool_identity": {
+        "official_documentation": "https://releases.llvm.org/18.1.8/tools/clang/docs/LibTooling.html",
+        "official_repository": "https://github.com/llvm/llvm-project",
+        "release_commit_sha": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
+        "release_tag": "llvmorg-18.1.8",
+        "tool": "LLVM/Clang LibTooling and Clang Tooling API",
+        "version": "18.1.8"
+      },
+      "expected_unresolved_classes": [
+        "UNRESOLVED_ALIAS",
+        "UNRESOLVED_VIRTUAL_TARGET",
+        "FUNCTION_POINTER_UNRESOLVED",
+        "TEMPLATE_INSTANTIATION_NOT_MATERIALIZED",
+        "MACRO_GENERATED_USE_UNRESOLVED",
+        "EXTERNAL_LIBRARY_BOUNDARY",
+        "RUNTIME_SELECTED_PROVIDER",
+        "POST_INIT_POINTER_REPLACEMENT",
+        "CONFIGURATION_DEPENDENT_REACHABILITY",
+        "MISSING_TRANSLATION_UNIT",
+        "PARSE_FAILURE"
+      ],
+      "implementation_burden_person_weeks": 4.25,
+      "independent_review_burden_person_weeks": 1.5,
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "wsl_availability": "NOT_CURRENTLY_INSTALLED; PINNED_ACQUISITION_FEASIBLE"
+    },
+    {
+      "acquisition_and_pinning_strategy": {
+        "installation_performed_in_this_task": false,
+        "method": "Same pinned Clang 18.1.8 release; consume source-only AST output and own all cross-translation-unit normalization.",
+        "pin_is_immutable": true
+      },
+      "candidate_feasibility": "TECHNICALLY_POSSIBLE_BUT_NORMALIZER_BURDEN_NEAR_CAP",
+      "candidate_id": "CLANG_AST_JSON_QUERY_NORMALIZER_18_1_8",
+      "capabilities": {
+        "alias_pointer_analysis": {
+          "future_requirement": "Resolve only source-supported points-to/assignment facts; serialize every remainder as blocking.",
+          "limitation": "General C++ alias closure and runtime pointer replacement are not guaranteed.",
+          "primary_evidence": "Typed pointer/reference assignments can be extracted from the AST.",
+          "support": "PARTIAL_FAIL_CLOSED"
+        },
+        "cxx_language_and_templates": {
+          "future_requirement": "Fail closed on a required template use without a materialized specialization.",
+          "limitation": "Only materialized instantiations in the fixed translation-unit set are visible.",
+          "primary_evidence": "Clang 18.1.8 parses C++11 templates and exposes typed AST declarations and instantiations.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "deterministic_serialization": {
+          "future_requirement": "Sort canonical source-backed keys and hash normalized records.",
+          "limitation": "Raw traversal order and compiler-internal IDs are not a stable artifact contract.",
+          "primary_evidence": "USR/type/coordinate anchors can be normalized independently of traversal order.",
+          "support": "SUPPORTED_WITH_REPOSITORY_NORMALIZER"
+        },
+        "dynamic_dispatch": {
+          "future_requirement": "Emit candidate targets and block closure when the target set is not closed.",
+          "limitation": "Runtime-selected concrete targets cannot be proven statically.",
+          "primary_evidence": "Typed virtual call sites and class hierarchies are representable.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "field_member_dataflow": {
+          "future_requirement": "Index field identity and all writes/reads across the authoritative corpus.",
+          "limitation": "Cross-function write/read flow requires repository-owned indexing.",
+          "primary_evidence": "Member expressions and field declarations carry static type and coordinates.",
+          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+        },
+        "interprocedural_call_and_return": {
+          "future_requirement": "Implement deterministic call-site/parameter/return matching and fail on unresolved callees.",
+          "limitation": "Clang AST traversal alone does not construct whole-program value flow.",
+          "primary_evidence": "AST call expressions, function declarations, parameters, and returns expose the required anchors.",
+          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+        },
+        "macro_handling": {
+          "future_requirement": "Serialize both spelling and expansion ranges or emit MACRO_GENERATED_USE_UNRESOLVED.",
+          "limitation": "Macro-generated semantics need an explicit expansion policy.",
+          "primary_evidence": "Clang source locations distinguish spelling and expansion coordinates.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "source_coordinate_stability": {
+          "future_requirement": "Bind every coordinate to source SHA-256 and canonical compile-command identity.",
+          "limitation": "Coordinates change if source bytes or flags change.",
+          "primary_evidence": "Pinned bytes plus Clang spelling/expansion offsets provide deterministic coordinates.",
+          "support": "SUPPORTED"
+        }
+      },
+      "ci_availability": "NOT_IN_CURRENT_WORKFLOW; FUTURE_PINNED_TOOLCHAIN_JOB_FEASIBLE",
+      "compilation_database_requirements": "The same exact 120-translation-unit database; JSON emission does not remove compile-flag dependence.",
+      "exact_tool_identity": {
+        "official_documentation": "https://releases.llvm.org/18.1.8/tools/clang/docs/IntroductionToTheClangAST.html",
+        "official_repository": "https://github.com/llvm/llvm-project",
+        "release_commit_sha": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
+        "release_tag": "llvmorg-18.1.8",
+        "tool": "Clang AST JSON / clang-query plus repository-owned normalizer",
+        "version": "18.1.8"
+      },
+      "expected_unresolved_classes": [
+        "UNRESOLVED_ALIAS",
+        "UNRESOLVED_VIRTUAL_TARGET",
+        "FUNCTION_POINTER_UNRESOLVED",
+        "TEMPLATE_INSTANTIATION_NOT_MATERIALIZED",
+        "MACRO_GENERATED_USE_UNRESOLVED",
+        "EXTERNAL_LIBRARY_BOUNDARY",
+        "RUNTIME_SELECTED_PROVIDER",
+        "POST_INIT_POINTER_REPLACEMENT",
+        "CONFIGURATION_DEPENDENT_REACHABILITY",
+        "MISSING_TRANSLATION_UNIT",
+        "PARSE_FAILURE"
+      ],
+      "implementation_burden_person_weeks": 6.5,
+      "independent_review_burden_person_weeks": 2.0,
+      "license": "Apache-2.0 WITH LLVM-exception",
+      "wsl_availability": "NOT_CURRENTLY_INSTALLED; PINNED_ACQUISITION_FEASIBLE"
+    },
+    {
+      "acquisition_and_pinning_strategy": {
+        "installation_performed_in_this_task": false,
+        "method": "Future review would pin official CLI bundle v2.25.5 and matching query-repository commit; no acquisition occurred here.",
+        "pin_is_immutable": true
+      },
+      "candidate_feasibility": "TECHNICALLY_CAPABLE_BUT_CI_DATABASE_LICENSE_AND_MODEL_STABILITY_BLOCK_SELECTION",
+      "candidate_id": "CODEQL_CPP_2_25_5",
+      "capabilities": {
+        "alias_pointer_analysis": {
+          "future_requirement": "Audit every modeled/unmodeled boundary and retain blocking unresolved states.",
+          "limitation": "Runtime-selected providers and model gaps remain unresolved.",
+          "primary_evidence": "Official C/C++ data-flow libraries model pointer indirections and fields.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "cxx_language_and_templates": {
+          "future_requirement": "Fail closed on a required template use without a materialized specialization.",
+          "limitation": "Only materialized instantiations in the fixed translation-unit set are visible.",
+          "primary_evidence": "Clang 18.1.8 parses C++11 templates and exposes typed AST declarations and instantiations.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "deterministic_serialization": {
+          "future_requirement": "Sort canonical source-backed keys and hash normalized records.",
+          "limitation": "Raw traversal order and compiler-internal IDs are not a stable artifact contract.",
+          "primary_evidence": "USR/type/coordinate anchors can be normalized independently of traversal order.",
+          "support": "SUPPORTED_WITH_REPOSITORY_NORMALIZER"
+        },
+        "dynamic_dispatch": {
+          "future_requirement": "Emit candidate targets and block closure when the target set is not closed.",
+          "limitation": "Runtime-selected concrete targets cannot be proven statically.",
+          "primary_evidence": "Typed virtual call sites and class hierarchies are representable.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "field_member_dataflow": {
+          "future_requirement": "Index field identity and all writes/reads across the authoritative corpus.",
+          "limitation": "Cross-function write/read flow requires repository-owned indexing.",
+          "primary_evidence": "Member expressions and field declarations carry static type and coordinates.",
+          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+        },
+        "interprocedural_call_and_return": {
+          "future_requirement": "Pin the query pack, enumerate modeled boundaries, and fail closed on unmodeled calls.",
+          "limitation": "Custom models and dynamic target completeness remain query- and version-dependent.",
+          "primary_evidence": "Official CodeQL C/C++ libraries provide local/global data-flow and call-graph APIs.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "macro_handling": {
+          "future_requirement": "Serialize both spelling and expansion ranges or emit MACRO_GENERATED_USE_UNRESOLVED.",
+          "limitation": "Macro-generated semantics need an explicit expansion policy.",
+          "primary_evidence": "Clang source locations distinguish spelling and expansion coordinates.",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
+        },
+        "source_coordinate_stability": {
+          "future_requirement": "Bind every coordinate to source SHA-256 and canonical compile-command identity.",
+          "limitation": "Coordinates change if source bytes or flags change.",
+          "primary_evidence": "Pinned bytes plus Clang spelling/expansion offsets provide deterministic coordinates.",
+          "support": "SUPPORTED"
+        }
+      },
+      "ci_availability": "DATABASE_GENERATION_IN_AUTOMATED_CI_NOT_SUPPORTED_BY_STANDARD_DOWNLOADED_CLI_TERMS",
+      "compilation_database_requirements": "Manual-build database creation with the exact source-only build commands; this adds capture and licensing constraints.",
+      "exact_tool_identity": {
+        "binary_release_commit_sha": "697ca25e7c992daa3ecdb020fb62c38d0f5f8907",
+        "binary_release_tag": "v2.25.5",
+        "official_documentation": "https://docs.github.com/en/code-security/codeql-cli",
+        "official_repository": "https://github.com/github/codeql",
+        "query_repository_commit_sha": "b551e89ea8e011c0e3301fd0ce05589c9f2d3681",
+        "query_repository_tag": "codeql-cli/v2.25.5",
+        "tool": "GitHub CodeQL CLI C/C++ database and query layer",
+        "version": "2.25.5"
+      },
+      "expected_unresolved_classes": [
+        "UNRESOLVED_ALIAS",
+        "UNRESOLVED_VIRTUAL_TARGET",
+        "FUNCTION_POINTER_UNRESOLVED",
+        "TEMPLATE_INSTANTIATION_NOT_MATERIALIZED",
+        "MACRO_GENERATED_USE_UNRESOLVED",
+        "EXTERNAL_LIBRARY_BOUNDARY",
+        "RUNTIME_SELECTED_PROVIDER",
+        "POST_INIT_POINTER_REPLACEMENT",
+        "CONFIGURATION_DEPENDENT_REACHABILITY",
+        "MISSING_TRANSLATION_UNIT",
+        "PARSE_FAILURE"
+      ],
+      "implementation_burden_person_weeks": 5.0,
+      "independent_review_burden_person_weeks": 2.0,
+      "license": "CodeQL CLI standard terms; query repository MIT",
+      "wsl_availability": "NOT_CURRENTLY_INSTALLED; LICENSE_REVIEW_REQUIRED"
+    }
+  ],
+  "unresolved_evidence_contract": {
+    "closure_requires_zero_unresolved_binding_paths": true,
+    "critical_path_policy": "UNRESOLVED_HARD_PROCESS_ISR_OR_REMNANT_PATH_BLOCKS_COMPLETENESS",
+    "states": [
+      "UNRESOLVED_ALIAS",
+      "UNRESOLVED_VIRTUAL_TARGET",
+      "FUNCTION_POINTER_UNRESOLVED",
+      "TEMPLATE_INSTANTIATION_NOT_MATERIALIZED",
+      "MACRO_GENERATED_USE_UNRESOLVED",
+      "EXTERNAL_LIBRARY_BOUNDARY",
+      "RUNTIME_SELECTED_PROVIDER",
+      "POST_INIT_POINTER_REPLACEMENT",
+      "CONFIGURATION_DEPENDENT_REACHABILITY",
+      "MISSING_TRANSLATION_UNIT",
+      "PARSE_FAILURE"
+    ],
+    "unresolved_may_satisfy_supported_edge": false
+  },
+  "validation": {
+    "artifact_generation_deterministic": true,
+    "compile_database_generated": false,
+    "generator_or_physics_execution_performed": false,
+    "parser_or_graph_execution_performed": false,
+    "production_graph_nodes_or_edges_generated": false
+  }
+}
