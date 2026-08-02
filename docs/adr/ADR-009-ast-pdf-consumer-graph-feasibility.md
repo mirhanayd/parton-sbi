@@ -1,23 +1,22 @@
 # ADR-009: AST-grounded PYTHIA PDF-consumer graph feasibility
 
 - Status: Proposed
-- Date: 2026-08-02
-- Decision: `FEASIBLE_FOR_SEPARATE_STATIC_EVIDENCE_TASK`
+- Proposed decision: `INCONCLUSIVE`
+- Preferred feasibility candidate: `LLVM_CLANG_LIBTOOLING_18_1_8`
+- Selected toolchain: `null`
+- Compile-contract status: `SOURCE_INSPECTION_CORRECTED_BUT_PARSE_NOT_VALIDATED`
+- Implementation-cost bound: `NOT_SUPPORTED`
 - Operational policy: `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`
 
-## Context
+## Context and precedence
 
-D1D-A failed at `provenance_evidence_integrity`. Its tokenizer-based provenance
-slice remains a rejected diagnostic: it promoted ordinary uses and calls to
-roots, attached historical members to global roots, emitted synthetic
-root-to-unit edges, and lacked production interprocedural dataflow. D1D-B was
-therefore `INCONCLUSIVE` and retained the non-authorizing pause.
-
-This ADR asks a narrower planning question: can one future, independently
-reviewed static-evidence task build a typed, source-backed consumer graph with
-explicit completeness gates? It does not build that graph. No parser was
-installed or run, no compilation database was generated, and no production
-graph node or edge was created.
+The rejected tokenizer provenance slice did not establish a complete,
+source-backed PDF-consumer graph. A typed AST approach remains scientifically
+relevant to the failed `provenance_evidence_integrity` gate, but the previous
+v1 `FEASIBLE_FOR_SEPARATE_STATIC_EVIDENCE_TASK` result depended on incomplete
+compile commands, shallow decision predicates, and an unsupported cost bound.
+Because PR #46 remains draft, that v1 planning result is superseded rather than
+preserved as an immutable scientific result.
 
 The immutable precedence remains:
 
@@ -34,197 +33,190 @@ ARCHITECTURE_COMPARISON_READY = false
 D2_AUTHORIZED = false
 ```
 
-## Primary tooling evidence
+All ten implementation, prototype, generator, event, dataset, and D2
+authorization flags remain false.
 
-The review used official documentation and source repositories only:
+## Corrected decision
 
-- LLVM/Clang LibTooling 18.1.8 documentation:
-  <https://releases.llvm.org/18.1.8/tools/clang/docs/LibTooling.html>
-- LLVM/Clang AST introduction 18.1.8:
-  <https://releases.llvm.org/18.1.8/tools/clang/docs/IntroductionToTheClangAST.html>
-- LLVM project tag `llvmorg-18.1.8`, peeled commit
-  `3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff`:
-  <https://github.com/llvm/llvm-project>
-- CMake `CMAKE_EXPORT_COMPILE_COMMANDS` documentation:
-  <https://cmake.org/cmake/help/latest/variable/CMAKE_EXPORT_COMPILE_COMMANDS.html>
-- CodeQL CLI and C/C++ dataflow documentation:
-  <https://docs.github.com/en/code-security/codeql-cli> and
-  <https://codeql.github.com/docs/codeql-language-guides/analyzing-data-flow-in-cpp/>
-- CodeQL CLI v2.25.5 and query repository tag `codeql-cli/v2.25.5`, query
-  commit `b551e89ea8e011c0e3301fd0ce05589c9f2d3681`:
-  <https://github.com/github/codeql>
-- Official PYTHIA release tag `pythia8312`, commit
-  `cf0823ace0e2ebc2435f3f614e0926e9b381e21f`:
-  <https://gitlab.com/Pythia8/releases>
+The v2 artifact derives `INCONCLUSIVE` because:
 
-LibTooling exposes the complete typed AST and source locations and consumes a
-JSON compilation database. Those facts make the required relations
-representable; they do not supply whole-program dataflow automatically.
-Repository-owned, deterministic interprocedural normalization and fail-closed
-unresolved states are still required.
+```text
+AST_GRAPH_APPROACH_REMAINS_SCIENTIFICALLY_RELEVANT
+CURRENT_IMPLEMENTATION_SCOPE_NOT_CREDIBLY_BOUNDED
+COMPILE_CONTRACT_NOT_YET_SUPPORTED
+IMPLEMENTATION_NOT_AUTHORIZED
+```
 
-## Candidate assessment
+The corpus identity is supported and LLVM is a plausible typed-AST
+foundation, so `DO_NOT_PROCEED` would overstate the negative evidence. LLVM is
+only a preferred feasibility candidate. It is not selected, and this ADR does
+not authorize acquisition, installation, execution, or implementation.
 
-| Candidate | Identity | Technical result | Burden | Disposition |
-|---|---|---|---:|---|
-| LLVM/Clang LibTooling | 18.1.8, `llvmorg-18.1.8`, commit `3b5b5c1…` | Typed declarations, expressions, macro coordinates, call/parameter/return and field anchors are available. Dynamic targets and general aliases remain fail-closed. | 4.25 implementation weeks plus shared preparation/tests | Selected as feasibility reference only |
-| Clang AST JSON / clang-query with normalizer | Same pinned Clang 18.1.8 | Emits typed syntax, but repository code must own still more cross-TU identity and dataflow normalization. AST emission alone is insufficient. | 6.5 graph weeks; near total cap | Technically possible, not preferred |
-| CodeQL C/C++ | CLI 2.25.5; queries commit `b551e89…` | Official libraries provide local/global C++ dataflow, fields and pointer indirections. Models and dynamic closure still require review. | 5.0 graph weeks | Not selected: automated database creation under the downloaded CLI's standard terms and query/model stability complicate reproducible CI |
+## Tool identities and evidence boundaries
 
-None of these executables was present in the inspected WSL environment or the
-existing CI workflow. This is recorded availability evidence, not permission
-to install one.
+LLVM/Clang remains pinned to release `llvmorg-18.1.8`, peeled commit
+`3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff`, under Apache-2.0 with the LLVM
+exception.
 
-## Authoritative source and compile-command contract
+The corrected CodeQL identities are:
 
-The only future semantic corpus is the official PYTHIA 8.312 release tree at
-`.external/src/releases-pythia8312`, pinned by tag, commit, archive URL, and
-archive SHA-256. The exact inventory has 247 files: 127 headers and 120 core
-`.cc` translation units. Its records and hashes are serialized in the JSON.
-All 127 installed mirror headers were byte-identical; the installed mirror is
-identity evidence only and must not produce duplicate nodes.
+- CLI tag `v2.25.5`, official tag identity
+  `697ca25a6968ae01bab1b11ae56c3be5960f588c`;
+- query tag `codeql-cli/v2.25.5`, peeled commit
+  `b551e89ea8e011c0e3301fd0ce05589c9f2d3681`.
 
-External plugins, examples, documentation, and non-C++ files are excluded with
-explicit reasons. The fixed configuration uses C++11, the release `include`
-directory, no added preprocessor definitions, no required generated core
-header, and disabled external plugins/LHAPDF/HepMC/FastJet linkage. A path that
-depends on an excluded module forces corpus expansion and review before any
-completeness claim.
+The versioned CodeQL terms permit some automated analysis for OSI-licensed
+codebases hosted and maintained on GitHub.com. Applicability to this repository
+has not been established because no reviewed root OSI-license identity exists.
+CodeQL therefore remains unselected because repository-specific licensing,
+deployment, and query/model stability remain unresolved. This is not a
+universal prohibition on CodeQL database generation in CI.
 
-Upstream PYTHIA uses configure plus GNU Make rather than an upstream CMake
-target that could directly emit `compile_commands.json`. A future task must
-therefore build a repository-owned, source-only JSON Compilation Database over
-the exact 120 translation units. Commands are argv arrays using pinned
-`clang++` 18.1.8, C++11, upstream semantic flags, the release include path, and
-`-fsyntax-only`. Paths use stable placeholders, entries are sorted by semantic
-file ID, environment is restricted to `LC_ALL=C` and `TZ=UTC`, and command,
-environment, compiler-binary, and release identities are hashed. Missing or
-unparsable translation units fail closed. No link or generator execution is
-needed.
+For the LLVM feasibility reference, responsibilities are separated:
 
-## Graph contract
+- `CLANG_AST_DIRECTLY_PROVIDES`: typed declarations/expressions, spelling and
+  expansion coordinates, materialized template instances, call/parameter/
+  return AST anchors, and field/member anchors.
+- `REPOSITORY_ANALYSIS_MUST_IMPLEMENT`: cross-TU identity, ODR reconciliation,
+  overload/specialization identity, argument/parameter and return/caller flow,
+  member/cache flow, points-to propagation, closed virtual-target sets, and
+  deterministic serialization.
+- `STATIC_ANALYSIS_CANNOT_PROVE`: runtime-selected concrete targets, post-init
+  pointer replacement, actual query envelopes, general alias closure, and
+  thread/process behavior.
 
-Roots may originate only in a typed declaration, definition, construction,
-assignment, or installation coordinate. Required classes cover
-`Pythia8::PDF` and derived providers, PDF pointer declarations/fields, all 16
-BeamSetup roles, BeamParticle forwarders, public `xf`/`xfVal`/`xfSea`, provider
-updates, caches, alpha_s routing, hard NC, ISR/backward evolution, remnants,
-and LHA/complete-event-weight boundaries.
+## Authoritative source and portable lineage
 
-Identifier and filename roots, historical-member seeds, global
-`xf`/`PDF`/`PDFPtr` fallback, and source-free synthetic roots are prohibited.
-The 16 required roles are `pdfAPtr`, `pdfBPtr`, `pdfHardAPtr`, `pdfHardBPtr`,
-`pdfPomAPtr`, `pdfPomBPtr`, `pdfGamAPtr`, `pdfGamBPtr`, `pdfHardGamAPtr`,
-`pdfHardGamBPtr`, `pdfUnresAPtr`, `pdfUnresBPtr`, `pdfUnresGamAPtr`,
-`pdfUnresGamBPtr`, `pdfVMDAPtr`, and `pdfVMDBPtr`.
+The authoritative corpus remains the official PYTHIA 8.312 release:
 
-The edge vocabulary is `DECLARES`, `HAS_STATIC_TYPE`, `POINTS_TO`,
-`ASSIGNED_FROM`, `MAY_ALIAS`, `PASSED_AS_ARGUMENT`,
-`RECEIVED_AS_PARAMETER`, `RETURNS`, `RETURN_VALUE_CONSUMED_BY`, `CALLS`,
-`VIRTUAL_DISPATCH_CANDIDATE`, `READS_FIELD`, `WRITES_FIELD`, `CACHE_WRITE`,
-`CACHE_READ`, `ARITHMETIC_DEPENDENCY`, `CONDITION_DEPENDENCY`,
-`CATEGORICAL_SELECTION_DEPENDENCY`, `DENOMINATOR_DEPENDENCY`,
-`MAXIMUM_OR_ENVELOPE_DEPENDENCY`, and `EVENT_WEIGHT_DEPENDENCY`.
-Each future edge must serialize its exact coordinate, enclosing function or
-declaration, endpoint static types, derivation rule, evidence state, and
-translation-unit identity. A direct root-to-unit edge cannot stand in for a
-dataflow path.
+- tag `pythia8312`;
+- commit `cf0823ace0e2ebc2435f3f614e0926e9b381e21f`;
+- archive SHA-256
+  `c1a33aa5fa15e6b70d7946ce6d237246842887ec84ea0b35dfc2535c868a2770`;
+- 247 files: 127 headers and 120 core translation units.
 
-Aliases, virtual targets, function pointers, unmaterialized templates,
-macro-generated uses, external boundaries, runtime providers, post-init
-replacement, configuration-dependent reachability, missing translation units,
-and parse failures have explicit unresolved states. Any such binding hard,
-ISR, or remnant path blocks completeness.
+The independent audit reproduced the archive and found zero path, byte-size,
+or hash mismatches. Installed mirror headers remain identity evidence only and
+cannot become duplicate semantic nodes.
 
-## Static/runtime boundary
+Clean CI source validation is exactly:
 
-A static graph cannot prove the actual installed pointer, post-init
-substitution, configuration-selected dynamic target, runtime query envelope,
-or thread/process behavior. Those require separately authorized,
-configuration-specific runtime identity, mutation, query-envelope, and
-concurrency evidence. Runtime assertions cannot be substituted for a static
-gate, and the static graph cannot by itself authorize issue #10 or D2.
+```text
+PORTABLE_MANIFEST_VALIDATION_ONLY
+```
 
-Even a complete graph would not establish signed probability/rate validity or
-signed Sudakov mathematics. Its scientifically material contribution would be
-repairing source-backed consumer provenance and making the remaining
-mathematical/runtime limitations explicit.
+The committed D1D manifest stores file paths, sizes, and hashes. D1E filters it
+into the 247-file inventory. Ignored local release bytes are checked only when
+that checkout exists; clean CI skips the comparison, does not retrieve the
+official archive, and does not independently resolve the tag or commit. Clean
+CI therefore proves committed-manifest and artifact reproducibility, not
+independent upstream byte identity.
 
-## Independent calibration and controls
+## Corrected compile-command contract
 
-The 672 historical source-reviewed members are a post-construction holdout.
-They cannot seed identifiers, roots, edges, paths, reachability, or fallback.
-Future results are `LOCALLY_RECOVERED`,
-`EXPLICIT_BOUNDARY_OR_POLICY_EXEMPTION`, `UNRESOLVED`, or `NOT_RECOVERED`.
-Global fallback, synthetic attachment, dangling calibration references, and
-binding unresolved/not-recovered members must all be zero.
+The future command model is common arguments plus deterministic per-TU
+overrides. The only project include root remains
+`${PYTHIA_SOURCE_ROOT}/include`, but system headers are also required.
 
-The negative controls are `state`, `size`, `id`, `push_back`, `p`, and `Vec4`.
-An exact occurrence needs a typed source path; a common spelling or same-line
-PDF expression is insufficient. An independent recall challenge must cover
-neutral aliases, cross-function member/cache flow, parameters, returns,
-references/pointers, templates, macros, virtual dispatch, and neutral helper
-wrappers, with zero material misses and zero unresolved binding challenges.
+Mandatory source-inspected overrides include:
 
-## Binding acceptance gates
+```text
+Pythia.cc:
+  -DXMLDIR="<PINNED_SHARE_ROOT>/xmldoc"
 
-A future static evidence task may claim completeness only if all 18 gates pass:
+FJcore.cc:
+  -DFJCORE_HAVE_LIMITED_THREAD_SAFETY
+```
 
-1. authoritative corpus identity complete;
-2. every required translation unit parsed;
-3. exact compile-command replay deterministic;
-4. typed roots complete;
-5. no name-based or historical fallback;
-6. every edge source-supported;
-7. interprocedural argument/parameter/return flow implemented;
-8. member/cache write-read flow implemented;
-9. aliases and virtual targets resolved or explicitly blocking;
-10. all 16 pointer roles accounted for locally;
-11. alpha_s routing accounted for;
-12. hard-process, ISR, and remnant paths represented;
-13. holdout recovery has zero binding unresolved/not-recovered members;
-14. negative controls pass;
-15. independent recall challenge finds no material miss;
-16. graph generation and serialization are deterministic;
-17. an independent reviewer reproduces the result; and
-18. runtime-only limitations are not represented as static closure.
+`XMLDIR` is used unconditionally in `Pythia.cc`; the FJcore definition changes
+the upstream core build semantics. Thus the v1 claims of no preprocessor
+definitions and one sufficient argv template were false.
 
-These gates are not evaluated or passed by this planning ADR.
+The bounded textual inspection found zero generated core-header dependencies
+and zero includes escaping the authoritative root. Its three apparent missing
+`fastjet/internal/Dnn*Cylinder.hh` includes are in the branch disabled by
+`__FJCORE_DROP_CGAL`, defined in `Pythia8/FJcore.h`.
 
-## Cost and stop conditions
+No parser ran, no `compile_commands.json` was created, and actual parse success
+is not claimed. Reconstructing and reviewing the exact 120-TU command inventory
+remains future work.
 
-The future implementation estimate is 7.0 person-weeks: 0.75 toolchain
-preparation, 4.25 graph implementation, 0.25 corpus execution, 0.75 evidence
-normalization, and 1.0 tests. The predeclared implementation cap is 8.0
-person-weeks. Independent review is estimated and capped at 2.0 person-weeks.
+## Expanded acceptance contract
 
-Stop if a required translation unit cannot parse reproducibly, source-backed
-interprocedural/member flow cannot fit the cap, calibration or the independent
-challenge exposes an unbounded material miss, or the method degenerates into
-name, filename, global, historical, or synthetic fallback. A negative future
-result remains valid.
+The v2 JSON binds 25 machine-oriented contract sections:
 
-## Decision
+1. exact graph-node schema;
+2. source evidence for every node kind;
+3. stable cross-TU symbol identity;
+4. overload identity;
+5. template specialization/instantiation identity;
+6. duplicate declaration and ODR reconciliation;
+7. formal graph-path validity;
+8. allowed edge composition;
+9. static reachability semantics;
+10. prospective configuration policy;
+11. exclusion relevance proof;
+12. external-call boundary policy;
+13. callback/function-pointer policy;
+14. material-miss definition;
+15. boundary/policy exemption review;
+16. macro spelling/expansion identity;
+17. closed-world virtual-target conditions;
+18. neutral wrapper/registration discovery;
+19. graph-size/resource caps;
+20. timeout/truncation behavior;
+21. overall unresolved-record cap;
+22. zero unresolved hard/ISR/remnant paths;
+23. independent-reviewer definition;
+24. blinded holdout procedure; and
+25. machine predicates for every gate.
 
-`FEASIBLE_FOR_SEPARATE_STATIC_EVIDENCE_TASK` is selected because one immutable
-toolchain is identifiable, the source and compile-command strategies are
-exact, the required relations are technically representable, runtime limits
-and stop conditions are explicit, and implementation/review fit the caps.
+Each of the existing 18 gates now references applicable contract sections and
+names its own future predicate. These definitions are binding, but none of the
+future schemas, algorithms, or predicates has been implemented or evaluated;
+the acceptance-contract condition is consequently
+`SUPPORTED_WITH_QUALIFICATION`, not `SUPPORTED`.
 
-`INCONCLUSIVE` is not selected because source, build, toolchain, relation, and
-cost information are sufficient to bound the separate evidence task.
-`DO_NOT_PROCEED` is not selected because the proposed method is not merely a
-more elaborate lexical search: it can produce typed, coordinate-backed,
-interprocedural evidence if every gate passes.
+## Cost challenge
 
-This decision is feasibility only. LLVM/Clang acquisition, parser or graph
-implementation, generator work, a prototype, architecture comparison, issue
-#10, and D2 are not authorized. All ten authorization flags remain false.
-Issue #42 stays closed, issue #45 remains open planning work, and issue #10
-stays open and blocked.
+The original 7.0-person-week estimate is retained only as historical planning
+metadata and classified `NOT_CREDIBLE`. The independent work-breakdown
+challenge gives:
+
+| Range | Implementation | Independent reproduction |
+|---|---:|---:|
+| Optimistic | 76 days / 15.2 weeks | 5 days / 1 week |
+| Nominal | 153 days / 30.6 weeks | 10 days / 2 weeks |
+| Pessimistic | 287 days / 57.4 weeks | 15 days / 3 weeks |
+
+Therefore:
+
+```text
+implementation_cap_8_person_weeks = NOT_SUPPORTED
+independent_review_cap_2_person_weeks = SUPPORTED_WITH_QUALIFICATION
+```
+
+These ranges are a feasibility challenge, not precise scheduling commitments.
+
+## Decision derivation and boundary
+
+The validator independently binds tool identities and claims, source identity,
+compile arguments, candidate capability matrices, lineage, cost breakdown,
+acceptance definitions, gates, calibration, controls, runtime limitations,
+scientific limitations, dependencies, and authorization boundaries. It then
+recomputes 17 feasibility conditions and derives the decision. Whole-artifact
+byte equality remains a second generator-consistency layer.
+
+`INCONCLUSIVE` follows because the compile contract is only source-corrected,
+relation/acceptance implementation remains unevaluated, and the implementation
+cost bound is not supported. A correct graph could still provide evidence for
+`provenance_evidence_integrity`; it would not solve signed-rate or Sudakov
+mathematics, runtime pointer identity, generator compatibility, issue #10, or
+D2.
 
 ## Next step
 
-Review ADR-009 and the v1 feasibility artifact. Only a later explicit decision
-may create a separately scoped static-evidence implementation task. That
-review is not implementation authorization.
+Review the corrected v2 feasibility and acceptance contract. Only a later
+explicit decision may authorize a separately scoped static-evidence task.
+Issue #45 remains open planning work, issue #42 remains closed, and issue #10
+and D2 remain blocked. This next step is not implementation authorization.

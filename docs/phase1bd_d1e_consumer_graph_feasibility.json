@@ -1,118 +1,407 @@
 {
+  "acceptance_contract": {
+    "contract_status": "SUPPORTED_WITH_QUALIFICATION",
+    "qualification": "Definitions are binding and machine-oriented, but their future implementations and predicates have not been built or evaluated.",
+    "sections": [
+      {
+        "binding": true,
+        "definition": "Define every node kind, required fields, stable node ID, and prohibited synthetic fields.",
+        "machine_predicate": "schema_validate_all_nodes",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC01_GRAPH_NODE_SCHEMA"
+      },
+      {
+        "binding": true,
+        "definition": "Every node kind requires exact source coordinate, source hash, TU identity, and owning declaration or function.",
+        "machine_predicate": "node_source_evidence_count_equals_node_count",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC02_NODE_SOURCE_EVIDENCE"
+      },
+      {
+        "binding": true,
+        "definition": "Canonical symbol identity combines qualified declaration identity, signature, source identity, and linkage scope.",
+        "machine_predicate": "zero_ambiguous_cross_tu_symbol_ids",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC03_CROSS_TU_SYMBOL_IDENTITY"
+      },
+      {
+        "binding": true,
+        "definition": "Overloads are distinct by canonical parameter and cv/ref/template signature.",
+        "machine_predicate": "zero_unresolved_overload_bindings",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC04_OVERLOAD_IDENTITY"
+      },
+      {
+        "binding": true,
+        "definition": "Primary templates, specializations, and materialized instantiations have distinct stable identities.",
+        "machine_predicate": "zero_required_unmaterialized_template_paths",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC05_TEMPLATE_IDENTITY"
+      },
+      {
+        "binding": true,
+        "definition": "Duplicate declarations are reconciled only with equivalent canonical declarations; conflicting definitions block closure.",
+        "machine_predicate": "zero_odr_conflicts_or_unreconciled_duplicates",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC06_ODR_RECONCILIATION"
+      },
+      {
+        "binding": true,
+        "definition": "A provenance path is an ordered root-to-consumer edge sequence with matching endpoints and source-backed transitions.",
+        "machine_predicate": "all_admitted_units_have_valid_root_paths",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC07_GRAPH_PATH_VALIDITY"
+      },
+      {
+        "binding": true,
+        "definition": "Only declared edge-kind compositions may propagate provenance; direct synthetic root-to-unit attachment is forbidden.",
+        "machine_predicate": "zero_invalid_or_synthetic_edge_compositions",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC08_EDGE_COMPOSITION"
+      },
+      {
+        "binding": true,
+        "definition": "Static reachability means a source-backed call/configuration path under the declared closed-world configuration, never filename inference.",
+        "machine_predicate": "zero_final_reachability_without_static_path",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC09_STATIC_REACHABILITY"
+      },
+      {
+        "binding": true,
+        "definition": "The future configuration manifest must fix enabled processes, showers, remnants, pointer roles, and disabled modules before graph interpretation.",
+        "machine_predicate": "configuration_manifest_identity_present_and_complete",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC10_PROSPECTIVE_CONFIGURATION"
+      },
+      {
+        "binding": true,
+        "definition": "Every excluded module requires a source-backed proof that no required configuration path depends on it.",
+        "machine_predicate": "zero_unproved_relevant_exclusions",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC11_EXCLUSION_RELEVANCE"
+      },
+      {
+        "binding": true,
+        "definition": "External calls require a typed signature, modeled argument/return effect, or blocking EXTERNAL_LIBRARY_BOUNDARY.",
+        "machine_predicate": "zero_unmodeled_binding_external_calls",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC12_EXTERNAL_CALL_BOUNDARY"
+      },
+      {
+        "binding": true,
+        "definition": "Callbacks and function pointers require a closed target set or blocking FUNCTION_POINTER_UNRESOLVED.",
+        "machine_predicate": "zero_open_binding_callback_target_sets",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC13_CALLBACK_FUNCTION_POINTER"
+      },
+      {
+        "binding": true,
+        "definition": "A material miss is any omitted source-backed PDF-derived path affecting hard, ISR, remnant, selection, ratio, envelope, or weight semantics.",
+        "machine_predicate": "material_miss_count_equals_zero",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC14_MATERIAL_MISS"
+      },
+      {
+        "binding": true,
+        "definition": "Boundary/policy exemptions require an independent reviewer, exact source evidence, rationale, and non-dataflow justification.",
+        "machine_predicate": "zero_unreviewed_or_invalid_exemptions",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC15_EXEMPTION_REVIEW"
+      },
+      {
+        "binding": true,
+        "definition": "Macro-generated evidence records spelling and expansion identities and blocks when either coordinate cannot be stabilized.",
+        "machine_predicate": "zero_unresolved_binding_macro_identities",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC16_MACRO_IDENTITY"
+      },
+      {
+        "binding": true,
+        "definition": "A virtual target set is closed only when corpus, class hierarchy, construction sites, and configuration exclusions are proven complete.",
+        "machine_predicate": "zero_open_binding_virtual_target_sets",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC17_CLOSED_WORLD_VIRTUAL_TARGETS"
+      },
+      {
+        "binding": true,
+        "definition": "Neutral wrappers and registration tables are discovered from typed call/assignment/registration relations, not names.",
+        "machine_predicate": "zero_unresolved_binding_wrappers_or_registrations",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC18_NEUTRAL_WRAPPER_REGISTRATION"
+      },
+      {
+        "binding": true,
+        "definition": "Predeclared node, edge, memory, and serialized-byte caps stop with an explicit incomplete result when exceeded.",
+        "machine_predicate": "resource_caps_declared_and_not_exceeded",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC19_GRAPH_RESOURCE_CAPS"
+      },
+      {
+        "binding": true,
+        "definition": "Any timeout, depth limit, dropped TU, or truncation is serialized and blocks completeness.",
+        "machine_predicate": "zero_timeout_or_truncation_events",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC20_TIMEOUT_TRUNCATION"
+      },
+      {
+        "binding": true,
+        "definition": "The total unresolved-record cap is predeclared; exceeding it blocks the evidence task rather than dropping records.",
+        "machine_predicate": "unresolved_total_within_predeclared_cap",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC21_OVERALL_UNRESOLVED_CAP"
+      },
+      {
+        "binding": true,
+        "definition": "Required hard-process, ISR, and remnant paths each require zero unresolved binding records.",
+        "machine_predicate": "hard_isr_remnant_unresolved_binding_count_equals_zero",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC22_REQUIRED_PATH_ZERO_UNRESOLVED"
+      },
+      {
+        "binding": true,
+        "definition": "The reviewer must not author graph-construction rules or curate the construction input and must reproduce from pinned inputs.",
+        "machine_predicate": "reviewer_independence_attested",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC23_INDEPENDENT_REVIEWER"
+      },
+      {
+        "binding": true,
+        "definition": "The 672-member holdout stays inaccessible to construction and is evaluated only after graph serialization is frozen.",
+        "machine_predicate": "holdout_access_audit_proves_post_freeze_only",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC24_BLINDED_HOLDOUT"
+      },
+      {
+        "binding": true,
+        "definition": "Every binding gate names deterministic input fields, a machine predicate, expected value, and failure output.",
+        "machine_predicate": "all_gate_predicates_defined_and_executable",
+        "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_CONTRACT",
+        "section_id": "AC25_GATE_MACHINE_PREDICATES"
+      }
+    ]
+  },
   "acceptance_gates": [
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC02_NODE_SOURCE_EVIDENCE",
+        "AC11_EXCLUSION_RELEVANCE"
+      ],
       "gate_id": "G01_AUTHORITATIVE_CORPUS_IDENTITY_COMPLETE",
+      "machine_predicate_id": "PREDICATE_G01_AUTHORITATIVE_CORPUS_IDENTITY_COMPLETE",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "Authoritative source identity, inventory, mirrors, and exclusions reproduce exactly."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC19_GRAPH_RESOURCE_CAPS",
+        "AC20_TIMEOUT_TRUNCATION"
+      ],
       "gate_id": "G02_EVERY_REQUIRED_TRANSLATION_UNIT_PARSED",
+      "machine_predicate_id": "PREDICATE_G02_EVERY_REQUIRED_TRANSLATION_UNIT_PARSED",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "All 120 required translation units parse; one miss is a blocking failure."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC03_CROSS_TU_SYMBOL_IDENTITY",
+        "AC20_TIMEOUT_TRUNCATION"
+      ],
       "gate_id": "G03_COMPILE_COMMAND_REPLAY_DETERMINISTIC",
+      "machine_predicate_id": "PREDICATE_G03_COMPILE_COMMAND_REPLAY_DETERMINISTIC",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "Canonical compile argv and environment replay with exact set and byte equality."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC01_GRAPH_NODE_SCHEMA",
+        "AC02_NODE_SOURCE_EVIDENCE",
+        "AC09_STATIC_REACHABILITY"
+      ],
       "gate_id": "G04_TYPED_ROOTS_COMPLETE",
+      "machine_predicate_id": "PREDICATE_G04_TYPED_ROOTS_COMPLETE",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "All required roots arise from typed declarations, definitions, or assignments."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC07_GRAPH_PATH_VALIDITY",
+        "AC08_EDGE_COMPOSITION",
+        "AC18_NEUTRAL_WRAPPER_REGISTRATION"
+      ],
       "gate_id": "G05_NO_NAME_OR_HISTORICAL_FALLBACK",
+      "machine_predicate_id": "PREDICATE_G05_NO_NAME_OR_HISTORICAL_FALLBACK",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "Identifier, filename, historical, global, and synthetic fallback counts are zero."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC02_NODE_SOURCE_EVIDENCE",
+        "AC07_GRAPH_PATH_VALIDITY",
+        "AC08_EDGE_COMPOSITION"
+      ],
       "gate_id": "G06_EVERY_EDGE_SOURCE_SUPPORTED",
+      "machine_predicate_id": "PREDICATE_G06_EVERY_EDGE_SOURCE_SUPPORTED",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
-      "requirement": "Every graph edge has exact source support and the required evidence fields."
+      "requirement": "Every graph edge has exact source support and valid composition."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC03_CROSS_TU_SYMBOL_IDENTITY",
+        "AC04_OVERLOAD_IDENTITY",
+        "AC12_EXTERNAL_CALL_BOUNDARY",
+        "AC13_CALLBACK_FUNCTION_POINTER"
+      ],
       "gate_id": "G07_INTERPROCEDURAL_ARGUMENT_PARAMETER_RETURN_FLOW",
+      "machine_predicate_id": "PREDICATE_G07_INTERPROCEDURAL_ARGUMENT_PARAMETER_RETURN_FLOW",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
-      "requirement": "Argument-to-parameter and return-to-caller flows are implemented and tested on corpus code."
+      "requirement": "Argument-to-parameter and return-to-caller flows are implemented and tested."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC03_CROSS_TU_SYMBOL_IDENTITY",
+        "AC06_ODR_RECONCILIATION",
+        "AC07_GRAPH_PATH_VALIDITY"
+      ],
       "gate_id": "G08_MEMBER_CACHE_WRITE_READ_FLOW",
+      "machine_predicate_id": "PREDICATE_G08_MEMBER_CACHE_WRITE_READ_FLOW",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "Member and cache writes connect to reads across functions without spelling inference."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC13_CALLBACK_FUNCTION_POINTER",
+        "AC17_CLOSED_WORLD_VIRTUAL_TARGETS",
+        "AC21_OVERALL_UNRESOLVED_CAP",
+        "AC22_REQUIRED_PATH_ZERO_UNRESOLVED"
+      ],
       "gate_id": "G09_ALIAS_AND_VIRTUAL_TARGETS_RESOLVED_OR_BLOCKING",
+      "machine_predicate_id": "PREDICATE_G09_ALIAS_AND_VIRTUAL_TARGETS_RESOLVED_OR_BLOCKING",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
-      "requirement": "Unresolved aliases and virtual targets either resolve or block completeness."
+      "requirement": "Aliases, callbacks, and virtual targets resolve or block completeness."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC07_GRAPH_PATH_VALIDITY",
+        "AC09_STATIC_REACHABILITY",
+        "AC10_PROSPECTIVE_CONFIGURATION"
+      ],
       "gate_id": "G10_SIXTEEN_POINTER_ROLES_LOCALLY_ACCOUNTED",
+      "machine_predicate_id": "PREDICATE_G10_SIXTEEN_POINTER_ROLES_LOCALLY_ACCOUNTED",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "All sixteen BeamSetup PDF pointer roles have local typed installation/accounting paths."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC07_GRAPH_PATH_VALIDITY",
+        "AC10_PROSPECTIVE_CONFIGURATION",
+        "AC22_REQUIRED_PATH_ZERO_UNRESOLVED"
+      ],
       "gate_id": "G11_ALPHA_S_ROUTING_ACCOUNTED",
+      "machine_predicate_id": "PREDICATE_G11_ALPHA_S_ROUTING_ACCOUNTED",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "PDF-object alpha_s providers and routing paths are represented or block closure."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC09_STATIC_REACHABILITY",
+        "AC10_PROSPECTIVE_CONFIGURATION",
+        "AC22_REQUIRED_PATH_ZERO_UNRESOLVED"
+      ],
       "gate_id": "G12_HARD_ISR_REMNANT_PATHS_REPRESENTED",
+      "machine_predicate_id": "PREDICATE_G12_HARD_ISR_REMNANT_PATHS_REPRESENTED",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "Hard-process NC, ISR/backward-evolution, and remnant paths are represented."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC14_MATERIAL_MISS",
+        "AC15_EXEMPTION_REVIEW",
+        "AC23_INDEPENDENT_REVIEWER",
+        "AC24_BLINDED_HOLDOUT"
+      ],
       "gate_id": "G13_HOLDOUT_RECOVERY_ZERO_UNRESOLVED_OR_NOT_RECOVERED",
+      "machine_predicate_id": "PREDICATE_G13_HOLDOUT_RECOVERY_ZERO_UNRESOLVED_OR_NOT_RECOVERED",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
-      "requirement": "The 672-member holdout has zero binding UNRESOLVED and NOT_RECOVERED entries."
+      "requirement": "The 672-member holdout has zero binding unresolved and not-recovered entries."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC07_GRAPH_PATH_VALIDITY",
+        "AC14_MATERIAL_MISS",
+        "AC18_NEUTRAL_WRAPPER_REGISTRATION"
+      ],
       "gate_id": "G14_NEGATIVE_CONTROLS_PASS",
+      "machine_predicate_id": "PREDICATE_G14_NEGATIVE_CONTROLS_PASS",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "All generic-name and co-located-occurrence controls pass."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC14_MATERIAL_MISS",
+        "AC23_INDEPENDENT_REVIEWER"
+      ],
       "gate_id": "G15_FALSE_NEGATIVE_CHALLENGE_NO_MATERIAL_MISS",
+      "machine_predicate_id": "PREDICATE_G15_FALSE_NEGATIVE_CHALLENGE_NO_MATERIAL_MISS",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
-      "requirement": "Independent neutral-name/interprocedural recall challenge finds no material miss."
+      "requirement": "Independent neutral-name/interprocedural recall finds no material miss."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC03_CROSS_TU_SYMBOL_IDENTITY",
+        "AC05_TEMPLATE_IDENTITY",
+        "AC06_ODR_RECONCILIATION",
+        "AC16_MACRO_IDENTITY"
+      ],
       "gate_id": "G16_GRAPH_GENERATION_SERIALIZATION_DETERMINISTIC",
+      "machine_predicate_id": "PREDICATE_G16_GRAPH_GENERATION_SERIALIZATION_DETERMINISTIC",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "Two independent graph generations serialize byte-identically."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC23_INDEPENDENT_REVIEWER",
+        "AC24_BLINDED_HOLDOUT"
+      ],
       "gate_id": "G17_INDEPENDENT_REVIEW_REPRODUCES",
+      "machine_predicate_id": "PREDICATE_G17_INDEPENDENT_REVIEW_REPRODUCES",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
       "requirement": "An independent reviewer reproduces source, commands, graph, and calibration."
     },
     {
       "binding": true,
+      "contract_section_ids": [
+        "AC09_STATIC_REACHABILITY",
+        "AC10_PROSPECTIVE_CONFIGURATION",
+        "AC22_REQUIRED_PATH_ZERO_UNRESOLVED"
+      ],
       "gate_id": "G18_RUNTIME_LIMITATIONS_NOT_STATIC_CLOSURE",
+      "machine_predicate_id": "PREDICATE_G18_RUNTIME_LIMITATIONS_NOT_STATIC_CLOSURE",
       "planning_status": "NOT_EVALUATED_FUTURE_STATIC_EVIDENCE_GATE",
-      "requirement": "Runtime-only properties remain explicitly unresolved and never satisfy a static gate."
+      "requirement": "Runtime-only limitations remain unresolved and never satisfy a static gate."
     }
   ],
   "authoritative_source_contract": {
     "archive_sha256": "c1a33aa5fa15e6b70d7946ce6d237246842887ec84ea0b35dfc2535c868a2770",
     "archive_url": "https://gitlab.com/Pythia8/releases/-/archive/pythia8312/releases-pythia8312.tar.gz",
     "authoritative_source_root": ".external/src/releases-pythia8312",
+    "common_preprocessor_definitions": [],
     "cxx_standard": "c++11",
     "file_inventory": [
       {
@@ -1845,11 +2134,8 @@
         "sha256": "41dbdf4ef6be090dd701c655b8e8b5ebf67f5c7401d21004432179a73d9887bb"
       }
     ],
-    "generated_configuration_note": "Upstream configure materializes Makefile.inc, not a required core parse header; a future task must fail if an include is missing.",
     "header_count": 127,
-    "include_paths": [
-      "${PYTHIA_SOURCE_ROOT}/include"
-    ],
+    "identity_assessment": "SUPPORTED",
     "installed_mirror": {
       "byte_identical_headers": 127,
       "release_headers_compared": 127,
@@ -1888,15 +2174,18 @@
       "lhapdf_linkage": "DISABLED",
       "policy": "Expand and re-review the corpus before claiming a path that depends on a disabled module."
     },
-    "preprocessor_definitions": [],
     "prior_search_manifest": {
       "path": "docs/phase1bd_d1d_pythia_semantics_search_manifest.json",
       "prior_inventory_count": 374,
       "schema_version": "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3",
       "sha256": "e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701"
     },
+    "project_include_paths": [
+      "${PYTHIA_SOURCE_ROOT}/include"
+    ],
     "pythia_version": "8.312",
     "required_generated_headers": [],
+    "system_headers_required": true,
     "translation_unit_count": 120,
     "translation_unit_semantic_file_ids": [
       "PY8312-0128",
@@ -2021,16 +2310,6 @@
       "PY8312-0247"
     ],
     "upstream_commit_sha": "cf0823ace0e2ebc2435f3f614e0926e9b381e21f",
-    "upstream_core_compiler_flags": [
-      "-O2",
-      "-std=c++11",
-      "-pedantic",
-      "-W",
-      "-Wall",
-      "-Wshadow",
-      "-fPIC",
-      "-pthread"
-    ],
     "upstream_repository": "https://gitlab.com/Pythia8/releases",
     "upstream_tag": "pythia8312"
   },
@@ -2054,6 +2333,7 @@
       "UNRESOLVED_BINDING_MEMBER",
       "NOT_RECOVERED_BINDING_MEMBER"
     ],
+    "contract_status": "SUPPORTED",
     "historical_member_count": 672,
     "may_define_edges": false,
     "may_define_reachability": false,
@@ -2066,10 +2346,12 @@
       "UNRESOLVED",
       "NOT_RECOVERED"
     ],
-    "use": "POST_CONSTRUCTION_HOLDOUT_ONLY"
+    "use": "POST_CONSTRUCTION_BLINDED_HOLDOUT_ONLY"
   },
   "compilation_database_contract": {
-    "canonical_argv_template": [
+    "assessment": "SOURCE_INSPECTION_CORRECTED_BUT_PARSE_NOT_VALIDATED",
+    "command_model": "COMMON_ARGUMENTS_PLUS_DETERMINISTIC_PER_TU_OVERRIDES",
+    "common_argv_template": [
       "${PINNED_LLVM_18_1_8_ROOT}/bin/clang++",
       "-std=c++11",
       "-pedantic",
@@ -2079,15 +2361,7 @@
       "-fPIC",
       "-pthread",
       "-I${PYTHIA_SOURCE_ROOT}/include",
-      "-fsyntax-only",
-      "${SOURCE_FILE}"
-    ],
-    "canonicalization": [
-      "Store argv arrays, never shell command strings.",
-      "Normalize paths to repository-relative POSIX paths and stable root placeholders.",
-      "Sort entries by semantic_file_id and reject duplicate or omitted translation units.",
-      "Exclude output paths, wall-clock values, host paths, and non-allowlisted environment.",
-      "Hash canonical compact JSON for the command set and environment separately."
+      "-fsyntax-only"
     ],
     "compile_commands_present_at_review": false,
     "compiler": {
@@ -2100,41 +2374,244 @@
       "LC_ALL": "C",
       "TZ": "UTC"
     },
-    "inspected_existing_build_tools": {
-      "clang": "NOT_INSTALLED",
-      "clang_query": "NOT_INSTALLED",
-      "cmake": "/usr/bin/cmake 3.28.3",
-      "codeql": "NOT_INSTALLED",
-      "gcc": "/usr/bin/gcc 13.3.0",
-      "gxx": "/usr/bin/g++ 13.3.0"
-    },
+    "exact_per_tu_command_inventory_complete": false,
     "link_or_generator_execution_required": false,
     "missing_or_unparsable_policy": "FAIL_CLOSED",
-    "optional_modules": "All external plugins disabled; core 120 translation units required.",
+    "per_translation_unit_overrides": [
+      {
+        "arguments": [
+          "-DXMLDIR=\"<PINNED_SHARE_ROOT>/xmldoc\""
+        ],
+        "source_evidence": "XMLDIR is used unconditionally by Pythia.cc and supplied by the upstream Makefile.",
+        "source_file": "${PYTHIA_SOURCE_ROOT}/src/Pythia.cc"
+      },
+      {
+        "arguments": [
+          "-DFJCORE_HAVE_LIMITED_THREAD_SAFETY"
+        ],
+        "source_evidence": "The upstream FJcore build definition changes limited-thread-safety semantics.",
+        "source_file": "${PYTHIA_SOURCE_ROOT}/src/FJcore.cc"
+      }
+    ],
     "required_future_identities": [
       "canonical_compile_command_set_sha256",
       "canonical_environment_sha256",
       "compiler_binary_sha256",
       "toolchain_release_commit_sha"
     ],
-    "source_only_configuration_sufficient": true,
+    "source_only_configuration_sufficient": "NOT_EVALUATED_WITH_PARSER",
     "strategy": "REPOSITORY_OWNED_SOURCE_ONLY_JSON_COMPILATION_DATABASE",
-    "upstream_build_system": "configure plus GNU Makefile",
-    "upstream_cmake_can_emit_for_this_corpus": false
+    "superseded_v1_claims": [
+      "PREPROCESSOR_DEFINITIONS_EMPTY",
+      "ONE_CANONICAL_ARGV_TEMPLATE_SUFFICIENT"
+    ],
+    "textual_include_closure_audit": {
+      "actual_parse_success_claimed": false,
+      "apparent_missing_include_disposition": "DISABLED_BY___FJCORE_DROP_CGAL_DEFINED_IN_PYTHIA8_FJCORE_H",
+      "apparent_missing_quoted_includes": [
+        "fastjet/internal/Dnn4piCylinder.hh",
+        "fastjet/internal/Dnn3piCylinder.hh",
+        "fastjet/internal/Dnn2piCylinder.hh"
+      ],
+      "generated_core_header_dependencies": 0,
+      "includes_escaping_authoritative_root": 0,
+      "translation_units_inspected": 120
+    },
+    "upstream_build_system": "configure plus GNU Makefile"
   },
   "cost_bound": {
-    "corpus_execution_person_weeks": 0.25,
-    "estimate_scope": "One pinned toolchain, the 247-file/120-TU core corpus, fail-closed graph relations, calibration, controls, and static evidence only.",
-    "evidence_normalization_person_weeks": 0.75,
-    "graph_implementation_person_weeks": 4.25,
-    "implementation_cap_person_weeks": 8.0,
-    "implementation_total_person_weeks": 7.0,
-    "independent_review_cap_person_weeks": 2.0,
-    "independent_review_person_weeks": 2.0,
-    "tests_person_weeks": 1.0,
-    "toolchain_preparation_person_weeks": 0.75
+    "implementation_cap_8_person_weeks": "NOT_SUPPORTED",
+    "implementation_range": {
+      "nominal": {
+        "person_days": 153,
+        "person_weeks": 30.6
+      },
+      "optimistic": {
+        "person_days": 76,
+        "person_weeks": 15.2
+      },
+      "pessimistic": {
+        "person_days": 287,
+        "person_weeks": 57.4
+      }
+    },
+    "independent_audit_assessment": "NOT_CREDIBLE",
+    "independent_reproduction_range": {
+      "nominal": {
+        "person_days": 10,
+        "person_weeks": 2.0
+      },
+      "optimistic": {
+        "person_days": 5,
+        "person_weeks": 1.0
+      },
+      "pessimistic": {
+        "person_days": 15,
+        "person_weeks": 3.0
+      }
+    },
+    "independent_review_cap_2_person_weeks": "SUPPORTED_WITH_QUALIFICATION",
+    "interpretation": "These ranges challenge feasibility; they are not precise project scheduling commitments.",
+    "original_planning_estimate_person_weeks": 7.0,
+    "scheduling_commitment": false,
+    "work_breakdown_challenge": [
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 7,
+        "principal_uncertainty": "Toolchain build and CI reproducibility.",
+        "work_item": "LLVM_ACQUISITION_BUILD_CI"
+      },
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 7,
+        "principal_uncertainty": "Per-TU flags and environment reconstruction.",
+        "work_item": "DETERMINISTIC_120_TU_COMMAND_INVENTORY"
+      },
+      {
+        "nominal_person_days": 6,
+        "optimistic_person_days": 3,
+        "pessimistic_person_days": 10,
+        "principal_uncertainty": "Corpus-specific AST size and traversal.",
+        "work_item": "AST_EXTRACTION"
+      },
+      {
+        "nominal_person_days": 8,
+        "optimistic_person_days": 4,
+        "pessimistic_person_days": 14,
+        "principal_uncertainty": "Cross-TU and ODR identity.",
+        "work_item": "STABLE_DECLARATION_TYPE_IDENTITY"
+      },
+      {
+        "nominal_person_days": 10,
+        "optimistic_person_days": 5,
+        "pessimistic_person_days": 20,
+        "principal_uncertainty": "Overloads, callbacks, and indirect calls.",
+        "work_item": "CROSS_TU_CALL_MATCHING"
+      },
+      {
+        "nominal_person_days": 6,
+        "optimistic_person_days": 3,
+        "pessimistic_person_days": 10,
+        "principal_uncertainty": "Wrappers and default arguments.",
+        "work_item": "ARGUMENT_TO_PARAMETER_FLOW"
+      },
+      {
+        "nominal_person_days": 6,
+        "optimistic_person_days": 3,
+        "pessimistic_person_days": 10,
+        "principal_uncertainty": "Chained and indirect returns.",
+        "work_item": "RETURN_TO_CALLER_FLOW"
+      },
+      {
+        "nominal_person_days": 10,
+        "optimistic_person_days": 5,
+        "pessimistic_person_days": 20,
+        "principal_uncertainty": "Cross-function state mutation.",
+        "work_item": "FIELD_MEMBER_FLOW"
+      },
+      {
+        "nominal_person_days": 5,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 10,
+        "principal_uncertainty": "Neutral cache names and lifetimes.",
+        "work_item": "CACHE_FLOW"
+      },
+      {
+        "nominal_person_days": 12,
+        "optimistic_person_days": 6,
+        "pessimistic_person_days": 25,
+        "principal_uncertainty": "Alias-set growth.",
+        "work_item": "POINTER_REFERENCE_ALIASES"
+      },
+      {
+        "nominal_person_days": 8,
+        "optimistic_person_days": 4,
+        "pessimistic_person_days": 16,
+        "principal_uncertainty": "Closed-world assumptions.",
+        "work_item": "VIRTUAL_CANDIDATE_SETS"
+      },
+      {
+        "nominal_person_days": 10,
+        "optimistic_person_days": 5,
+        "pessimistic_person_days": 20,
+        "principal_uncertainty": "Expansion and specialization identity.",
+        "work_item": "MACRO_TEMPLATE_POLICY"
+      },
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 7,
+        "principal_uncertainty": "Binding-path semantics.",
+        "work_item": "UNRESOLVED_STATE_SERIALIZATION"
+      },
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 8,
+        "principal_uncertainty": "Installation and replacement chains.",
+        "work_item": "SIXTEEN_POINTER_ROLES"
+      },
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 8,
+        "principal_uncertainty": "Multiple provider paths.",
+        "work_item": "ALPHA_S_ROUTING"
+      },
+      {
+        "nominal_person_days": 10,
+        "optimistic_person_days": 5,
+        "pessimistic_person_days": 18,
+        "principal_uncertainty": "Scientific source review.",
+        "work_item": "HARD_ISR_REMNANT_CLASSIFICATION"
+      },
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 7,
+        "principal_uncertainty": "Stable identities and ordering.",
+        "work_item": "GRAPH_SERIALIZATION"
+      },
+      {
+        "nominal_person_days": 12,
+        "optimistic_person_days": 6,
+        "pessimistic_person_days": 20,
+        "principal_uncertainty": "Adversarial and corpus fixtures.",
+        "work_item": "TESTS"
+      },
+      {
+        "nominal_person_days": 6,
+        "optimistic_person_days": 3,
+        "pessimistic_person_days": 12,
+        "principal_uncertainty": "Exemptions and independence.",
+        "work_item": "HISTORICAL_672_MEMBER_HOLDOUT"
+      },
+      {
+        "nominal_person_days": 4,
+        "optimistic_person_days": 2,
+        "pessimistic_person_days": 8,
+        "principal_uncertainty": "Occurrence-level exclusion proof.",
+        "work_item": "NEGATIVE_CONTROLS"
+      },
+      {
+        "nominal_person_days": 10,
+        "optimistic_person_days": 5,
+        "pessimistic_person_days": 20,
+        "principal_uncertainty": "False-negative discovery.",
+        "work_item": "INDEPENDENT_RECALL_CHALLENGE"
+      },
+      {
+        "nominal_person_days": 6,
+        "optimistic_person_days": 3,
+        "pessimistic_person_days": 10,
+        "principal_uncertainty": "Traceability and review.",
+        "work_item": "EVIDENCE_DOCUMENTATION"
+      }
+    ]
   },
-  "decision": "FEASIBLE_FOR_SEPARATE_STATIC_EVIDENCE_TASK",
+  "decision": "INCONCLUSIVE",
   "dependencies": {
     "blocked_downstream_issue": {
       "authorization": "NOT_AUTHORIZED",
@@ -2152,10 +2629,12 @@
       "state": "OPEN"
     }
   },
-  "failure_scope": "Failure would reject this bounded Clang-18.1.8 static consumer-graph plan; it would not prove all future source-analysis methods impossible.",
+  "failure_scope": "INCONCLUSIVE rejects the current boundedness and compile-contract claims; it does not prove all future typed source-analysis methods impossible.",
   "false_negative_challenge": {
     "acceptance": "ZERO_MATERIAL_MISSES_AND_ZERO_UNRESOLVED_BINDING_CHALLENGES",
+    "contract_status": "SUPPORTED",
     "independent_from_graph_construction": true,
+    "material_miss_definition": "Any omitted source-backed PDF-derived path affecting hard, ISR, remnant, selection, ratio, envelope, or weight semantics.",
     "required_classes": [
       "NEUTRAL_NAME_ALIASES",
       "MEMBER_WRITES_READ_IN_ANOTHER_FUNCTION",
@@ -2168,6 +2647,93 @@
       "HELPER_WRAPPERS",
       "NEUTRAL_NAME_CACHE_VARIABLES"
     ]
+  },
+  "feasibility_conditions": {
+    "acceptance_contract_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Twenty-five binding definitions exist, but their schemas and predicates are not implemented or evaluated.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "alias_dispatch_policy_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Alias, callback, function-pointer, and virtual closed-world policies are defined but unevaluated.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "calibration_contract_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "The holdout remains post-construction and blinded with zero binding misses.",
+      "status": "SUPPORTED"
+    },
+    "compile_contract_supported": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Source inspection corrected two per-TU definitions, but exact commands have not been generated or parsed.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "corpus_identity_supported": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Official PYTHIA identity and the 247-file manifest inventory reproduced.",
+      "status": "SUPPORTED"
+    },
+    "false_negative_contract_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Material-miss and independent challenge classes are explicit.",
+      "status": "SUPPORTED"
+    },
+    "implementation_cost_bounded": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "The independent 15.2/30.6/57.4-week challenge does not support the eight-week cap.",
+      "status": "NOT_SUPPORTED"
+    },
+    "independent_review_cost_bounded": {
+      "qualified_state_permitted_for_feasible": true,
+      "rationale": "Two weeks is nominally plausible but the pessimistic range is three weeks.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "interprocedural_plan_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Cross-TU identity, overload, call, parameter, and return rules are defined but unimplemented.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "member_cache_plan_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Member/cache source-path requirements are defined but unimplemented.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "relation_representation_supported": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Clang supplies typed anchors; repository cross-TU and dataflow relations remain unimplemented.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "scientific_contract_unchanged": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "The accepted PDF family, support, sign, and inference contracts remain unchanged.",
+      "status": "SUPPORTED"
+    },
+    "source_lineage_portable_or_explicitly_qualified": {
+      "qualified_state_permitted_for_feasible": true,
+      "rationale": "Clean CI is explicitly limited to committed-manifest and artifact reproducibility.",
+      "status": "SUPPORTED_WITH_QUALIFICATION"
+    },
+    "static_runtime_boundary_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Runtime-only properties cannot satisfy static closure.",
+      "status": "SUPPORTED"
+    },
+    "stop_conditions_machine_checkable": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Each stop condition names a future machine predicate.",
+      "status": "SUPPORTED"
+    },
+    "toolchain_identity_supported": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "LLVM 18.1.8 identity is pinned; preference is not selection.",
+      "status": "SUPPORTED"
+    },
+    "typed_root_contract_complete": {
+      "qualified_state_permitted_for_feasible": false,
+      "rationale": "Typed root classes and prohibitions are specified with source-evidence requirements.",
+      "status": "SUPPORTED"
+    }
   },
   "graph_edge_contract": {
     "direct_root_to_unit_synthetic_edge_allowed": false,
@@ -2206,6 +2772,7 @@
     "source_support_required": true
   },
   "graph_root_contract": {
+    "contract_status": "SUPPORTED",
     "prohibitions": {
       "filename_substring_roots": false,
       "global_xf_pdf_pdfptr_fallback": false,
@@ -2248,6 +2815,33 @@
       "pdfVMDBPtr"
     ]
   },
+  "llvm_capability_boundary": {
+    "CLANG_AST_DIRECTLY_PROVIDES": [
+      "typed_declarations_and_expressions",
+      "source_spelling_and_expansion_coordinates",
+      "materialized_template_instances",
+      "call_parameter_return_ast_anchors",
+      "field_member_ast_anchors"
+    ],
+    "REPOSITORY_ANALYSIS_MUST_IMPLEMENT": [
+      "cross_translation_unit_identity",
+      "odr_reconciliation",
+      "overload_and_specialization_identity",
+      "call_site_to_parameter_propagation",
+      "return_to_caller_propagation",
+      "field_cache_write_read_flow",
+      "points_to_propagation",
+      "closed_virtual_target_construction",
+      "deterministic_graph_serialization"
+    ],
+    "STATIC_ANALYSIS_CANNOT_PROVE": [
+      "runtime_selected_concrete_targets",
+      "post_init_pointer_replacement",
+      "actual_query_envelopes",
+      "general_alias_closure",
+      "thread_process_behavior"
+    ]
+  },
   "negative_controls": {
     "co_located_line_admission_allowed": false,
     "identifiers": [
@@ -2259,19 +2853,19 @@
       "Vec4"
     ],
     "lexical_name_admission_allowed": false,
-    "required_proof": "The exact lexical occurrence must lie on a typed, source-backed provenance path."
+    "required_proof": "The exact occurrence must lie on a typed, source-backed provenance path."
   },
   "next_step": {
-    "action": "SEPARATE_REVIEW_OF_D1E_FEASIBILITY_AND_ACCEPTANCE_CONTRACT",
-    "condition": "Only a later explicit decision may open a separately scoped static-evidence implementation task.",
+    "action": "SEPARATE_REVIEW_TO_BOUND_COMPILE_COMMANDS_ACCEPTANCE_PREDICATES_AND_TASK_SCOPE",
+    "condition": "Only a later explicit decision may authorize a separately scoped static-evidence implementation task.",
     "implementation_authorized": false
   },
-  "non_failure_scope": "Feasibility does not establish graph completeness, signed-rate mathematics, runtime reachability, generator compatibility, or permission to implement.",
+  "non_failure_scope": "AST evidence may still repair provenance integrity, but does not establish graph completeness, signed-rate mathematics, runtime reachability, generator compatibility, or implementation permission.",
   "objective": {
     "planning_only": true,
     "production_graph_constructed": false,
     "scientific_objective_unchanged": "p(theta_PDF | D), where D is a set of events",
-    "task": "Decide whether a separately reviewed AST-grounded PYTHIA PDF-consumer graph task is technically bounded and scientifically useful."
+    "task": "Assess whether a separately reviewed AST-grounded PYTHIA PDF-consumer graph task is technically bounded and scientifically useful."
   },
   "precedence": {
     "ARCHITECTURE_COMPARISON_READY": false,
@@ -2285,31 +2879,70 @@
     "PROVENANCE_SLICE_V1_DECISION": "FAIL",
     "PROVENANCE_SLICE_V1_STATUS": "REJECTED_DIAGNOSTIC"
   },
-  "schema_version": "partonsbi.phase1bd.d1e.consumer-graph-feasibility.v1",
+  "preferred_feasibility_candidate": {
+    "candidate_id": "LLVM_CLANG_LIBTOOLING_18_1_8",
+    "reason": "Typed AST anchors remain scientifically relevant, but cross-TU/dataflow implementation, compile replay, and cost are not bounded.",
+    "relation_representation_status": "SUPPORTED_WITH_QUALIFICATION",
+    "selection_or_authorization": false,
+    "status": "PLAUSIBLE_FOUNDATION_REQUIRES_FURTHER_BOUNDING"
+  },
+  "schema_version": "partonsbi.phase1bd.d1e.consumer-graph-feasibility.v2",
   "scientific_decisiveness": {
+    "approach_status": "AST_GRAPH_APPROACH_REMAINS_SCIENTIFICALLY_RELEVANT",
     "cannot_establish": [
       "SIGNED_PROBABILITY_OR_RATE_VALIDITY",
       "SIGNED_SUDAKOV_MATHEMATICS",
       "RUNTIME_POINTER_IDENTITY",
-      "ACTUAL_GENERATOR_QUERY_ENVELOPES"
+      "POST_INIT_POINTER_SUBSTITUTION",
+      "ACTUAL_GENERATOR_QUERY_ENVELOPES",
+      "THREAD_PROCESS_SAFETY",
+      "GENERATOR_COMPATIBILITY",
+      "D2_AUTHORIZATION"
     ],
+    "compile_status": "COMPILE_CONTRACT_NOT_YET_SUPPORTED",
     "could_materially_repair_failed_gate": "provenance_evidence_integrity",
-    "not_merely_lexical_reason": "LibTooling can anchor typed declarations, calls, assignments, parameters, returns, and fields; repository logic must connect only source-supported relations and fail closed.",
+    "implementation_status": "IMPLEMENTATION_NOT_AUTHORIZED",
     "repair_is_conditional_on_all_binding_gates": true,
     "scientific_contract_changed": false,
+    "scope_status": "CURRENT_IMPLEMENTATION_SCOPE_NOT_CREDIBLY_BOUNDED",
     "stop_conditions": [
-      "Any required translation unit cannot be parsed reproducibly.",
-      "Interprocedural or member flow cannot be source-backed within the implementation cap.",
-      "The holdout or independent challenge exposes a material missed path that cannot be bounded.",
-      "The result degenerates into identifier, filename, global, historical, or synthetic fallback."
+      {
+        "condition": "Any required translation unit cannot be parsed reproducibly.",
+        "machine_predicate_id": "STOP_ANY_REQUIRED_TU_PARSE_FAILURE"
+      },
+      {
+        "condition": "Source-backed interprocedural or member flow remains incomplete after a separately approved bound.",
+        "machine_predicate_id": "STOP_BINDING_FLOW_INCOMPLETE_AT_APPROVED_BOUND"
+      },
+      {
+        "condition": "Holdout or independent challenge exposes a material miss that cannot be bounded.",
+        "machine_predicate_id": "STOP_UNBOUNDED_MATERIAL_MISS"
+      },
+      {
+        "condition": "Construction uses identifier, filename, global, historical, or synthetic fallback.",
+        "machine_predicate_id": "STOP_PROHIBITED_FALLBACK_NONZERO"
+      },
+      {
+        "condition": "Any timeout, truncation, ODR conflict, or required unresolved path remains.",
+        "machine_predicate_id": "STOP_INCOMPLETE_OR_UNRESOLVED_BINDING_EVIDENCE"
+      }
     ]
   },
-  "selected_toolchain": {
-    "candidate_id": "LLVM_CLANG_LIBTOOLING_18_1_8",
-    "reason": "The pinned API exposes typed AST and source locations while permitting repository-owned fail-closed interprocedural normalization within the cost cap.",
-    "selection_scope": "FEASIBILITY_REFERENCE_ONLY_NOT_AUTHORIZATION_FOR_ACQUISITION_OR_IMPLEMENTATION"
+  "selected_toolchain": null,
+  "source_lineage": {
+    "clean_ci_does_not_prove": "INDEPENDENT_UPSTREAM_BYTE_IDENTITY",
+    "clean_ci_independently_resolves_upstream_tag_or_commit": false,
+    "clean_ci_proves": "COMMITTED_MANIFEST_AND_ARTIFACT_REPRODUCIBILITY",
+    "clean_ci_retrieves_official_archive": false,
+    "clean_ci_skips_absent_local_byte_comparison": true,
+    "clean_ci_source_identity_validation": "PORTABLE_MANIFEST_VALIDATION_ONLY",
+    "committed_manifest_stores_paths_sizes_and_sha256": true,
+    "d1e_inventory_is_deterministic_manifest_filter": true,
+    "local_ignored_bytes_checked_only_when_checkout_exists": true,
+    "official_archive_reproduced_independently_during_audit": true
   },
   "static_runtime_boundary": {
+    "contract_status": "SUPPORTED",
     "runtime_evidence_may_satisfy_static_gate": false,
     "runtime_only_properties": [
       {
@@ -2318,17 +2951,17 @@
         "statically_proven": false
       },
       {
-        "later_evidence": "Separately authorized post-init mutation trace over the selected configuration.",
+        "later_evidence": "Separately authorized post-init mutation trace.",
         "property": "post_init_pointer_substitution",
         "statically_proven": false
       },
       {
-        "later_evidence": "Reviewed configuration plus runtime target observation for every dynamic dispatch site.",
+        "later_evidence": "Reviewed configuration plus separately authorized runtime target observation.",
         "property": "configuration_selected_dynamic_targets",
         "statically_proven": false
       },
       {
-        "later_evidence": "Separately authorized bounded query-envelope measurement with support checks.",
+        "later_evidence": "Separately authorized bounded query-envelope measurement.",
         "property": "runtime_query_envelopes",
         "statically_proven": false
       },
@@ -2344,64 +2977,74 @@
     {
       "acquisition_and_pinning_strategy": {
         "installation_performed_in_this_task": false,
-        "method": "Future task obtains official llvm-project tag llvmorg-18.1.8 and verifies peeled commit before a separate reviewed installation/build step.",
+        "method": "A future separately authorized task would obtain llvmorg-18.1.8 and verify the peeled commit before installation.",
         "pin_is_immutable": true
       },
-      "candidate_feasibility": "PINNABLE_AND_RELATIONS_TECHNICALLY_REPRESENTABLE",
+      "candidate_feasibility": "PLAUSIBLE_FOUNDATION_REQUIRES_FURTHER_BOUNDING",
       "candidate_id": "LLVM_CLANG_LIBTOOLING_18_1_8",
       "capabilities": {
         "alias_pointer_analysis": {
-          "future_requirement": "Resolve only source-supported points-to/assignment facts; serialize every remainder as blocking.",
-          "limitation": "General C++ alias closure and runtime pointer replacement are not guaranteed.",
-          "primary_evidence": "Typed pointer/reference assignments can be extracted from the AST.",
-          "support": "PARTIAL_FAIL_CLOSED"
+          "future_requirement": "Propagate only source-supported points-to facts and serialize every remaining alias as blocking.",
+          "limitation": "General alias closure and post-init pointer replacement cannot be proven statically.",
+          "primary_evidence": "Clang anchors typed pointer/reference assignments.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "cxx_language_and_templates": {
-          "future_requirement": "Fail closed on a required template use without a materialized specialization.",
-          "limitation": "Only materialized instantiations in the fixed translation-unit set are visible.",
-          "primary_evidence": "Clang 18.1.8 parses C++11 templates and exposes typed AST declarations and instantiations.",
+          "future_requirement": "Repository analysis must identify specializations across TUs and fail closed on an unmaterialized required instance.",
+          "limitation": "Cross-TU specialization identity and unmaterialized instances are not supplied as a complete graph.",
+          "primary_evidence": "Clang exposes typed declarations and materialized template instances for parsed C++11 translation units.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "deterministic_serialization": {
-          "future_requirement": "Sort canonical source-backed keys and hash normalized records.",
-          "limitation": "Raw traversal order and compiler-internal IDs are not a stable artifact contract.",
-          "primary_evidence": "USR/type/coordinate anchors can be normalized independently of traversal order.",
-          "support": "SUPPORTED_WITH_REPOSITORY_NORMALIZER"
+          "future_requirement": "Define canonical cross-TU symbol IDs, ordering, normalization, and byte equality.",
+          "limitation": "Traversal order and compiler-internal identifiers are not stable artifact identities.",
+          "primary_evidence": "Typed declarations and coordinates provide possible stable anchors.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "dynamic_dispatch": {
-          "future_requirement": "Emit candidate targets and block closure when the target set is not closed.",
-          "limitation": "Runtime-selected concrete targets cannot be proven statically.",
-          "primary_evidence": "Typed virtual call sites and class hierarchies are representable.",
+          "future_requirement": "Construct source-backed candidate sets under explicit closed-world conditions and block every open set.",
+          "limitation": "Runtime-selected concrete targets cannot be statically proven by this record.",
+          "primary_evidence": "Clang anchors typed virtual calls and class declarations.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "field_member_dataflow": {
-          "future_requirement": "Index field identity and all writes/reads across the authoritative corpus.",
-          "limitation": "Cross-function write/read flow requires repository-owned indexing.",
-          "primary_evidence": "Member expressions and field declarations carry static type and coordinates.",
-          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+          "future_requirement": "Index field identity and source-supported writes and reads across the corpus.",
+          "limitation": "Cross-function member and cache write/read flow is not automatic.",
+          "primary_evidence": "Clang anchors field declarations and member expressions with static types.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "interprocedural_call_and_return": {
-          "future_requirement": "Implement deterministic call-site/parameter/return matching and fail on unresolved callees.",
-          "limitation": "Clang AST traversal alone does not construct whole-program value flow.",
-          "primary_evidence": "AST call expressions, function declarations, parameters, and returns expose the required anchors.",
-          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+          "future_requirement": "Implement stable cross-TU call, parameter, and return matching with unresolved external boundaries.",
+          "limitation": "AST traversal does not supply complete cross-TU argument/parameter or return/caller flow.",
+          "primary_evidence": "Clang anchors call expressions, declarations, parameters, returns, and parsed overload resolution.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "macro_handling": {
-          "future_requirement": "Serialize both spelling and expansion ranges or emit MACRO_GENERATED_USE_UNRESOLVED.",
-          "limitation": "Macro-generated semantics need an explicit expansion policy.",
-          "primary_evidence": "Clang source locations distinguish spelling and expansion coordinates.",
+          "future_requirement": "Repository analysis must serialize both coordinates or emit MACRO_GENERATED_USE_UNRESOLVED.",
+          "limitation": "A stable macro identity and expansion policy is not automatic.",
+          "primary_evidence": "Clang source locations expose spelling and expansion coordinates.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "source_coordinate_stability": {
-          "future_requirement": "Bind every coordinate to source SHA-256 and canonical compile-command identity.",
-          "limitation": "Coordinates change if source bytes or flags change.",
-          "primary_evidence": "Pinned bytes plus Clang spelling/expansion offsets provide deterministic coordinates.",
-          "support": "SUPPORTED"
+          "future_requirement": "Bind coordinates to source, toolchain, and canonical command hashes.",
+          "limitation": "Coordinates depend on exact source bytes and compile arguments.",
+          "primary_evidence": "Clang provides spelling and expansion source coordinates.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         }
       },
-      "ci_availability": "NOT_IN_CURRENT_WORKFLOW; FUTURE_PINNED_TOOLCHAIN_JOB_FEASIBLE",
-      "compilation_database_requirements": "A deterministic repository-owned JSON Compilation Database containing all 120 release translation units and exact Clang argv arrays.",
+      "ci_availability": "NOT_IN_CURRENT_WORKFLOW_FUTURE_PINNED_JOB_REQUIRES_REVIEW",
+      "compilation_database_requirements": "Exact source-only argv arrays for all 120 TUs, including deterministic per-TU overrides.",
       "exact_tool_identity": {
+        "identity_verification_status": "SUPPORTED",
+        "license": "Apache-2.0 WITH LLVM-exception",
         "official_documentation": "https://releases.llvm.org/18.1.8/tools/clang/docs/LibTooling.html",
         "official_repository": "https://github.com/llvm/llvm-project",
         "release_commit_sha": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
@@ -2424,70 +3067,80 @@
       ],
       "implementation_burden_person_weeks": 4.25,
       "independent_review_burden_person_weeks": 1.5,
-      "license": "Apache-2.0 WITH LLVM-exception",
-      "wsl_availability": "NOT_CURRENTLY_INSTALLED; PINNED_ACQUISITION_FEASIBLE"
+      "license_assessment": "PINNED_APACHE_2_0_WITH_LLVM_EXCEPTION",
+      "wsl_availability": "NOT_CURRENTLY_INSTALLED"
     },
     {
       "acquisition_and_pinning_strategy": {
         "installation_performed_in_this_task": false,
-        "method": "Same pinned Clang 18.1.8 release; consume source-only AST output and own all cross-translation-unit normalization.",
+        "method": "A future task would use the same pinned Clang release and own all cross-TU normalization.",
         "pin_is_immutable": true
       },
-      "candidate_feasibility": "TECHNICALLY_POSSIBLE_BUT_NORMALIZER_BURDEN_NEAR_CAP",
+      "candidate_feasibility": "PLAUSIBLE_BUT_NORMALIZER_SCOPE_NOT_BOUNDED",
       "candidate_id": "CLANG_AST_JSON_QUERY_NORMALIZER_18_1_8",
       "capabilities": {
         "alias_pointer_analysis": {
-          "future_requirement": "Resolve only source-supported points-to/assignment facts; serialize every remainder as blocking.",
-          "limitation": "General C++ alias closure and runtime pointer replacement are not guaranteed.",
-          "primary_evidence": "Typed pointer/reference assignments can be extracted from the AST.",
-          "support": "PARTIAL_FAIL_CLOSED"
+          "future_requirement": "Propagate only source-supported points-to facts and serialize every remaining alias as blocking.",
+          "limitation": "General alias closure and post-init pointer replacement cannot be proven statically.",
+          "primary_evidence": "Clang anchors typed pointer/reference assignments.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "cxx_language_and_templates": {
-          "future_requirement": "Fail closed on a required template use without a materialized specialization.",
-          "limitation": "Only materialized instantiations in the fixed translation-unit set are visible.",
-          "primary_evidence": "Clang 18.1.8 parses C++11 templates and exposes typed AST declarations and instantiations.",
+          "future_requirement": "Repository analysis must identify specializations across TUs and fail closed on an unmaterialized required instance.",
+          "limitation": "Cross-TU specialization identity and unmaterialized instances are not supplied as a complete graph.",
+          "primary_evidence": "Clang exposes typed declarations and materialized template instances for parsed C++11 translation units.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "deterministic_serialization": {
-          "future_requirement": "Sort canonical source-backed keys and hash normalized records.",
-          "limitation": "Raw traversal order and compiler-internal IDs are not a stable artifact contract.",
-          "primary_evidence": "USR/type/coordinate anchors can be normalized independently of traversal order.",
-          "support": "SUPPORTED_WITH_REPOSITORY_NORMALIZER"
+          "future_requirement": "Define canonical cross-TU symbol IDs, ordering, normalization, and byte equality.",
+          "limitation": "Traversal order and compiler-internal identifiers are not stable artifact identities.",
+          "primary_evidence": "Typed declarations and coordinates provide possible stable anchors.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "dynamic_dispatch": {
-          "future_requirement": "Emit candidate targets and block closure when the target set is not closed.",
-          "limitation": "Runtime-selected concrete targets cannot be proven statically.",
-          "primary_evidence": "Typed virtual call sites and class hierarchies are representable.",
+          "future_requirement": "Construct source-backed candidate sets under explicit closed-world conditions and block every open set.",
+          "limitation": "Runtime-selected concrete targets cannot be statically proven by this record.",
+          "primary_evidence": "Clang anchors typed virtual calls and class declarations.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "field_member_dataflow": {
-          "future_requirement": "Index field identity and all writes/reads across the authoritative corpus.",
-          "limitation": "Cross-function write/read flow requires repository-owned indexing.",
-          "primary_evidence": "Member expressions and field declarations carry static type and coordinates.",
-          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+          "future_requirement": "Index field identity and source-supported writes and reads across the corpus.",
+          "limitation": "Cross-function member and cache write/read flow is not automatic.",
+          "primary_evidence": "Clang anchors field declarations and member expressions with static types.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "interprocedural_call_and_return": {
-          "future_requirement": "Implement deterministic call-site/parameter/return matching and fail on unresolved callees.",
-          "limitation": "Clang AST traversal alone does not construct whole-program value flow.",
-          "primary_evidence": "AST call expressions, function declarations, parameters, and returns expose the required anchors.",
-          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+          "future_requirement": "Implement stable cross-TU call, parameter, and return matching with unresolved external boundaries.",
+          "limitation": "AST traversal does not supply complete cross-TU argument/parameter or return/caller flow.",
+          "primary_evidence": "Clang anchors call expressions, declarations, parameters, returns, and parsed overload resolution.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "macro_handling": {
-          "future_requirement": "Serialize both spelling and expansion ranges or emit MACRO_GENERATED_USE_UNRESOLVED.",
-          "limitation": "Macro-generated semantics need an explicit expansion policy.",
-          "primary_evidence": "Clang source locations distinguish spelling and expansion coordinates.",
+          "future_requirement": "Repository analysis must serialize both coordinates or emit MACRO_GENERATED_USE_UNRESOLVED.",
+          "limitation": "A stable macro identity and expansion policy is not automatic.",
+          "primary_evidence": "Clang source locations expose spelling and expansion coordinates.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "source_coordinate_stability": {
-          "future_requirement": "Bind every coordinate to source SHA-256 and canonical compile-command identity.",
-          "limitation": "Coordinates change if source bytes or flags change.",
-          "primary_evidence": "Pinned bytes plus Clang spelling/expansion offsets provide deterministic coordinates.",
-          "support": "SUPPORTED"
+          "future_requirement": "Bind coordinates to source, toolchain, and canonical command hashes.",
+          "limitation": "Coordinates depend on exact source bytes and compile arguments.",
+          "primary_evidence": "Clang provides spelling and expansion source coordinates.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         }
       },
-      "ci_availability": "NOT_IN_CURRENT_WORKFLOW; FUTURE_PINNED_TOOLCHAIN_JOB_FEASIBLE",
-      "compilation_database_requirements": "The same exact 120-translation-unit database; JSON emission does not remove compile-flag dependence.",
+      "ci_availability": "NOT_IN_CURRENT_WORKFLOW_FUTURE_PINNED_JOB_REQUIRES_REVIEW",
+      "compilation_database_requirements": "The same exact 120-TU command set; JSON output does not remove flag dependence.",
       "exact_tool_identity": {
+        "identity_verification_status": "SUPPORTED",
+        "license": "Apache-2.0 WITH LLVM-exception",
         "official_documentation": "https://releases.llvm.org/18.1.8/tools/clang/docs/IntroductionToTheClangAST.html",
         "official_repository": "https://github.com/llvm/llvm-project",
         "release_commit_sha": "3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff",
@@ -2510,74 +3163,83 @@
       ],
       "implementation_burden_person_weeks": 6.5,
       "independent_review_burden_person_weeks": 2.0,
-      "license": "Apache-2.0 WITH LLVM-exception",
-      "wsl_availability": "NOT_CURRENTLY_INSTALLED; PINNED_ACQUISITION_FEASIBLE"
+      "license_assessment": "PINNED_APACHE_2_0_WITH_LLVM_EXCEPTION",
+      "wsl_availability": "NOT_CURRENTLY_INSTALLED"
     },
     {
       "acquisition_and_pinning_strategy": {
         "installation_performed_in_this_task": false,
-        "method": "Future review would pin official CLI bundle v2.25.5 and matching query-repository commit; no acquisition occurred here.",
+        "method": "A future review would pin the official CLI tag and query commit; no acquisition occurred here.",
         "pin_is_immutable": true
       },
-      "candidate_feasibility": "TECHNICALLY_CAPABLE_BUT_CI_DATABASE_LICENSE_AND_MODEL_STABILITY_BLOCK_SELECTION",
+      "candidate_feasibility": "NOT_SELECTED_LICENSE_DEPLOYMENT_AND_MODEL_STABILITY_UNRESOLVED",
       "candidate_id": "CODEQL_CPP_2_25_5",
       "capabilities": {
         "alias_pointer_analysis": {
-          "future_requirement": "Audit every modeled/unmodeled boundary and retain blocking unresolved states.",
-          "limitation": "Runtime-selected providers and model gaps remain unresolved.",
-          "primary_evidence": "Official C/C++ data-flow libraries model pointer indirections and fields.",
+          "future_requirement": "Propagate only source-supported points-to facts and serialize every remaining alias as blocking.",
+          "limitation": "General alias closure and post-init pointer replacement cannot be proven statically.",
+          "primary_evidence": "Clang anchors typed pointer/reference assignments.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "cxx_language_and_templates": {
-          "future_requirement": "Fail closed on a required template use without a materialized specialization.",
-          "limitation": "Only materialized instantiations in the fixed translation-unit set are visible.",
-          "primary_evidence": "Clang 18.1.8 parses C++11 templates and exposes typed AST declarations and instantiations.",
+          "future_requirement": "Repository analysis must identify specializations across TUs and fail closed on an unmaterialized required instance.",
+          "limitation": "Cross-TU specialization identity and unmaterialized instances are not supplied as a complete graph.",
+          "primary_evidence": "Clang exposes typed declarations and materialized template instances for parsed C++11 translation units.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "deterministic_serialization": {
-          "future_requirement": "Sort canonical source-backed keys and hash normalized records.",
-          "limitation": "Raw traversal order and compiler-internal IDs are not a stable artifact contract.",
-          "primary_evidence": "USR/type/coordinate anchors can be normalized independently of traversal order.",
-          "support": "SUPPORTED_WITH_REPOSITORY_NORMALIZER"
+          "future_requirement": "Define canonical cross-TU symbol IDs, ordering, normalization, and byte equality.",
+          "limitation": "Traversal order and compiler-internal identifiers are not stable artifact identities.",
+          "primary_evidence": "Typed declarations and coordinates provide possible stable anchors.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "dynamic_dispatch": {
-          "future_requirement": "Emit candidate targets and block closure when the target set is not closed.",
-          "limitation": "Runtime-selected concrete targets cannot be proven statically.",
-          "primary_evidence": "Typed virtual call sites and class hierarchies are representable.",
+          "future_requirement": "Construct source-backed candidate sets under explicit closed-world conditions and block every open set.",
+          "limitation": "Runtime-selected concrete targets cannot be statically proven by this record.",
+          "primary_evidence": "Clang anchors typed virtual calls and class declarations.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "field_member_dataflow": {
-          "future_requirement": "Index field identity and all writes/reads across the authoritative corpus.",
-          "limitation": "Cross-function write/read flow requires repository-owned indexing.",
-          "primary_evidence": "Member expressions and field declarations carry static type and coordinates.",
-          "support": "REPRESENTABLE_WITH_REPOSITORY_ANALYSIS"
+          "future_requirement": "Index field identity and source-supported writes and reads across the corpus.",
+          "limitation": "Cross-function member and cache write/read flow is not automatic.",
+          "primary_evidence": "Clang anchors field declarations and member expressions with static types.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "interprocedural_call_and_return": {
-          "future_requirement": "Pin the query pack, enumerate modeled boundaries, and fail closed on unmodeled calls.",
-          "limitation": "Custom models and dynamic target completeness remain query- and version-dependent.",
-          "primary_evidence": "Official CodeQL C/C++ libraries provide local/global data-flow and call-graph APIs.",
+          "future_requirement": "Pin queries, enumerate models, and fail closed on every unmodeled call.",
+          "limitation": "Model coverage and dynamic target completeness remain query- and version-dependent.",
+          "primary_evidence": "Official CodeQL C/C++ libraries expose local/global dataflow and call-graph APIs.",
+          "responsibility_class": "REPOSITORY_ANALYSIS_MUST_IMPLEMENT",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "macro_handling": {
-          "future_requirement": "Serialize both spelling and expansion ranges or emit MACRO_GENERATED_USE_UNRESOLVED.",
-          "limitation": "Macro-generated semantics need an explicit expansion policy.",
-          "primary_evidence": "Clang source locations distinguish spelling and expansion coordinates.",
+          "future_requirement": "Repository analysis must serialize both coordinates or emit MACRO_GENERATED_USE_UNRESOLVED.",
+          "limitation": "A stable macro identity and expansion policy is not automatic.",
+          "primary_evidence": "Clang source locations expose spelling and expansion coordinates.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
           "support": "SUPPORTED_WITH_QUALIFICATION"
         },
         "source_coordinate_stability": {
-          "future_requirement": "Bind every coordinate to source SHA-256 and canonical compile-command identity.",
-          "limitation": "Coordinates change if source bytes or flags change.",
-          "primary_evidence": "Pinned bytes plus Clang spelling/expansion offsets provide deterministic coordinates.",
-          "support": "SUPPORTED"
+          "future_requirement": "Bind coordinates to source, toolchain, and canonical command hashes.",
+          "limitation": "Coordinates depend on exact source bytes and compile arguments.",
+          "primary_evidence": "Clang provides spelling and expansion source coordinates.",
+          "responsibility_class": "CLANG_AST_DIRECTLY_PROVIDES",
+          "support": "SUPPORTED_WITH_QUALIFICATION"
         }
       },
-      "ci_availability": "DATABASE_GENERATION_IN_AUTOMATED_CI_NOT_SUPPORTED_BY_STANDARD_DOWNLOADED_CLI_TERMS",
-      "compilation_database_requirements": "Manual-build database creation with the exact source-only build commands; this adds capture and licensing constraints.",
+      "ci_availability": "REPOSITORY_SPECIFIC_LICENSE_DEPLOYMENT_AND_MODEL_STABILITY_UNRESOLVED",
+      "compilation_database_requirements": "Exact source-only database creation adds capture, licensing, and deployment constraints.",
       "exact_tool_identity": {
-        "binary_release_commit_sha": "697ca25e7c992daa3ecdb020fb62c38d0f5f8907",
+        "binary_release_commit_sha": "697ca25a6968ae01bab1b11ae56c3be5960f588c",
         "binary_release_tag": "v2.25.5",
-        "official_documentation": "https://docs.github.com/en/code-security/codeql-cli",
-        "official_repository": "https://github.com/github/codeql",
+        "identity_verification_status": "SUPPORTED",
+        "official_binary_repository": "https://github.com/github/codeql-cli-binaries",
+        "official_query_repository": "https://github.com/github/codeql",
         "query_repository_commit_sha": "b551e89ea8e011c0e3301fd0ce05589c9f2d3681",
         "query_repository_tag": "codeql-cli/v2.25.5",
         "tool": "GitHub CodeQL CLI C/C++ database and query layer",
@@ -2598,8 +3260,43 @@
       ],
       "implementation_burden_person_weeks": 5.0,
       "independent_review_burden_person_weeks": 2.0,
-      "license": "CodeQL CLI standard terms; query repository MIT",
-      "wsl_availability": "NOT_CURRENTLY_INSTALLED; LICENSE_REVIEW_REQUIRED"
+      "license_assessment": {
+        "permitted_scope": "OSI-licensed codebases hosted and maintained on GitHub.com, subject to the versioned terms.",
+        "repository_root_osi_license_identity_reviewed": false,
+        "selection_effect": "BLOCKED_BY_REPOSITORY_SPECIFIC_LICENSE_DEPLOYMENT_AND_MODEL_STABILITY_UNCERTAINTY",
+        "status": "REPOSITORY_SPECIFIC_APPLICABILITY_NOT_ESTABLISHED",
+        "universal_ci_prohibition_claimed": false,
+        "versioned_terms_permit_some_automated_ci": true
+      },
+      "official_sources": [
+        {
+          "canonical_url": "https://github.com/github/codeql-cli-binaries/releases/tag/v2.25.5",
+          "claim_scope": [
+            "official_cli_version_tag_identity"
+          ],
+          "immutable_identity": "697ca25a6968ae01bab1b11ae56c3be5960f588c",
+          "source_id": "CODEQL_CLI_BINARY_TAG_V2_25_5"
+        },
+        {
+          "canonical_url": "https://github.com/github/codeql/tree/codeql-cli/v2.25.5",
+          "claim_scope": [
+            "official_query_repository_tag_identity",
+            "query_repository_mit_license"
+          ],
+          "immutable_identity": "b551e89ea8e011c0e3301fd0ce05589c9f2d3681",
+          "source_id": "CODEQL_QUERY_TAG_V2_25_5"
+        },
+        {
+          "canonical_url": "https://github.com/github/codeql-cli-binaries/blob/v2.25.5/LICENSE.md",
+          "claim_scope": [
+            "automated_ci_permitted_for_osi_licensed_codebase_hosted_and_maintained_on_github",
+            "other_automated_ci_contexts_restricted_without_applicable_paid_license"
+          ],
+          "immutable_identity": "versioned_file_at_tag:v2.25.5:LICENSE.md",
+          "source_id": "CODEQL_CLI_TERMS_V2_25_5"
+        }
+      ],
+      "wsl_availability": "NOT_CURRENTLY_INSTALLED"
     }
   ],
   "unresolved_evidence_contract": {
@@ -2625,6 +3322,7 @@
     "compile_database_generated": false,
     "generator_or_physics_execution_performed": false,
     "parser_or_graph_execution_performed": false,
-    "production_graph_nodes_or_edges_generated": false
+    "production_graph_nodes_or_edges_generated": false,
+    "semantic_contract_validation_independent_of_byte_replay": true
   }
 }
