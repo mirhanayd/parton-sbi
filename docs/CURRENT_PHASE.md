@@ -274,22 +274,65 @@
   validated complete consumer/dataflow graph; or (4) a separately reviewed and
   approved change to the PDF-family or inference contract. A reopen condition
   is not an authorization.
-- All ten D1D-B authorization flags are false. Issue #42 remains open and in
-  planning review; Project fields are unchanged. Architecture comparison was
-  not promoted to readiness, issue #10 stays blocked, and D2 remains
-  unauthorized.
+- All ten D1D-B authorization flags are false. Issue #42 is closed as completed
+  planning work. Architecture comparison was not promoted to readiness, issue
+  #10 stays blocked, and D2 remains unauthorized.
+- Phase 1B-D1E now records the corrected planning-only result
+  `D1E_PROPOSED_DECISION = INCONCLUSIVE`. The previous draft `FEASIBLE`
+  result is superseded. `PREFERRED_FEASIBILITY_CANDIDATE =
+  LLVM_CLANG_LIBTOOLING_18_1_8`, while `SELECTED_TOOLCHAIN = null`.
+  Preference is not permission to acquire, install, run, or implement LLVM.
+- The authoritative future source contract has one semantic tree,
+  `.external/src/releases-pythia8312`, with 127 headers and 120 core
+  translation units. The 127 byte-identical installed headers are identity
+  evidence only and cannot create duplicate semantic nodes. Clean CI performs
+  `PORTABLE_MANIFEST_VALIDATION_ONLY`: it does not retrieve the official
+  archive or independently resolve the upstream tag/commit. Optional ignored
+  source bytes are checked only when the local checkout exists.
+- `COMPILE_CONTRACT_STATUS =
+  SOURCE_INSPECTION_CORRECTED_BUT_PARSE_NOT_VALIDATED`. A future command set
+  must add `-DXMLDIR="<PINNED_SHARE_ROOT>/xmldoc"` for `Pythia.cc` and
+  `-DFJCORE_HAVE_LIMITED_THREAD_SAFETY` for `FJcore.cc`; the previous empty
+  definition list and one-template argv claim were false. No parser ran and
+  the exact 120-TU command inventory remains future work.
+- Typed declarations, definitions, assignments, call/parameter/return flow,
+  member/cache flow, and explicit unresolved states replace every prohibited
+  identifier, filename, historical, global, or synthetic fallback. The 672
+  historical records remain a blinded post-construction holdout; `state`,
+  `size`, `id`, `push_back`, `p`, and `Vec4` remain mandatory exact-occurrence
+  negative controls. Twenty-five binding definitions now cover node/source
+  schemas, stable identities, path and reachability rules, aliases, callbacks,
+  ODR/templates/macros, exclusions, material misses, resource/truncation
+  limits, unresolved caps, independent review, and machine gate predicates.
+- Static evidence cannot establish runtime pointer installation, post-init
+  substitution, configuration-selected targets, query envelopes, or
+  thread/process behavior. It also cannot solve signed-rate or signed-Sudakov
+  mathematics. All 18 future acceptance gates must pass before a graph can
+  claim completeness.
+- `IMPLEMENTATION_COST_BOUND = NOT_SUPPORTED`. The original 7.0-week estimate
+  is retained only as challenged history; independent implementation ranges
+  are 15.2/30.6/57.4 person-weeks. Independent reproduction is 1/2/3 weeks,
+  so its two-week cap is supported only with qualification. These are
+  feasibility ranges, not scheduling commitments.
+- AST graph work remains potentially valuable for
+  `provenance_evidence_integrity`, but this record authorizes no implementation.
+  No parser or graph was implemented, no compilation database or production
+  nodes/edges were generated, and issue #45 remains open `Planning Only` work.
+  Issue #10 and D2 remain blocked under
+  `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-SCIENTIFIC_REVIEW_OF_EVIDENCE_DERIVED_D1D_B_DECISION
+REVIEW_D1E_AST_CONSUMER_GRAPH_FEASIBILITY_CONTRACT
 ```
 
-This is review of corrected ADR-008 and the pinned, evidence-derived v3
-planning artifact. It does not authorize implementation, a generator
-prototype, architecture selection, advancement of issue #10, or D2.
+This is review of ADR-009 and the v1 planning artifact. Only a later explicit
+decision may open a separate static-evidence implementation task. This review
+does not authorize tool installation, parser or graph implementation, a
+generator prototype, architecture selection, advancement of issue #10, or D2.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
@@ -313,10 +356,11 @@ unimplemented hypotheses.
 - Do not proceed from D1C-B to runtime consumer instrumentation using the
   installed `PDF` subclass boundary: its non-virtual positivity-clipping
   readers violate the accepted signed-value contract.
-- Issue #42 remains planning only. D1D-A is final `FAIL`, D1D-B is proposed
-  `INCONCLUSIVE` with an interim non-authorizing pause,
-  architecture-comparison readiness remains false, and all implementations,
-  prototypes, and D2 remain blocked and unauthorized.
+- Issue #42 is closed as completed D1D planning. D1D-A is final `FAIL`, D1D-B
+  is final `INCONCLUSIVE` with an interim non-authorizing pause, and D1E is a
+  feasibility result only. Architecture-comparison readiness remains false;
+  issue #45 authorizes planning only, while all implementations, prototypes,
+  issue #10, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
