@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate and validate the planning-only Phase 1B-D1F v2 decision.
+"""Generate and validate the planning-only Phase 1B-D1F v3 decision.
 
 The record independently derives (1) disposition of the failed current
 full-generator line and (2) priority among separate prospective contracts.
@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "partonsbi.phase1bd.d1f.active-contract-decision.v2"
+SCHEMA = "partonsbi.phase1bd.d1f.active-contract-decision.v3"
 ARTIFACT = "docs/phase1bd_d1f_active_contract_decision.json"
 
 OPTION_IDS = (
@@ -49,6 +49,17 @@ EVIDENCE_STATUSES = {
     "SUPPORTED_WITH_QUALIFICATION",
     "NOT_SUPPORTED",
     "NOT_EVALUATED",
+}
+CURRENT_EVIDENCE_CLASSES = {
+    "DIRECT_IMMUTABLE_EVIDENCE",
+    "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE",
+    "NOT_EVALUATED",
+}
+SCORE_EVIDENCE_CLASSES = {
+    "DIRECT_IMMUTABLE_EVIDENCE",
+    "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE",
+    "PROSPECTIVE_HYPOTHESIS",
+    "NOT_APPLICABLE",
 }
 SCORE_STATUSES = {
     "SUPPORTED",
@@ -152,12 +163,28 @@ LOWER_LEVEL_PROOF_OBLIGATIONS = (
 SUPERSESSION_STATUSES = {
     "PRESERVED",
     "PRESERVED_AS_HISTORICAL_EVIDENCE",
-    "PROSPECTIVELY_SUPERSEDED",
-    "PROSPECTIVELY_SUPERSEDED_OR_CLOSED_BY_TERMINATION",
-    "REQUIRES_EXPLICIT_CONFIRMATION",
-    "REQUIRES_NEW_DECISION",
+    "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
+    "WOULD_REQUIRE_EXPLICIT_CONFIRMATION_IF_SEPARATELY_ACCEPTED",
+    "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
     "NOT_COMPLETED_BY_LOWER_LEVEL_MODEL",
+    "CURRENT_STATE_PRESERVED",
     "NOT_APPLICABLE",
+}
+
+HISTORICAL_RESULT_KEYS = {
+    "D0R_NEGATIVE_AND_POSITIVE_EVIDENCE",
+    "D1_RESULT",
+    "D1R_RESULT",
+    "D1C_RESULT",
+    "D1D_RESULT",
+    "D1E_RESULT",
+}
+
+PREFERENCE_CRITICAL_CRITERIA = {
+    "independent_falsifiability",
+    "end_to_end_scientific_mvp_path",
+    "scientific_objective_change_risk",
+    "no_clipping_preservation",
 }
 
 
@@ -196,60 +223,105 @@ def build_repository_evidence() -> dict[str, dict[str, Any]]:
     return {
         "ADR001_D0R_FAMILY": {
             "path": "docs/adr/ADR-001-continuous-pdf-family.md",
-            "claim_scope": ["D0R_THETA_AND_PDF_INTERPRETABILITY", "STRICT_SUPPORT_AND_NO_CLIPPING"],
+            "claims": {
+                "D0R_THETA_AND_PDF_INTERPRETABILITY": {
+                    "option_scope": list(OPTION_IDS),
+                    "criterion_scope": ["pdf_interpretability", "scientific_objective_change_risk"],
+                    "maximum_supported_status": "SUPPORTED",
+                },
+                "STRICT_SUPPORT_AND_NO_CLIPPING": {
+                    "option_scope": list(OPTION_IDS),
+                    "criterion_scope": ["strict_support_preservation", "no_clipping_preservation"],
+                    "maximum_supported_status": "SUPPORTED",
+                },
+            },
         },
         "ADR003_EVENT_SEMANTICS": {
             "path": "docs/adr/ADR-003-event-sampling-semantics.md",
-            "claim_scope": ["FIXED_N_SHAPE_ONLY_SET_OBJECTIVE", "WEIGHTED_SETS_ARE_NOT_IID_UNWEIGHTED", "CALIBRATION_REQUIRED"],
+            "claims": {
+                "FIXED_N_SHAPE_ONLY_SET_OBJECTIVE": {
+                    "option_scope": list(OPTION_IDS),
+                    "criterion_scope": ["posterior_target_coherence", "set_level_amortized_sbi_compatibility", "rate_shape_clarity"],
+                    "maximum_supported_status": "SUPPORTED",
+                },
+                "WEIGHTED_SETS_ARE_NOT_IID_UNWEIGHTED": {
+                    "option_scope": list(OPTION_IDS),
+                    "criterion_scope": ["set_level_amortized_sbi_compatibility", "event_weight_clarity"],
+                    "maximum_supported_status": "SUPPORTED",
+                },
+                "CALIBRATION_REQUIRED": {
+                    "option_scope": list(OPTION_IDS),
+                    "criterion_scope": ["calibration_feasibility"],
+                    "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+                },
+            },
         },
         "ADR004_D0R_SIGN_TOPOLOGY": {
             "path": "docs/adr/ADR-004-d0-baseline-and-admissibility.md",
-            "claim_scope": ["D0R_SIGNED_NLO_VALUES", "D0R_HISTORICAL_IDENTITY"],
+            "claims": {
+                "D0R_SIGNED_NLO_VALUES": {
+                    "option_scope": [OPTION_IDS[0], OPTION_IDS[4]],
+                    "criterion_scope": ["qcd_factorization_compatibility"],
+                    "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+                },
+                "D0R_HISTORICAL_IDENTITY": {
+                    "option_scope": list(OPTION_IDS),
+                    "criterion_scope": ["pdf_interpretability", "scientific_objective_change_risk"],
+                    "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+                },
+            },
         },
         "D1D_FINAL_RECORD": {
             "path": "docs/phase1bd_d1d_terminal_decision.json",
-            "claim_scope": [
-                "FULL_GENERATOR_ARCHITECTURE_NOT_READY",
-                "SIGNED_KERNEL_PATH_NOT_BOUNDED",
-                "ALTERNATIVE_GENERATOR_PATH_NOT_BOUNDED",
-                "ACCEPTED_GENERATOR_MEASURE_ABSENT",
-                "RUNTIME_CONSUMER_CLOSURE_ABSENT",
-                "CURRENT_CONTRACT_NOT_PRESERVED_BY_CONTINUATION",
-                "TERMINATION_IS_NOT_GLOBAL_IMPOSSIBILITY",
-            ],
+            "claims": {
+                "FULL_GENERATOR_ARCHITECTURE_NOT_READY": {"current_fields": ["full_generator_architecture_ready"]},
+                "SIGNED_KERNEL_PATH_NOT_BOUNDED": {"current_fields": ["bounded_signed_kernel_path_exists"]},
+                "ALTERNATIVE_GENERATOR_ROUTES_POSSIBLE_WITH_EVIDENCE_GAPS": {
+                    "current_fields": ["bounded_alternative_generator_path_exists", "current_contract_preserved_by_continuation"],
+                    "option_scope": [OPTION_IDS[0], OPTION_IDS[5]],
+                    "criterion_scope": ["maintenance_burden"],
+                    "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+                },
+                "ACCEPTED_GENERATOR_ARCHITECTURE_ABSENT": {
+                    "current_fields": ["accepted_generator_measure_exists"],
+                    "option_scope": [OPTION_IDS[0], OPTION_IDS[4]],
+                    "criterion_scope": ["normalized_generative_measure"],
+                    "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+                },
+                "SIGNED_INTERNAL_RATE_CONSTRUCTION_ABSENT": {"current_fields": ["accepted_generator_measure_exists"]},
+                "COMPLETED_GENERATOR_MEASURE_ABSENT": {"current_fields": ["accepted_generator_measure_exists"]},
+                "RUNTIME_CONSUMER_CLOSURE_NOT_VALIDATED": {"current_fields": ["accepted_runtime_consumer_closure_exists"]},
+                "TERMINATION_IS_NOT_GLOBAL_IMPOSSIBILITY": {"current_fields": []},
+            },
         },
         "D1E_FINAL_RECORD": {
             "path": "docs/phase1bd_d1e_consumer_graph_feasibility.json",
-            "claim_scope": ["STATIC_EVIDENCE_PATH_NOT_BOUNDED", "IMPLEMENTATION_TASK_NOT_BOUNDED", "NO_TOOLCHAIN_SELECTED"],
+            "claims": {
+                "CURRENT_STATIC_SCOPE_NOT_CREDIBLY_BOUNDED": {
+                    "current_fields": ["bounded_static_evidence_path_exists"],
+                    "option_scope": [OPTION_IDS[0], OPTION_IDS[5]],
+                    "criterion_scope": ["independent_falsifiability"],
+                    "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+                },
+                "IMPLEMENTATION_COST_BOUND_NOT_SUPPORTED": {
+                    "current_fields": ["implementation_task_credibly_bounded"],
+                    "option_scope": [OPTION_IDS[0]],
+                    "criterion_scope": ["implementation_boundedness", "validation_boundedness"],
+                    "maximum_supported_status": "NOT_SUPPORTED",
+                },
+                "NO_TOOLCHAIN_SELECTED": {
+                    "option_scope": [],
+                    "criterion_scope": [],
+                    "maximum_supported_status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE",
+                },
+            },
         },
         "D1F_CONCEPTUAL_REVIEW": {
             "path": "docs/adr/ADR-010-active-scientific-contract-after-generator-pause.md",
-            "claim_scope": ["REDESIGNS_ARE_SEPARATE_CONTRACTS", "LOWER_LEVEL_FORM_IS_CONCEPTUALLY_COHERENT", "HISTORICAL_NEGATIVE_EVIDENCE_PRESERVED"],
+            "allowed_roles": ["DECISION_RECORD_DEFINITION", "EXPLICIT_INFERENCE_RECORD", "CONTRACT_DESCRIPTION"],
+            "claims": {},
         },
     }
-
-
-CURRENT_CLAIM_STATUS = {
-    "FULL_GENERATOR_ARCHITECTURE_NOT_READY": "NOT_SUPPORTED",
-    "STATIC_EVIDENCE_PATH_NOT_BOUNDED": "NOT_SUPPORTED",
-    "SIGNED_KERNEL_PATH_NOT_BOUNDED": "NOT_SUPPORTED",
-    "ALTERNATIVE_GENERATOR_PATH_NOT_BOUNDED": "NOT_SUPPORTED",
-    "ACCEPTED_GENERATOR_MEASURE_ABSENT": "NOT_SUPPORTED",
-    "RUNTIME_CONSUMER_CLOSURE_ABSENT": "NOT_SUPPORTED",
-    "IMPLEMENTATION_TASK_NOT_BOUNDED": "NOT_SUPPORTED",
-    "CURRENT_CONTRACT_NOT_PRESERVED_BY_CONTINUATION": "NOT_SUPPORTED",
-}
-
-CURRENT_FIELD_CLAIMS = {
-    "full_generator_architecture_ready": ("D1D_FINAL_RECORD", "FULL_GENERATOR_ARCHITECTURE_NOT_READY"),
-    "bounded_static_evidence_path_exists": ("D1E_FINAL_RECORD", "STATIC_EVIDENCE_PATH_NOT_BOUNDED"),
-    "bounded_signed_kernel_path_exists": ("D1D_FINAL_RECORD", "SIGNED_KERNEL_PATH_NOT_BOUNDED"),
-    "bounded_alternative_generator_path_exists": ("D1D_FINAL_RECORD", "ALTERNATIVE_GENERATOR_PATH_NOT_BOUNDED"),
-    "accepted_generator_measure_exists": ("D1D_FINAL_RECORD", "ACCEPTED_GENERATOR_MEASURE_ABSENT"),
-    "accepted_runtime_consumer_closure_exists": ("D1D_FINAL_RECORD", "RUNTIME_CONSUMER_CLOSURE_ABSENT"),
-    "implementation_task_credibly_bounded": ("D1E_FINAL_RECORD", "IMPLEMENTATION_TASK_NOT_BOUNDED"),
-    "current_contract_preserved_by_continuation": ("D1D_FINAL_RECORD", "CURRENT_CONTRACT_NOT_PRESERVED_BY_CONTINUATION"),
-}
 
 
 def base_preserved() -> list[str]:
@@ -332,12 +404,12 @@ def build_options() -> dict[str, dict[str, Any]]:
             "calibration_coverage_target": field("CONCEPTUALLY_DEFINED_REQUIRES_EXECUTABLE_CLOSURE", "SBC, conditional coverage, and independent quadrature closure require future executable definitions."),
             "original_objective_compatibility": field("PRESERVED_WITH_SCOPED_OBSERVATION", "Preserves p(theta_PDF|D), with D explicitly lower-level rather than full-generator events."),
             "preserved_evidence": base_preserved() + ["ADR-001/ADR-004/D0R and initial fixed-N shape-only semantics may be preserved."],
-            "prospectively_superseded_evidence": ["ADR-002 full-generator artifact", "ADR-006 full-generator transport", "issue #10 current full-generator scope", "current D2-D5 full-generator roadmap"],
+            "prospectively_superseded_evidence": ["Would require prospective supersession of ADR-002, ADR-006, issue #10, and the current D2-D5 roadmap only if separately accepted."],
             "issue_roadmap_implications": field("SEPARATE_SCOPE_NOT_ISSUE_10_COMPLETION", "A later accepted contract would supersede, not complete, issue #10."),
             "smallest_falsifiable_next_step": field("BOUNDED_PLANNING_REVIEW", "Formalize formulae, support, positivity, normalization, detector kernel, omissions, and closure gates without implementation."),
             "burden_estimate": field("PLANNING_BOUNDED_IMPLEMENTATION_NOT_AUTHORIZED", "The mathematical contract review is bounded; implementation remains unestimated and unauthorized."),
             "relationship_to_current_line": "SEPARATE_PROSPECTIVE_CONTRACT",
-            "scientific_motivation": field("SUPPORTED_WITH_QUALIFICATION", "A normalized lower-level law directly serves set-level PDF inference while explicitly reducing physics scope."),
+            "scientific_motivation": field("PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE", "The lower-level form is plausible, but independent evidence does not establish it as the unique next scientific priority."),
             "implementation_ready_claimed": False,
             "hidden_clipping_or_semantic_repair": False,
             "signed_weights_are_probabilities": False,
@@ -355,6 +427,8 @@ def build_options() -> dict[str, dict[str, Any]]:
             "full_generator_equivalence_claimed": False,
             "complete_rate_positivity_proven": False,
             "detector_kernel_normalization_proven": False,
+            "conceptual_reviewability": "INCOMPLETE_BUT_REVIEWABLE",
+            "candidate_status": "PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE",
         },
         OPTION_IDS[3]: {
             "latent_parameter_theta": field("REQUIRES_NEW_DECISION", "May retain D0R only after defining the empirical-measure law."),
@@ -413,7 +487,7 @@ def build_options() -> dict[str, dict[str, Any]]:
         OPTION_IDS[5]: {
             "latent_parameter_theta": field("PRESERVED_HISTORICALLY", "D0R theta remains evidence."),
             "active_pdf_family_identity": field("PRESERVED_HISTORICALLY", "D0R remains accepted at its validated scope."),
-            "simulator_or_data_generating_law": field("CURRENT_LINE_TERMINATED", "No further full-generator coupling is pursued for the fixed contract."),
+            "simulator_or_data_generating_law": field("PROSPECTIVE_SCOPED_TERMINATION_OPTION", "Termination remains one reviewed option, not the active state."),
             "normalized_probability_measure": field("NOT_APPLICABLE", "Termination defines no new law."),
             "observed_event_set_representation": field("NOT_APPLICABLE", "Termination defines no dataset."),
             "event_and_set_weights": field("NOT_APPLICABLE", "Termination defines no weights."),
@@ -427,8 +501,8 @@ def build_options() -> dict[str, dict[str, Any]]:
             "calibration_coverage_target": field("NOT_APPLICABLE", "Termination defines no calibration."),
             "original_objective_compatibility": field("SCOPED_LINE_TERMINATION", "Terminates only the current full-generator path, not PDF SBI."),
             "preserved_evidence": base_preserved(),
-            "prospectively_superseded_evidence": ["issue #10 current full-generator scope", "current full-generator D2-D5 roadmap"],
-            "issue_roadmap_implications": field("CURRENT_LINE_CLOSED_PROSPECTIVELY", "Separate contracts require separate decisions."),
+            "prospectively_superseded_evidence": ["No active supersession; termination would require a separately supported decision."],
+            "issue_roadmap_implications": field("NO_ACTIVE_TERMINATION", "Issue #10 and the current roadmap retain their existing states."),
             "smallest_falsifiable_next_step": field("NOT_APPLICABLE", "A scoped resource disposition, not an experiment."),
             "burden_estimate": field("LOW", "Documentation and roadmap disposition only."),
             "relationship_to_current_line": "CURRENT_LINE_DISPOSITION",
@@ -442,7 +516,7 @@ def build_options() -> dict[str, dict[str, Any]]:
     return options
 
 
-SCORE_CODES = {
+V2_SCORE_CODES = {
     OPTION_IDS[0]: ("Q","Q","S","S","Q","S","S","U","S","S","Q","N","N","N","Q","N","Q","N","S","Q"),
     OPTION_IDS[1]: ("Q","Q","S","Q","Q","S","S","U","S","S","Q","Q","U","U","Q","N","Q","U","N","Q"),
     OPTION_IDS[2]: ("Q","Q","S","Q","S","S","S","Q","S","S","Q","S","Q","Q","Q","Q","Q","Q","Q","S"),
@@ -490,47 +564,97 @@ OPTION_SCOPE = {
     OPTION_IDS[5]: "Scoped termination proposes no new data law and preserves all historical evidence.",
 }
 
-CRITERION_EVIDENCE = {
-    "normalized_generative_measure": ("D1D_FINAL_RECORD", ["ACCEPTED_GENERATOR_MEASURE_ABSENT"]),
-    "posterior_target_coherence": ("ADR003_EVENT_SEMANTICS", ["FIXED_N_SHAPE_ONLY_SET_OBJECTIVE"]),
-    "set_level_amortized_sbi_compatibility": ("ADR003_EVENT_SEMANTICS", ["FIXED_N_SHAPE_ONLY_SET_OBJECTIVE", "WEIGHTED_SETS_ARE_NOT_IID_UNWEIGHTED"]),
-    "pdf_interpretability": ("ADR001_D0R_FAMILY", ["D0R_THETA_AND_PDF_INTERPRETABILITY"]),
-    "qcd_factorization_compatibility": ("ADR004_D0R_SIGN_TOPOLOGY", ["D0R_SIGNED_NLO_VALUES"]),
-    "strict_support_preservation": ("ADR001_D0R_FAMILY", ["STRICT_SUPPORT_AND_NO_CLIPPING"]),
-    "no_clipping_preservation": ("ADR001_D0R_FAMILY", ["STRICT_SUPPORT_AND_NO_CLIPPING"]),
-    "detector_model_feasibility": ("D1F_CONCEPTUAL_REVIEW", ["LOWER_LEVEL_FORM_IS_CONCEPTUALLY_COHERENT"]),
-    "event_weight_clarity": ("ADR003_EVENT_SEMANTICS", ["WEIGHTED_SETS_ARE_NOT_IID_UNWEIGHTED"]),
-    "rate_shape_clarity": ("ADR003_EVENT_SEMANTICS", ["FIXED_N_SHAPE_ONLY_SET_OBJECTIVE"]),
-    "calibration_feasibility": ("ADR003_EVENT_SEMANTICS", ["CALIBRATION_REQUIRED"]),
-    "independent_falsifiability": ("D1E_FINAL_RECORD", ["IMPLEMENTATION_TASK_NOT_BOUNDED"]),
-    "implementation_boundedness": ("D1E_FINAL_RECORD", ["IMPLEMENTATION_TASK_NOT_BOUNDED"]),
-    "validation_boundedness": ("D1E_FINAL_RECORD", ["STATIC_EVIDENCE_PATH_NOT_BOUNDED"]),
-    "reproducibility": ("D1E_FINAL_RECORD", ["NO_TOOLCHAIN_SELECTED"]),
-    "maintenance_burden": ("D1D_FINAL_RECORD", ["ALTERNATIVE_GENERATOR_PATH_NOT_BOUNDED"]),
-    "existing_rust_cpp_infrastructure_compatibility": ("ADR003_EVENT_SEMANTICS", ["FIXED_N_SHAPE_ONLY_SET_OBJECTIVE"]),
-    "end_to_end_scientific_mvp_path": ("D1F_CONCEPTUAL_REVIEW", ["LOWER_LEVEL_FORM_IS_CONCEPTUALLY_COHERENT"]),
-    "scientific_objective_change_risk": ("ADR001_D0R_FAMILY", ["D0R_THETA_AND_PDF_INTERPRETABILITY"]),
-    "evidence_value_on_failure": ("D1F_CONCEPTUAL_REVIEW", ["HISTORICAL_NEGATIVE_EVIDENCE_PRESERVED"]),
+AUDIT_CLASS_CODES = {
+    OPTION_IDS[0]: ("Q","Q","D","D","M","D","D","M","D","D","Q","D","D","Q","M","M","M","M","D","U"),
+    OPTION_IDS[1]: ("M","M","Q","M","M","Q","Q","M","Q","Q","Q","M","M","M","M","M","M","M","Q","U"),
+    OPTION_IDS[2]: ("M","Q","D","Q","O","D","D","U","Q","D","Q","M","M","M","M","M","M","U","Q","U"),
+    OPTION_IDS[3]: ("M","M","Q","M","M","Q","Q","M","D","M","Q","M","M","M","M","M","M","M","M","U"),
+    OPTION_IDS[4]: ("D","M","Q","M","Q","Q","Q","M","Q","M","Q","M","M","M","M","M","M","M","Q","U"),
+    OPTION_IDS[5]: ("A","A","A","A","A","D","D","A","A","A","A","Q","M","M","M","Q","A","A","Q","U"),
+}
+AUDIT_CLASS = {
+    "D": "DIRECTLY_SUPPORTED",
+    "Q": "SUPPORTED_WITH_QUALIFICATION",
+    "O": "OVERSTATED",
+    "M": "MISBOUND",
+    "U": "UNSUPPORTED",
+    "A": "NOT_APPLICABLE",
+}
+
+SCORE_SOURCE = {
+    "normalized_generative_measure": ("D1D_FINAL_RECORD", "ACCEPTED_GENERATOR_ARCHITECTURE_ABSENT"),
+    "posterior_target_coherence": ("ADR003_EVENT_SEMANTICS", "FIXED_N_SHAPE_ONLY_SET_OBJECTIVE"),
+    "set_level_amortized_sbi_compatibility": ("ADR003_EVENT_SEMANTICS", "FIXED_N_SHAPE_ONLY_SET_OBJECTIVE"),
+    "pdf_interpretability": ("ADR001_D0R_FAMILY", "D0R_THETA_AND_PDF_INTERPRETABILITY"),
+    "qcd_factorization_compatibility": ("ADR004_D0R_SIGN_TOPOLOGY", "D0R_SIGNED_NLO_VALUES"),
+    "strict_support_preservation": ("ADR001_D0R_FAMILY", "STRICT_SUPPORT_AND_NO_CLIPPING"),
+    "no_clipping_preservation": ("ADR001_D0R_FAMILY", "STRICT_SUPPORT_AND_NO_CLIPPING"),
+    "event_weight_clarity": ("ADR003_EVENT_SEMANTICS", "WEIGHTED_SETS_ARE_NOT_IID_UNWEIGHTED"),
+    "rate_shape_clarity": ("ADR003_EVENT_SEMANTICS", "FIXED_N_SHAPE_ONLY_SET_OBJECTIVE"),
+    "calibration_feasibility": ("ADR003_EVENT_SEMANTICS", "CALIBRATION_REQUIRED"),
+    "independent_falsifiability": ("D1E_FINAL_RECORD", "CURRENT_STATIC_SCOPE_NOT_CREDIBLY_BOUNDED"),
+    "implementation_boundedness": ("D1E_FINAL_RECORD", "IMPLEMENTATION_COST_BOUND_NOT_SUPPORTED"),
+    "validation_boundedness": ("D1E_FINAL_RECORD", "IMPLEMENTATION_COST_BOUND_NOT_SUPPORTED"),
+    "maintenance_burden": ("D1D_FINAL_RECORD", "ALTERNATIVE_GENERATOR_ROUTES_POSSIBLE_WITH_EVIDENCE_GAPS"),
+    "scientific_objective_change_risk": ("ADR001_D0R_FAMILY", "D0R_THETA_AND_PDF_INTERPRETABILITY"),
 }
 
 
-def build_scorecards() -> dict[str, dict[str, dict[str, Any]]]:
+def corrected_score_status(v2_code: str, audit_code: str) -> str:
+    if audit_code == "A":
+        return "NOT_APPLICABLE"
+    if audit_code in {"M", "O", "U"}:
+        return "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+    status = CODE_STATUS[v2_code]
+    if audit_code == "Q" and status == "SUPPORTED":
+        return "SUPPORTED_WITH_QUALIFICATION"
+    return status
+
+
+def build_scorecards(repository_evidence: dict[str, dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
     cards: dict[str, dict[str, dict[str, Any]]] = {}
     for option_id in OPTION_IDS:
         cards[option_id] = {}
-        for criterion, code in zip(CRITERIA, SCORE_CODES[option_id], strict=True):
-            evidence_id, claim_keys = CRITERION_EVIDENCE[criterion]
+        for criterion, v2_code, audit_code in zip(CRITERIA, V2_SCORE_CODES[option_id], AUDIT_CLASS_CODES[option_id], strict=True):
+            status = corrected_score_status(v2_code, audit_code)
+            audit_class = AUDIT_CLASS[audit_code]
+            if audit_code == "D":
+                evidence_class = "DIRECT_IMMUTABLE_EVIDENCE"
+            elif audit_code == "Q":
+                evidence_class = "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE"
+            elif audit_code == "A":
+                evidence_class = "NOT_APPLICABLE"
+            else:
+                evidence_class = "PROSPECTIVE_HYPOTHESIS"
+            bindings: list[dict[str, Any]] = []
+            if evidence_class in {"DIRECT_IMMUTABLE_EVIDENCE", "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE"}:
+                evidence_id, claim_key = SCORE_SOURCE[criterion]
+                claim = repository_evidence[evidence_id]["claims"][claim_key]
+                bindings.append({
+                    "evidence_id": evidence_id,
+                    "claim_key": claim_key,
+                    "option_scope": [option_id],
+                    "criterion_scope": [criterion],
+                    "maximum_supported_status": claim["maximum_supported_status"],
+                })
+            explicit_inference = None
+            if evidence_class == "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE":
+                explicit_inference = {
+                    "premises": [f"{row['evidence_id']}:{row['claim_key']}" for row in bindings],
+                    "inference": f"The immutable premise supports only the stated qualified conclusion for {option_id}/{criterion}.",
+                }
             cards[option_id][criterion] = {
-                "status": CODE_STATUS[code],
-                "criterion_specific_rationale": f"{CRITERION_RATIONALE[criterion]} {OPTION_SCOPE[option_id]}",
-                "evidence_ids": [evidence_id],
-                "claim_keys": claim_keys,
-                "implication_for_current_line": "Does not reopen or authorize the current full-generator line.",
-                "implication_for_separate_review": (
-                    "Contributes to separate-review prioritization only at the stated epistemic status."
-                    if option_id in REDESIGN_OPTIONS
-                    else "Not a separate-review candidate."
-                ),
+                "option_id": option_id,
+                "criterion_id": criterion,
+                "status": status,
+                "criterion_specific_rationale": f"{CRITERION_RATIONALE[criterion]} {OPTION_SCOPE[option_id]} Audit correction: {audit_class}.",
+                "evidence_class": evidence_class,
+                "evidence_bindings": bindings,
+                "explicit_inference": explicit_inference,
+                "implication_for_current_line": "This score cannot reopen or authorize the paused current full-generator line.",
+                "implication_for_separate_review": "A hypothesis may motivate future evidence collection but cannot establish unique preference." if evidence_class == "PROSPECTIVE_HYPOTHESIS" else "The cell contributes only within its exact option and criterion scope.",
+                "load_bearing": bool(option_id in REDESIGN_OPTIONS and criterion in PREFERENCE_CRITICAL_CRITERIA and evidence_class in {"DIRECT_IMMUTABLE_EVIDENCE", "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE"}),
+                "historical_correction_classification": audit_class,
             }
     return cards
 
@@ -542,59 +666,128 @@ def build_supersession() -> dict[str, Any]:
     }
     redesign = {
         OPTION_IDS[1]: {
-            "ADR-001": "PROSPECTIVELY_SUPERSEDED",
-            "ADR-004": "PROSPECTIVELY_SUPERSEDED",
+            "ADR-001": "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
+            "ADR-004": "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
             "D0R": "PRESERVED_AS_HISTORICAL_EVIDENCE",
-            "ISSUE_10": "REQUIRES_NEW_DECISION",
-            "NEURAL_PHASE": "REQUIRES_NEW_DECISION",
+            "ISSUE_10": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
+            "NEURAL_PHASE": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
         },
         OPTION_IDS[2]: {
             "ADR-001": "PRESERVED",
             "ADR-004": "PRESERVED",
             "D0R": "PRESERVED",
-            "ADR-003_FIXED_N_SHAPE_ONLY": "REQUIRES_EXPLICIT_CONFIRMATION",
-            "ADR-002": "PROSPECTIVELY_SUPERSEDED",
-            "ADR-006": "PROSPECTIVELY_SUPERSEDED",
+            "ADR-003_FIXED_N_SHAPE_ONLY": "WOULD_REQUIRE_EXPLICIT_CONFIRMATION_IF_SEPARATELY_ACCEPTED",
+            "ADR-002": "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
+            "ADR-006": "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
             "ISSUE_10": "NOT_COMPLETED_BY_LOWER_LEVEL_MODEL",
-            "NEURAL_PHASE": "REQUIRES_NEW_DECISION",
+            "NEURAL_PHASE": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
         },
         OPTION_IDS[3]: {
-            "ADR-003_FIXED_N_SHAPE_ONLY": "PROSPECTIVELY_SUPERSEDED",
-            "ISSUE_10": "REQUIRES_NEW_DECISION",
-            "NEURAL_PHASE": "REQUIRES_NEW_DECISION",
+            "ADR-003_FIXED_N_SHAPE_ONLY": "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
+            "ISSUE_10": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
+            "NEURAL_PHASE": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
         },
         OPTION_IDS[4]: {
-            "ADR-003_FIXED_N_SHAPE_ONLY": "PROSPECTIVELY_SUPERSEDED",
-            "ISSUE_10": "REQUIRES_NEW_DECISION",
-            "NEURAL_PHASE": "REQUIRES_NEW_DECISION",
+            "ADR-003_FIXED_N_SHAPE_ONLY": "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED",
+            "ISSUE_10": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
+            "NEURAL_PHASE": "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED",
         },
     }
     return {
         "historical_negative_results": historical,
-        "current_line_termination_effects": {
-            "ISSUE_10_FULL_GENERATOR_D2": "PROSPECTIVELY_SUPERSEDED_OR_CLOSED_BY_TERMINATION",
-            "CURRENT_FULL_GENERATOR_D2_D5_ROADMAP": "PROSPECTIVELY_SUPERSEDED",
+        "current_line_active_effects": {
+            "ISSUE_10_FULL_GENERATOR_D2": "CURRENT_STATE_PRESERVED",
+            "CURRENT_FULL_GENERATOR_D2_D5_ROADMAP": "CURRENT_STATE_PRESERVED",
         },
         "redesign_option_effects": redesign,
-        "preferred_lower_level_review_effects": copy.deepcopy(redesign[OPTION_IDS[2]]),
+        "lower_level_candidate_hypothetical_effects": copy.deepcopy(redesign[OPTION_IDS[2]]),
     }
 
 
 def build_current_line_evidence(options: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
-    evidence: dict[str, dict[str, Any]] = {}
-    for field_id, (evidence_id, claim_key) in CURRENT_FIELD_CLAIMS.items():
-        evidence[field_id] = {
-            "status": CURRENT_CLAIM_STATUS[claim_key],
-            "evidence_ids": [evidence_id],
-            "claim_keys": [claim_key],
-            "rationale": f"{field_id} is not supported by the immutable D1D/D1E result identified by {claim_key}.",
-        }
+    evidence: dict[str, dict[str, Any]] = {
+        "full_generator_architecture_ready": {
+            "proposition_status": "NOT_SUPPORTED",
+            "evidence_class": "DIRECT_IMMUTABLE_EVIDENCE",
+            "evidence_ids": ["D1D_FINAL_RECORD"],
+            "claim_keys": ["FULL_GENERATOR_ARCHITECTURE_NOT_READY"],
+            "premises": ["D1D-A failed its evidence-integrity gate and architecture-comparison readiness remains false."],
+            "inference": None,
+            "rationale": "The immutable D1D record directly rejects readiness of the current full-generator architecture.",
+        },
+        "bounded_static_evidence_path_exists": {
+            "proposition_status": "NOT_SUPPORTED",
+            "evidence_class": "DIRECT_IMMUTABLE_EVIDENCE",
+            "evidence_ids": ["D1E_FINAL_RECORD"],
+            "claim_keys": ["CURRENT_STATIC_SCOPE_NOT_CREDIBLY_BOUNDED"],
+            "premises": ["D1E records the current AST/consumer-graph implementation scope as not credibly bounded."],
+            "inference": None,
+            "rationale": "The immutable D1E assessment directly rejects a bounded current static-evidence task.",
+        },
+        "bounded_signed_kernel_path_exists": {
+            "proposition_status": "NOT_SUPPORTED",
+            "evidence_class": "DIRECT_IMMUTABLE_EVIDENCE",
+            "evidence_ids": ["D1D_FINAL_RECORD"],
+            "claim_keys": ["SIGNED_KERNEL_PATH_NOT_BOUNDED"],
+            "premises": ["D1D finds no reviewed signed-kernel or signed-Sudakov construction for the current contract."],
+            "inference": None,
+            "rationale": "The immutable D1D review directly finds no bounded signed-kernel route in the reviewed scope.",
+        },
+        "bounded_alternative_generator_path_exists": {
+            "proposition_status": "NOT_EVALUATED",
+            "evidence_class": "NOT_EVALUATED",
+            "evidence_ids": ["D1D_FINAL_RECORD"],
+            "claim_keys": ["ALTERNATIVE_GENERATOR_ROUTES_POSSIBLE_WITH_EVIDENCE_GAPS"],
+            "premises": ["D1D leaves Architecture C, Sherpa, and Herwig possible with evidence gaps."],
+            "inference": "The source neither establishes a bounded path nor establishes the affirmative negative that no bounded path exists.",
+            "rationale": "The proposition remains unevaluated rather than being converted from missing evidence into incompatibility.",
+        },
+        "accepted_generator_measure_exists": {
+            "proposition_status": "NOT_SUPPORTED",
+            "evidence_class": "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE",
+            "evidence_ids": ["D1D_FINAL_RECORD"],
+            "claim_keys": ["ACCEPTED_GENERATOR_ARCHITECTURE_ABSENT", "SIGNED_INTERNAL_RATE_CONSTRUCTION_ABSENT", "COMPLETED_GENERATOR_MEASURE_ABSENT"],
+            "premises": ["No accepted generator architecture exists.", "No reviewed signed internal-rate construction exists.", "No completed normalized generator measure exists."],
+            "inference": "Together these immutable premises imply that no accepted generator measure is currently available; the exact proposition is not claimed to appear verbatim in D1D.",
+            "rationale": "This is an explicit bounded inference, not a direct quotation from D1D.",
+        },
+        "accepted_runtime_consumer_closure_exists": {
+            "proposition_status": "NOT_SUPPORTED",
+            "evidence_class": "DIRECT_IMMUTABLE_EVIDENCE",
+            "evidence_ids": ["D1D_FINAL_RECORD"],
+            "claim_keys": ["RUNTIME_CONSUMER_CLOSURE_NOT_VALIDATED"],
+            "premises": ["D1D records that a complete consumer/dataflow graph was not validated."],
+            "inference": None,
+            "rationale": "No accepted runtime-consumer closure exists in the immutable evidence.",
+        },
+        "implementation_task_credibly_bounded": {
+            "proposition_status": "NOT_SUPPORTED",
+            "evidence_class": "DIRECT_IMMUTABLE_EVIDENCE",
+            "evidence_ids": ["D1E_FINAL_RECORD"],
+            "claim_keys": ["IMPLEMENTATION_COST_BOUND_NOT_SUPPORTED"],
+            "premises": ["D1E rejects the implementation cost bound for the current consumer-graph task."],
+            "inference": None,
+            "rationale": "The immutable D1E assessment directly rejects a credibly bounded current implementation task.",
+        },
+        "current_contract_preserved_by_continuation": {
+            "proposition_status": "NOT_EVALUATED",
+            "evidence_class": "NOT_EVALUATED",
+            "evidence_ids": ["D1D_FINAL_RECORD"],
+            "claim_keys": ["ALTERNATIVE_GENERATOR_ROUTES_POSSIBLE_WITH_EVIDENCE_GAPS"],
+            "premises": ["D1D retains potentially coherent routes with evidence gaps under the fixed reviewed contract."],
+            "inference": "No immutable source establishes that every continuation necessarily fails to preserve the current contract.",
+            "rationale": "Contract preservation by continuation remains unevaluated.",
+        },
+    }
     separate = all(options[option]["relationship_to_current_line"] == "SEPARATE_PROSPECTIVE_CONTRACT" for option in REDESIGN_OPTIONS)
     evidence["redesigns_are_separate_contracts"] = {
-        "status": "SUPPORTED" if separate else "NOT_SUPPORTED",
-        "evidence_ids": ["D1F_CONCEPTUAL_REVIEW"],
-        "claim_keys": ["REDESIGNS_ARE_SEPARATE_CONTRACTS"],
-        "rationale": "Every redesign is explicitly serialized as a separate prospective contract, never continuation of the current line.",
+        "proposition_status": "SUPPORTED" if separate else "NOT_SUPPORTED",
+        "evidence_class": "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE",
+        "evidence_ids": ["ADR001_D0R_FAMILY", "ADR003_EVENT_SEMANTICS", "ADR004_D0R_SIGN_TOPOLOGY"],
+        "claim_keys": ["D0R_THETA_AND_PDF_INTERPRETABILITY", "FIXED_N_SHAPE_ONLY_SET_OBJECTIVE", "D0R_HISTORICAL_IDENTITY"],
+        "premises": ["Every redesign relationship_to_current_line is SEPARATE_PROSPECTIVE_CONTRACT.", "Every redesign records hypothetical prospective supersession rather than current-line continuation.", "The immutable D0R and fixed-N contracts remain the comparison baseline."],
+        "inference": "The serialized redesign definitions are separate prospective contracts; ADR-010 records but does not independently prove this inference.",
+        "rationale": "The separation conclusion follows from non-ADR-010 premises and exact option definitions.",
     }
     return evidence
 
@@ -657,13 +850,34 @@ def derive_normalized_measure_gates(options: dict[str, dict[str, Any]]) -> dict[
 
 def derive_score_status(cell: dict[str, Any], evidence: dict[str, dict[str, Any]]) -> str:
     require(cell["status"] in SCORE_STATUSES, "invalid score status")
-    require(cell["evidence_ids"], "score cell has no evidence ID")
-    require(cell["claim_keys"], "score cell has no claim key")
-    available_claims: set[str] = set()
-    for evidence_id in cell["evidence_ids"]:
+    require(cell["evidence_class"] in SCORE_EVIDENCE_CLASSES, "invalid score evidence class")
+    bindings = cell["evidence_bindings"]
+    if cell["evidence_class"] in {"PROSPECTIVE_HYPOTHESIS", "NOT_APPLICABLE"}:
+        require(not bindings, "hypothesis or not-applicable cell cannot cite load-bearing evidence")
+        require(cell["load_bearing"] is False, "hypothesis or not-applicable cell cannot be load-bearing")
+        required_status = "NOT_APPLICABLE" if cell["evidence_class"] == "NOT_APPLICABLE" else "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+        require(cell["status"] == required_status, "non-evidence cell overstates its status")
+        return cell["status"]
+    require(bindings, "evidence-backed score cell has no binding")
+    for binding in bindings:
+        evidence_id = binding["evidence_id"]
+        claim_key = binding["claim_key"]
+        require(evidence_id != "D1F_CONCEPTUAL_REVIEW", "ADR-010 cannot be independent score evidence")
         require(evidence_id in evidence, f"unknown score evidence ID: {evidence_id}")
-        available_claims.update(evidence[evidence_id]["claim_scope"])
-    require(set(cell["claim_keys"]) <= available_claims, "score claim exceeds cited evidence scope")
+        claims = evidence[evidence_id].get("claims", {})
+        require(claim_key in claims, f"unknown score claim: {evidence_id}/{claim_key}")
+        claim = claims[claim_key]
+        require(binding["option_scope"] == [cell["option_id"]], "score evidence bound to wrong option")
+        require(binding["criterion_scope"] == [cell["criterion_id"]], "score evidence bound to wrong criterion")
+        require(cell["option_id"] in claim.get("option_scope", []), "source claim excludes score option")
+        require(cell["criterion_id"] in claim.get("criterion_scope", []), "source claim excludes score criterion")
+        require(binding["maximum_supported_status"] == claim["maximum_supported_status"], "maximum-supported status changed")
+        rank = {"PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 0, "NOT_SUPPORTED": 0, "SUPPORTED_WITH_QUALIFICATION": 1, "SUPPORTED": 2, "NOT_APPLICABLE": 0}
+        require(rank[cell["status"]] <= rank[claim["maximum_supported_status"]] or cell["status"] == "NOT_SUPPORTED", "maximum-supported status exceeded")
+    if cell["evidence_class"] == "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE":
+        require(cell["explicit_inference"] and cell["explicit_inference"]["premises"], "explicit inference lacks premises")
+    else:
+        require(cell["explicit_inference"] is None, "direct evidence cell cannot hide an inference")
     return cell["status"]
 
 
@@ -679,56 +893,38 @@ def derive_separate_review_eligibility(
     supersession: dict[str, Any],
     repository_evidence: dict[str, dict[str, Any]],
 ) -> dict[str, dict[str, Any]]:
-    posterior_map = {
-        "DEFINED_CONDITIONALLY_REQUIRES_NEW_FAMILY_LAW": "SUPPORTED_WITH_QUALIFICATION",
-        "CONCEPTUALLY_COHERENT_REQUIRES_FORMAL_LIKELIHOOD": "SUPPORTED_WITH_QUALIFICATION",
-        "CONCEPTUALLY_COHERENT_REQUIRES_WEIGHTED_EMPIRICAL_LAW": "SUPPORTED_WITH_QUALIFICATION",
-        "NOT_SUPPORTED_WITHOUT_POSITIVE_DATA_LAW": "NOT_SUPPORTED",
-    }
-    representation_map = {"DEFINED": "SUPPORTED", "DEFINED_WEIGHTED_NOT_IID_UNWEIGHTED": "SUPPORTED_WITH_QUALIFICATION", "NOT_EVALUATED": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"}
-    weight_map = {"DEFINED_UNWEIGHTED_PRIMARY": "SUPPORTED", "DEFINED_POSITIVE_ONLY_SIGNED_EXCLUDED": "SUPPORTED_WITH_QUALIFICATION", "SIGNED_ESTIMATOR_NOT_PROBABILITY": "NOT_SUPPORTED"}
-    calibration_map = {"CONCEPTUALLY_DEFINED_REQUIRES_NEW_FAMILY_LAW": "SUPPORTED_WITH_QUALIFICATION", "CONCEPTUALLY_DEFINED_REQUIRES_EXECUTABLE_CLOSURE": "SUPPORTED_WITH_QUALIFICATION", "NOT_EVALUATED": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE", "NOT_SUPPORTED": "NOT_SUPPORTED"}
-    motivation_map = {"SUPPORTED": "SUPPORTED", "SUPPORTED_WITH_QUALIFICATION": "SUPPORTED_WITH_QUALIFICATION", "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"}
     result: dict[str, dict[str, Any]] = {}
+    provisional: dict[str, bool] = {}
     for option_id in REDESIGN_OPTIONS:
         option = options[option_id]
         cells = scorecards[option_id]
         for cell in cells.values():
             derive_score_status(cell, repository_evidence)
         effects = supersession["redesign_option_effects"].get(option_id, {})
-        explicit_supersession = bool(effects) and any(value in {"PROSPECTIVELY_SUPERSEDED", "REQUIRES_NEW_DECISION", "REQUIRES_EXPLICIT_CONFIRMATION", "NOT_COMPLETED_BY_LOWER_LEVEL_MODEL"} for value in effects.values())
-        bounded_review = (
-            "SUPPORTED_WITH_QUALIFICATION"
-            if option["smallest_falsifiable_next_step"]["status"] == "BOUNDED_PLANNING_REVIEW"
-            and cells["independent_falsifiability"]["status"] in {"SUPPORTED", "SUPPORTED_WITH_QUALIFICATION"}
-            else "NOT_SUPPORTED"
-        )
+        explicit_supersession = bool(effects) and any("WOULD_REQUIRE_" in value or value == "NOT_COMPLETED_BY_LOWER_LEVEL_MODEL" for value in effects.values())
+        bounded_question = "SUPPORTED_WITH_QUALIFICATION" if option["smallest_falsifiable_next_step"]["status"] == "BOUNDED_PLANNING_REVIEW" and cells["independent_falsifiability"]["status"] in {"SUPPORTED", "SUPPORTED_WITH_QUALIFICATION"} else "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+        independent = all(cells[key]["evidence_class"] in {"DIRECT_IMMUTABLE_EVIDENCE", "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE"} for key in PREFERENCE_CRITICAL_CRITERIA)
+        posterior = "SUPPORTED_WITH_QUALIFICATION" if option["posterior_target"]["status"] in {"DEFINED_CONDITIONALLY_REQUIRES_NEW_FAMILY_LAW", "CONCEPTUALLY_COHERENT_REQUIRES_FORMAL_LIKELIHOOD", "CONCEPTUALLY_COHERENT_REQUIRES_WEIGHTED_EMPIRICAL_LAW"} else "NOT_SUPPORTED"
         statuses = {
-            "normalized_measure_status": "SUPPORTED_WITH_QUALIFICATION" if gates[option_id]["status"] == "PASS_WITH_QUALIFICATION" else "NOT_SUPPORTED",
-            "posterior_target_status": map_contract_status(option["posterior_target"]["status"], posterior_map, "posterior"),
-            "event_representation_status": map_contract_status(option["observed_event_set_representation"]["status"], representation_map, "event representation"),
-            "weight_semantics_status": map_contract_status(option["event_and_set_weights"]["status"], weight_map, "weight"),
-            "calibration_status": map_contract_status(option["calibration_coverage_target"]["status"], calibration_map, "calibration"),
-            "no_clipping_status": cells["no_clipping_preservation"]["status"],
-            "explicit_supersession_status": "SUPPORTED" if explicit_supersession else "NOT_SUPPORTED",
-            "bounded_contract_review_status": bounded_review,
-            "credible_mvp_path_status": cells["end_to_end_scientific_mvp_path"]["status"],
-            "objective_change_status": cells["scientific_objective_change_risk"]["status"],
-            "scientific_motivation_status": map_contract_status(option["scientific_motivation"]["status"], motivation_map, "scientific motivation"),
-            "implementation_boundedness_status": cells["implementation_boundedness"]["status"],
-            "validation_boundedness_status": cells["validation_boundedness"]["status"],
+            "normalized_measure_reviewability": gates[option_id]["status"],
+            "posterior_reviewability": posterior,
+            "option_specific_scientific_motivation": option["scientific_motivation"]["status"],
+            "bounded_planning_question": bounded_question,
+            "independent_evidence_available": independent,
+            "prospective_supersession_explicit": explicit_supersession,
+            "no_hidden_repair": not option["hidden_clipping_or_semantic_repair"],
+            "unique_preference_supported": False,
         }
-        required = (
-            "normalized_measure_status", "posterior_target_status", "event_representation_status",
-            "weight_semantics_status", "calibration_status", "no_clipping_status",
-            "explicit_supersession_status", "bounded_contract_review_status",
-            "credible_mvp_path_status", "objective_change_status", "scientific_motivation_status",
-        )
-        eligible = all(statuses[key] in {"SUPPORTED", "SUPPORTED_WITH_QUALIFICATION"} for key in required)
-        eligible = eligible and not option["implementation_ready_claimed"]
+        provisional[option_id] = gates[option_id]["status"] == "PASS_WITH_QUALIFICATION" and posterior in {"SUPPORTED", "SUPPORTED_WITH_QUALIFICATION"} and option["scientific_motivation"]["status"] in {"SUPPORTED", "SUPPORTED_WITH_QUALIFICATION"} and bounded_question in {"SUPPORTED", "SUPPORTED_WITH_QUALIFICATION"} and independent and explicit_supersession and statuses["no_hidden_repair"] and not option["implementation_ready_claimed"]
+        result[option_id] = statuses
+    candidates = [option_id for option_id, eligible in provisional.items() if eligible]
+    for option_id in REDESIGN_OPTIONS:
+        unique = provisional[option_id] and len(candidates) == 1
+        result[option_id]["unique_preference_supported"] = unique
+        result[option_id]["preferred_review_eligible"] = unique
         if option_id == OPTION_IDS[2]:
-            eligible = eligible and not option["full_generator_equivalence_claimed"] and bool(option["omitted_physics"])
-        result[option_id] = {**statuses, "preferred_review_eligible": eligible}
+            result[option_id]["conceptual_reviewability"] = options[option_id]["conceptual_reviewability"]
+            result[option_id]["candidate_status"] = options[option_id]["candidate_status"]
     return result
 
 
@@ -736,7 +932,7 @@ def derive_current_line_disposition(record: dict[str, Any]) -> str:
     evidence = record["current_line_evidence"]
     require(set(evidence) == set(CURRENT_EVIDENCE_FIELDS), "current-line evidence fields are incomplete")
     continuation_fields = CURRENT_EVIDENCE_FIELDS[:8]
-    statuses = {key: evidence[key]["status"] for key in continuation_fields}
+    statuses = {key: evidence[key]["proposition_status"] for key in continuation_fields}
     path_fields = (
         "bounded_static_evidence_path_exists",
         "bounded_signed_kernel_path_exists",
@@ -759,9 +955,10 @@ def derive_current_line_disposition(record: dict[str, Any]) -> str:
     scope = record["termination_scope"]
     if (
         all(status == "NOT_SUPPORTED" for status in statuses.values())
-        and evidence["redesigns_are_separate_contracts"]["status"] == "SUPPORTED"
+        and evidence["redesigns_are_separate_contracts"]["proposition_status"] == "SUPPORTED"
         and scope["historical_negative_evidence_preserved"]
         and not scope["global_sbi_impossibility_claimed"]
+        and all(evidence[key]["evidence_class"] in {"DIRECT_IMMUTABLE_EVIDENCE", "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE"} for key in continuation_fields)
     ):
         return "TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING"
     return "MAINTAIN_CURRENT_FULL_GENERATOR_PAUSE"
@@ -788,8 +985,8 @@ def score_totals(scorecards: dict[str, dict[str, dict[str, Any]]]) -> dict[str, 
 
 def build_record() -> dict[str, Any]:
     options = build_options()
-    scorecards = build_scorecards()
     repository_evidence = build_repository_evidence()
+    scorecards = build_scorecards(repository_evidence)
     supersession = build_supersession()
     gates = derive_normalized_measure_gates(options)
     current_evidence = build_current_line_evidence(options)
@@ -809,7 +1006,7 @@ def build_record() -> dict[str, Any]:
         },
         "fixed_contract_failure_summary": {
             "scope": "current D0R signed full-generator coupling line",
-            "failure": "No accepted measure, runtime closure, or credibly bounded continuation exists.",
+            "failure": "No accepted measure or runtime closure exists, and no bounded continuation has been established.",
             "not_a_failure_of": ["PDF SBI", "D0R evidence", "lower-level models", "future separately reviewed contracts"],
         },
         "options": options,
@@ -820,18 +1017,22 @@ def build_record() -> dict[str, Any]:
         "termination_scope": {
             "historical_negative_evidence_preserved": True,
             "global_sbi_impossibility_claimed": False,
-            "scope_statement": "Terminates only the current Phase 1B D0R signed full-generator coupling line.",
+            "scope_statement": "Defines the evidence threshold for a hypothetical scoped termination; termination is not active in v3.",
         },
         "separate_review_eligibility": None,
         "decision_rule": {
-            "current_line_axis": "Terminate only when every accepted/bounded continuation field is NOT_SUPPORTED, redesigns are separate, history is preserved, and no global impossibility is claimed.",
-            "separate_review_axis": "Prefer the unique redesign whose derived semantic statuses support a bounded, falsifiable planning review and plausible MVP without implementation readiness.",
+            "current_line_axis": "Continue only with supported foundations and a supported bounded path; terminate only when every mandatory proposition is affirmatively NOT_SUPPORTED by direct evidence or reviewed inference; otherwise pause.",
+            "separate_review_axis": "Prefer only a uniquely supported redesign with independent option-specific motivation, reviewability, and load-bearing evidence; hypotheses cannot select a preference.",
             "top_level_axis": "The top-level decision represents current-line disposition; a separate preference never converts redesign into continuation.",
         },
         "derived_decision_inputs": None,
         "scientific_scope": "Planning-only disposition of the failed current line and prioritization of separate contracts.",
-        "failure_scope": "The current full-generator coupling line is terminated prospectively.",
+        "failure_scope": "The current full-generator coupling line remains paused because bounded continuation and contract preservation are not fully evaluated.",
         "non_failure_scope": ["D0R evidence", "p(theta_PDF|D) generally", "lower-level hard-event contracts", "future reviewed family or inference changes"],
+        "active_operational_policy": "PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION",
+        "current_full_generator_line": "PAUSED_NO_BOUNDED_CONTINUATION_ESTABLISHED",
+        "lower_level_contract_review": "PLAUSIBLE_BUT_NOT_PREFERRED_OR_AUTHORIZED",
+        "lower_level_candidate_status": "PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE",
         "authorization": {flag: False for flag in AUTHORIZATION_FLAGS},
         "dependencies": {
             "planning_issue": {"number": 47, "state": "OPEN", "authorization": "PLANNING_ONLY"},
@@ -839,10 +1040,11 @@ def build_record() -> dict[str, Any]:
             "issue_45": {"number": 45, "state": "CLOSED", "gate_decision": "INCONCLUSIVE"},
             "issue_10": {"number": 10, "state": "OPEN_BLOCKED", "completed_by_lower_level_model": False, "authorization": "NOT_AUTHORIZED"},
             "D2": "BLOCKED_AND_UNAUTHORIZED",
+            "roadmap": {"D2": "BLOCKED", "D3": "BACKLOG", "D4": "BACKLOG", "D5": "BACKLOG", "active_supersession": False},
         },
         "next_step": {
-            "action": "SCIENTIFIC_REVIEW_OF_FORMAL_LOWER_LEVEL_NC_DIS_HARD_EVENT_CONTRACT",
-            "scope": "Planning-only discharge criteria for the fourteen serialized proof obligations.",
+            "action": "INDEPENDENT_EVIDENCE_REVIEW_FOR_SEPARATE_CONTRACT_PRIORITY",
+            "scope": "Planning-only review of independent motivation and load-bearing evidence; Option C obligations remain unevaluated.",
             "implementation": False,
             "authorization_granted": False,
         },
@@ -854,7 +1056,7 @@ def build_record() -> dict[str, Any]:
     record["preferred_separate_contract_review"] = derive_preferred_review(record)
     record["decision"] = derive_top_level_decision(record["current_line_disposition"], record["preferred_separate_contract_review"])
     record["derived_decision_inputs"] = {
-        "current_line_evidence_statuses": {key: value["status"] for key, value in current_evidence.items()},
+        "current_line_evidence_statuses": {key: value["proposition_status"] for key, value in current_evidence.items()},
         "separate_review_eligibility": {key: value["preferred_review_eligible"] for key, value in eligibility.items()},
         "axes_are_independent": True,
     }
@@ -864,6 +1066,14 @@ def build_record() -> dict[str, Any]:
         "preferred_review_recomputed": True,
         "gates_recomputed": True,
         "score_totals": score_totals(scorecards),
+        "historical_correction_totals": {
+            classification: sum(cell["historical_correction_classification"] == classification for cells in scorecards.values() for cell in cells.values())
+            for classification in sorted(set(AUDIT_CLASS.values()))
+        },
+        "score_evidence_class_totals": {
+            evidence_class: sum(cell["evidence_class"] == evidence_class for cells in scorecards.values() for cell in cells.values())
+            for evidence_class in sorted(SCORE_EVIDENCE_CLASSES)
+        },
         "all_authorization_flags_false": True,
     }
     return record
@@ -874,8 +1084,7 @@ def validate_repository_evidence(record: dict[str, Any]) -> None:
     expected = build_repository_evidence()
     require(set(evidence) == set(expected), "repository evidence identities changed")
     for evidence_id, identity in expected.items():
-        require(evidence[evidence_id]["path"] == identity["path"], f"evidence path changed: {evidence_id}")
-        require(set(evidence[evidence_id]["claim_scope"]) == set(identity["claim_scope"]), f"evidence claim scope changed: {evidence_id}")
+        require(evidence[evidence_id] == identity, f"repository evidence contract changed: {evidence_id}")
 
 
 def validate_options(options: dict[str, dict[str, Any]]) -> None:
@@ -904,57 +1113,63 @@ def validate_scorecards(record: dict[str, Any]) -> None:
     for option_id, cells in scorecards.items():
         require(set(cells) == set(CRITERIA) and len(cells) == 20, f"twenty criteria required: {option_id}")
         rationales = []
-        expected_statuses = {
-            criterion: CODE_STATUS[code]
-            for criterion, code in zip(CRITERIA, SCORE_CODES[option_id], strict=True)
-        }
         for criterion, cell in cells.items():
-            require(set(cell) == {"status", "criterion_specific_rationale", "evidence_ids", "claim_keys", "implication_for_current_line", "implication_for_separate_review"}, f"score cell schema invalid: {option_id}/{criterion}")
+            require(set(cell) == {"option_id", "criterion_id", "status", "criterion_specific_rationale", "evidence_class", "evidence_bindings", "explicit_inference", "implication_for_current_line", "implication_for_separate_review", "load_bearing", "historical_correction_classification"}, f"score cell schema invalid: {option_id}/{criterion}")
+            require(cell["option_id"] == option_id, f"score option identity changed: {option_id}/{criterion}")
+            require(cell["criterion_id"] == criterion, f"score criterion identity changed: {option_id}/{criterion}")
             derive_score_status(cell, evidence)
-            require(cell["status"] == expected_statuses[criterion], f"score status exceeds its curated evidence claim: {option_id}/{criterion}")
+            index = CRITERIA.index(criterion)
+            audit_code = AUDIT_CLASS_CODES[option_id][index]
+            require(cell["historical_correction_classification"] == AUDIT_CLASS[audit_code], f"historical correction classification changed: {option_id}/{criterion}")
+            require(cell["status"] == corrected_score_status(V2_SCORE_CODES[option_id][index], audit_code), f"corrected score status changed: {option_id}/{criterion}")
             require(len(cell["criterion_specific_rationale"]) >= 80, f"criterion rationale too shallow: {option_id}/{criterion}")
             rationales.append(cell["criterion_specific_rationale"])
         require(len(set(rationales)) == 20, f"generic rationale reused across scorecard: {option_id}")
 
 
 def validate_supersession(supersession: dict[str, Any], options: dict[str, dict[str, Any]]) -> None:
-    for section in ("historical_negative_results", "current_line_termination_effects", "preferred_lower_level_review_effects"):
+    for section in ("historical_negative_results", "current_line_active_effects", "lower_level_candidate_hypothetical_effects"):
         require(section in supersession, f"missing supersession section: {section}")
         require(set(supersession[section].values()) <= SUPERSESSION_STATUSES, f"invalid supersession status: {section}")
-    require(supersession["current_line_termination_effects"] == {
-        "ISSUE_10_FULL_GENERATOR_D2": "PROSPECTIVELY_SUPERSEDED_OR_CLOSED_BY_TERMINATION",
-        "CURRENT_FULL_GENERATOR_D2_D5_ROADMAP": "PROSPECTIVELY_SUPERSEDED",
-    }, "current-line termination effects changed")
-    lower = supersession["preferred_lower_level_review_effects"]
+    require(set(supersession["historical_negative_results"]) == HISTORICAL_RESULT_KEYS, "historical negative-result keys changed")
+    require(supersession["current_line_active_effects"] == {"ISSUE_10_FULL_GENERATOR_D2": "CURRENT_STATE_PRESERVED", "CURRENT_FULL_GENERATOR_D2_D5_ROADMAP": "CURRENT_STATE_PRESERVED"}, "active pause effects changed")
+    lower = supersession["lower_level_candidate_hypothetical_effects"]
     require(lower == supersession["redesign_option_effects"][OPTION_IDS[2]], "preferred lower-level effects differ from the option-derived row")
     require(lower["ADR-001"] == "PRESERVED" and lower["ADR-004"] == "PRESERVED" and lower["D0R"] == "PRESERVED", "lower-level review must preserve D0R evidence")
-    require(lower["ADR-002"] == "PROSPECTIVELY_SUPERSEDED" and lower["ADR-006"] == "PROSPECTIVELY_SUPERSEDED", "lower-level full-generator supersession incomplete")
+    require(lower["ADR-002"] == "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED" and lower["ADR-006"] == "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED", "lower-level hypothetical supersession incomplete")
     require(lower["ISSUE_10"] == "NOT_COMPLETED_BY_LOWER_LEVEL_MODEL", "lower-level model cannot complete issue #10")
+    require(lower["NEURAL_PHASE"] == "WOULD_REQUIRE_NEW_DECISION_IF_SEPARATELY_ACCEPTED", "Neural decision boundary changed")
     require(all(value == "PRESERVED_AS_HISTORICAL_EVIDENCE" for value in supersession["historical_negative_results"].values()), "historical negative evidence changed")
     family = supersession["redesign_option_effects"][OPTION_IDS[1]]
     require(options[OPTION_IDS[1]]["active_pdf_family_identity"]["status"] == "NEW_FAMILY_NOT_D0R_CORRECTION", "nonnegative family relationship changed")
-    require(family["ADR-001"] == "PROSPECTIVELY_SUPERSEDED" and family["ADR-004"] == "PROSPECTIVELY_SUPERSEDED" and family["D0R"] == "PRESERVED_AS_HISTORICAL_EVIDENCE", "new-family supersession does not follow its contract")
+    require(family["ADR-001"] == "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED" and family["ADR-004"] == "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED" and family["D0R"] == "PRESERVED_AS_HISTORICAL_EVIDENCE", "new-family supersession does not follow its contract")
     weighted = supersession["redesign_option_effects"][OPTION_IDS[3]]
     require(options[OPTION_IDS[3]]["original_objective_compatibility"]["status"] == "CHANGES_PRIMARY_DATA_OBJECT", "weighted-set objective-change status changed")
-    require(weighted["ADR-003_FIXED_N_SHAPE_ONLY"] == "PROSPECTIVELY_SUPERSEDED", "weighted sets must prospectively supersede ADR-003")
+    require(weighted["ADR-003_FIXED_N_SHAPE_ONLY"] == "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED", "weighted sets must remain hypothetical")
     signed = supersession["redesign_option_effects"][OPTION_IDS[4]]
     require(options[OPTION_IDS[4]]["original_objective_compatibility"]["status"] == "NOT_SUPPORTED", "signed-weight objective status changed")
-    require(signed["ADR-003_FIXED_N_SHAPE_ONLY"] == "PROSPECTIVELY_SUPERSEDED", "signed-weight research requires explicit ADR-003 supersession")
+    require(signed["ADR-003_FIXED_N_SHAPE_ONLY"] == "WOULD_REQUIRE_PROSPECTIVE_SUPERSESSION_IF_SEPARATELY_ACCEPTED", "signed-weight research must remain hypothetical")
 
 
 def validate_current_line_evidence(record: dict[str, Any]) -> None:
     evidence = record["current_line_evidence"]
     require(set(evidence) == set(CURRENT_EVIDENCE_FIELDS), "current-line evidence incomplete")
+    expected = build_current_line_evidence(record["options"])
     repo_evidence = record["repository_evidence"]
-    for field_id in CURRENT_EVIDENCE_FIELDS[:8]:
+    required_keys = {"proposition_status", "evidence_class", "evidence_ids", "claim_keys", "premises", "inference", "rationale"}
+    for field_id in CURRENT_EVIDENCE_FIELDS:
         row = evidence[field_id]
-        require(row["status"] in EVIDENCE_STATUSES, f"invalid current-line status: {field_id}")
-        evidence_id, claim_key = CURRENT_FIELD_CLAIMS[field_id]
-        require(row["evidence_ids"] == [evidence_id] and row["claim_keys"] == [claim_key], f"current-line evidence binding changed: {field_id}")
-        require(claim_key in repo_evidence[evidence_id]["claim_scope"], f"current-line claim exceeds evidence: {field_id}")
-        require(row["status"] == CURRENT_CLAIM_STATUS[claim_key], f"current-line status unsupported: {field_id}")
-    separate_expected = all(record["options"][option]["relationship_to_current_line"] == "SEPARATE_PROSPECTIVE_CONTRACT" for option in REDESIGN_OPTIONS)
-    require(evidence["redesigns_are_separate_contracts"]["status"] == ("SUPPORTED" if separate_expected else "NOT_SUPPORTED"), "separate-contract status not derived")
+        require(set(row) == required_keys, f"current-line evidence schema changed: {field_id}")
+        require(row["proposition_status"] in EVIDENCE_STATUSES, f"invalid current-line status: {field_id}")
+        require(row["evidence_class"] in CURRENT_EVIDENCE_CLASSES, f"invalid current-line evidence class: {field_id}")
+        require(row == expected[field_id], f"current-line evidence contract changed: {field_id}")
+        for evidence_id, claim_key in zip(row["evidence_ids"], row["claim_keys"], strict=False):
+            require(evidence_id != "D1F_CONCEPTUAL_REVIEW", f"ADR-010 cannot independently prove current-line evidence: {field_id}")
+            require(claim_key in repo_evidence[evidence_id].get("claims", {}), f"unknown current-line claim: {field_id}")
+        if row["evidence_class"] == "NOT_EVALUATED":
+            require(row["proposition_status"] == "NOT_EVALUATED", f"unevaluated proposition promoted: {field_id}")
+        if row["evidence_class"] == "EXPLICIT_INFERENCE_FROM_IMMUTABLE_EVIDENCE":
+            require(row["premises"] and row["inference"], f"current-line inference lacks premises: {field_id}")
 
 
 def validate_record(record: dict[str, Any]) -> None:
@@ -981,18 +1196,32 @@ def validate_record(record: dict[str, Any]) -> None:
     require(record["decision"] == decision and decision in TOP_LEVEL_DECISIONS, "top-level decision differs from two-axis derivation")
     require(record["current_line_disposition"] in CURRENT_LINE_DISPOSITIONS, "invalid current-line disposition")
     require(record["preferred_separate_contract_review"] in PREFERRED_REVIEWS, "invalid preferred review")
+    require(current == "MAINTAIN_CURRENT_FULL_GENERATOR_PAUSE", "corrected evidence must retain the current-line pause")
+    require(preferred == "NONE", "independent evidence does not support a unique preferred review")
+    require(decision == "MAINTAIN_CURRENT_CONTRACT_AND_PAUSE", "corrected top-level pause decision changed")
+    require(all(not row["unique_preference_supported"] and not row["preferred_review_eligible"] for row in eligibility.values()), "unsupported unique preference selected")
+    require(record["options"][OPTION_IDS[2]]["candidate_status"] == "PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE", "lower-level candidate status changed")
+    require(record["options"][OPTION_IDS[2]]["conceptual_reviewability"] == "INCOMPLETE_BUT_REVIEWABLE", "lower-level reviewability changed")
 
     derived = {
-        "current_line_evidence_statuses": {key: value["status"] for key, value in record["current_line_evidence"].items()},
+        "current_line_evidence_statuses": {key: value["proposition_status"] for key, value in record["current_line_evidence"].items()},
         "separate_review_eligibility": {key: value["preferred_review_eligible"] for key, value in eligibility.items()},
         "axes_are_independent": True,
     }
     require(record["derived_decision_inputs"] == derived, "serialized derived inputs changed")
     require(record["validation"]["score_totals"] == score_totals(record["option_scorecards"]), "score totals differ from recomputation")
+    expected_corrections = {classification: sum(cell["historical_correction_classification"] == classification for cells in record["option_scorecards"].values() for cell in cells.values()) for classification in sorted(set(AUDIT_CLASS.values()))}
+    expected_evidence_classes = {evidence_class: sum(cell["evidence_class"] == evidence_class for cells in record["option_scorecards"].values() for cell in cells.values()) for evidence_class in sorted(SCORE_EVIDENCE_CLASSES)}
+    require(record["validation"]["historical_correction_totals"] == expected_corrections, "historical correction totals changed")
+    require(record["validation"]["score_evidence_class_totals"] == expected_evidence_classes, "score evidence-class totals changed")
     require(record["authorization"] == {flag: False for flag in AUTHORIZATION_FLAGS}, "all authorization flags must be false")
     require(record["dependencies"]["issue_10"] == {"number": 10, "state": "OPEN_BLOCKED", "completed_by_lower_level_model": False, "authorization": "NOT_AUTHORIZED"}, "issue #10 boundary changed")
     require(record["dependencies"]["D2"] == "BLOCKED_AND_UNAUTHORIZED", "D2 boundary changed")
-    require(record["next_step"]["implementation"] is False and record["next_step"]["authorization_granted"] is False, "next step became implementation")
+    require(record["dependencies"]["roadmap"] == {"D2": "BLOCKED", "D3": "BACKLOG", "D4": "BACKLOG", "D5": "BACKLOG", "active_supersession": False}, "roadmap state changed")
+    require(record["active_operational_policy"] == "PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION", "active operational policy changed")
+    require(record["current_full_generator_line"] == "PAUSED_NO_BOUNDED_CONTINUATION_ESTABLISHED", "current full-generator state changed")
+    require(record["lower_level_contract_review"] == "PLAUSIBLE_BUT_NOT_PREFERRED_OR_AUTHORIZED", "lower-level policy changed")
+    require(record["next_step"] == {"action": "INDEPENDENT_EVIDENCE_REVIEW_FOR_SEPARATE_CONTRACT_PRIORITY", "scope": "Planning-only review of independent motivation and load-bearing evidence; Option C obligations remain unevaluated.", "implementation": False, "authorization_granted": False}, "next step became implementation or changed scope")
 
 
 def serialized(record: dict[str, Any]) -> str:

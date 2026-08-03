@@ -320,21 +320,23 @@
   nodes/edges were generated. Issue #45 is closed as completed planning with
   `INCONCLUSIVE`; issue #10 and D2 remain blocked under
   `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`.
-- Phase 1B-D1F v2 independently derives two results:
-  `D1F_CURRENT_LINE_DISPOSITION =
-  TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING` and
-  `D1F_PREFERRED_SEPARATE_CONTRACT_REVIEW =
-  LOWER_LEVEL_DIS_HARD_EVENT_MODEL`.
-- The current D0R signed full-generator coupling line has no supported
-  architecture, accepted generator measure, runtime consumer closure, bounded
-  static-evidence route, bounded signed-kernel route, bounded alternative-
-  generator route, or credibly bounded implementation task. All redesigns are
-  explicitly separate prospective contracts. Termination follows without a
-  hardcoded preserve boolean.
-- Current-line termination is scoped. It does not reject PDF SBI, D0R evidence,
-  lower-level event laws, new PDF families, weighted statistical contracts, or
-  future separately reviewed decisions. Preserving the scientific objective
-  does not require preserving the failed implementation line.
+- Phase 1B-D1F v3 corrects the unmerged v2 termination proposal after the
+  independent integrity audit. V2 was never merged and is not an immutable
+  scientific result. The corrected independent axes derive
+  `D1F_CURRENT_LINE_DISPOSITION = MAINTAIN_CURRENT_FULL_GENERATOR_PAUSE`,
+  `D1F_PREFERRED_SEPARATE_CONTRACT_REVIEW = NONE`, and
+  `D1F_TOP_LEVEL_DECISION = MAINTAIN_CURRENT_CONTRACT_AND_PAUSE`.
+- Five current-line propositions are directly supported, accepted-generator-
+  measure absence is an explicit inference, and two propositions remain
+  `NOT_EVALUATED`: a bounded alternative-generator path and preservation of
+  the current contract by continuation. Missing evidence is not converted into
+  affirmative incompatibility, so termination is not derived.
+- `ACTIVE_OPERATIONAL_POLICY =
+  PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`,
+  `CURRENT_FULL_GENERATOR_LINE =
+  PAUSED_NO_BOUNDED_CONTINUATION_ESTABLISHED`, and
+  `LOWER_LEVEL_CONTRACT_REVIEW =
+  PLAUSIBLE_BUT_NOT_PREFERRED_OR_AUTHORIZED`.
 - The six reviewed choices are: preserve the current D0R/full-generator
   contract and pause; define a prospectively new nonnegative family; define a
   lower-level neutral-current DIS hard-event law; adopt a weighted empirical
@@ -356,11 +358,24 @@
 - The lower-level observation is not a full-generator event. Its future
   contract must enumerate omitted ISR, showering, hadronization, underlying
   event, and beam-remnant effects and may not claim full-generator equivalence.
-- A future accepted lower-level contract would prospectively supersede
-  ADR-002/ADR-006 full-generator transport, issue #10's current D2 scope, and
-  the dependent D2-D5 roadmap. The current-line termination prospectively
-  supersedes or closes issue #10's current full-generator scope. A lower-level
-  model does not complete issue #10 and requires an explicit new roadmap.
+- The lower-level option remains
+  `PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE` and
+  `INCOMPLETE_BUT_REVIEWABLE`. It is not preferred, selected, authorized, or
+  implementation-ready. Its fourteen proof obligations remain
+  `NOT_EVALUATED`.
+- ADR-010 is a decision record and contract description, not independent
+  evidence for its own candidate. The v3 scorecards bind every source claim to
+  an exact option and criterion. The audit baseline is preserved as 17 direct,
+  30 qualified, 53 misbound, 8 unsupported, 1 overstated, and 11
+  not-applicable historical classifications. Corrected cells comprise 17
+  direct immutable, 30 explicit-inference, 62 prospective-hypothesis, and 11
+  not-applicable evidence classes.
+- No roadmap supersession is active. Issue #10 remains open, blocked, not
+  evaluated, and not authorized; D2 remains blocked and D3-D5 remain backlog.
+  If a lower-level contract were separately accepted later, ADR-002 and
+  ADR-006 would require prospective supersession, ADR-003 would require
+  explicit confirmation, and Neural would require a new decision. A
+  lower-level model cannot complete issue #10.
 - The nonnegative-family option would be a new active family and theta
   contract, not a correction to D0R. D0R remains immutable evidence. The
   scientific justification for imposing NLO nonnegativity for generator
@@ -381,27 +396,27 @@
   event generation, datasets, neural training, every implementation, and every
   prototype remain unauthorized.
 - `LOWER_LEVEL_NORMALIZED_MEASURE_STATUS = PASS_WITH_QUALIFICATION`,
+  `D1F_LOWER_LEVEL_CANDIDATE_STATUS =
+  PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE`,
   `LOWER_LEVEL_SIMULATOR_AUTHORIZED = false`,
   `EVENT_GENERATION_AUTHORIZED = false`, `DATASET_AUTHORIZED = false`,
   `NEURAL_TRAINING_AUTHORIZED = false`, and `D2_AUTHORIZED = false`.
-- The lower-level review is preferred only because its measure, posterior,
-  representation, weights, calibration, no-clipping rule, supersession,
-  bounded review, plausible MVP path, scoped objective change, motivation, and
-  validation burden are supported or explicitly qualified. No implementation
-  readiness is claimed.
+- Independent evidence does not establish a unique separate-review priority.
+  Prospective hypotheses cannot become load-bearing preference evidence.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-SCIENTIFIC_REVIEW_OF_FORMAL_LOWER_LEVEL_NC_DIS_HARD_EVENT_CONTRACT
+INDEPENDENT_EVIDENCE_REVIEW_FOR_SEPARATE_CONTRACT_PRIORITY
 ```
 
-This is a planning-only review of the fourteen formal proof obligations in
-ADR-010 and the D1F v2 artifact. It authorizes no lower-level simulator,
-implementation, parser, generator, event, dataset, numerical closure, neural,
-issue #10, or D2 work.
+This is a planning-only review of independent scientific motivation and
+load-bearing evidence for separate-contract priority. Option C's fourteen
+formal obligations remain unevaluated. The review authorizes no lower-level
+simulator, implementation, parser, generator, event, dataset, numerical
+closure, neural, issue #10, or D2 work.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
