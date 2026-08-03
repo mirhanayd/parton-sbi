@@ -317,22 +317,106 @@
 - AST graph work remains potentially valuable for
   `provenance_evidence_integrity`, but this record authorizes no implementation.
   No parser or graph was implemented, no compilation database or production
-  nodes/edges were generated, and issue #45 remains open `Planning Only` work.
-  Issue #10 and D2 remain blocked under
+  nodes/edges were generated. Issue #45 is closed as completed planning with
+  `INCONCLUSIVE`; issue #10 and D2 remain blocked under
   `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`.
+- Phase 1B-D1F v3 corrects the unmerged v2 termination proposal after the
+  independent integrity audit. V2 was never merged and is not an immutable
+  scientific result. The corrected independent axes derive
+  `D1F_CURRENT_LINE_DISPOSITION = MAINTAIN_CURRENT_FULL_GENERATOR_PAUSE`,
+  `D1F_PREFERRED_SEPARATE_CONTRACT_REVIEW = NONE`, and
+  `D1F_TOP_LEVEL_DECISION = MAINTAIN_CURRENT_CONTRACT_AND_PAUSE`.
+- Five current-line propositions are directly supported, accepted-generator-
+  measure absence is an explicit inference, and two propositions remain
+  `NOT_EVALUATED`: a bounded alternative-generator path and preservation of
+  the current contract by continuation. Missing evidence is not converted into
+  affirmative incompatibility, so termination is not derived.
+- `ACTIVE_OPERATIONAL_POLICY =
+  PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`,
+  `CURRENT_FULL_GENERATOR_LINE =
+  PAUSED_NO_BOUNDED_CONTINUATION_ESTABLISHED`, and
+  `LOWER_LEVEL_CONTRACT_REVIEW =
+  PLAUSIBLE_BUT_NOT_PREFERRED_OR_AUTHORIZED`.
+- The six reviewed choices are: preserve the current D0R/full-generator
+  contract and pause; define a prospectively new nonnegative family; define a
+  lower-level neutral-current DIS hard-event law; adopt a weighted empirical
+  event-set objective; create signed-weight inference research; or terminate
+  the current Phase 1B full-generator line.
+- Normalized-measure gates are `PASS_WITH_QUALIFICATION` for the preserved
+  contract, a new nonnegative family, the lower-level hard-event model, and a
+  positive weighted empirical measure; `FAIL` for signed-weight research; and
+  `NOT_APPLICABLE` for termination. Option A is not operationally instantiated.
+  Option C has only a plausible mathematical form, not a completed measure.
+- The lower-level option proposes `z ~ p_theta(z)`, `y ~ K(y|z)`, and a fixed-N
+  set `D={y_i}`, with `p_theta` proportional to the accepted full neutral-
+  current differential rate. Exact electron/positron formulae, F2/FL/xF3
+  conventions, gamma/Z/interference terms, electroweak scheme, scales, flavors,
+  phase-space Jacobian, finite normalization, complete-rate positivity, strict
+  support, detector-kernel normalization, identity-kernel case, independent
+  numerical closure, and omitted-physics declaration remain unevaluated proof
+  obligations.
+- The lower-level observation is not a full-generator event. Its future
+  contract must enumerate omitted ISR, showering, hadronization, underlying
+  event, and beam-remnant effects and may not claim full-generator equivalence.
+- The lower-level option remains
+  `PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE` and
+  `INCOMPLETE_BUT_REVIEWABLE`. It is not preferred, selected, authorized, or
+  implementation-ready. Its fourteen proof obligations remain
+  `NOT_EVALUATED`.
+- ADR-010 is a decision record and contract description, not independent
+  evidence for its own candidate. The v3 scorecards bind every source claim to
+  an exact option and criterion. The audit baseline is preserved as 17 direct,
+  30 qualified, 53 misbound, 8 unsupported, 1 overstated, and 11
+  not-applicable historical classifications. Corrected cells comprise 17
+  direct immutable, 30 explicit-inference, 62 prospective-hypothesis, and 11
+  not-applicable evidence classes.
+- No roadmap supersession is active. Issue #10 remains open, blocked, not
+  evaluated, and not authorized; D2 remains blocked and D3-D5 remain backlog.
+  If a lower-level contract were separately accepted later, ADR-002 and
+  ADR-006 would require prospective supersession, ADR-003 would require
+  explicit confirmation, and Neural would require a new decision. A
+  lower-level model cannot complete issue #10.
+- The nonnegative-family option would be a new active family and theta
+  contract, not a correction to D0R. D0R remains immutable evidence. The
+  scientific justification for imposing NLO nonnegativity for generator
+  compatibility is not established.
+- Weighted empirical sets are not ordinary iid unweighted sets. Positive
+  normalized weights can define an empirical probability measure only with a
+  proposal/weight law, ESS, posterior, loss, and repeated-sampling calibration.
+  Signed weights do not pass as probabilities. This option would prospectively
+  supersede ADR-003's primary objective.
+- Signed-weight research fails the normalized-measure gate because no reviewed
+  positive data law, posterior, proper loss, or coverage definition exists.
+  Negative complete-event weights alone do not supply those semantics.
+- All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence. D1C
+  remains `FAIL`, the minimal public-reader patch remains `INSUFFICIENT`, the
+  provenance slice remains a rejected diagnostic, D1D-A remains `FAIL`, and
+  D1D-B and D1E remain `INCONCLUSIVE`.
+- Issue #47 is planning-only work. Issue #10 remains open and blocked; D2,
+  event generation, datasets, neural training, every implementation, and every
+  prototype remain unauthorized.
+- `LOWER_LEVEL_NORMALIZED_MEASURE_STATUS = PASS_WITH_QUALIFICATION`,
+  `D1F_LOWER_LEVEL_CANDIDATE_STATUS =
+  PLAUSIBLE_SEPARATE_REVIEW_CANDIDATE_REQUIRES_INDEPENDENT_EVIDENCE`,
+  `LOWER_LEVEL_SIMULATOR_AUTHORIZED = false`,
+  `EVENT_GENERATION_AUTHORIZED = false`, `DATASET_AUTHORIZED = false`,
+  `NEURAL_TRAINING_AUTHORIZED = false`, and `D2_AUTHORIZED = false`.
+- Independent evidence does not establish a unique separate-review priority.
+  Prospective hypotheses cannot become load-bearing preference evidence.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-REVIEW_D1E_AST_CONSUMER_GRAPH_FEASIBILITY_CONTRACT
+INDEPENDENT_EVIDENCE_REVIEW_FOR_SEPARATE_CONTRACT_PRIORITY
 ```
 
-This is review of ADR-009 and the v1 planning artifact. Only a later explicit
-decision may open a separate static-evidence implementation task. This review
-does not authorize tool installation, parser or graph implementation, a
-generator prototype, architecture selection, advancement of issue #10, or D2.
+This is a planning-only review of independent scientific motivation and
+load-bearing evidence for separate-contract priority. Option C's fourteen
+formal obligations remain unevaluated. The review authorizes no lower-level
+simulator, implementation, parser, generator, event, dataset, numerical
+closure, neural, issue #10, or D2 work.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
@@ -359,8 +443,8 @@ unimplemented hypotheses.
 - Issue #42 is closed as completed D1D planning. D1D-A is final `FAIL`, D1D-B
   is final `INCONCLUSIVE` with an interim non-authorizing pause, and D1E is a
   feasibility result only. Architecture-comparison readiness remains false;
-  issue #45 authorizes planning only, while all implementations, prototypes,
-  issue #10, and D2 remain blocked and unauthorized.
+  issue #45 is a closed planning record, while all implementations,
+  prototypes, issue #10, and D2 remain blocked and unauthorized.
 - Do not shrink the pilot box, clip negative densities, or change tolerances
   without a reviewed scientific decision.
 - Do not begin neural inference until D0-D5 pass and a separate neural phase is
