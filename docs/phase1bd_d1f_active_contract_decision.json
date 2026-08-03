@@ -1,0 +1,2139 @@
+{
+  "authorization": {
+    "D2_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "LOWER_LEVEL_SIMULATOR_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "PDF_FAMILY_REDESIGN_AUTHORIZED": false,
+    "PROTOTYPE_AUTHORIZED": false,
+    "PYTHIA_INIT_AUTHORIZED": false,
+    "PYTHIA_NEXT_AUTHORIZED": false,
+    "SIGNED_WEIGHT_RESEARCH_AUTHORIZED": false,
+    "WEIGHTED_SET_OBJECTIVE_AUTHORIZED": false
+  },
+  "current_contract": {
+    "data_objective": "fixed-N shape-only unordered event sets",
+    "generator_consistency": "hard process, ISR, and beam remnants must share scientifically valid PDF semantics",
+    "pdf_family": "versioned sum-rule-projected D0R family",
+    "pdf_value_semantics": "signed binary64 x*f with strict support and no clipping",
+    "posterior_objective": "p(theta_PDF | D)",
+    "theta": "theta=(delta_v, lambda_sea) on the accepted D0R domain"
+  },
+  "decision": "RECOMMEND_LOWER_LEVEL_HARD_EVENT_CONTRACT_REVIEW",
+  "decision_rule": {
+    "maintain_pause_when": "the current objective remains worth preserving but no redesign has a bounded eligible next decision",
+    "redesign_requirements": [
+      "normalized measure passes",
+      "posterior target is coherent",
+      "no hidden clipping",
+      "prospective supersession is explicit",
+      "next decision is bounded",
+      "credible end-to-end MVP path exists",
+      "objective-change risk is lower or scientifically justified"
+    ],
+    "selection_method": "independently recompute gates and per-option inputs; select the sole non-dominated eligible redesign",
+    "terminate_when": "the current full-generator line is unbounded, the objective is not preserved, and redesigns are separate contracts"
+  },
+  "dependencies": {
+    "D2": "BLOCKED_AND_UNAUTHORIZED",
+    "issue_10": {
+      "authorization": "NOT_AUTHORIZED",
+      "gate_decision": "NOT_EVALUATED",
+      "number": 10,
+      "state": "OPEN_BLOCKED"
+    },
+    "issue_42": {
+      "gate_decision": "INCONCLUSIVE",
+      "number": 42,
+      "state": "CLOSED"
+    },
+    "issue_45": {
+      "gate_decision": "INCONCLUSIVE",
+      "number": 45,
+      "state": "CLOSED"
+    },
+    "planning_issue": {
+      "authorization": "PLANNING_ONLY",
+      "number": 47,
+      "state": "OPEN"
+    }
+  },
+  "derived_decision_inputs": {
+    "all_redesigns_are_separate_contracts_not_continuations": true,
+    "current_full_generator_continuation_bounded": false,
+    "current_objective_remains_scientifically_worth_preserving": true,
+    "eligible_redesign_options": [
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL"
+    ],
+    "per_option": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": {
+        "bounded_next_decision": true,
+        "credible_end_to_end_mvp_path": true,
+        "normalized_measure_gate": "PASS",
+        "posterior_target_status": "DEFINED",
+        "prospective_supersession_explicit": true,
+        "redesign_recommendation_eligible": true,
+        "scientific_objective_change_risk": "MEDIUM_EXPLICITLY_JUSTIFIED_BY_SCOPED_SIMULATOR"
+      },
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": {
+        "bounded_next_decision": true,
+        "credible_end_to_end_mvp_path": false,
+        "normalized_measure_gate": "PASS_WITH_QUALIFICATION",
+        "posterior_target_status": "DEFINED_CONDITIONALLY",
+        "prospective_supersession_explicit": true,
+        "redesign_recommendation_eligible": false,
+        "scientific_objective_change_risk": "HIGH_NOT_SCIENTIFICALLY_JUSTIFIED"
+      },
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": {
+        "bounded_next_decision": false,
+        "credible_end_to_end_mvp_path": false,
+        "normalized_measure_gate": "PASS",
+        "posterior_target_status": "DEFINED_BUT_NOT_OPERATIONAL",
+        "prospective_supersession_explicit": false,
+        "redesign_recommendation_eligible": false,
+        "scientific_objective_change_risk": "LOW_BUT_NO_BOUNDED_ACTION"
+      },
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": {
+        "bounded_next_decision": false,
+        "credible_end_to_end_mvp_path": false,
+        "normalized_measure_gate": "FAIL",
+        "posterior_target_status": "NOT_SUPPORTED",
+        "prospective_supersession_explicit": true,
+        "redesign_recommendation_eligible": false,
+        "scientific_objective_change_risk": "HIGH_POSTERIOR_UNDEFINED"
+      },
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": {
+        "bounded_next_decision": false,
+        "credible_end_to_end_mvp_path": false,
+        "normalized_measure_gate": "NOT_APPLICABLE",
+        "posterior_target_status": "NOT_APPLICABLE",
+        "prospective_supersession_explicit": true,
+        "redesign_recommendation_eligible": false,
+        "scientific_objective_change_risk": "LOW_SCOPED_RESOURCE_DECISION"
+      },
+      "WEIGHTED_EMPIRICAL_EVENT_SET": {
+        "bounded_next_decision": true,
+        "credible_end_to_end_mvp_path": false,
+        "normalized_measure_gate": "FAIL",
+        "posterior_target_status": "DEFINED_WITH_QUALIFICATION",
+        "prospective_supersession_explicit": true,
+        "redesign_recommendation_eligible": false,
+        "scientific_objective_change_risk": "HIGH_STATISTICAL_OBJECTIVE_UNRESOLVED"
+      }
+    }
+  },
+  "failure_scope": "The fixed D0R signed full-generator coupling has no bounded next task under accepted evidence.",
+  "fixed_contract_failure_summary": {
+    "failure": "No bounded source-backed complete-consumer path or signed internal probability construction was established.",
+    "not_a_failure_of": [
+      "all SBI for PDFs",
+      "all event simulators",
+      "all lower-level hard-event models",
+      "all future PDF-family contracts"
+    ],
+    "scope": "current D0R signed family through a complete full-generator coupling"
+  },
+  "next_step": {
+    "action": "SCIENTIFIC_REVIEW_OF_LOWER_LEVEL_NC_DIS_HARD_EVENT_CONTRACT",
+    "authorization_granted": false,
+    "implementation": false,
+    "scope": "Planning-only definition of the normalized hard-event measure, full gamma/Z/interference terms, phase space, detector kernel, omissions, posterior, and validation gates."
+  },
+  "non_failure_scope": [
+    "D0R input-scale scientific evidence",
+    "set-level posterior inference in general",
+    "a separately reviewed normalized lower-level hard-event law",
+    "future contract decisions"
+  ],
+  "normalized_measure_gate": {
+    "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": {
+      "calibration_status": "DEFINED_FOR_REVIEW",
+      "event_representation_status": "DEFINED",
+      "hidden_clipping_or_semantic_repair": false,
+      "normalized_measure_status": "DEFINED",
+      "posterior_status": "DEFINED",
+      "signed_weights_are_probabilities": false,
+      "status": "PASS",
+      "weight_rule_status": "DEFINED"
+    },
+    "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": {
+      "calibration_status": "DEFINED_CONDITIONALLY",
+      "event_representation_status": "DEFINED",
+      "hidden_clipping_or_semantic_repair": false,
+      "normalized_measure_status": "DEFINED_CONDITIONALLY",
+      "posterior_status": "DEFINED_CONDITIONALLY",
+      "signed_weights_are_probabilities": false,
+      "status": "PASS_WITH_QUALIFICATION",
+      "weight_rule_status": "DEFINED"
+    },
+    "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": {
+      "calibration_status": "DEFINED_BUT_NOT_OPERATIONAL",
+      "event_representation_status": "DEFINED",
+      "hidden_clipping_or_semantic_repair": false,
+      "normalized_measure_status": "DEFINED_BUT_NOT_OPERATIONAL",
+      "posterior_status": "DEFINED_BUT_NOT_OPERATIONAL",
+      "signed_weights_are_probabilities": false,
+      "status": "PASS",
+      "weight_rule_status": "DEFINED"
+    },
+    "SIGNED_WEIGHT_INFERENCE_RESEARCH": {
+      "calibration_status": "NOT_SUPPORTED",
+      "event_representation_status": "UNRESOLVED",
+      "hidden_clipping_or_semantic_repair": false,
+      "normalized_measure_status": "NOT_SUPPORTED",
+      "posterior_status": "NOT_SUPPORTED",
+      "signed_weights_are_probabilities": false,
+      "status": "FAIL",
+      "weight_rule_status": "DEFINED_AS_PROBLEM"
+    },
+    "TERMINATE_PHASE1B_GENERATOR_COUPLING": {
+      "calibration_status": "NOT_APPLICABLE",
+      "event_representation_status": "NOT_APPLICABLE",
+      "hidden_clipping_or_semantic_repair": false,
+      "normalized_measure_status": "NOT_APPLICABLE",
+      "posterior_status": "NOT_APPLICABLE",
+      "signed_weights_are_probabilities": false,
+      "status": "NOT_APPLICABLE",
+      "weight_rule_status": "NOT_APPLICABLE"
+    },
+    "WEIGHTED_EMPIRICAL_EVENT_SET": {
+      "calibration_status": "UNRESOLVED",
+      "event_representation_status": "DEFINED_WITH_QUALIFICATION",
+      "hidden_clipping_or_semantic_repair": false,
+      "normalized_measure_status": "DEFINED_WITH_QUALIFICATION",
+      "posterior_status": "DEFINED_WITH_QUALIFICATION",
+      "signed_weights_are_probabilities": false,
+      "status": "FAIL",
+      "weight_rule_status": "DEFINED_WITH_QUALIFICATION"
+    }
+  },
+  "option_scorecards": {
+    "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": {
+      "calibration_feasibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "calibration_feasibility: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "detector_model_feasibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "detector_model_feasibility: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "end_to_end_scientific_mvp_path": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "end_to_end_scientific_mvp_path: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "event_weight_clarity": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "event_weight_clarity: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "evidence_value_on_failure": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "evidence_value_on_failure: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "existing_rust_cpp_infrastructure_compatibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "existing_rust_cpp_infrastructure_compatibility: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "implementation_boundedness": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "implementation_boundedness: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "independent_falsifiability": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "independent_falsifiability: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "maintenance_burden": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "maintenance_burden: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "no_clipping_preservation": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "no_clipping_preservation: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "normalized_generative_measure": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "normalized_generative_measure: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "pdf_interpretability": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "pdf_interpretability: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "posterior_target_coherence": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "posterior_target_coherence: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "qcd_factorization_compatibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "qcd_factorization_compatibility: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "rate_shape_clarity": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "rate_shape_clarity: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "reproducibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "reproducibility: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "scientific_objective_change_risk": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "scientific_objective_change_risk: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "set_level_amortized_sbi_compatibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "set_level_amortized_sbi_compatibility: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "strict_support_preservation": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "strict_support_preservation: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED"
+      },
+      "validation_boundedness": {
+        "evidence": [
+          "ADR-001",
+          "ADR-003",
+          "ADR-004",
+          "ADR-008",
+          "ADR-009"
+        ],
+        "rationale": "validation_boundedness: The explicit normalized hard-event law supplies this property at lower-level NC DIS scope; omitted ISR, hadronization, and remnants prevent full-generator equivalence.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      }
+    },
+    "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": {
+      "calibration_feasibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "calibration_feasibility: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "detector_model_feasibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "detector_model_feasibility: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "end_to_end_scientific_mvp_path": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "end_to_end_scientific_mvp_path: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "event_weight_clarity": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "event_weight_clarity: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED"
+      },
+      "evidence_value_on_failure": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "evidence_value_on_failure: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "existing_rust_cpp_infrastructure_compatibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "existing_rust_cpp_infrastructure_compatibility: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "implementation_boundedness": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "implementation_boundedness: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "independent_falsifiability": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "independent_falsifiability: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "maintenance_burden": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "maintenance_burden: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "NOT_SUPPORTED"
+      },
+      "no_clipping_preservation": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "no_clipping_preservation: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED"
+      },
+      "normalized_generative_measure": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "normalized_generative_measure: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "pdf_interpretability": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "pdf_interpretability: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "posterior_target_coherence": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "posterior_target_coherence: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "qcd_factorization_compatibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "qcd_factorization_compatibility: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "rate_shape_clarity": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "rate_shape_clarity: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED"
+      },
+      "reproducibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "reproducibility: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "scientific_objective_change_risk": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "scientific_objective_change_risk: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "NOT_SUPPORTED"
+      },
+      "set_level_amortized_sbi_compatibility": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "set_level_amortized_sbi_compatibility: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED"
+      },
+      "strict_support_preservation": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "strict_support_preservation: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "SUPPORTED"
+      },
+      "validation_boundedness": {
+        "evidence": [
+          "ADR-001",
+          "ADR-004",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "validation_boundedness: A prospectively new nonnegative family could supply this property, but scientific motivation, evolution-wide positivity, and end-to-end bounds are not yet established.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      }
+    },
+    "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": {
+      "calibration_feasibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "calibration_feasibility: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "detector_model_feasibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "detector_model_feasibility: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "end_to_end_scientific_mvp_path": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "end_to_end_scientific_mvp_path: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "NOT_SUPPORTED"
+      },
+      "event_weight_clarity": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "event_weight_clarity: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "evidence_value_on_failure": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "evidence_value_on_failure: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "existing_rust_cpp_infrastructure_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "existing_rust_cpp_infrastructure_compatibility: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "implementation_boundedness": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "implementation_boundedness: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "NOT_SUPPORTED"
+      },
+      "independent_falsifiability": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "independent_falsifiability: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "maintenance_burden": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "maintenance_burden: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "NOT_SUPPORTED"
+      },
+      "no_clipping_preservation": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "no_clipping_preservation: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "normalized_generative_measure": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "normalized_generative_measure: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "pdf_interpretability": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "pdf_interpretability: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "posterior_target_coherence": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "posterior_target_coherence: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "qcd_factorization_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "qcd_factorization_compatibility: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "rate_shape_clarity": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "rate_shape_clarity: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "reproducibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "reproducibility: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "scientific_objective_change_risk": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "scientific_objective_change_risk: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "set_level_amortized_sbi_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "set_level_amortized_sbi_compatibility: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "strict_support_preservation": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "strict_support_preservation: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "SUPPORTED"
+      },
+      "validation_boundedness": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "validation_boundedness: The accepted fixed contract supplies this property only at its recorded scope; the failed full-generator realization limits operational closure.",
+        "status": "NOT_SUPPORTED"
+      }
+    },
+    "SIGNED_WEIGHT_INFERENCE_RESEARCH": {
+      "calibration_feasibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "calibration_feasibility: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "detector_model_feasibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "detector_model_feasibility: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "end_to_end_scientific_mvp_path": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "end_to_end_scientific_mvp_path: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "event_weight_clarity": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "event_weight_clarity: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "evidence_value_on_failure": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "evidence_value_on_failure: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "existing_rust_cpp_infrastructure_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "existing_rust_cpp_infrastructure_compatibility: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "implementation_boundedness": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "implementation_boundedness: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "independent_falsifiability": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "independent_falsifiability: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "maintenance_burden": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "maintenance_burden: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "no_clipping_preservation": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "no_clipping_preservation: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED"
+      },
+      "normalized_generative_measure": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "normalized_generative_measure: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "pdf_interpretability": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "pdf_interpretability: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "posterior_target_coherence": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "posterior_target_coherence: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "qcd_factorization_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "qcd_factorization_compatibility: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "rate_shape_clarity": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "rate_shape_clarity: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "reproducibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "reproducibility: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "scientific_objective_change_risk": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "scientific_objective_change_risk: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      },
+      "set_level_amortized_sbi_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "set_level_amortized_sbi_compatibility: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "strict_support_preservation": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "strict_support_preservation: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "SUPPORTED"
+      },
+      "validation_boundedness": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "validation_boundedness: The current signed object lacks a reviewed positive data law and coherent posterior; preserving signs alone does not supply probability semantics.",
+        "status": "NOT_SUPPORTED"
+      }
+    },
+    "TERMINATE_PHASE1B_GENERATOR_COUPLING": {
+      "calibration_feasibility": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "calibration_feasibility: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "detector_model_feasibility": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "detector_model_feasibility: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "end_to_end_scientific_mvp_path": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "end_to_end_scientific_mvp_path: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "event_weight_clarity": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "event_weight_clarity: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "evidence_value_on_failure": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "evidence_value_on_failure: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "existing_rust_cpp_infrastructure_compatibility": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "existing_rust_cpp_infrastructure_compatibility: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "implementation_boundedness": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "implementation_boundedness: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "independent_falsifiability": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "independent_falsifiability: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "maintenance_burden": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "maintenance_burden: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "no_clipping_preservation": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "no_clipping_preservation: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "normalized_generative_measure": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "normalized_generative_measure: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "pdf_interpretability": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "pdf_interpretability: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "posterior_target_coherence": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "posterior_target_coherence: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "qcd_factorization_compatibility": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "qcd_factorization_compatibility: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "rate_shape_clarity": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "rate_shape_clarity: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "reproducibility": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "reproducibility: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "scientific_objective_change_risk": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "scientific_objective_change_risk: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "set_level_amortized_sbi_compatibility": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "set_level_amortized_sbi_compatibility: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "NOT_APPLICABLE"
+      },
+      "strict_support_preservation": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "strict_support_preservation: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      },
+      "validation_boundedness": {
+        "evidence": [
+          "ADR-008",
+          "ADR-009",
+          "phase1bd_d1d_terminal_decision.json",
+          "phase1bd_d1e_consumer_graph_feasibility.json"
+        ],
+        "rationale": "validation_boundedness: Termination is evaluated only as a scoped resource and provenance decision; it proposes no new simulator or posterior.",
+        "status": "SUPPORTED"
+      }
+    },
+    "WEIGHTED_EMPIRICAL_EVENT_SET": {
+      "calibration_feasibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "calibration_feasibility: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "detector_model_feasibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "detector_model_feasibility: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "end_to_end_scientific_mvp_path": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "end_to_end_scientific_mvp_path: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "event_weight_clarity": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "event_weight_clarity: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "evidence_value_on_failure": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "evidence_value_on_failure: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "existing_rust_cpp_infrastructure_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "existing_rust_cpp_infrastructure_compatibility: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "implementation_boundedness": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "implementation_boundedness: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      },
+      "independent_falsifiability": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "independent_falsifiability: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "maintenance_burden": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "maintenance_burden: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "no_clipping_preservation": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "no_clipping_preservation: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED"
+      },
+      "normalized_generative_measure": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "normalized_generative_measure: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "pdf_interpretability": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "pdf_interpretability: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "posterior_target_coherence": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "posterior_target_coherence: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "qcd_factorization_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "qcd_factorization_compatibility: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "rate_shape_clarity": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "rate_shape_clarity: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "reproducibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "reproducibility: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "scientific_objective_change_risk": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "scientific_objective_change_risk: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "NOT_SUPPORTED"
+      },
+      "set_level_amortized_sbi_compatibility": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "set_level_amortized_sbi_compatibility: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED_WITH_QUALIFICATION"
+      },
+      "strict_support_preservation": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "strict_support_preservation: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "SUPPORTED"
+      },
+      "validation_boundedness": {
+        "evidence": [
+          "ADR-003",
+          "ADR-008",
+          "phase1bd_d1d_terminal_decision.json"
+        ],
+        "rationale": "validation_boundedness: A positive weighted empirical-measure contract can partly supply this property, but producer randomness, ESS, proper loss, and coverage remain unresolved.",
+        "status": "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE"
+      }
+    }
+  },
+  "options": {
+    "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": {
+      "active_pdf_family_identity": {
+        "statement": "Retain the accepted D0R boundary/evolution family as scientific input; transport requirements are replaced only prospectively.",
+        "status": "DEFINED"
+      },
+      "burden_estimate": {
+        "statement": "The mathematical contract review is bounded; implementation and numerical validation remain separately unestimated and unauthorized.",
+        "status": "MEDIUM_FOR_CONTRACT_HIGH_FOR_LATER_IMPLEMENTATION"
+      },
+      "calibration_coverage_target": {
+        "statement": "SBC, conditional coverage, support-failure accounting, and closure against independent quadrature over predeclared theta points.",
+        "status": "DEFINED_FOR_REVIEW"
+      },
+      "detector_response_contract": {
+        "statement": "A normalized, theta-independent response/acceptance kernel must be specified and separately validated; perfect-detector identity is an explicit initial special case.",
+        "status": "DEFINED_FOR_REVIEW"
+      },
+      "event_and_set_weights": {
+        "statement": "Primary draws are unweighted under the normalized hard-event law; integration weights are validation provenance and never observed features.",
+        "status": "DEFINED"
+      },
+      "hidden_clipping_or_semantic_repair": false,
+      "issue_roadmap_implications": {
+        "statement": "A later accepted contract would supersede, not complete, issue #10 and would require a new lower-level validation roadmap before Neural.",
+        "status": "PROSPECTIVE_SCOPE_REPLACEMENT"
+      },
+      "latent_parameter_theta": {
+        "statement": "Retain theta=(delta_v, lambda_sea) and the accepted D0R domain unless a later review explicitly changes them.",
+        "status": "DEFINED"
+      },
+      "normalized_probability_measure": {
+        "statement": "For fixed N, each event is drawn from the nonnegative differential hard-event cross section restricted to declared acceptance and divided by its finite integral; the set law is the exchangeable product conditioned on N.",
+        "status": "DEFINED"
+      },
+      "observed_event_set_representation": {
+        "statement": "An unordered fixed-N set of detector-level lepton/hadronic-summary observables with stable event identities; hard flavor and PDF values remain provenance.",
+        "status": "DEFINED"
+      },
+      "original_objective_compatibility": {
+        "statement": "Preserves set-level p(theta_PDF|D), while D is explicitly a lower-level hard-event observation rather than a full hadronized generator event.",
+        "status": "PRESERVED_WITH_SCOPED_SIMULATOR"
+      },
+      "positivity_signed_value_rules": {
+        "statement": "Only the complete physical differential rate must be nonnegative; signed NLO component terms may cancel before normalization and are never sampled as probabilities.",
+        "status": "DEFINED"
+      },
+      "posterior_target": {
+        "statement": "p(theta_D0R|D_hard) proportional to the prior times the fixed-N product of normalized detector-level hard-event densities.",
+        "status": "DEFINED"
+      },
+      "preserved_evidence": [
+        "All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence.",
+        "Strict support, explicit provenance, and the prohibition on hidden clipping remain binding.",
+        "D0R family identity and all negative full-generator results remain binding evidence."
+      ],
+      "prospectively_superseded_evidence": [
+        "ADR-002 full-generator artifact requirement",
+        "ADR-006 full-generator transport architecture",
+        "issue #10 full-generator D2 scope",
+        "the current D2-D5 full-generator roadmap"
+      ],
+      "rate_shape_semantics": {
+        "statement": "Shape-only likelihood uses the normalized cross section; total rates are retained as diagnostics, not conditioned features.",
+        "status": "DEFINED"
+      },
+      "sample_size_semantics": {
+        "statement": "Fixed N and exchangeable sampling conditioned on selection; a Poisson rate extension is outside this contract.",
+        "status": "DEFINED"
+      },
+      "signed_weights_are_probabilities": false,
+      "simulator_or_data_generating_law": {
+        "statement": "A repository-owned or independently validated normalized neutral-current e\u00b1p hard-event density including gamma, Z, and interference over declared phase space, followed by an explicit detector kernel.",
+        "status": "PLANNING_DEFINED"
+      },
+      "smallest_falsifiable_next_step": {
+        "statement": "Write a mathematical hard-event contract covering beams, full NC gamma/Z/interference, phase-space/Jacobian, flavor sum, normalization, detector kernel, omissions, and independent validation gates.",
+        "status": "BOUNDED_PLANNING_REVIEW"
+      },
+      "support_extrapolation_rules": {
+        "statement": "Phase-space and PDF support are intersected analytically; queries outside support fail and no clipping/extrapolation is allowed.",
+        "status": "DEFINED"
+      },
+      "training_objective": {
+        "statement": "A proper amortized posterior or likelihood-ratio objective trained only on samples from the declared normalized law.",
+        "status": "DEFINED_FOR_REVIEW"
+      }
+    },
+    "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": {
+      "active_pdf_family_identity": {
+        "statement": "A new immutable generator-compatible family, not a correction to D0R.",
+        "status": "PROSPECTIVE_NEW_FAMILY"
+      },
+      "burden_estimate": {
+        "statement": "The contract review is bounded; APFEL and full-generator implementation/validation are not yet bounded.",
+        "status": "HIGH_AND_UNBOUNDED_BEYOND_REVIEW"
+      },
+      "calibration_coverage_target": {
+        "statement": "SBC and frequentist coverage across the new theta domain under the same law.",
+        "status": "DEFINED_CONDITIONALLY"
+      },
+      "detector_response_contract": {
+        "statement": "A validated detector kernel would compose with the parton/event law.",
+        "status": "REQUIRES_NEW_DECISION"
+      },
+      "event_and_set_weights": {
+        "statement": "Unweighted selected events after a separately validated sampling law; no clipping or absolute-value repair.",
+        "status": "DEFINED"
+      },
+      "hidden_clipping_or_semantic_repair": false,
+      "issue_roadmap_implications": {
+        "statement": "Issue #10 cannot resume under its current D0R contract; a new D0-family and evolution validation sequence is required.",
+        "status": "REQUIRES_NEW_ROADMAP"
+      },
+      "latent_parameter_theta": {
+        "statement": "A new theta and domain must be scientifically defined; the D0R box cannot be silently reused.",
+        "status": "REQUIRES_NEW_DECISION"
+      },
+      "normalized_probability_measure": {
+        "statement": "A normalized selected-event probability law exists only if nonnegative rates, ratios, channels, envelopes, ISR, and remnants validate end to end.",
+        "status": "DEFINED_CONDITIONALLY"
+      },
+      "observed_event_set_representation": {
+        "statement": "Unordered fixed-N observed event sets, excluding generator-only truth by default.",
+        "status": "DEFINED"
+      },
+      "original_objective_compatibility": {
+        "statement": "Preserves the form p(theta_PDF|D) but changes which PDF family and theta are scientifically active.",
+        "status": "CHANGED_PARAMETER_FAMILY"
+      },
+      "positivity_signed_value_rules": {
+        "statement": "Nonnegative evolved densities and positivity-preserving interpolation are defining family properties, never post-hoc clipping.",
+        "status": "PROSPECTIVE_NEW_RULE"
+      },
+      "posterior_target": {
+        "statement": "p(theta_new_family|D) under the validated new-family generator law.",
+        "status": "DEFINED_CONDITIONALLY"
+      },
+      "preserved_evidence": [
+        "All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence.",
+        "Strict support, explicit provenance, and the prohibition on hidden clipping remain binding.",
+        "D0R remains historical evidence and is never relabelled as the new family."
+      ],
+      "prospectively_superseded_evidence": [
+        "ADR-001 active family selection",
+        "ADR-004 active D0R family identity",
+        "D0R as the active family"
+      ],
+      "rate_shape_semantics": {
+        "statement": "Shape-only primary target with rate diagnostics.",
+        "status": "DEFINED"
+      },
+      "sample_size_semantics": {
+        "statement": "Fixed-N primary sets; variable-N rate inference requires another decision.",
+        "status": "DEFINED"
+      },
+      "signed_weights_are_probabilities": false,
+      "simulator_or_data_generating_law": {
+        "statement": "A future full neutral-current generator law using nonnegative evolved densities across every consumer domain.",
+        "status": "PLANNING_DEFINED"
+      },
+      "smallest_falsifiable_next_step": {
+        "statement": "Specify scientific motivation, analytic family, theta, sum rules, positivity theorem/gates, and full consumer support without implementation.",
+        "status": "BOUNDED_PLANNING_REVIEW"
+      },
+      "support_extrapolation_rules": {
+        "statement": "Explicit family support covers the full consumer domain; no extrapolation.",
+        "status": "DEFINED"
+      },
+      "training_objective": {
+        "statement": "A proper amortized posterior objective for unweighted fixed-N sets.",
+        "status": "DEFINED_CONDITIONALLY"
+      }
+    },
+    "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": {
+      "active_pdf_family_identity": {
+        "statement": "The accepted versioned sum-rule-projected D0R family remains active.",
+        "status": "DEFINED"
+      },
+      "burden_estimate": {
+        "statement": "Full-generator evidence and signed internal-rate mathematics remain unbounded.",
+        "status": "UNBOUNDED"
+      },
+      "calibration_coverage_target": {
+        "statement": "Simulation-based calibration and coverage under the same selected-event law; no simulator currently instantiates it.",
+        "status": "DEFINED_BUT_NOT_OPERATIONAL"
+      },
+      "detector_response_contract": {
+        "statement": "A separately validated detector response is required before detector-level inference.",
+        "status": "DEFERRED"
+      },
+      "event_and_set_weights": {
+        "statement": "Primary sets are unweighted; source weights remain provenance and clipping, absolute values, or weights=1 repair are forbidden.",
+        "status": "DEFINED"
+      },
+      "hidden_clipping_or_semantic_repair": false,
+      "issue_roadmap_implications": {
+        "statement": "Issue #10 and D2 remain blocked; D3-D5 and Neural cannot begin.",
+        "status": "PAUSED"
+      },
+      "latent_parameter_theta": {
+        "statement": "theta=(delta_v, lambda_sea) on the accepted D0R box.",
+        "status": "DEFINED"
+      },
+      "normalized_probability_measure": {
+        "statement": "The original target remains a normalized selected-event law p(event|theta,selection), but no accepted full-generator realization exists.",
+        "status": "DEFINED_BUT_NOT_OPERATIONAL"
+      },
+      "observed_event_set_representation": {
+        "statement": "An unordered fixed-N set of observed event features; generator-only truth is provenance, not a default feature.",
+        "status": "DEFINED"
+      },
+      "original_objective_compatibility": {
+        "statement": "Preserves p(theta_PDF|D) exactly.",
+        "status": "PRESERVED"
+      },
+      "positivity_signed_value_rules": {
+        "statement": "Signed binary64 x*f is preserved; no positivity repair is allowed.",
+        "status": "DEFINED"
+      },
+      "posterior_target": {
+        "statement": "p(theta_PDF|D) for fixed-N sets from the unavailable accepted generator law.",
+        "status": "DEFINED_BUT_NOT_OPERATIONAL"
+      },
+      "preserved_evidence": [
+        "All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence.",
+        "Strict support, explicit provenance, and the prohibition on hidden clipping remain binding."
+      ],
+      "prospectively_superseded_evidence": [],
+      "rate_shape_semantics": {
+        "statement": "Shape-only MVP; cross sections and veto rates remain diagnostics.",
+        "status": "DEFINED"
+      },
+      "sample_size_semantics": {
+        "statement": "Fixed N conditions away rate information.",
+        "status": "DEFINED"
+      },
+      "signed_weights_are_probabilities": false,
+      "simulator_or_data_generating_law": {
+        "statement": "The intended full neutral-current generator law remains unavailable because signed values cannot enter every required internal consumer coherently.",
+        "status": "BLOCKED"
+      },
+      "smallest_falsifiable_next_step": {
+        "statement": "D1E found the complete AST consumer graph unbounded and selected no toolchain; the other reopen paths still require separate decisions.",
+        "status": "NOT_BOUNDED"
+      },
+      "support_extrapolation_rules": {
+        "statement": "Strict declared support; no extrapolation, clamping, or observed-query-defined shrinkage.",
+        "status": "DEFINED"
+      },
+      "training_objective": {
+        "statement": "A proper amortized posterior loss is defined only after a valid simulator law exists.",
+        "status": "DEFERRED"
+      }
+    },
+    "SIGNED_WEIGHT_INFERENCE_RESEARCH": {
+      "active_pdf_family_identity": {
+        "statement": "No signed-weight inference family is selected.",
+        "status": "UNRESOLVED"
+      },
+      "burden_estimate": {
+        "statement": "Signed-kernel, variance, cancellation, posterior, and calibration theory are unbounded.",
+        "status": "OPEN_ENDED"
+      },
+      "calibration_coverage_target": {
+        "statement": "Coverage is undefined until repeated data draws from a positive law are defined.",
+        "status": "NOT_SUPPORTED"
+      },
+      "detector_response_contract": {
+        "statement": "The response action on a signed estimator has not been connected to a positive observation law.",
+        "status": "UNRESOLVED"
+      },
+      "event_and_set_weights": {
+        "statement": "Signed complete-event weights are retained exactly, but cannot be interpreted as probabilities.",
+        "status": "DEFINED_AS_PROBLEM"
+      },
+      "hidden_clipping_or_semantic_repair": false,
+      "issue_roadmap_implications": {
+        "statement": "Issue #10 and D2 remain blocked; no dataset or neural work follows.",
+        "status": "RESEARCH_ONLY"
+      },
+      "latent_parameter_theta": {
+        "statement": "Could reference D0R only after a signed data object and conditioning rule are defined.",
+        "status": "UNRESOLVED"
+      },
+      "normalized_probability_measure": {
+        "statement": "No reviewed positive normalized measure has been constructed from signed event weights.",
+        "status": "NOT_SUPPORTED"
+      },
+      "observed_event_set_representation": {
+        "statement": "A cancellation-aware signed measure representation would be required.",
+        "status": "UNRESOLVED"
+      },
+      "original_objective_compatibility": {
+        "statement": "May change p(theta_PDF|D) into inference from a signed estimator.",
+        "status": "UNRESOLVED"
+      },
+      "positivity_signed_value_rules": {
+        "statement": "Signed weights remain signed estimators; negative MC@NLO weights are not probability evidence.",
+        "status": "DEFINED_AS_RESEARCH_BOUNDARY"
+      },
+      "posterior_target": {
+        "statement": "No coherent p(theta|signed finite sample) is established without an underlying positive law.",
+        "status": "NOT_SUPPORTED"
+      },
+      "preserved_evidence": [
+        "All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence.",
+        "Strict support, explicit provenance, and the prohibition on hidden clipping remain binding."
+      ],
+      "prospectively_superseded_evidence": [
+        "ADR-003 ordinary unweighted fixed-N primary objective if a future signed contract were accepted"
+      ],
+      "rate_shape_semantics": {
+        "statement": "Signed normalization and cancellation obstruct ordinary shape/rate decomposition.",
+        "status": "UNRESOLVED"
+      },
+      "sample_size_semantics": {
+        "statement": "N and signed effective sample size do not define an iid sample size without new mathematics.",
+        "status": "UNRESOLVED"
+      },
+      "signed_weights_are_probabilities": false,
+      "simulator_or_data_generating_law": {
+        "statement": "A finite signed sample is currently only an estimator, not a data-generating probability law.",
+        "status": "NOT_DEFINED"
+      },
+      "smallest_falsifiable_next_step": {
+        "statement": "Construct or rule out a positive normalized law, proper loss, and calibration semantics; this is not currently bounded as project implementation planning.",
+        "status": "OPEN_MATHEMATICAL_RESEARCH"
+      },
+      "support_extrapolation_rules": {
+        "statement": "No extrapolation, clipping, absolute values, or discarded signs.",
+        "status": "DEFINED"
+      },
+      "training_objective": {
+        "statement": "No proper loss is established for the undefined posterior target.",
+        "status": "NOT_SUPPORTED"
+      }
+    },
+    "TERMINATE_PHASE1B_GENERATOR_COUPLING": {
+      "active_pdf_family_identity": {
+        "statement": "D0R remains accepted at its validated scope.",
+        "status": "PRESERVED_HISTORICALLY"
+      },
+      "burden_estimate": {
+        "statement": "Documentation and roadmap closure only.",
+        "status": "LOW"
+      },
+      "calibration_coverage_target": {
+        "statement": "Termination proposes no calibration study.",
+        "status": "NOT_APPLICABLE"
+      },
+      "detector_response_contract": {
+        "statement": "Termination proposes no detector model.",
+        "status": "NOT_APPLICABLE"
+      },
+      "event_and_set_weights": {
+        "statement": "Termination proposes no event weights.",
+        "status": "NOT_APPLICABLE"
+      },
+      "hidden_clipping_or_semantic_repair": false,
+      "issue_roadmap_implications": {
+        "statement": "Issue #10 would require explicit closure; alternative lower-level or changed-contract work would be separate.",
+        "status": "CLOSE_CURRENT_LINE"
+      },
+      "latent_parameter_theta": {
+        "statement": "D0R theta remains valid evidence but is not coupled to a full generator.",
+        "status": "PRESERVED_HISTORICALLY"
+      },
+      "normalized_probability_measure": {
+        "statement": "Termination proposes no new data law.",
+        "status": "NOT_APPLICABLE"
+      },
+      "observed_event_set_representation": {
+        "statement": "Termination proposes no dataset.",
+        "status": "NOT_APPLICABLE"
+      },
+      "original_objective_compatibility": {
+        "statement": "Does not refute p(theta_PDF|D); it ends only the current full-generator route.",
+        "status": "SCOPED_TERMINATION"
+      },
+      "positivity_signed_value_rules": {
+        "statement": "No clipping or sign repair is introduced.",
+        "status": "PRESERVED_HISTORICALLY"
+      },
+      "posterior_target": {
+        "statement": "Termination proposes no posterior implementation.",
+        "status": "NOT_APPLICABLE"
+      },
+      "preserved_evidence": [
+        "All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence.",
+        "Strict support, explicit provenance, and the prohibition on hidden clipping remain binding."
+      ],
+      "prospectively_superseded_evidence": [
+        "issue #10 full-generator continuation",
+        "the current full-generator D2-D5 roadmap"
+      ],
+      "rate_shape_semantics": {
+        "statement": "Termination proposes no likelihood.",
+        "status": "NOT_APPLICABLE"
+      },
+      "sample_size_semantics": {
+        "statement": "Termination proposes no sampling.",
+        "status": "NOT_APPLICABLE"
+      },
+      "signed_weights_are_probabilities": false,
+      "simulator_or_data_generating_law": {
+        "statement": "No further full-generator law is pursued for the fixed D0R signed contract.",
+        "status": "TERMINATED_SCOPE"
+      },
+      "smallest_falsifiable_next_step": {
+        "statement": "The option records a resource decision, not a scientific experiment.",
+        "status": "NOT_APPLICABLE"
+      },
+      "support_extrapolation_rules": {
+        "statement": "Strict support and no extrapolation remain historical requirements.",
+        "status": "PRESERVED_HISTORICALLY"
+      },
+      "training_objective": {
+        "statement": "Termination proposes no training.",
+        "status": "NOT_APPLICABLE"
+      }
+    },
+    "WEIGHTED_EMPIRICAL_EVENT_SET": {
+      "active_pdf_family_identity": {
+        "statement": "The producer family and its weight semantics must be fixed before this can be an active contract.",
+        "status": "UNRESOLVED"
+      },
+      "burden_estimate": {
+        "statement": "Mathematical review is bounded, but a scientifically valid producer and end-to-end MVP are not established.",
+        "status": "HIGH_AND_UNRESOLVED"
+      },
+      "calibration_coverage_target": {
+        "statement": "Coverage must repeat both proposal sampling and weighted-measure construction and report ESS/support failures.",
+        "status": "UNRESOLVED"
+      },
+      "detector_response_contract": {
+        "statement": "Response must act on events before empirical-measure normalization and preserve weight provenance.",
+        "status": "REQUIRES_NEW_DECISION"
+      },
+      "event_and_set_weights": {
+        "statement": "Weights remain explicit; positive weights normalize by their sum, while signed weights require the separate research contract.",
+        "status": "DEFINED_WITH_QUALIFICATION"
+      },
+      "hidden_clipping_or_semantic_repair": false,
+      "issue_roadmap_implications": {
+        "statement": "Issue #10 does not become complete; a producer-law and weighted-inference decision must precede any dataset or Neural work.",
+        "status": "REQUIRES_NEW_ROADMAP"
+      },
+      "latent_parameter_theta": {
+        "statement": "May retain D0R theta only if the weighted empirical measure is defined independently of the failed generator coupling.",
+        "status": "REQUIRES_NEW_DECISION"
+      },
+      "normalized_probability_measure": {
+        "statement": "Positive normalized weights define a random empirical probability measure conditional on the generated support; signed weights do not.",
+        "status": "DEFINED_WITH_QUALIFICATION"
+      },
+      "observed_event_set_representation": {
+        "statement": "A set of (observed event, source weight, provenance) tuples, not an iid unweighted set.",
+        "status": "DEFINED_WITH_QUALIFICATION"
+      },
+      "original_objective_compatibility": {
+        "statement": "Replaces ordinary fixed-N event sets with random empirical measures.",
+        "status": "OBJECTIVE_CHANGED"
+      },
+      "positivity_signed_value_rules": {
+        "statement": "No clipping, absolute values, or reset-to-one; signed cases fail this option and move to signed-weight research.",
+        "status": "DEFINED"
+      },
+      "posterior_target": {
+        "statement": "p(theta|random positive empirical measure) requires a hierarchical law for proposal draws and weights, not merely normalized histograms.",
+        "status": "DEFINED_WITH_QUALIFICATION"
+      },
+      "preserved_evidence": [
+        "All D0R, D1, D1R, D1C, D1D, and D1E results remain immutable evidence.",
+        "Strict support, explicit provenance, and the prohibition on hidden clipping remain binding."
+      ],
+      "prospectively_superseded_evidence": [
+        "ADR-003 fixed-N unweighted shape-only primary objective"
+      ],
+      "rate_shape_semantics": {
+        "statement": "Normalization may erase rate information; rate-aware use needs luminosity and producer-normalization semantics.",
+        "status": "REQUIRES_NEW_DECISION"
+      },
+      "sample_size_semantics": {
+        "statement": "Both candidate count and effective sample size are recorded; neither is silently equated with iid N.",
+        "status": "DEFINED_WITH_QUALIFICATION"
+      },
+      "signed_weights_are_probabilities": false,
+      "simulator_or_data_generating_law": {
+        "statement": "A random weighted empirical measure requires a specified proposal law and weight functional; no accepted producer currently supplies them.",
+        "status": "PARTIALLY_DEFINED"
+      },
+      "smallest_falsifiable_next_step": {
+        "statement": "Specify a positive-weight proposal/target empirical-measure law, posterior, ESS, loss, and coverage definitions.",
+        "status": "BOUNDED_MATHEMATICAL_REVIEW"
+      },
+      "support_extrapolation_rules": {
+        "statement": "Strict proposal and target support; no cross-point pool reuse or extrapolation.",
+        "status": "DEFINED"
+      },
+      "training_objective": {
+        "statement": "A proper permutation-invariant objective respecting weights and proposal randomness has not been selected.",
+        "status": "UNRESOLVED"
+      }
+    }
+  },
+  "precedence": {
+    "ARCHITECTURE_COMPARISON_READY": false,
+    "CURRENT_OPERATIONAL_POLICY": "PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION",
+    "D1C_FINAL_DECISION": "FAIL",
+    "D1D_A_FAILED_GATE": "provenance_evidence_integrity",
+    "D1D_A_FINAL_DECISION": "FAIL",
+    "D1D_B_FINAL_DECISION": "INCONCLUSIVE",
+    "D1E_FINAL_DECISION": "INCONCLUSIVE",
+    "D1E_PREFERRED_FEASIBILITY_CANDIDATE": "LLVM_CLANG_LIBTOOLING_18_1_8",
+    "D1E_SELECTED_TOOLCHAIN": null,
+    "D2_AUTHORIZED": false,
+    "MINIMAL_PUBLIC_READER_PATCH": "INSUFFICIENT",
+    "PROVENANCE_SLICE_V1_DECISION": "FAIL",
+    "PROVENANCE_SLICE_V1_STATUS": "REJECTED_DIAGNOSTIC"
+  },
+  "schema_version": "partonsbi.phase1bd.d1f.active-contract-decision.v1",
+  "scientific_scope": "Planning comparison of six active-contract choices after the generator-coupling pause.",
+  "supersession_matrix": {
+    "ADR-001_CONTINUOUS_PDF_FAMILY": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PROSPECTIVELY_SUPERSEDED",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED"
+    },
+    "ADR-002_DIRECT_GENERATION_ARTIFACT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PROSPECTIVELY_SUPERSEDED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "REQUIRES_NEW_DECISION",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED"
+    },
+    "ADR-003_EVENT_SAMPLING_SEMANTICS": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "REQUIRES_NEW_DECISION",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PROSPECTIVELY_SUPERSEDED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PROSPECTIVELY_SUPERSEDED"
+    },
+    "ADR-004_PROJECTED_BASELINE_AND_SIGN_TOPOLOGY": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PROSPECTIVELY_SUPERSEDED",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED"
+    },
+    "ADR-005_D1_EVOLUTION_AND_ARTIFACT_TRANSPORT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "ADR-006_TRANSPORT_ARCHITECTURE": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PROSPECTIVELY_SUPERSEDED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "REQUIRES_NEW_DECISION",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED"
+    },
+    "ADR-008_SIGNED_GENERATOR_TERMINAL_DECISION": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "ADR-009_AST_GRAPH_FEASIBILITY": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "D0R_EVIDENCE": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED"
+    },
+    "D1C_RESULT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "D1D_RESULT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "D1E_RESULT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "D1R_RESULT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    },
+    "D2_D5_ROADMAP": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PROSPECTIVELY_SUPERSEDED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "REQUIRES_NEW_DECISION",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "REQUIRES_NEW_DECISION",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PROSPECTIVELY_SUPERSEDED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "REQUIRES_NEW_DECISION"
+    },
+    "ISSUE_10_FULL_GENERATOR_D2": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PROSPECTIVELY_SUPERSEDED",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "REQUIRES_NEW_DECISION",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PROSPECTIVELY_SUPERSEDED",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED"
+    },
+    "NEURAL_PHASE": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "REQUIRES_NEW_DECISION",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "REQUIRES_NEW_DECISION",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "REQUIRES_NEW_DECISION",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "REQUIRES_NEW_DECISION",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "REQUIRES_NEW_DECISION"
+    },
+    "ORIGINAL_D1_RESULT": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": "PRESERVED_AS_HISTORICAL_EVIDENCE",
+      "WEIGHTED_EMPIRICAL_EVENT_SET": "PRESERVED_AS_HISTORICAL_EVIDENCE"
+    }
+  },
+  "validation": {
+    "all_authorization_flags_false": true,
+    "complete_twenty_criterion_scorecards": true,
+    "complete_twenty_field_contracts": true,
+    "decision_recomputed_from_serialized_evidence": true,
+    "exactly_six_options": true,
+    "generator": "scripts/phase1bd_d1f_active_contract_decision.py",
+    "score_totals": {
+      "LOWER_LEVEL_DIS_HARD_EVENT_MODEL": {
+        "NOT_APPLICABLE": 0,
+        "NOT_SUPPORTED": 0,
+        "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 0,
+        "SUPPORTED": 10,
+        "SUPPORTED_WITH_QUALIFICATION": 10
+      },
+      "NEW_NONNEGATIVE_GENERATOR_COMPATIBLE_PDF_FAMILY": {
+        "NOT_APPLICABLE": 0,
+        "NOT_SUPPORTED": 2,
+        "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 2,
+        "SUPPORTED": 5,
+        "SUPPORTED_WITH_QUALIFICATION": 11
+      },
+      "PRESERVE_CURRENT_CONTRACT_AND_PAUSE": {
+        "NOT_APPLICABLE": 0,
+        "NOT_SUPPORTED": 4,
+        "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 0,
+        "SUPPORTED": 9,
+        "SUPPORTED_WITH_QUALIFICATION": 7
+      },
+      "SIGNED_WEIGHT_INFERENCE_RESEARCH": {
+        "NOT_APPLICABLE": 0,
+        "NOT_SUPPORTED": 8,
+        "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 5,
+        "SUPPORTED": 2,
+        "SUPPORTED_WITH_QUALIFICATION": 5
+      },
+      "TERMINATE_PHASE1B_GENERATOR_COUPLING": {
+        "NOT_APPLICABLE": 11,
+        "NOT_SUPPORTED": 0,
+        "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 0,
+        "SUPPORTED": 8,
+        "SUPPORTED_WITH_QUALIFICATION": 1
+      },
+      "WEIGHTED_EMPIRICAL_EVENT_SET": {
+        "NOT_APPLICABLE": 0,
+        "NOT_SUPPORTED": 1,
+        "PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE": 4,
+        "SUPPORTED": 2,
+        "SUPPORTED_WITH_QUALIFICATION": 13
+      }
+    }
+  }
+}
