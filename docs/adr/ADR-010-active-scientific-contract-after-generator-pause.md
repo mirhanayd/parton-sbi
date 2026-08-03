@@ -2,202 +2,220 @@
 
 - Status: Proposed
 - Scope: Phase 1B-D1F planning only
-- Proposed decision: `RECOMMEND_LOWER_LEVEL_HARD_EVENT_CONTRACT_REVIEW`
-- Implementation authorization: `false`
+- Current-line disposition: `TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING`
+- Preferred separate contract review: `LOWER_LEVEL_DIS_HARD_EVENT_MODEL`
+- Lower-level normalized-measure status: `PASS_WITH_QUALIFICATION`
 
-## Context and immutable precedence
+## Immutable precedence
 
-The accepted PartonSBI objective is set-level inference,
-`p(theta_PDF | D)`. The D0R family remains an accepted, versioned,
-sum-rule-projected two-parameter boundary family with signed binary64 `x*f`,
-strict support, and no clipping. The initial data contract is a fixed-N,
-shape-only set of observed events.
+The following merged results remain unchanged:
 
-The fixed attempt to realize that contract through a complete generator has no
-bounded next task. D1C is `FAIL`; the minimal public-reader patch is
-`INSUFFICIENT`; provenance slice v1 is `FAIL` and
-`REJECTED_DIAGNOSTIC`; D1D-A is `FAIL` at
-`provenance_evidence_integrity`; D1D-B and D1E are `INCONCLUSIVE`.
-LLVM/Clang 18.1.8 is only D1E's preferred feasibility candidate, no toolchain
-is selected, architecture comparison is not ready, and D2 is unauthorized.
+```text
+D1C_FINAL_DECISION = FAIL
+MINIMAL_PUBLIC_READER_PATCH = INSUFFICIENT
+PROVENANCE_SLICE_V1_DECISION = FAIL
+PROVENANCE_SLICE_V1_STATUS = REJECTED_DIAGNOSTIC
+D1D_A_FINAL_DECISION = FAIL
+D1D_A_FAILED_GATE = provenance_evidence_integrity
+D1D_B_FINAL_DECISION = INCONCLUSIVE
+D1E_FINAL_DECISION = INCONCLUSIVE
+D1E_PREFERRED_FEASIBILITY_CANDIDATE = LLVM_CLANG_LIBTOOLING_18_1_8
+D1E_SELECTED_TOOLCHAIN = null
+CURRENT_OPERATIONAL_POLICY = PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION
+ARCHITECTURE_COMPARISON_READY = false
+D2_AUTHORIZED = false
+```
 
-Those results are historical evidence. This decision neither deletes nor
-upgrades them.
+The D0R family, strict support, signed binary64 `x*f`, no clipping, fixed-N
+shape-only initial objective, and set-level target `p(theta_PDF | D)` remain
+scientific evidence. Preserving that objective does not require preserving a
+failed implementation line.
 
-## Decision method
+## Two independent decision axes
 
-The v1 decision artifact defines six complete scientific contracts, scores
-each against twenty criteria, records a target-by-option supersession matrix,
-and derives each normalized-measure gate. A redesign may enter the final
-selection only if it has:
+D1F v2 separates two questions that v1 overloaded:
 
-- a normalized data-generating probability measure and coherent posterior;
-- an explicit event/set and weight representation;
-- calibration semantics and strict no-clipping behavior;
-- prospective supersession rather than silent contract drift;
-- a bounded next decision;
-- a credible end-to-end scientific MVP path; and
-- an objective change whose risk is lower than alternatives or explicitly
-  scientifically justified.
+1. Does the current D0R signed full-generator coupling line have a justified,
+   accepted, and credibly bounded continuation?
+2. Which separate prospective scientific contract deserves a bounded planning
+   review?
 
-The validator recomputes those conditions from the serialized contracts and
-scorecards. The recommendation is not stored as an independent policy switch.
+A separate redesign can be scientifically promising without continuing or
+completing the current generator line. Its preference grants no implementation
+authorization.
 
-## Option A: preserve the current contract and pause
+## Current-line evidence and disposition
 
-This option preserves D0R, signed values, strict support, fixed-N shape-only
-sets, full hard-process/ISR/remnant consistency, and the original posterior.
-Its normalized-measure gate is `PASS`: the target law and posterior are
-coherent as a contract. They are not operational because no accepted complete
-generator instantiates them.
+The validator derives the current-line evidence statuses from serialized,
+source-bound D1D/D1E claims:
 
-The option has no bounded next action. D1E's AST route is not credibly bounded,
-and signed internal-rate mathematics and alternate interfaces remain separate
-evidence decisions. Continued pause is scientifically honest but dominated by
-the bounded lower-level contract review below.
+| Evidence field | Status |
+|---|---|
+| Full-generator architecture ready | `NOT_SUPPORTED` |
+| Bounded static-evidence path exists | `NOT_SUPPORTED` |
+| Bounded signed-kernel path exists | `NOT_SUPPORTED` |
+| Bounded alternative-generator path exists | `NOT_SUPPORTED` |
+| Accepted generator measure exists | `NOT_SUPPORTED` |
+| Accepted runtime consumer closure exists | `NOT_SUPPORTED` |
+| Implementation task credibly bounded | `NOT_SUPPORTED` |
+| Current contract preserved by continuation | `NOT_SUPPORTED` |
+| Redesigns are separate contracts | `SUPPORTED` |
 
-## Option B: new nonnegative generator-compatible family
+Every accepted or bounded continuation field is `NOT_SUPPORTED`; every
+redesign is explicitly separate; all historical evidence is preserved; and no
+global impossibility is claimed. Therefore:
 
-This would be a prospectively new family and theta contract, never a
-correction to D0R. D0R would remain immutable historical evidence. The new
-family would require nonnegative evolved densities over the complete consumer
-domain, positivity-preserving interpolation, exact sum rules, explicit
-support, a new identity, and independent APFEL and generator validation.
+```text
+D1F_CURRENT_LINE_DISPOSITION =
+  TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING
+```
 
-Its gate is `PASS_WITH_QUALIFICATION`: a conventional normalized generator law
-and posterior can be stated conditionally. The scientific motivation is not
-established. Requiring an NLO family to be pointwise nonnegative merely to fit
-generator internals risks replacing a physics family with a software-driven
-prior. Evolution-wide positivity, theta design, and end-to-end validation are
-also unbounded. It is not recommended.
+This terminates only the current Phase 1B D0R signed full-generator coupling
+line. It does not reject PDF SBI, D0R evidence, lower-level simulators,
+alternative families, weighted statistical contracts, or future reviewed
+decisions.
 
-## Option C: lower-level neutral-current DIS hard-event model
+## Normalized-measure gates
 
-This option retains D0R and theta while prospectively replacing the full-
-generator transport requirement with a normalized lower-level law. A future
-contract must specify:
+| Option | Gate | Reason |
+|---|---|---|
+| A. Preserve current contract and pause | `PASS_WITH_QUALIFICATION` | The probability law and posterior are conceptually defined but no accepted simulator instantiates them. |
+| B. New nonnegative family | `PASS_WITH_QUALIFICATION` | A conventional law is conceptually possible, but family motivation, evolution-wide positivity, support, and generator proofs are absent. |
+| C. Lower-level hard-event model | `PASS_WITH_QUALIFICATION` | The mathematical form is plausible, but formulae, support, positivity, normalization, detector response, and closure remain future obligations. |
+| D. Weighted empirical event set | `PASS_WITH_QUALIFICATION` | Positive weights can define an empirical measure only after a proposal, weight, posterior, loss, ESS, and calibration contract. |
+| E. Signed-weight inference research | `FAIL` | No positive normalized data law or coherent posterior exists. |
+| F. Terminate current line | `NOT_APPLICABLE` | Termination proposes no new probability law. |
 
-- incoming electron/positron and proton states;
-- the complete neutral-current gamma, Z, and interference contribution;
-- PDF dependence, flavor summation, scales, phase space, and Jacobian;
-- a finite accepted cross section and its normalization;
-- an explicit detector response/acceptance kernel;
-- fixed-N exchangeable shape-only sampling;
-- strict PDF and phase-space support;
-- event identity, posterior, training, and calibration definitions; and
-- every omitted effect, including parton showers, hadronization, underlying
-  event, and beam remnants.
+Gate transitions use exact semantic enums. The validator does not infer
+qualification from substrings.
 
-For declared acceptance `A`, the planning law is the nonnegative differential
-hard-event measure divided by its finite integral over `A`. A fixed-N set is
-drawn from the resulting normalized detector-level density and the posterior
-is proportional to the prior times that set likelihood. Signed perturbative
-components may cancel before forming the physical rate; they are never used as
-sampling probabilities.
+## Lower-level mathematical claim scope
 
-The gate is `PASS`. The contract is a lower-level scientific model, not full-
-generator equivalence. If later accepted, it would prospectively supersede
-ADR-002/ADR-006 full-generator transport, issue #10's current D2 scope, and
-the dependent D2-D5 roadmap. It would not complete issue #10. Its first step
-is a bounded mathematical contract review, not implementation.
+Option C proposes only the form
 
-## Option D: weighted empirical event set
+```text
+z ~ p_theta(z)
+y ~ K(y | z)
+D = {y_i}_{i=1}^N
 
-Positive normalized weights can define a random empirical probability
-measure, but that object is not an ordinary iid unweighted event set. A valid
-contract would require the proposal law, weight functional, normalization,
-candidate count, ESS, rate/shape split, posterior, proper loss, resampling,
-calibration, coverage, and deployment representation. Signed weights do not
-pass as probabilities.
+p_theta(z) =
+  1_A(z) d_sigma_theta/dz
+  / integral_A d_sigma_theta/dz dz
+```
 
-The gate is `PASS_WITH_QUALIFICATION`. The producer law, proper training loss,
-and repeated-sampling calibration remain unresolved, and the option would
-prospectively supersede ADR-003's primary fixed-N unweighted objective. It has
-higher scientific-objective change risk and no credible end-to-end producer
-path, so it is not recommended.
+It is not yet a formal or executable simulator contract. The following remain
+`NOT_EVALUATED` proof obligations:
 
-## Option E: signed-weight inference research
+1. exact electron and positron neutral-current differential formula;
+2. F2, FL, and xF3 conventions and signs;
+3. gamma, Z, and interference terms;
+4. electroweak parameter scheme;
+5. factorization and renormalization scales;
+6. flavor and heavy-quark treatment;
+7. phase-space coordinates and Jacobian;
+8. finite, nonzero normalization for every accepted theta;
+9. nonnegative complete differential rate on accepted support;
+10. strict PDF-support intersection;
+11. detector/acceptance-kernel normalization;
+12. perfect-detector identity-kernel special case;
+13. independent numerical closure; and
+14. explicit omitted-physics declaration.
 
-A signed finite sample is currently an estimator, not a normalized positive
-data law. No coherent posterior, proper loss, or calibration/coverage target
-has been established. Negative MC@NLO weights do not establish that signed
-event sets are inference distributions.
+The prospective contract omits ISR, parton showering, hadronization,
+underlying event, and beam remnants. It cannot claim full-generator
+equivalence.
 
-The gate is `FAIL`. This remains potentially valuable mathematical research,
-but it is open-ended and cannot be selected as implementation planning.
+## Separate-review prioritization
 
-## Option F: terminate the current Phase 1B generator-coupling line
+For each redesign, the validator derives thirteen statuses from option fields,
+criterion-level evidence, and supersession records: measure, posterior,
+representation, weights, calibration, no clipping, supersession, bounded
+review, MVP path, objective change, scientific motivation, implementation
+boundedness, and validation boundedness.
 
-Termination would be scoped to the fixed D0R signed full-generator route. It
-would not claim that PDF SBI, all generators, lower-level models, or changed
-contracts are impossible. Its measure gate is `NOT_APPLICABLE` because it
-defines no new data law.
+| Separate review | Eligible | Binding reason |
+|---|:---:|---|
+| New nonnegative family | No | MVP, implementation, validation, and scientific motivation are unavailable; objective-change risk is not supported. |
+| Lower-level hard-event model | Yes | All review-critical statuses are supported or qualified; omissions and supersession are explicit; implementation readiness is not claimed. |
+| Weighted empirical event set | No | Calibration and MVP path are unavailable, and objective-change risk is not supported. |
+| Signed-weight inference research | No | The normalized measure, posterior, weights, calibration, and MVP path are not supported. |
 
-The current full-generator route is unbounded, but Option C supplies a bounded,
-scientifically motivated separate contract review. Termination is therefore
-not selected at this planning point.
+Thus:
 
-## Scorecard result
+```text
+D1F_PREFERRED_SEPARATE_CONTRACT_REVIEW =
+  LOWER_LEVEL_DIS_HARD_EVENT_MODEL
+```
 
-Legend: S = `SUPPORTED`, Q = `SUPPORTED_WITH_QUALIFICATION`, N =
-`NOT_SUPPORTED`, U = `PRIMARY_OR_MATHEMATICAL_EVIDENCE_UNAVAILABLE`, A =
-`NOT_APPLICABLE`.
+This preference is a planning priority, not continuation of the terminated
+line and not authorization.
 
-| Option | S | Q | N | U | A |
+## Criterion-specific scorecards
+
+Every one of the 120 option/criterion cells records a unique
+criterion-specific rationale, evidence IDs, claim keys, current-line
+implication, and separate-review implication.
+
+| Option | Supported | Qualified | Not supported | Unavailable | N/A |
 |---|---:|---:|---:|---:|---:|
-| A preserve and pause | 9 | 7 | 4 | 0 | 0 |
-| B new nonnegative family | 5 | 11 | 2 | 2 | 0 |
-| C lower-level hard-event law | 10 | 10 | 0 | 0 | 0 |
-| D weighted empirical set | 2 | 13 | 1 | 4 | 0 |
-| E signed-weight research | 2 | 5 | 8 | 5 | 0 |
-| F terminate current line | 8 | 1 | 0 | 0 | 11 |
+| A. Preserve and pause | 7 | 7 | 5 | 1 | 0 |
+| B. New nonnegative family | 5 | 9 | 2 | 4 | 0 |
+| C. Lower-level hard-event model | 8 | 12 | 0 | 0 | 0 |
+| D. Weighted empirical set | 2 | 12 | 1 | 5 | 0 |
+| E. Signed-weight research | 2 | 5 | 8 | 5 | 0 |
+| F. Terminate current line | 8 | 1 | 0 | 0 | 11 |
 
-The machine-readable artifact contains all 120 criterion cells and their
-scope-specific rationales.
+Changing a score without its curated evidence claim, reusing a generic
+rationale, or exceeding a cited source's claim scope fails validation.
 
-## Proposed decision
+## Supersession
 
-The sole redesign satisfying the normalized-measure, posterior, no-clipping,
-prospective-supersession, bounded-next-decision, credible-MVP, and justified-
-objective-change conditions is:
+Current-line termination prospectively supersedes or closes issue #10's
+current full-generator D2 scope and prospectively supersedes the current
+full-generator D2-D5 roadmap.
+
+The preferred lower-level review independently:
+
+- preserves ADR-001, ADR-004, and D0R;
+- requires explicit confirmation of ADR-003 fixed-N shape-only semantics;
+- prospectively supersedes ADR-002 and ADR-006 full-generator requirements;
+- does not complete issue #10; and
+- requires a new Neural-phase decision.
+
+All D0R, D1, D1R, D1C, D1D, and D1E negative or qualified results remain
+historical evidence.
+
+## Top-level decision
+
+The top-level field represents the primary current-line disposition:
 
 ```text
-RECOMMEND_LOWER_LEVEL_HARD_EVENT_CONTRACT_REVIEW
+decision = TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING
+preferred_separate_contract_review = LOWER_LEVEL_DIS_HARD_EVENT_MODEL
 ```
 
-This is a planning recommendation. It does not authorize a simulator,
-implementation, PDF change, event generation, dataset, neural training, or
-D2.
+The separate preference does not prevent or reverse termination.
 
-## Static validation
-
-The phase-scoped record is validated with:
+## Authorization boundary
 
 ```text
-python3 scripts/phase1bd_d1f_active_contract_decision.py --validate
-python3 -m json.tool docs/phase1bd_d1f_active_contract_decision.json >/dev/null
-python3 -m pytest -q analysis/tests/test_d1f_active_contract_decision.py
-cargo fmt --all -- --check
-git diff --check
+LOWER_LEVEL_SIMULATOR_AUTHORIZED = false
+EVENT_GENERATION_AUTHORIZED = false
+DATASET_AUTHORIZED = false
+NEURAL_TRAINING_AUTHORIZED = false
+D2_AUTHORIZED = false
 ```
 
-All commands pass. The focused suite contains 20 tests, including the 15
-required adversarial mutations. The unresolved scientific limitations remain
-the absence of an accepted complete generator law, the lower-level model's
-not-yet-reviewed matrix element/phase-space/detector details, and the explicit
-omission of ISR, hadronization, and remnants. No numerical physics validation
-was run or implied.
+All other implementation and prototype authorization fields are also false.
+Issue #10 and D2 remain blocked during this draft.
 
-## Consequences and next step
+## Static validation and next step
 
-Issue #10 remains open, blocked, and unauthorized under its existing full-
-generator scope. D2 remains unauthorized. A later acceptance of a lower-level
-contract would require an explicit new roadmap decision and would supersede,
-not complete, that scope.
+The deterministic validator recomputes both decision axes, all gates, all
+separate-review eligibility fields, score totals, supersession effects, the
+top-level decision, and authorization state. The focused suite has 29 tests,
+including 22 direct adversarial mutations.
 
-The exact next step is scientific review of a planning-only lower-level NC DIS
-hard-event contract: normalized gamma/Z/interference measure, phase space,
-detector kernel, omissions, posterior, calibration, and independent validation
-gates. No implementation belongs in that review.
-
-All twelve authorization flags in the v1 artifact are `false`.
+The only next step is planning review of the fourteen formal lower-level
+contract obligations. No implementation, numerical closure, generator, event,
+dataset, neural, or D2 work is authorized by that review.

@@ -1,4 +1,4 @@
-"""Adversarial tests for the planning-only Phase 1B-D1F decision."""
+"""Adversarial tests for the two-axis Phase 1B-D1F v2 decision."""
 
 from __future__ import annotations
 
@@ -15,6 +15,8 @@ SPEC = importlib.util.spec_from_file_location("d1f_decision", MODULE_PATH)
 assert SPEC and SPEC.loader
 d1f = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(d1f)
+
+A, B, C, D, E, F = d1f.OPTION_IDS
 
 
 @pytest.fixture()
@@ -35,27 +37,41 @@ def test_committed_artifact_is_valid_and_deterministic(record: dict) -> None:
     assert path.read_text(encoding="utf-8") == d1f.serialized(record)
 
 
-def test_exactly_six_complete_option_contracts(record: dict) -> None:
-    assert set(record["options"]) == set(d1f.OPTION_IDS)
-    for option in record["options"].values():
-        assert set(d1f.CONTRACT_FIELDS).issubset(option)
-
-
-def test_all_twenty_criterion_scorecards_are_complete(record: dict) -> None:
-    for card in record["option_scorecards"].values():
-        assert set(card) == set(d1f.CRITERIA)
-    assert record["validation"]["score_totals"] == d1f.score_totals(
-        record["option_scorecards"]
+def test_current_line_disposition_is_independently_derived(record: dict) -> None:
+    assert d1f.derive_current_line_disposition(record) == (
+        "TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING"
+    )
+    assert record["current_line_disposition"] == (
+        "TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING"
     )
 
 
-def test_decision_is_derived_from_serialized_evidence(record: dict) -> None:
-    assert d1f.derive_decision(record) == (
-        "RECOMMEND_LOWER_LEVEL_HARD_EVENT_CONTRACT_REVIEW"
+def test_preferred_separate_review_is_independently_derived(record: dict) -> None:
+    assert d1f.derive_preferred_review(record) == C
+    assert record["preferred_separate_contract_review"] == C
+    assert record["separate_review_eligibility"][C]["preferred_review_eligible"]
+    assert not any(
+        record["separate_review_eligibility"][option]["preferred_review_eligible"]
+        for option in (B, D, E)
     )
-    assert record["derived_decision_inputs"]["eligible_redesign_options"] == [
-        "LOWER_LEVEL_DIS_HARD_EVENT_MODEL"
-    ]
+
+
+def test_lower_level_measure_gate_remains_qualified(record: dict) -> None:
+    assert record["normalized_measure_gate"][C]["status"] == (
+        "PASS_WITH_QUALIFICATION"
+    )
+    assert all(
+        row["status"] == "NOT_EVALUATED"
+        for row in record["options"][C]["proof_obligations"]
+    )
+
+
+def test_top_level_decision_follows_current_line_axis(record: dict) -> None:
+    assert record["decision"] == "TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING"
+    assert d1f.derive_top_level_decision(
+        record["current_line_disposition"],
+        record["preferred_separate_contract_review"],
+    ) == record["decision"]
 
 
 def test_all_authorization_flags_are_false(record: dict) -> None:
@@ -63,106 +79,149 @@ def test_all_authorization_flags_are_false(record: dict) -> None:
     assert all(value is False for value in record["authorization"].values())
 
 
+def test_issue_10_and_d2_remain_blocked(record: dict) -> None:
+    assert record["dependencies"]["issue_10"] == {
+        "number": 10,
+        "state": "OPEN_BLOCKED",
+        "completed_by_lower_level_model": False,
+        "authorization": "NOT_AUTHORIZED",
+    }
+    assert record["dependencies"]["D2"] == "BLOCKED_AND_UNAUTHORIZED"
+
+
 def m01(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[2]]["normalized_probability_measure"][
-        "status"
-    ] = "NOT_SUPPORTED"
+    record["normalized_measure_gate"][A]["status"] = "PASS"
 
 
 def m02(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[2]]["posterior_target"]["status"] = (
-        "NOT_SUPPORTED"
-    )
+    record["normalized_measure_gate"][C]["status"] = "PASS"
 
 
 def m03(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[4]]["signed_weights_are_probabilities"] = True
+    record["options"][C]["proof_obligations"].pop()
 
 
 def m04(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[3]]["observed_event_set_representation"][
-        "statement"
-    ] = "Treat weighted events as ordinary iid unweighted events."
+    record["options"][C]["complete_rate_positivity_proven"] = True
 
 
 def m05(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[1]]["active_pdf_family_identity"][
-        "statement"
-    ] = "Correct D0R in place to force nonnegativity."
+    record["options"][C]["detector_kernel_normalization_proven"] = True
 
 
 def m06(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[2]]["issue_roadmap_implications"][
-        "statement"
-    ] = "This completes issue #10 under its existing contract."
+    record["separate_review_eligibility"][C]["credible_mvp_path_status"] = (
+        "SUPPORTED"
+    )
 
 
 def m07(record: dict) -> None:
-    record["supersession_matrix"]["ADR-003_EVENT_SAMPLING_SEMANTICS"][
-        d1f.OPTION_IDS[3]
-    ] = "PRESERVED"
+    record["separate_review_eligibility"][D]["objective_change_status"] = (
+        "SUPPORTED"
+    )
 
 
 def m08(record: dict) -> None:
-    record["precedence"]["D1D_A_FINAL_DECISION"] = "PASS"
-
-
-def m09(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[2]][
-        "hidden_clipping_or_semantic_repair"
+    record["derived_decision_inputs"][
+        "current_objective_remains_scientifically_worth_preserving"
     ] = True
 
 
+def m09(record: dict) -> None:
+    record["options"][C]["relationship_to_current_line"] = (
+        "CURRENT_LINE_CONTINUATION"
+    )
+
+
 def m10(record: dict) -> None:
-    record["options"][d1f.OPTION_IDS[2]]["calibration_coverage_target"][
-        "status"
-    ] = "UNRESOLVED"
+    record["termination_scope"]["historical_negative_evidence_preserved"] = False
 
 
 def m11(record: dict) -> None:
-    record["authorization"]["LOWER_LEVEL_SIMULATOR_AUTHORIZED"] = True
+    record["dependencies"]["issue_10"]["completed_by_lower_level_model"] = True
 
 
 def m12(record: dict) -> None:
-    record["authorization"]["D2_AUTHORIZED"] = True
+    record["option_scorecards"][C]["detector_model_feasibility"]["status"] = (
+        "SUPPORTED"
+    )
 
 
 def m13(record: dict) -> None:
-    record["decision"] = "MAINTAIN_CURRENT_CONTRACT_AND_PAUSE"
+    generic = "One generic rationale is repeated and does not distinguish the criterion-specific evidence or its implications."
+    for cell in record["option_scorecards"][C].values():
+        cell["criterion_specific_rationale"] = generic
 
 
 def m14(record: dict) -> None:
-    record["supersession_matrix"]["ISSUE_10_FULL_GENERATOR_D2"][
-        d1f.OPTION_IDS[2]
-    ] = "PRESERVED"
+    record["supersession_matrix"]["redesign_option_effects"][C] = {}
 
 
 def m15(record: dict) -> None:
+    record["options"][C]["smallest_falsifiable_next_step"]["status"] = (
+        "OPEN_ENDED_RESEARCH"
+    )
+
+
+def m16(record: dict) -> None:
+    record["preferred_separate_contract_review"] = E
+
+
+def m17(record: dict) -> None:
+    record["current_line_evidence"]["bounded_static_evidence_path_exists"][
+        "status"
+    ] = "SUPPORTED"
+
+
+def m18(record: dict) -> None:
+    record["authorization"]["LOWER_LEVEL_SIMULATOR_AUTHORIZED"] = True
+
+
+def m19(record: dict) -> None:
+    record["authorization"]["EVENT_GENERATION_AUTHORIZED"] = True
+
+
+def m20(record: dict) -> None:
+    record["authorization"]["D2_AUTHORIZED"] = True
+
+
+def m21(record: dict) -> None:
     record["next_step"]["action"] = "IMPLEMENT_LOWER_LEVEL_SIMULATOR"
     record["next_step"]["implementation"] = True
 
 
+def m22(record: dict) -> None:
+    record["decision"] = "RECOMMEND_LOWER_LEVEL_HARD_EVENT_CONTRACT_REVIEW"
+
+
 ADVERSARIAL_MUTATIONS: tuple[tuple[str, Callable[[dict], None]], ...] = (
-    ("recommend_without_normalized_measure", m01),
-    ("recommend_without_posterior", m02),
-    ("signed_weights_as_probabilities", m03),
-    ("weighted_events_as_iid", m04),
-    ("d0r_silently_replaced", m05),
-    ("lower_level_claims_issue_10_complete", m06),
-    ("weighted_set_omits_adr_003_supersession", m07),
-    ("historical_negative_removed", m08),
-    ("recommended_option_clips", m09),
-    ("recommend_without_calibration", m10),
-    ("implementation_authorization_true", m11),
-    ("d2_authorization_true", m12),
-    ("decision_hardcoded_against_scorecard", m13),
-    ("supersession_matrix_changed", m14),
-    ("planning_step_becomes_implementation", m15),
+    ("option_a_unqualified_pass", m01),
+    ("option_c_unqualified_pass", m02),
+    ("lower_level_obligation_removed", m03),
+    ("complete_rate_positivity_prematurely_proven", m04),
+    ("detector_kernel_normalization_prematurely_proven", m05),
+    ("mvp_status_manually_forced", m06),
+    ("risk_status_manually_forced", m07),
+    ("unconditional_preserve_boolean_added", m08),
+    ("redesign_claimed_as_current_line_continuation", m09),
+    ("termination_deletes_historical_negative", m10),
+    ("lower_level_claims_issue_10_completion", m11),
+    ("criterion_score_changed_without_claim", m12),
+    ("generic_rationale_reused", m13),
+    ("prospective_supersession_removed", m14),
+    ("bounded_planning_review_removed", m15),
+    ("signed_weight_research_selected", m16),
+    ("current_line_bounded_without_evidence", m17),
+    ("lower_level_simulator_authorized", m18),
+    ("event_generation_authorized", m19),
+    ("d2_authorized", m20),
+    ("next_step_becomes_implementation", m21),
+    ("top_level_decision_inconsistent", m22),
 )
 
 
 @pytest.mark.parametrize(("name", "mutate"), ADVERSARIAL_MUTATIONS)
-def test_adversarial_mutation_is_rejected(
+def test_direct_semantic_mutation_is_rejected(
     record: dict, name: str, mutate: Callable[[dict], None]
 ) -> None:
     del name

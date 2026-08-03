@@ -320,30 +320,47 @@
   nodes/edges were generated. Issue #45 is closed as completed planning with
   `INCONCLUSIVE`; issue #10 and D2 remain blocked under
   `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`.
-- Phase 1B-D1F now proposes the evidence-derived planning recommendation
-  `RECOMMEND_LOWER_LEVEL_HARD_EVENT_CONTRACT_REVIEW`. It does not select or
-  authorize a simulator implementation.
+- Phase 1B-D1F v2 independently derives two results:
+  `D1F_CURRENT_LINE_DISPOSITION =
+  TERMINATE_CURRENT_PHASE1B_GENERATOR_COUPLING` and
+  `D1F_PREFERRED_SEPARATE_CONTRACT_REVIEW =
+  LOWER_LEVEL_DIS_HARD_EVENT_MODEL`.
+- The current D0R signed full-generator coupling line has no supported
+  architecture, accepted generator measure, runtime consumer closure, bounded
+  static-evidence route, bounded signed-kernel route, bounded alternative-
+  generator route, or credibly bounded implementation task. All redesigns are
+  explicitly separate prospective contracts. Termination follows without a
+  hardcoded preserve boolean.
+- Current-line termination is scoped. It does not reject PDF SBI, D0R evidence,
+  lower-level event laws, new PDF families, weighted statistical contracts, or
+  future separately reviewed decisions. Preserving the scientific objective
+  does not require preserving the failed implementation line.
 - The six reviewed choices are: preserve the current D0R/full-generator
   contract and pause; define a prospectively new nonnegative family; define a
   lower-level neutral-current DIS hard-event law; adopt a weighted empirical
   event-set objective; create signed-weight inference research; or terminate
   the current Phase 1B full-generator line.
-- Normalized-measure gates are `PASS` for the preserved contract and the
-  lower-level hard-event contract, `PASS_WITH_QUALIFICATION` for a new
-  nonnegative family and positive weighted empirical measures, `FAIL` for the
-  current signed-weight research object, and `NOT_APPLICABLE` for termination.
-- The lower-level option defines a fixed-N exchangeable law from a finite,
-  nonnegative full neutral-current gamma/Z/interference differential hard-event
-  cross section normalized over declared acceptance and composed with an
-  explicit detector kernel. Signed perturbative components may cancel before
-  the physical rate; they are not sampling probabilities.
+- Normalized-measure gates are `PASS_WITH_QUALIFICATION` for the preserved
+  contract, a new nonnegative family, the lower-level hard-event model, and a
+  positive weighted empirical measure; `FAIL` for signed-weight research; and
+  `NOT_APPLICABLE` for termination. Option A is not operationally instantiated.
+  Option C has only a plausible mathematical form, not a completed measure.
+- The lower-level option proposes `z ~ p_theta(z)`, `y ~ K(y|z)`, and a fixed-N
+  set `D={y_i}`, with `p_theta` proportional to the accepted full neutral-
+  current differential rate. Exact electron/positron formulae, F2/FL/xF3
+  conventions, gamma/Z/interference terms, electroweak scheme, scales, flavors,
+  phase-space Jacobian, finite normalization, complete-rate positivity, strict
+  support, detector-kernel normalization, identity-kernel case, independent
+  numerical closure, and omitted-physics declaration remain unevaluated proof
+  obligations.
 - The lower-level observation is not a full-generator event. Its future
   contract must enumerate omitted ISR, showering, hadronization, underlying
   event, and beam-remnant effects and may not claim full-generator equivalence.
 - A future accepted lower-level contract would prospectively supersede
   ADR-002/ADR-006 full-generator transport, issue #10's current D2 scope, and
-  the dependent D2-D5 roadmap. It would supersede rather than complete issue
-  #10 and would require an explicit new roadmap decision.
+  the dependent D2-D5 roadmap. The current-line termination prospectively
+  supersedes or closes issue #10's current full-generator scope. A lower-level
+  model does not complete issue #10 and requires an explicit new roadmap.
 - The nonnegative-family option would be a new active family and theta
   contract, not a correction to D0R. D0R remains immutable evidence. The
   scientific justification for imposing NLO nonnegativity for generator
@@ -363,20 +380,28 @@
 - Issue #47 is planning-only work. Issue #10 remains open and blocked; D2,
   event generation, datasets, neural training, every implementation, and every
   prototype remain unauthorized.
+- `LOWER_LEVEL_NORMALIZED_MEASURE_STATUS = PASS_WITH_QUALIFICATION`,
+  `LOWER_LEVEL_SIMULATOR_AUTHORIZED = false`,
+  `EVENT_GENERATION_AUTHORIZED = false`, `DATASET_AUTHORIZED = false`,
+  `NEURAL_TRAINING_AUTHORIZED = false`, and `D2_AUTHORIZED = false`.
+- The lower-level review is preferred only because its measure, posterior,
+  representation, weights, calibration, no-clipping rule, supersession,
+  bounded review, plausible MVP path, scoped objective change, motivation, and
+  validation burden are supported or explicitly qualified. No implementation
+  readiness is claimed.
 - No PYTHIA continuous-PDF coupling, direct event corpus, sampling method,
   dataset, or amortized posterior model exists.
 
 # Next scientific action
 
 ```text
-SCIENTIFIC_REVIEW_OF_LOWER_LEVEL_NC_DIS_HARD_EVENT_CONTRACT
+SCIENTIFIC_REVIEW_OF_FORMAL_LOWER_LEVEL_NC_DIS_HARD_EVENT_CONTRACT
 ```
 
-This is a planning-only review of the normalized full gamma/Z/interference
-hard-event measure, phase space, detector kernel, omissions, posterior,
-calibration, and independent validation gates in ADR-010 and the D1F v1
-artifact. It authorizes no implementation, parser, generator, event, dataset,
-neural, issue #10, or D2 work.
+This is a planning-only review of the fourteen formal proof obligations in
+ADR-010 and the D1F v2 artifact. It authorizes no lower-level simulator,
+implementation, parser, generator, event, dataset, numerical closure, neural,
+issue #10, or D2 work.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
