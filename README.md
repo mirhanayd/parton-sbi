@@ -14,6 +14,11 @@ D = {event_1, ..., event_N},
 
 with target posterior `p(theta_PDF | D)`. The objective is not to determine an instantaneous PDF for one proton from one event.
 
+The maintenance-only [Phase 1B closeout](docs/PHASE1B_CLOSEOUT.md) and its
+[machine-readable manifest](docs/phase1b_closeout_manifest.json) freeze the
+accepted evidence identities, decisions, lineage, pause, and authorization
+boundaries without selecting further work.
+
 ## Implemented capabilities
 
 - exact finite-mass electron and proton beam four-vectors and inclusive DIS kinematics;
