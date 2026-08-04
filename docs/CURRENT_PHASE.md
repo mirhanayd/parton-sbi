@@ -46,6 +46,46 @@
 
 # Current state
 
+- Phase 1B-D1F is merged with
+  `D1F_FINAL_DECISION = MAINTAIN_CURRENT_CONTRACT_AND_PAUSE`; the active
+  full-generator line remains paused and no redesign is an active contract.
+- Phase 1B-D1G is a planning-only independent primary-evidence review of four
+  separate prospective contracts. The corrected v2 evidence-derived result is
+  `NO_UNIQUE_PRIORITY_MAINTAIN_PAUSE`: every candidate is ineligible because
+  preference-critical evidence remains unavailable.
+- D1G v1 was never merged and is not immutable scientific state. Its
+  independent audit found five verified, seven qualified, and one contradicted
+  source identity; 14 claim scopes were overstated and one was misbound. The
+  corrected registry has five verified and eight qualified identities.
+- The contradicted D'Agostini record now uses the exact 1995 publisher DOI,
+  article identity, and publication date. The Höcker-Kartvelishvili arXiv URL
+  and hash are removed. No official downloadable article bytes were available,
+  so its hash is null and its contextual limitation is explicit.
+- The explicit 72-cell audited ledger yields qualified/unavailable totals of
+  7/11 for Candidate B, 7/11 for Candidate C, 8/10 for Candidate D, and 9/9
+  for Candidate E. Missing evidence is not converted into incompatibility.
+- Candidate C is
+  `SCIENTIFICALLY_MOTIVATED_COMPONENTS_PRESENT_BUT_PRIORITY_GATES_UNMET`.
+  HERA formulae, unfolding context, SBC, and Deep Sets components do not define
+  a normalized measure, coherent posterior, forward detector law, or composite
+  end-to-end MVP. All fourteen mathematical, physics, support, detector, and
+  closure obligations remain `NOT_EVALUATED`.
+- The independent-evidence gate requires complete primary coverage of every
+  preference-critical claim. The composite MVP separately requires nine
+  physical-law, normalization, detector, representation, target, calibration,
+  implementation, validation, and infrastructure components. Both gates remain
+  unavailable for all four candidates.
+- Validation is limited to deterministic artifact construction, identity and
+  audited-ledger integrity, scope/maximum enforcement, derivation, and frozen
+  boundaries. It does not independently re-read publications or prove
+  scientific correctness, future source availability, discharged obligations,
+  or executable validity.
+- The next action is `MAINTAIN_PAUSE_PENDING_PREFERENCE_CRITICAL_EVIDENCE`;
+  no lower-level contract proposal or other task is authorized. The active
+  policy remains `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`.
+- Issue #49 remains open planning work. Issue #10 remains open, blocked, and
+  unauthorized; D2 remains Blocked; D3-D5 remain Backlog; no roadmap
+  supersession is active and all twelve authorization flags remain false.
 - CLI and batch-oriented DIS research infrastructure.
 - APFEL++, LHAPDF, PYTHIA 8, HepMC3, and Candle surrogate retained.
 - No Cornell demo.
@@ -409,14 +449,15 @@
 # Next scientific action
 
 ```text
-INDEPENDENT_EVIDENCE_REVIEW_FOR_SEPARATE_CONTRACT_PRIORITY
+MAINTAIN_PAUSE_PENDING_PREFERENCE_CRITICAL_EVIDENCE
 ```
 
-This is a planning-only review of independent scientific motivation and
-load-bearing evidence for separate-contract priority. Option C's fourteen
-formal obligations remain unevaluated. The review authorizes no lower-level
-simulator, implementation, parser, generator, event, dataset, numerical
-closure, neural, issue #10, or D2 work.
+No new contract review is created. Another priority review is warranted only
+after independent evidence addresses a candidate's normalized measure,
+posterior, no-hidden-repair, and composite MVP gaps. Candidate C's fourteen
+obligations remain `NOT_EVALUATED`. The maintained pause authorizes no
+lower-level simulator, implementation, parser, generator, event, dataset,
+numerical closure, neural work, issue #10, roadmap supersession, or D2 work.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
