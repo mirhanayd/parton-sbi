@@ -46,6 +46,28 @@
 
 # Current state
 
+- Phase 1B-D1F is merged with
+  `D1F_FINAL_DECISION = MAINTAIN_CURRENT_CONTRACT_AND_PAUSE`; the active
+  full-generator line remains paused and no redesign is an active contract.
+- Phase 1B-D1G is a planning-only independent primary-evidence review of four
+  separate prospective contracts. Its proposed evidence-derived result is
+  `PRIORITIZE_LOWER_LEVEL_DIS_CONTRACT_REVIEW` because exactly one candidate
+  passes the ten planning-priority gates.
+- The D1G priority is not implementation authorization and does not change the
+  active scientific contract. Option C remains a reduced, non-full-generator
+  proposal; all fourteen mathematical, physics, support, detector, and closure
+  obligations remain `NOT_EVALUATED`.
+- The D1G registry binds thirteen primary sources: three for the nonnegative
+  family, four for lower-level DIS, three for positive weighted empirical
+  sets, and three for signed-weight research. Repository decisions constrain
+  the review but do not independently prove preference.
+- New-family evidence does not supply a complete observation law or MVP;
+  weighted-empirical evidence does not supply a posterior on random weighted
+  observed sets; negative NLO event weights remain estimator contributions,
+  not signed probabilities.
+- Issue #49 remains open planning work. Issue #10 remains open, blocked, and
+  unauthorized; D2 remains Blocked; D3-D5 remain Backlog; no roadmap
+  supersession is active and all twelve authorization flags remain false.
 - CLI and batch-oriented DIS research infrastructure.
 - APFEL++, LHAPDF, PYTHIA 8, HepMC3, and Candle surrogate retained.
 - No Cornell demo.
@@ -409,14 +431,13 @@
 # Next scientific action
 
 ```text
-INDEPENDENT_EVIDENCE_REVIEW_FOR_SEPARATE_CONTRACT_PRIORITY
+CREATE_SEPARATE_LOWER_LEVEL_DIS_CONTRACT_REVIEW_PROPOSAL
 ```
 
-This is a planning-only review of independent scientific motivation and
-load-bearing evidence for separate-contract priority. Option C's fourteen
-formal obligations remain unevaluated. The review authorizes no lower-level
-simulator, implementation, parser, generator, event, dataset, numerical
-closure, neural, issue #10, or D2 work.
+This is a later planning proposal only. It must review all fourteen Option C
+obligations without presuming PASS. It authorizes no lower-level simulator,
+implementation, parser, generator, event, dataset, numerical closure, neural,
+issue #10, roadmap supersession, or D2 work.
 
 The approved design's later APFEL and fixed-envelope proposals remain
 unimplemented hypotheses.
