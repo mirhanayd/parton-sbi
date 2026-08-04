@@ -27,6 +27,8 @@ def rejects(value: dict, match: str | None = None) -> None:
 
 
 def test_committed_manifest_validates_with_full_lineage() -> None:
+    if closeout.is_shallow_repository(ROOT):
+        pytest.skip("full merge-lineage validation requires non-shallow Git history")
     closeout.validate_manifest(manifest(), ROOT, verify_git=True)
 
 
