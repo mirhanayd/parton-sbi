@@ -6,8 +6,10 @@ This is a maintenance-only closeout of the accepted Phase 1A and Phase 1B
 record at main commit `0acd10e0e27a5ae60cef31827f09ec77f3fccb33` (tree
 `703e5f404c90e2773444adb0b1892f7a9308507d`). It adds no scientific result,
 changes no accepted result, selects no candidate, and authorizes no later work.
-The machine-readable authority is
-[`phase1b_closeout_manifest.json`](phase1b_closeout_manifest.json).
+The machine-readable authority is the
+[`partonsbi.phase1b.closeout-manifest.v2` manifest](phase1b_closeout_manifest.json),
+which separates immutable repository state from an observed GitHub snapshot
+and its expected post-merge lifecycle.
 
 The inference unit remains a set of events,
 `D = {event_1, ..., event_N}`, with long-term target
@@ -98,9 +100,13 @@ The exact status capitalization is historical and intentionally preserved.
 | #48 | merge commit | `fc1949b8f3e6f21e48db84f89419a04c56bbcfec` | `8e270b4bd6c1c6476ab476d00c3c2ad2213d5eed` | reviewed branch history preserved |
 | #50 | merge commit | `0acd10e0e27a5ae60cef31827f09ec77f3fccb33` | `80323f5b9725e3e32d1a5b52655620e2d0362a71` | reviewed branch history preserved |
 
-The validator checks the recorded parents against full local Git history. It
-does not pretend that the squashed PR #40 and #41 branch heads are ancestors of
-main.
+Every row combines local Git and GitHub PR metadata. The validator checks the
+recorded commit parents against full local Git history. For merge commits, the
+reviewed head is the locally verifiable second parent. For squashed PRs #40
+and #41, the squash commit and its first-parent relationship are locally
+verifiable, but the reviewed branch heads come from GitHub PR metadata and are
+not claimed to remain independently available or ancestry-verifiable in every
+fresh clone.
 
 ## Active pause, roadmap, and authorization boundary
 
@@ -109,10 +115,17 @@ full-generator line is paused because no bounded continuation has been
 established. No preferred or active scientific candidate and no implementation
 next step exists. This pause is not a proof that PDF SBI is impossible.
 
-Issue #51 is the open closeout-maintenance record. Issue #10 remains open,
-`Blocked`, `Not Evaluated`, and `Not Authorized`. D2 remains `Blocked`; D3-D5
-remain `Backlog`. No roadmap supersession and no next-phase selection is
-active.
+At inventory time (`2026-08-04T23:18:27Z`) issue #51 was open and `In
+Progress`, with `Not Evaluated / Planning Only` Project fields. After a
+successful merge it is expected to be closed as completed maintenance work
+with `Done / INCONCLUSIVE / Completed` Project fields. Live GitHub state is
+not verified by the offline repository validator, and this correction neither
+pre-closes nor mutates the issue.
+
+Issue #10 is an active expected policy boundary and must remain `OPEN /
+Blocked / Not Evaluated / Not Authorized`; it is not completed by this
+closeout. D2 remains `Blocked`; D3-D5 remain `Backlog`. No roadmap
+supersession and no next-phase selection is active.
 
 All authorization flags are false: implementation, prototype, PDF-family
 redesign, lower-level simulator, weighted-set objective, signed-weight
@@ -145,15 +158,17 @@ cargo fmt --all -- --check
 git diff --check
 ```
 
-The validator checks canonical serialization, paths, schemas, file SHA-256
-identities, decision payload invariants, ADR statuses and identities, the seven
-recorded merge parent relationships, the generated-from tree, issue and
-roadmap boundaries, the pause, reopen conditions, and all authorization flags.
-It requires full Git history for the CLI lineage check; focused mutation tests
-can disable only that Git-history portion for deterministic fixtures.
+The offline validator proves repository artifact and ADR byte identities,
+local Git commit and parent relationships, frozen repository-policy
+consistency, and the integrity of the recorded external-state snapshot and
+expected lifecycle fields. It requires full Git history for the CLI lineage
+check; focused mutation tests can disable only that Git-history portion for
+deterministic fixtures. The offline validator itself contacts no internet.
 
-This validation does not rerun physics, re-read external publications, prove
-scientific correctness, establish runtime behavior, execute a generator, or
-authorize future work. The sole next action is maintenance: preserve the
-accepted evidence and pause until a separately reviewed non-authorizing reopen
-condition is satisfied.
+GitHub issue, Project, and PR metadata were used to construct the inventory.
+The validator does not prove live GitHub issue state, live Project fields, live
+PR metadata, external branch-head availability after deletion, or scientific
+correctness beyond accepted-record consistency. It does not rerun physics,
+establish runtime behavior, execute a generator, or authorize future work.
+The sole next action is maintenance: preserve the accepted evidence and pause
+until a separately reviewed non-authorizing reopen condition is satisfied.

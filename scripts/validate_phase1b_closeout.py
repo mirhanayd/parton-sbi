@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "partonsbi.phase1b.closeout-manifest.v1"
+SCHEMA = "partonsbi.phase1b.closeout-manifest.v2"
 MANIFEST_PATH = "docs/phase1b_closeout_manifest.json"
 GENERATED_FROM_MAIN = "0acd10e0e27a5ae60cef31827f09ec77f3fccb33"
 GENERATED_FROM_TREE = "703e5f404c90e2773444adb0b1892f7a9308507d"
@@ -263,7 +263,7 @@ def lineage(
     reviewed_branch_head: str,
     preserved: bool,
 ) -> dict[str, Any]:
-    return {
+    record = {
         "pr_number": pr_number,
         "merge_commit": merge_commit,
         "first_parent": first_parent,
@@ -271,7 +271,25 @@ def lineage(
         "merge_method": merge_method,
         "reviewed_branch_head": reviewed_branch_head,
         "reviewed_branch_commits_preserved": preserved,
+        "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
     }
+    if merge_method == "SQUASH":
+        record.update(
+            {
+                "reviewed_branch_head_source": "GITHUB_PR_METADATA",
+                "reviewed_branch_head_offline_ancestry_verifiable": False,
+                "squash_commit_parentage_offline_verifiable": True,
+            }
+        )
+    else:
+        record.update(
+            {
+                "reviewed_branch_head_source": "LOCAL_GIT_SECOND_PARENT_AND_GITHUB_PR_METADATA",
+                "reviewed_branch_head_offline_ancestry_verifiable": True,
+                "merge_commit_parentage_offline_verifiable": True,
+            }
+        )
+    return record
 
 
 MERGE_LINEAGE = (
@@ -310,22 +328,43 @@ ACCEPTED_DECISIONS = {
 }
 
 ISSUE_STATE = {
-    "closeout_issue": {
-        "number": 51,
-        "state": "OPEN",
-        "status": "In Progress",
-        "phase": "Phase 1B-D1",
-        "work_type": "Documentation",
-        "gate_decision": "Not Evaluated",
-        "authorization": "Planning Only",
-        "priority": "P1",
+    "closeout_workflow": {
+        "issue_number": 51,
+        "inventory_snapshot": {
+            "observed_state": "OPEN",
+            "observed_status": "In Progress",
+            "observed_gate_decision": "Not Evaluated",
+            "observed_authorization": "Planning Only",
+            "observed_phase": "Phase 1B-D1",
+            "observed_work_type": "Documentation",
+            "observed_priority": "P1",
+            "observed_at": "2026-08-04T23:18:27Z",
+            "source": "GITHUB_ISSUE_AND_PROJECT_METADATA",
+        },
+        "expected_post_merge_finalization": {
+            "state": "CLOSED",
+            "status": "Done",
+            "gate_decision": "INCONCLUSIVE",
+            "authorization": "Completed",
+            "phase": "Phase 1B-D1",
+            "work_type": "Documentation",
+            "priority": "P1",
+        },
+        "lifecycle_semantics": {
+            "inventory_snapshot_is_historical": True,
+            "post_merge_state_is_not_repository_validated": True,
+            "offline_validator_can_verify_live_github_state": False,
+            "post_merge_authorization_is_workflow_completion_not_scientific_authorization": True,
+        },
     },
     "issue_10": {
         "number": 10,
-        "state": "OPEN",
-        "status": "Blocked",
-        "gate_decision": "Not Evaluated",
-        "authorization": "Not Authorized",
+        "expected_state": "OPEN",
+        "expected_status": "Blocked",
+        "expected_gate_decision": "Not Evaluated",
+        "expected_authorization": "Not Authorized",
+        "source": "PROJECT_POLICY_SNAPSHOT",
+        "offline_validator_can_verify_live_github_state": False,
     },
 }
 
@@ -378,18 +417,21 @@ VALIDATION_RECORD = {
     "adr_count": len(ADR_SPECS),
     "merge_lineage_count": len(MERGE_LINEAGE),
     "validator_proves": [
-        "recorded artifact and ADR byte identities match the checked-out tree",
-        "required historical records coexist and remain immutable",
-        "recorded merge commits and parent relationships exist in local full history",
-        "active pause, issue, roadmap, reopen-condition, and authorization consistency",
+        "repository artifact and ADR byte identities",
+        "local Git commit and parent relationships",
+        "frozen repository policy consistency",
+        "integrity of the recorded external-state snapshot and expected lifecycle fields",
     ],
     "validator_does_not_prove": [
+        "live GitHub issue state",
+        "live GitHub Project fields",
+        "live PR metadata",
+        "external branch-head availability after deletion",
         "scientific correctness beyond accepted record consistency",
-        "future source or dependency availability",
-        "generator, detector, event, dataset, numerical, neural, or D2 validity",
     ],
     "historical_artifacts_regenerated": False,
-    "internet_contacted": False,
+    "offline_validator_contacted_internet": False,
+    "github_metadata_was_used_to_construct_inventory": True,
     "physics_libraries_executed": False,
 }
 
@@ -559,8 +601,17 @@ def validate_manifest(manifest: dict[str, Any], repo: Path, *, verify_git: bool 
         require(sha256_file(path) == row["sha256"], f"ADR SHA-256 mismatch: {row['path']}")
         require(_adr_status(path.read_text(encoding="utf-8")) == row["status"], f"ADR status mismatch: {row['path']}")
 
-    require(manifest["merge_lineage"] == list(MERGE_LINEAGE), "accepted PR merge lineage changed")
+    require(manifest["merge_lineage"] == list(MERGE_LINEAGE), "accepted PR merge lineage or provenance changed")
     require({row["pr_number"] for row in manifest["merge_lineage"]} == {40, 41, 43, 44, 46, 48, 50}, "accepted PR lineage entry omitted")
+    for row in manifest["merge_lineage"]:
+        require(row["metadata_source"] == "LOCAL_GIT_AND_GITHUB_PR_METADATA", f"merge metadata source changed: PR #{row['pr_number']}")
+        if row["merge_method"] == "SQUASH":
+            require(row["reviewed_branch_head_source"] == "GITHUB_PR_METADATA", f"squash head lacks GitHub provenance: PR #{row['pr_number']}")
+            require(row["reviewed_branch_head_offline_ancestry_verifiable"] is False, f"squash head incorrectly claimed offline-verifiable: PR #{row['pr_number']}")
+            require(row["squash_commit_parentage_offline_verifiable"] is True, f"squash commit parentage marked non-verifiable: PR #{row['pr_number']}")
+        else:
+            require(row["reviewed_branch_head_offline_ancestry_verifiable"] is True, f"merge head ancestry marked non-verifiable: PR #{row['pr_number']}")
+            require(row["merge_commit_parentage_offline_verifiable"] is True, f"merge-commit parentage marked non-verifiable: PR #{row['pr_number']}")
     if verify_git:
         require(not is_shallow_repository(repo), "full local Git history required for lineage validation")
         require(git(repo, "cat-file", "-e", f"{GENERATED_FROM_MAIN}^{{commit}}", check=False).returncode == 0, "generated main commit missing")
@@ -578,8 +629,18 @@ def validate_manifest(manifest: dict[str, Any], repo: Path, *, verify_git: bool 
             else:
                 require(row["merge_method"] == "SQUASH" and row["second_parent"] is None, f"historical squash contract changed: PR #{row['pr_number']}")
 
-    require(manifest["issue_state"] == ISSUE_STATE, "issue #10 or closeout issue state changed")
-    require(manifest["issue_state"]["issue_10"] == {"number": 10, "state": "OPEN", "status": "Blocked", "gate_decision": "Not Evaluated", "authorization": "Not Authorized"}, "issue #10 boundary changed")
+    issue_state = manifest["issue_state"]
+    require("closeout_issue" not in issue_state, "issue #51 represented as timeless current state")
+    require(issue_state == ISSUE_STATE, "issue #10 boundary or closeout lifecycle changed")
+    workflow = issue_state["closeout_workflow"]
+    require(workflow["inventory_snapshot"]["observed_at"], "issue #51 inventory timestamp missing")
+    require(workflow["inventory_snapshot"]["source"] == "GITHUB_ISSUE_AND_PROJECT_METADATA", "issue #51 snapshot source changed")
+    require(workflow["expected_post_merge_finalization"]["state"] == "CLOSED", "expected issue #51 post-merge close state missing")
+    require(workflow["expected_post_merge_finalization"]["authorization"] == "Completed", "issue #51 lifecycle grants or misstates authorization")
+    require(workflow["lifecycle_semantics"]["offline_validator_can_verify_live_github_state"] is False, "offline validator claims live GitHub verification")
+    require(workflow["lifecycle_semantics"]["post_merge_authorization_is_workflow_completion_not_scientific_authorization"] is True, "workflow completion confused with scientific authorization")
+    require(issue_state["issue_10"] == ISSUE_STATE["issue_10"], "issue #10 active expected boundary changed")
+    require(issue_state["issue_10"]["source"] == "PROJECT_POLICY_SNAPSHOT", "issue #10 represented only as historical observation")
     require(manifest["roadmap_state"] == ROADMAP_STATE, "D2-D5 roadmap state changed")
     require(manifest["active_policy"] == ACTIVE_POLICY, "active pause or candidate selection changed")
     require(manifest["active_policy"]["preferred_scientific_candidate"] is None, "scientific candidate selected")
@@ -587,7 +648,11 @@ def validate_manifest(manifest: dict[str, Any], repo: Path, *, verify_git: bool 
     require(manifest["authorization"] == {flag: False for flag in AUTHORIZATION_FLAGS}, "authorization flag became true")
     require(manifest["reopen_conditions"] == list(REOPEN_CONDITIONS), "reopen conditions changed")
     require(all(row["authorization_granted"] is False for row in manifest["reopen_conditions"]), "reopen condition grants authorization")
-    require(manifest["validation"] == VALIDATION_RECORD, "validation scope or aggregate changed")
+    validation = manifest["validation"]
+    require("internet_contacted" not in validation, "ambiguous whole-process internet claim restored")
+    require(validation == VALIDATION_RECORD, "validation scope or aggregate changed")
+    require(validation["offline_validator_contacted_internet"] is False, "offline validator internet scope changed")
+    require(validation["github_metadata_was_used_to_construct_inventory"] is True, "GitHub inventory provenance denied")
 
 
 def main() -> int:

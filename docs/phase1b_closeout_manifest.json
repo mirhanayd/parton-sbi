@@ -356,22 +356,43 @@
     "worktree_clean_when_inventoried": true
   },
   "issue_state": {
-    "closeout_issue": {
-      "authorization": "Planning Only",
-      "gate_decision": "Not Evaluated",
-      "number": 51,
-      "phase": "Phase 1B-D1",
-      "priority": "P1",
-      "state": "OPEN",
-      "status": "In Progress",
-      "work_type": "Documentation"
+    "closeout_workflow": {
+      "expected_post_merge_finalization": {
+        "authorization": "Completed",
+        "gate_decision": "INCONCLUSIVE",
+        "phase": "Phase 1B-D1",
+        "priority": "P1",
+        "state": "CLOSED",
+        "status": "Done",
+        "work_type": "Documentation"
+      },
+      "inventory_snapshot": {
+        "observed_at": "2026-08-04T23:18:27Z",
+        "observed_authorization": "Planning Only",
+        "observed_gate_decision": "Not Evaluated",
+        "observed_phase": "Phase 1B-D1",
+        "observed_priority": "P1",
+        "observed_state": "OPEN",
+        "observed_status": "In Progress",
+        "observed_work_type": "Documentation",
+        "source": "GITHUB_ISSUE_AND_PROJECT_METADATA"
+      },
+      "issue_number": 51,
+      "lifecycle_semantics": {
+        "inventory_snapshot_is_historical": true,
+        "offline_validator_can_verify_live_github_state": false,
+        "post_merge_authorization_is_workflow_completion_not_scientific_authorization": true,
+        "post_merge_state_is_not_repository_validated": true
+      }
     },
     "issue_10": {
-      "authorization": "Not Authorized",
-      "gate_decision": "Not Evaluated",
+      "expected_authorization": "Not Authorized",
+      "expected_gate_decision": "Not Evaluated",
+      "expected_state": "OPEN",
+      "expected_status": "Blocked",
       "number": 10,
-      "state": "OPEN",
-      "status": "Blocked"
+      "offline_validator_can_verify_live_github_state": false,
+      "source": "PROJECT_POLICY_SNAPSHOT"
     }
   },
   "merge_lineage": [
@@ -379,63 +400,91 @@
       "first_parent": "c0468d784e27d95d20a420beecb7133975701706",
       "merge_commit": "0e3e2870c95e4cfbd4665598ccc163071d5f762a",
       "merge_method": "SQUASH",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 40,
       "reviewed_branch_commits_preserved": false,
       "reviewed_branch_head": "f01d84aced9e671f7f6896d4cc50b929a0471117",
-      "second_parent": null
+      "reviewed_branch_head_offline_ancestry_verifiable": false,
+      "reviewed_branch_head_source": "GITHUB_PR_METADATA",
+      "second_parent": null,
+      "squash_commit_parentage_offline_verifiable": true
     },
     {
       "first_parent": "0e3e2870c95e4cfbd4665598ccc163071d5f762a",
       "merge_commit": "2cfcc431fbb742df7f483cdeac0077ff6fb27118",
       "merge_method": "SQUASH",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 41,
       "reviewed_branch_commits_preserved": false,
       "reviewed_branch_head": "70756c10f1c2fc66c4067a4b4e7ff0dfabdb796f",
-      "second_parent": null
+      "reviewed_branch_head_offline_ancestry_verifiable": false,
+      "reviewed_branch_head_source": "GITHUB_PR_METADATA",
+      "second_parent": null,
+      "squash_commit_parentage_offline_verifiable": true
     },
     {
       "first_parent": "2cfcc431fbb742df7f483cdeac0077ff6fb27118",
       "merge_commit": "c7c6f6a61f8aaec0a726cb440124e0f2c955634f",
+      "merge_commit_parentage_offline_verifiable": true,
       "merge_method": "MERGE_COMMIT",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 43,
       "reviewed_branch_commits_preserved": true,
       "reviewed_branch_head": "ba85569cd3df43456c3e73d521a72a3ce49dff6d",
+      "reviewed_branch_head_offline_ancestry_verifiable": true,
+      "reviewed_branch_head_source": "LOCAL_GIT_SECOND_PARENT_AND_GITHUB_PR_METADATA",
       "second_parent": "ba85569cd3df43456c3e73d521a72a3ce49dff6d"
     },
     {
       "first_parent": "c7c6f6a61f8aaec0a726cb440124e0f2c955634f",
       "merge_commit": "a9f91275e4add2adaffd9fbf6c98ca8fe14802df",
+      "merge_commit_parentage_offline_verifiable": true,
       "merge_method": "MERGE_COMMIT",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 44,
       "reviewed_branch_commits_preserved": true,
       "reviewed_branch_head": "21ee2061894854cfe9c89d0f9ee88d4a1f484aef",
+      "reviewed_branch_head_offline_ancestry_verifiable": true,
+      "reviewed_branch_head_source": "LOCAL_GIT_SECOND_PARENT_AND_GITHUB_PR_METADATA",
       "second_parent": "21ee2061894854cfe9c89d0f9ee88d4a1f484aef"
     },
     {
       "first_parent": "a9f91275e4add2adaffd9fbf6c98ca8fe14802df",
       "merge_commit": "c5745c8f6e1cef4bf44108f06e0426a4ab7c1dfe",
+      "merge_commit_parentage_offline_verifiable": true,
       "merge_method": "MERGE_COMMIT",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 46,
       "reviewed_branch_commits_preserved": true,
       "reviewed_branch_head": "e16545640daf8d96d516538c2d4de1d18e6c5075",
+      "reviewed_branch_head_offline_ancestry_verifiable": true,
+      "reviewed_branch_head_source": "LOCAL_GIT_SECOND_PARENT_AND_GITHUB_PR_METADATA",
       "second_parent": "e16545640daf8d96d516538c2d4de1d18e6c5075"
     },
     {
       "first_parent": "c5745c8f6e1cef4bf44108f06e0426a4ab7c1dfe",
       "merge_commit": "fc1949b8f3e6f21e48db84f89419a04c56bbcfec",
+      "merge_commit_parentage_offline_verifiable": true,
       "merge_method": "MERGE_COMMIT",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 48,
       "reviewed_branch_commits_preserved": true,
       "reviewed_branch_head": "8e270b4bd6c1c6476ab476d00c3c2ad2213d5eed",
+      "reviewed_branch_head_offline_ancestry_verifiable": true,
+      "reviewed_branch_head_source": "LOCAL_GIT_SECOND_PARENT_AND_GITHUB_PR_METADATA",
       "second_parent": "8e270b4bd6c1c6476ab476d00c3c2ad2213d5eed"
     },
     {
       "first_parent": "fc1949b8f3e6f21e48db84f89419a04c56bbcfec",
       "merge_commit": "0acd10e0e27a5ae60cef31827f09ec77f3fccb33",
+      "merge_commit_parentage_offline_verifiable": true,
       "merge_method": "MERGE_COMMIT",
+      "metadata_source": "LOCAL_GIT_AND_GITHUB_PR_METADATA",
       "pr_number": 50,
       "reviewed_branch_commits_preserved": true,
       "reviewed_branch_head": "80323f5b9725e3e32d1a5b52655620e2d0362a71",
+      "reviewed_branch_head_offline_ancestry_verifiable": true,
+      "reviewed_branch_head_source": "LOCAL_GIT_SECOND_PARENT_AND_GITHUB_PR_METADATA",
       "second_parent": "80323f5b9725e3e32d1a5b52655620e2d0362a71"
     }
   ],
@@ -469,7 +518,7 @@
     "active_supersession": false,
     "next_phase_selected": false
   },
-  "schema_version": "partonsbi.phase1b.closeout-manifest.v1",
+  "schema_version": "partonsbi.phase1b.closeout-manifest.v2",
   "scientific_objective": {
     "inference_unit": "D = {event_1, ..., event_N}",
     "single_event_instantaneous_pdf_objective": false,
@@ -479,22 +528,25 @@
   "validation": {
     "adr_count": 11,
     "artifact_count": 20,
+    "github_metadata_was_used_to_construct_inventory": true,
     "historical_artifacts_regenerated": false,
-    "internet_contacted": false,
     "merge_lineage_count": 7,
     "offline": true,
+    "offline_validator_contacted_internet": false,
     "physics_libraries_executed": false,
     "scope": "IDENTITY_ANCESTRY_AND_POLICY_CONSISTENCY_ONLY",
     "validator_does_not_prove": [
-      "scientific correctness beyond accepted record consistency",
-      "future source or dependency availability",
-      "generator, detector, event, dataset, numerical, neural, or D2 validity"
+      "live GitHub issue state",
+      "live GitHub Project fields",
+      "live PR metadata",
+      "external branch-head availability after deletion",
+      "scientific correctness beyond accepted record consistency"
     ],
     "validator_proves": [
-      "recorded artifact and ADR byte identities match the checked-out tree",
-      "required historical records coexist and remain immutable",
-      "recorded merge commits and parent relationships exist in local full history",
-      "active pause, issue, roadmap, reopen-condition, and authorization consistency"
+      "repository artifact and ADR byte identities",
+      "local Git commit and parent relationships",
+      "frozen repository policy consistency",
+      "integrity of the recorded external-state snapshot and expected lifecycle fields"
     ]
   }
 }

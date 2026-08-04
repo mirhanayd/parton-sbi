@@ -43,6 +43,61 @@ def test_inventory_aggregates_are_complete() -> None:
     assert len(value["accepted_artifacts"]) == 20
     assert len(value["accepted_adrs"]) == 11
     assert len(value["merge_lineage"]) == 7
+    assert value["accepted_artifacts"] == list(closeout.ARTIFACT_SPECS)
+    assert value["accepted_adrs"] == closeout.build_manifest()["accepted_adrs"]
+    assert value["merge_lineage"] == list(closeout.MERGE_LINEAGE)
+
+
+def restore_timeless_closeout_issue(value: dict) -> None:
+    value["issue_state"]["closeout_issue"] = {
+        "number": 51,
+        "state": "OPEN",
+        "status": "In Progress",
+        "gate_decision": "Not Evaluated",
+        "authorization": "Planning Only",
+    }
+    value["issue_state"].pop("closeout_workflow")
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        restore_timeless_closeout_issue,
+        lambda value: value["issue_state"]["closeout_workflow"]["inventory_snapshot"].pop("observed_at"),
+        lambda value: value["issue_state"]["closeout_workflow"]["expected_post_merge_finalization"].pop("state"),
+        lambda value: value["issue_state"]["closeout_workflow"]["expected_post_merge_finalization"].update({"authorization": "Authorized"}),
+        lambda value: value["issue_state"]["closeout_workflow"]["lifecycle_semantics"].update({"offline_validator_can_verify_live_github_state": True}),
+        lambda value: value["validation"].update({"internet_contacted": False}),
+        lambda value: value["validation"].update({"github_metadata_was_used_to_construct_inventory": False}),
+        lambda value: value["merge_lineage"][0].pop("reviewed_branch_head_source"),
+        lambda value: value["merge_lineage"][0].update({"reviewed_branch_head_offline_ancestry_verifiable": True}),
+        lambda value: value["issue_state"]["issue_10"].update({"expected_state": "CLOSED"}),
+        lambda value: value["authorization"].update({"IMPLEMENTATION_AUTHORIZED": True}),
+        lambda value: value["accepted_artifacts"][0].update({"sha256": "f" * 64}),
+        lambda value: value["merge_lineage"][2].update({"merge_commit": "f" * 40}),
+    ],
+)
+def test_v2_lifecycle_and_provenance_mutations_are_rejected(mutation) -> None:
+    value = manifest()
+    mutation(value)
+    rejects(value)
+
+
+def test_closeout_snapshot_and_expected_lifecycle_coexist() -> None:
+    workflow = manifest()["issue_state"]["closeout_workflow"]
+    assert workflow["inventory_snapshot"] == closeout.ISSUE_STATE["closeout_workflow"]["inventory_snapshot"]
+    assert workflow["expected_post_merge_finalization"] == closeout.ISSUE_STATE["closeout_workflow"]["expected_post_merge_finalization"]
+    assert workflow["lifecycle_semantics"]["inventory_snapshot_is_historical"] is True
+    assert workflow["lifecycle_semantics"]["offline_validator_can_verify_live_github_state"] is False
+
+
+def test_issue_10_is_active_expected_boundary() -> None:
+    boundary = manifest()["issue_state"]["issue_10"]
+    assert boundary == closeout.ISSUE_STATE["issue_10"]
+    assert boundary["expected_state"] == "OPEN"
+    assert boundary["expected_status"] == "Blocked"
+    assert boundary["expected_gate_decision"] == "Not Evaluated"
+    assert boundary["expected_authorization"] == "Not Authorized"
 
 
 @pytest.mark.parametrize(
@@ -57,7 +112,7 @@ def test_inventory_aggregates_are_complete() -> None:
         (lambda value: value["active_policy"].update({"preferred_scientific_candidate": "CANDIDATE_C"}), "active pause"),
         (lambda value: value["authorization"].update({"D2_AUTHORIZED": True}), "authorization flag"),
         (lambda value: value["authorization"].update({"PROTOTYPE_AUTHORIZED": True}), "authorization flag"),
-        (lambda value: value["issue_state"]["issue_10"].update({"state": "CLOSED", "status": "Done"}), "issue #10"),
+        (lambda value: value["issue_state"]["issue_10"].update({"expected_state": "CLOSED", "expected_status": "Done"}), "issue #10"),
         (lambda value: value["roadmap_state"].update({"active_supersession": True}), "roadmap state"),
         (lambda value: value["reopen_conditions"][0].update({"authorization_granted": True}), "reopen conditions"),
         (lambda value: value["active_policy"].update({"implementation_next_step": "BUILD_CANDIDATE_C"}), "active pause"),
