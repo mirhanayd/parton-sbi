@@ -1,0 +1,500 @@
+{
+  "accepted_adrs": [
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-001-continuous-pdf-family.md",
+      "sha256": "bb31dcdf2f0e38e6807c06c887fa1b2ff1895755f03f90c81e4bca4e5bfc01d8",
+      "status": "Accepted for staged validation"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-002-direct-generation-artifact.md",
+      "sha256": "4d9501e09b9447e14a60945c8517db7a1ddac518f9e1bc5878760ba69e719cce",
+      "status": "Accepted for staged validation"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-003-event-sampling-semantics.md",
+      "sha256": "89c0cf8c09c4349f79855b614b2fea5c9d6eb632882bff5c18abe7f1a8d28fd5",
+      "status": "Experiment required"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-004-d0-baseline-and-admissibility.md",
+      "sha256": "db29c0f8a47e47bd22a54ec7548878f3f48332ed9acfafb987f53140ee72f4c8",
+      "status": "Proposed for scientific review"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-005-d1-evolution-and-artifact-transport.md",
+      "sha256": "80e88b9ab650ae2bfdf4de3636cbad7c139c391aeb936195279e873999ca7424",
+      "status": "proposed for scientific review"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-006-evolved-pdf-transport-architecture.md",
+      "sha256": "67093e678656307aa85d9eb3d99422dcac927d9b1a90f6c6b2a0f4e6e363b94d",
+      "status": "Proposed for scientific review"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-007-persistent-apfel-transport.md",
+      "sha256": "ae494c126e9431d7bc679a2256b4500960c7edc18dbfffdb89f62a4fe9643abf",
+      "status": "Proposed for scientific review"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-008-signed-generator-coupling-terminal-decision.md",
+      "sha256": "a3463f3e1fea2b777e315c24daabd0b7181d43a3e5dc14b6d40d23ae311df112",
+      "status": "Proposed"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-009-ast-pdf-consumer-graph-feasibility.md",
+      "sha256": "9481ac861075141067813143b7d1beb66b7f6f0c2a3c164e79db18aa3eb8ed69",
+      "status": "Proposed"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-010-active-scientific-contract-after-generator-pause.md",
+      "sha256": "e30b2dd4045af61a45953d2f176132dcb84d3b6d7424d4ecdf8ae1525115e428",
+      "status": "Proposed"
+    },
+    {
+      "immutable": true,
+      "path": "docs/adr/ADR-011-independent-evidence-for-contract-priority.md",
+      "sha256": "657cdd5e25eada28df3027b2626e92f62a5a6d979730a542550fca77a2a0918f",
+      "status": "Proposed"
+    }
+  ],
+  "accepted_artifacts": [
+    {
+      "decision": "FAIL \u2014 NOMINAL-POOL REUSE REJECTED",
+      "immutable": true,
+      "limitation": "This rejects nominal-pool reuse; it does not reject direct regeneration or PDF SBI generally.",
+      "path": "docs/phase1a_strict_support_decision.json",
+      "phase": "Phase 1A",
+      "schema": 1,
+      "scientific_scope": "Strict-support discrete-member reweighting and the predeclared ESS reuse gate.",
+      "sha256": "59c2880886a72e35aa914c05c02068274eb78be93e4da25c51f5570f8940072c",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "FAIL",
+      "immutable": true,
+      "limitation": "The original failed result coexists with D0R and is not replaced by it.",
+      "path": "docs/phase1bd_d0_decision.json",
+      "phase": "Phase 1B-D0",
+      "schema": "partonsbi.phase1bd_d0_decision.v1",
+      "scientific_scope": "Original D0 continuous boundary-family pilot and guard-shell validation.",
+      "sha256": "c4f7ba061494a406ba99946d72b0842f2eeca952fdeb1cd3b552b43e674a7f04",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "D0_REVISION_PLAN_SELECTED",
+      "immutable": true,
+      "limitation": "This planning record did not itself validate D0R or authorize D1.",
+      "path": "docs/phase1bd_d0_revision_decision.json",
+      "phase": "Phase 1B-D0 revision",
+      "schema": "partonsbi.phase1bd_d0_revision_decision.v1",
+      "scientific_scope": "Diagnosis and bounded authorization record for the separately versioned D0 revision.",
+      "sha256": "ef44ec6b230d06edce4b30b435d30ee382e3e151a8dfe3a9f8098e4ac6747873",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "PASS",
+      "immutable": true,
+      "limitation": "D0R PASS does not delete or reinterpret the original D0 FAIL.",
+      "path": "docs/phase1bd_d0r_decision.json",
+      "phase": "Phase 1B-D0R",
+      "schema": "partonsbi.phase1bd_d0r_decision.v2",
+      "scientific_scope": "Projected-baseline D0R validation under the ADR-004 admissibility contract.",
+      "sha256": "40e75fda281578f45d193858667eeed2c1747a07d64f53672adec10145c9e775",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "FAIL",
+      "immutable": true,
+      "limitation": "The failed off-knot and evolved-moment gates remain immutable.",
+      "path": "docs/phase1bd_d1_decision.json",
+      "phase": "Phase 1B-D1",
+      "schema": "partonsbi.phase1bd.d1.decision.v1",
+      "scientific_scope": "Original APFEL evolution and one-member LHAPDF transport validation.",
+      "sha256": "3cdb3e6e11fae63aa9b4bb9e0094c0610a8c01eb636eecc25571e3c2f11e9881",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "SELECTED",
+      "immutable": true,
+      "limitation": "Selection did not erase the original D1 FAIL or authorize D2.",
+      "path": "docs/phase1bd_d1_revision_decision.json",
+      "phase": "Phase 1B-D1 revision",
+      "schema": "partonsbi.phase1bd.d1_revision.decision.v1",
+      "scientific_scope": "Selection of the threshold-separated D1 revision contract.",
+      "sha256": "885aa404b1c8effe96f44d29d6217330481fb66a311f6ad6212d1f8ab5859b4e",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "FAIL",
+      "immutable": true,
+      "limitation": "D1R failed its fixed performance, moment/leakage, and off-knot gates and does not replace D1.",
+      "path": "docs/phase1bd_d1r_decision.json",
+      "phase": "Phase 1B-D1R",
+      "schema": "partonsbi.phase1bd.d1r.decision.v2",
+      "scientific_scope": "Revised Stage 1 threshold-separated artifact and transport study.",
+      "sha256": "69b5e823bb802a4adbc426ec5478caeeba623791a7b533d15557bf34f1bb8998",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "INCONCLUSIVE",
+      "immutable": true,
+      "limitation": "No production architecture was selected by this decision.",
+      "path": "docs/phase1bd_d1a_architecture_decision.json",
+      "phase": "Phase 1B-D1A",
+      "schema": "partonsbi.phase1bd.d1a.architecture-decision.v1",
+      "scientific_scope": "Architecture review of evolved-PDF transport candidates.",
+      "sha256": "9eb3feda36583a9e21835b7c3fa85ae5463db89d4212cbfb3721e3526eb5e626",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "INCONCLUSIVE",
+      "immutable": true,
+      "limitation": "The custom representation failed and direct APFEL transport remained unselected.",
+      "path": "docs/phase1bd_d1a_prototype_decision.json",
+      "phase": "Phase 1B-D1A",
+      "schema": "partonsbi.phase1bd.d1a.transport-prototype-decision.v1",
+      "scientific_scope": "Bounded transport-comparison prototype result.",
+      "sha256": "e2274acb12d7cff2b8c22b0655537737556d9e1fc903abdbd92bfe2f24260a41",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "AUTHORIZE_SEPARATE_BOUNDED_PROTOTYPE",
+      "immutable": true,
+      "limitation": "This was a bounded historical prototype authorization, not current implementation or D2 authorization.",
+      "path": "docs/phase1bd_d1b_decision.json",
+      "phase": "Phase 1B-D1B",
+      "schema": "partonsbi.phase1bd.d1b.transport-decision.v1",
+      "scientific_scope": "Historical source-level persistent-transport and PYTHIA-consumer planning decision.",
+      "sha256": "a92190686734091369a0a21caa9c032d62672dd5d1274f4b102fadbb1c710d6f",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "PASS_PREPARATION_ONLY",
+      "immutable": true,
+      "limitation": "This is engineering preparation evidence; the final D1C scientific gate was not evaluated here.",
+      "path": "docs/phase1bd_d1c_a_preparation_evidence.json",
+      "phase": "Phase 1B-D1C-A",
+      "schema": "partonsbi.d1c.persistent-apfel.preparation-evidence.v1",
+      "scientific_scope": "Persistent APFEL construction, identity, lifetime, and destruction preparation evidence.",
+      "sha256": "1acffdc63690cd3185ef32c0cbd742f23d79c646a5c7dd775470dfae7732c55f",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "FAIL",
+      "immutable": true,
+      "limitation": "Failure is scoped to the tested stock PYTHIA 8.312 public PDF boundary.",
+      "path": "docs/phase1bd_d1c_decision.json",
+      "phase": "Phase 1B-D1C",
+      "schema": "partonsbi.phase1bd.d1c.final-decision.v1",
+      "scientific_scope": "Final stock-PYTHIA signed-PDF public-reader compatibility decision.",
+      "sha256": "1ce8a824175d078887bef6fc7c72bbccb2b7c8277cd9669c2a355ced42a6e41b",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "SUPPORTED_SYNTACTIC_CLOSURE_ONLY",
+      "immutable": true,
+      "limitation": "Syntactic closure is not a typed consumer graph or scientific provenance classification.",
+      "path": "docs/phase1bd_d1d_pythia_semantics_search_manifest.json",
+      "phase": "Phase 1B-D1D-A",
+      "schema": "partonsbi.phase1bd.d1d.pythia-semantics-search-manifest.v3",
+      "scientific_scope": "Deterministic broad PYTHIA 8.312 syntactic occurrence corpus.",
+      "sha256": "e381a6774a17306336ebb016f152b611e9b66c4628e5c3835cc93efb5a9dc701",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "REJECTED_DIAGNOSTIC",
+      "immutable": true,
+      "limitation": "The slice is retained only as rejected diagnostic evidence and is not a valid review queue.",
+      "path": "docs/phase1bd_d1d_pythia_pdf_provenance_slice.json",
+      "phase": "Phase 1B-D1D-A",
+      "schema": "partonsbi.phase1bd.d1d.pythia-pdf-provenance-slice.v1",
+      "scientific_scope": "Tokenizer-based typed-PDF provenance-slice diagnostic.",
+      "sha256": "6641d6e2fb615780819bd957be2f942eab5f78f34828073eb66078088ef708c7",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "FAIL",
+      "immutable": true,
+      "limitation": "The failed gate is provenance evidence integrity; supported syntactic results remain narrower.",
+      "path": "docs/phase1bd_d1d_pythia_provenance_slice_decision.json",
+      "phase": "Phase 1B-D1D-A",
+      "schema": "partonsbi.phase1bd.d1d.pythia-provenance-slice-decision.v1",
+      "scientific_scope": "Independent integrity decision for provenance-slice v1.",
+      "sha256": "f92958fe745d64c24cd6d12222537154af7d916f24a0c7362c460123d46e04d7",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "FAIL",
+      "immutable": true,
+      "limitation": "The record does not establish architecture-comparison readiness.",
+      "path": "docs/phase1bd_d1d_pythia_semantics_audit.json",
+      "phase": "Phase 1B-D1D-A",
+      "schema": "partonsbi.phase1bd.d1d.pythia-semantics-audit.v6",
+      "scientific_scope": "Final D1D-A evidence-integrity audit and preserved direct evidence.",
+      "sha256": "bd63eb4b779c8f6fa622b4a4111fa07a963303d7c80ba3761c339bb764a5b430",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "INCONCLUSIVE",
+      "immutable": true,
+      "limitation": "The operational result is an interim non-authorizing pause, not a universal impossibility theorem.",
+      "path": "docs/phase1bd_d1d_terminal_decision.json",
+      "phase": "Phase 1B-D1D-B",
+      "schema": "partonsbi.phase1bd.d1d.terminal-decision.v3",
+      "scientific_scope": "Evidence-derived terminal generator-coupling planning record.",
+      "sha256": "d310b452a5a80d5bd59a91af2787b795dba7da17eb5d684990d9b718373376a7",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "INCONCLUSIVE",
+      "immutable": true,
+      "limitation": "No parser, graph implementation, or toolchain was selected or authorized.",
+      "path": "docs/phase1bd_d1e_consumer_graph_feasibility.json",
+      "phase": "Phase 1B-D1E",
+      "schema": "partonsbi.phase1bd.d1e.consumer-graph-feasibility.v2",
+      "scientific_scope": "Planning feasibility and acceptance contract for an AST-grounded consumer graph.",
+      "sha256": "2d597d24b6591dfe14a711a8b115956cbbfbaed6969bf65f772fa0510c107614",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "MAINTAIN_CURRENT_CONTRACT_AND_PAUSE",
+      "immutable": true,
+      "limitation": "No separate prospective contract was preferred or authorized.",
+      "path": "docs/phase1bd_d1f_active_contract_decision.json",
+      "phase": "Phase 1B-D1F",
+      "schema": "partonsbi.phase1bd.d1f.active-contract-decision.v3",
+      "scientific_scope": "Active-contract decision after the generator-coupling line became unbounded.",
+      "sha256": "62afa19354cb4546f4bc6019d58168d1803b6b2c9e8c57f29ecab14e29d198e5",
+      "superseded": false,
+      "superseded_by": null
+    },
+    {
+      "decision": "NO_UNIQUE_PRIORITY_MAINTAIN_PAUSE",
+      "immutable": true,
+      "limitation": "All candidates remain ineligible; component evidence does not establish a normalized law, posterior, or MVP.",
+      "path": "docs/phase1bd_d1g_independent_contract_priority.json",
+      "phase": "Phase 1B-D1G",
+      "schema": "partonsbi.phase1bd.d1g.independent-contract-priority.v2",
+      "scientific_scope": "Independent-evidence review of four prospective scientific contracts.",
+      "sha256": "1d0eeed3bb012446ee2e75f00f175e31ecbfab61a5e326345f4007c0a640b778",
+      "superseded": false,
+      "superseded_by": null
+    }
+  ],
+  "accepted_decisions": {
+    "D0R_DECISION": "PASS",
+    "D0_ORIGINAL_DECISION": "FAIL",
+    "D1A_ARCHITECTURE_DECISION": "INCONCLUSIVE",
+    "D1A_PROTOTYPE_DECISION": "INCONCLUSIVE",
+    "D1B_HISTORICAL_PLANNING_DECISION": "AUTHORIZE_SEPARATE_BOUNDED_PROTOTYPE",
+    "D1C_FINAL_DECISION": "FAIL",
+    "D1D_A_FINAL_DECISION": "FAIL",
+    "D1D_B_FINAL_DECISION": "INCONCLUSIVE",
+    "D1E_FINAL_DECISION": "INCONCLUSIVE",
+    "D1F_FINAL_DECISION": "MAINTAIN_CURRENT_CONTRACT_AND_PAUSE",
+    "D1G_ELIGIBLE_CANDIDATES": [],
+    "D1G_FINAL_DECISION": "NO_UNIQUE_PRIORITY_MAINTAIN_PAUSE",
+    "D1R_DECISION": "FAIL",
+    "D1_ORIGINAL_DECISION": "FAIL",
+    "PHASE1A_FINAL_DECISION": "FAIL \u2014 NOMINAL-POOL REUSE REJECTED"
+  },
+  "active_policy": {
+    "ACTIVE_OPERATIONAL_POLICY": "PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION",
+    "CURRENT_FULL_GENERATOR_LINE": "PAUSED_NO_BOUNDED_CONTINUATION_ESTABLISHED",
+    "active_scientific_candidate": null,
+    "implementation_next_step": null,
+    "maintenance_next_action": "PRESERVE_ACCEPTED_EVIDENCE_AND_PAUSE",
+    "pause_claims_pdf_sbi_impossible": false,
+    "preferred_scientific_candidate": null
+  },
+  "authorization": {
+    "D2_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "LOWER_LEVEL_SIMULATOR_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "PDF_FAMILY_REDESIGN_AUTHORIZED": false,
+    "PROTOTYPE_AUTHORIZED": false,
+    "PYTHIA_INIT_AUTHORIZED": false,
+    "PYTHIA_NEXT_AUTHORIZED": false,
+    "SIGNED_WEIGHT_RESEARCH_AUTHORIZED": false,
+    "WEIGHTED_SET_OBJECTIVE_AUTHORIZED": false
+  },
+  "generated_from_main": {
+    "branch": "main",
+    "commit_sha": "0acd10e0e27a5ae60cef31827f09ec77f3fccb33",
+    "tree_sha": "703e5f404c90e2773444adb0b1892f7a9308507d",
+    "worktree_clean_when_inventoried": true
+  },
+  "issue_state": {
+    "closeout_issue": {
+      "authorization": "Planning Only",
+      "gate_decision": "Not Evaluated",
+      "number": 51,
+      "phase": "Phase 1B-D1",
+      "priority": "P1",
+      "state": "OPEN",
+      "status": "In Progress",
+      "work_type": "Documentation"
+    },
+    "issue_10": {
+      "authorization": "Not Authorized",
+      "gate_decision": "Not Evaluated",
+      "number": 10,
+      "state": "OPEN",
+      "status": "Blocked"
+    }
+  },
+  "merge_lineage": [
+    {
+      "first_parent": "c0468d784e27d95d20a420beecb7133975701706",
+      "merge_commit": "0e3e2870c95e4cfbd4665598ccc163071d5f762a",
+      "merge_method": "SQUASH",
+      "pr_number": 40,
+      "reviewed_branch_commits_preserved": false,
+      "reviewed_branch_head": "f01d84aced9e671f7f6896d4cc50b929a0471117",
+      "second_parent": null
+    },
+    {
+      "first_parent": "0e3e2870c95e4cfbd4665598ccc163071d5f762a",
+      "merge_commit": "2cfcc431fbb742df7f483cdeac0077ff6fb27118",
+      "merge_method": "SQUASH",
+      "pr_number": 41,
+      "reviewed_branch_commits_preserved": false,
+      "reviewed_branch_head": "70756c10f1c2fc66c4067a4b4e7ff0dfabdb796f",
+      "second_parent": null
+    },
+    {
+      "first_parent": "2cfcc431fbb742df7f483cdeac0077ff6fb27118",
+      "merge_commit": "c7c6f6a61f8aaec0a726cb440124e0f2c955634f",
+      "merge_method": "MERGE_COMMIT",
+      "pr_number": 43,
+      "reviewed_branch_commits_preserved": true,
+      "reviewed_branch_head": "ba85569cd3df43456c3e73d521a72a3ce49dff6d",
+      "second_parent": "ba85569cd3df43456c3e73d521a72a3ce49dff6d"
+    },
+    {
+      "first_parent": "c7c6f6a61f8aaec0a726cb440124e0f2c955634f",
+      "merge_commit": "a9f91275e4add2adaffd9fbf6c98ca8fe14802df",
+      "merge_method": "MERGE_COMMIT",
+      "pr_number": 44,
+      "reviewed_branch_commits_preserved": true,
+      "reviewed_branch_head": "21ee2061894854cfe9c89d0f9ee88d4a1f484aef",
+      "second_parent": "21ee2061894854cfe9c89d0f9ee88d4a1f484aef"
+    },
+    {
+      "first_parent": "a9f91275e4add2adaffd9fbf6c98ca8fe14802df",
+      "merge_commit": "c5745c8f6e1cef4bf44108f06e0426a4ab7c1dfe",
+      "merge_method": "MERGE_COMMIT",
+      "pr_number": 46,
+      "reviewed_branch_commits_preserved": true,
+      "reviewed_branch_head": "e16545640daf8d96d516538c2d4de1d18e6c5075",
+      "second_parent": "e16545640daf8d96d516538c2d4de1d18e6c5075"
+    },
+    {
+      "first_parent": "c5745c8f6e1cef4bf44108f06e0426a4ab7c1dfe",
+      "merge_commit": "fc1949b8f3e6f21e48db84f89419a04c56bbcfec",
+      "merge_method": "MERGE_COMMIT",
+      "pr_number": 48,
+      "reviewed_branch_commits_preserved": true,
+      "reviewed_branch_head": "8e270b4bd6c1c6476ab476d00c3c2ad2213d5eed",
+      "second_parent": "8e270b4bd6c1c6476ab476d00c3c2ad2213d5eed"
+    },
+    {
+      "first_parent": "fc1949b8f3e6f21e48db84f89419a04c56bbcfec",
+      "merge_commit": "0acd10e0e27a5ae60cef31827f09ec77f3fccb33",
+      "merge_method": "MERGE_COMMIT",
+      "pr_number": 50,
+      "reviewed_branch_commits_preserved": true,
+      "reviewed_branch_head": "80323f5b9725e3e32d1a5b52655620e2d0362a71",
+      "second_parent": "80323f5b9725e3e32d1a5b52655620e2d0362a71"
+    }
+  ],
+  "reopen_conditions": [
+    {
+      "authorization_granted": false,
+      "condition": "New primary or mathematical evidence closes normalized-measure, posterior, no-hidden-repair, and composite-MVP gaps for a candidate.",
+      "condition_id": "PREFERENCE_CRITICAL_EVIDENCE_CLOSED"
+    },
+    {
+      "authorization_granted": false,
+      "condition": "An independently reviewed generator or inference architecture provides a bounded and falsifiable path.",
+      "condition_id": "BOUNDED_ARCHITECTURE_INDEPENDENTLY_REVIEWED"
+    },
+    {
+      "authorization_granted": false,
+      "condition": "A separate review accepts a change to the scientific contract.",
+      "condition_id": "SCIENTIFIC_CONTRACT_CHANGE_ACCEPTED"
+    },
+    {
+      "authorization_granted": false,
+      "condition": "An explicit user decision terminates or redirects the research objective.",
+      "condition_id": "USER_TERMINATES_OR_REDIRECTS_OBJECTIVE"
+    }
+  ],
+  "roadmap_state": {
+    "D2": "Blocked",
+    "D3": "Backlog",
+    "D4": "Backlog",
+    "D5": "Backlog",
+    "active_supersession": false,
+    "next_phase_selected": false
+  },
+  "schema_version": "partonsbi.phase1b.closeout-manifest.v1",
+  "scientific_objective": {
+    "inference_unit": "D = {event_1, ..., event_N}",
+    "single_event_instantaneous_pdf_objective": false,
+    "target": "p(theta_PDF | D)",
+    "unrestricted_full_flavor_separation_claimed_for_inclusive_nc_ep": false
+  },
+  "validation": {
+    "adr_count": 11,
+    "artifact_count": 20,
+    "historical_artifacts_regenerated": false,
+    "internet_contacted": false,
+    "merge_lineage_count": 7,
+    "offline": true,
+    "physics_libraries_executed": false,
+    "scope": "IDENTITY_ANCESTRY_AND_POLICY_CONSISTENCY_ONLY",
+    "validator_does_not_prove": [
+      "scientific correctness beyond accepted record consistency",
+      "future source or dependency availability",
+      "generator, detector, event, dataset, numerical, neural, or D2 validity"
+    ],
+    "validator_proves": [
+      "recorded artifact and ADR byte identities match the checked-out tree",
+      "required historical records coexist and remain immutable",
+      "recorded merge commits and parent relationships exist in local full history",
+      "active pause, issue, roadmap, reopen-condition, and authorization consistency"
+    ]
+  }
+}

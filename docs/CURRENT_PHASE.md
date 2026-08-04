@@ -46,6 +46,10 @@
 
 # Current state
 
+- The maintenance-only [Phase 1B closeout](PHASE1B_CLOSEOUT.md) and
+  [identity manifest](phase1b_closeout_manifest.json) freeze the accepted
+  evidence, ADR, merge-lineage, pause, and authorization record. They add no
+  scientific result and select no next phase.
 - Phase 1B-D1F is merged with
   `D1F_FINAL_DECISION = MAINTAIN_CURRENT_CONTRACT_AND_PAUSE`; the active
   full-generator line remains paused and no redesign is an active contract.
