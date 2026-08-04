@@ -17,7 +17,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-SCHEMA = "partonsbi.phase1bd.d1g.independent-contract-priority.v1"
+SCHEMA = "partonsbi.phase1bd.d1g.independent-contract-priority.v2"
 ARTIFACT = "docs/phase1bd_d1g_independent_contract_priority.json"
 
 CANDIDATES = (
@@ -180,7 +180,7 @@ def source(
     }
 
 
-def build_sources() -> dict[str, dict[str, Any]]:
+def _build_sources_v1() -> dict[str, dict[str, Any]]:
     return {
         "B_MSbar_POSITIVITY_2023": source(
             "B_MSbar_POSITIVITY_2023", "ORIGINAL_RESEARCH_PAPER",
@@ -347,6 +347,98 @@ def build_sources() -> dict[str, dict[str, Any]]:
     }
 
 
+# The v2 registry separates publication identity from downloadable-version
+# identity.  These classifications are the accepted result of the independent
+# source audit; the deterministic validator binds this ledger but does not
+# re-read the publications.
+SOURCE_IDENTITY_AUDIT = {
+    "B_MSbar_POSITIVITY_2023": ("VERIFIED", "VERIFIED"),
+    "B_NNPDF40": ("VERIFIED", "VERIFIED"),
+    "B_MSBAR_POSITIVITY_2020": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+    "C_HERA_COMBINED_DIS": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+    "C_DAGOSTINI_UNFOLDING": ("CONTRADICTED", "VERIFIED_WITH_QUALIFICATION"),
+    "C_SIMULATION_BASED_CALIBRATION": ("VERIFIED", "VERIFIED"),
+    "C_DEEP_SETS": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+    "D_WEIGHTED_EMPIRICAL_MEASURES": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+    "D_IMPORTANCE_ESS": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+    "D_WEIGHTED_ERM": ("VERIFIED", "VERIFIED"),
+    "E_MCATNLO": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+    "E_SHERPA_NEGATIVE_WEIGHTS": ("VERIFIED", "VERIFIED"),
+    "E_PROPER_SCORING_RULES": ("VERIFIED_WITH_QUALIFICATION", "VERIFIED_WITH_QUALIFICATION"),
+}
+
+SOURCE_DATES = {
+    "B_MSbar_POSITIVITY_2023": ("2023-07-31", "FIRST_ARXIV_SUBMISSION_DATE", "2026-04-22", "ARXIV_REVISION_DATE"),
+    "B_NNPDF40": ("2022-05-31", "JOURNAL_PUBLICATION_DATE", "2022-05-31", "ARXIV_REVISION_DATE"),
+    "B_MSBAR_POSITIVITY_2020": ("2020-11-01", "JOURNAL_PUBLICATION_MONTH", "2020-10-20", "ARXIV_REVISION_DATE"),
+    "C_HERA_COMBINED_DIS": ("2015-12-01", "JOURNAL_PUBLICATION_MONTH", "2015-11-20", "ARXIV_REVISION_DATE"),
+    "C_DAGOSTINI_UNFOLDING": ("1995-08-15", "PUBLISHER_ARTICLE_DATE", None, "NOT_APPLICABLE"),
+    "C_SIMULATION_BASED_CALIBRATION": ("2018-04-18", "FIRST_ARXIV_SUBMISSION_DATE", "2020-10-21", "ARXIV_REVISION_DATE"),
+    "C_DEEP_SETS": ("2017", "CONFERENCE_PUBLICATION_YEAR", "2018-04-14", "ARXIV_REVISION_DATE"),
+    "D_WEIGHTED_EMPIRICAL_MEASURES": ("2016-01-01", "JOURNAL_PUBLICATION_MONTH", "2014-08-29", "ARXIV_REVISION_DATE"),
+    "D_IMPORTANCE_ESS": ("2017-02-01", "JOURNAL_PUBLICATION_MONTH", "2016-09-25", "ARXIV_REVISION_DATE"),
+    "D_WEIGHTED_ERM": ("2020-02-12", "FIRST_ARXIV_SUBMISSION_DATE", "2020-02-19", "ARXIV_REVISION_DATE"),
+    "E_MCATNLO": ("2002-06-12", "JOURNAL_PUBLICATION_DATE", "2002-07-12", "ARXIV_REVISION_DATE"),
+    "E_SHERPA_NEGATIVE_WEIGHTS": ("2021-10-28", "FIRST_ARXIV_SUBMISSION_DATE", "2021-10-28", "ARXIV_VERSION_DATE"),
+    "E_PROPER_SCORING_RULES": ("2007-03-01", "JOURNAL_PUBLICATION_MONTH", None, "NOT_APPLICABLE"),
+}
+
+# Corrected claim scopes.  A claim may remain useful context without being
+# allowed to carry a preference-critical score.
+CLAIM_CORRECTED_SCOPE: dict[tuple[str, str], tuple[list[str], str]] = {
+    ("B_MSbar_POSITIVITY_2023", "PERTURBATIVE_MSBAR_NONNEGATIVITY_DOMAIN"): (["scientific_motivation", "qcd_factorization_compatibility"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("B_MSbar_POSITIVITY_2023", "LOW_SCALE_NEGATIVITY_REMAINS_POSSIBLE"): (["pdf_interpretability", "objective_change_risk"], "SUPPORTED"),
+    ("B_NNPDF40", "POSITIVITY_AND_SUM_RULE_CONSTRAINTS"): (["scientific_motivation", "pdf_interpretability"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("B_NNPDF40", "CLOSURE_AND_FUTURE_TESTS"): (["bounded_planning_review_question", "independent_falsifiability", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("B_NNPDF40", "OPEN_METHOD_IMPLEMENTATION"): (["reproducibility"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("B_MSBAR_POSITIVITY_2020", "NLO_MSBAR_POSITIVITY_IS_PERTURBATIVE"): (["qcd_factorization_compatibility", "pdf_interpretability"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE"): (["scientific_motivation", "qcd_factorization_compatibility", "pdf_interpretability"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("C_HERA_COMBINED_DIS", "GAMMA_Z_XF3_EVIDENCE"): (["independent_falsifiability", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("C_HERA_COMBINED_DIS", "REDUCED_INCLUSIVE_SCOPE"): (["objective_change_risk"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("C_DAGOSTINI_UNFOLDING", "DETECTOR_RESPONSE_CONDITIONAL_PROBABILITIES"): (["detector_response_coherence"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR"): (["calibration_and_coverage", "independent_falsifiability", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("C_DEEP_SETS", "PERMUTATION_INVARIANT_SET_FUNCTIONS"): (["event_set_representation"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"): (["scientific_motivation", "event_set_representation", "weight_semantics", "bounded_planning_review_question", "independent_falsifiability", "objective_change_risk", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("D_IMPORTANCE_ESS", "NORMALIZED_WEIGHT_ESS_DIAGNOSTICS"): (["weight_semantics", "independent_falsifiability", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("D_WEIGHTED_ERM", "TARGET_PROPOSAL_DOMINATION_AND_WEIGHTED_RISK"): (["scientific_motivation", "strict_support_preservation", "bounded_planning_review_question"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"): (["scientific_motivation", "qcd_factorization_compatibility", "event_set_representation", "weight_semantics", "no_clipping_preservation", "bounded_planning_review_question", "independent_falsifiability", "objective_change_risk", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST"): (["scientific_motivation", "event_set_representation", "weight_semantics", "independent_falsifiability", "expected_evidence_value_if_review_fails"], "SUPPORTED_WITH_QUALIFICATION"),
+    ("E_PROPER_SCORING_RULES", "PROPER_SCORES_ELICIT_PROBABILITY_DISTRIBUTIONS"): (["normalized_observation_measure", "posterior_target_coherence", "calibration_and_coverage"], "SUPPORTED"),
+}
+
+
+def build_sources() -> dict[str, dict[str, Any]]:
+    sources = _build_sources_v1()
+    for source_id, row in sources.items():
+        prior_identity, current_identity = SOURCE_IDENTITY_AUDIT[source_id]
+        publication_date, publication_kind, version_date, version_kind = SOURCE_DATES[source_id]
+        row.update({
+            "publication_date": publication_date,
+            "publication_date_kind": publication_kind,
+            "version_date": version_date,
+            "version_date_kind": version_kind,
+            "v1_identity_audit_classification": prior_identity,
+            "identity_classification": current_identity,
+        })
+        for claim_key, claim_row in row["claim_scope"].items():
+            criteria, maximum = CLAIM_CORRECTED_SCOPE[(source_id, claim_key)]
+            claim_row["criterion_scope"] = criteria
+            claim_row["maximum_supported_status"] = maximum
+        row["criterion_scope"] = sorted({criterion for claim_row in row["claim_scope"].values() for criterion in claim_row["criterion_scope"]})
+    dagostini = sources["C_DAGOSTINI_UNFOLDING"]
+    dagostini.update({
+        "source_type": "PEER_REVIEWED_PUBLISHER_RECORD",
+        "exact_title": "A multidimensional unfolding method based on Bayes' theorem",
+        "publication_or_standard": "Nuclear Instruments and Methods in Physics Research Section A 362 (1995) 487-498",
+        "DOI_or_arXiv_or_official_identifier": "doi:10.1016/0168-9002(95)00274-X",
+        "exact_version": "publisher article record",
+        "official_URL": "https://www.sciencedirect.com/science/article/pii/016890029500274X",
+        "retrieved_byte_SHA256_when_downloaded": None,
+        "limitations": "The DOI and publisher record identify the 1995 article; no official downloadable byte representation was archived or hashed. The method is contextual only and does not establish a PartonSBI forward detector law or MVP.",
+    })
+    return sources
+
+
 def build_repository_constraints() -> dict[str, dict[str, Any]]:
     return {
         "D1F_V3": {
@@ -372,7 +464,9 @@ def build_repository_constraints() -> dict[str, dict[str, Any]]:
     }
 
 
-STATUS_CODES = {
+# Retained only to explain the rejected v1 artifact.  v2 scientific scores are
+# built from the explicit 72-cell audited ledger below, never from these codes.
+V1_STATUS_CODE_AUDIT_PROVENANCE = {
     B: "UUQQQUUUUUQQQQUQQQ",
     C: "QQQQQQQQQQQQQQQQQQ",
     D: "QUQUUQQUUUQQQQUQQQ",
@@ -386,7 +480,7 @@ CODE_TO_STATUS = {
     "A": "NOT_APPLICABLE",
 }
 
-BINDINGS: dict[str, dict[str, list[tuple[str, str]]]] = {
+V1_BINDINGS_AUDIT_PROVENANCE: dict[str, dict[str, list[tuple[str, str]]]] = {
     B: {
         "scientific_motivation": [("B_MSbar_POSITIVITY_2023", "PERTURBATIVE_MSBAR_NONNEGATIVITY_DOMAIN"), ("B_NNPDF40", "POSITIVITY_AND_SUM_RULE_CONSTRAINTS")],
         "qcd_factorization_compatibility": [("B_MSbar_POSITIVITY_2023", "PERTURBATIVE_MSBAR_NONNEGATIVITY_DOMAIN"), ("B_MSBAR_POSITIVITY_2020", "NLO_MSBAR_POSITIVITY_IS_PERTURBATIVE")],
@@ -486,14 +580,14 @@ LIMITATIONS = {
 }
 
 
-def build_scorecards(sources: dict[str, dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
+def _build_scorecards_v1_for_audit_only(sources: dict[str, dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
     cards: dict[str, dict[str, dict[str, Any]]] = {}
     for candidate in CANDIDATES:
-        require(len(STATUS_CODES[candidate]) == len(CRITERIA), f"score code length: {candidate}")
+        require(len(V1_STATUS_CODE_AUDIT_PROVENANCE[candidate]) == len(CRITERIA), f"score code length: {candidate}")
         cards[candidate] = {}
-        for criterion, code in zip(CRITERIA, STATUS_CODES[candidate], strict=True):
+        for criterion, code in zip(CRITERIA, V1_STATUS_CODE_AUDIT_PROVENANCE[candidate], strict=True):
             status = CODE_TO_STATUS[code]
-            pairs = BINDINGS.get(candidate, {}).get(criterion, [])
+            pairs = V1_BINDINGS_AUDIT_PROVENANCE.get(candidate, {}).get(criterion, [])
             bindings = []
             for source_id, claim_key in pairs:
                 scope = sources[source_id]["claim_scope"][claim_key]
@@ -533,6 +627,207 @@ def build_scorecards(sources: dict[str, dict[str, Any]]) -> dict[str, dict[str, 
     return cards
 
 
+AUDITED_QUALIFIED_CRITERIA = {
+    B: {
+        "scientific_motivation", "qcd_factorization_compatibility", "pdf_interpretability",
+        "bounded_planning_review_question", "independent_falsifiability",
+        "objective_change_risk", "expected_evidence_value_if_review_fails",
+    },
+    C: {
+        "scientific_motivation", "qcd_factorization_compatibility", "pdf_interpretability",
+        "event_set_representation", "calibration_and_coverage", "independent_falsifiability",
+        "expected_evidence_value_if_review_fails",
+    },
+    D: {
+        "scientific_motivation", "event_set_representation", "weight_semantics",
+        "strict_support_preservation", "bounded_planning_review_question",
+        "independent_falsifiability", "objective_change_risk",
+        "expected_evidence_value_if_review_fails",
+    },
+    E: {
+        "scientific_motivation", "qcd_factorization_compatibility", "event_set_representation",
+        "weight_semantics", "no_clipping_preservation", "bounded_planning_review_question",
+        "independent_falsifiability", "objective_change_risk",
+        "expected_evidence_value_if_review_fails",
+    },
+}
+
+AUDITED_BINDINGS: dict[str, dict[str, list[tuple[str, str]]]] = {
+    B: {
+        "scientific_motivation": [("B_MSbar_POSITIVITY_2023", "PERTURBATIVE_MSBAR_NONNEGATIVITY_DOMAIN"), ("B_NNPDF40", "POSITIVITY_AND_SUM_RULE_CONSTRAINTS")],
+        "qcd_factorization_compatibility": [("B_MSbar_POSITIVITY_2023", "PERTURBATIVE_MSBAR_NONNEGATIVITY_DOMAIN"), ("B_MSBAR_POSITIVITY_2020", "NLO_MSBAR_POSITIVITY_IS_PERTURBATIVE")],
+        "pdf_interpretability": [("B_MSbar_POSITIVITY_2023", "LOW_SCALE_NEGATIVITY_REMAINS_POSSIBLE"), ("B_NNPDF40", "POSITIVITY_AND_SUM_RULE_CONSTRAINTS")],
+        "bounded_planning_review_question": [("B_NNPDF40", "CLOSURE_AND_FUTURE_TESTS")],
+        "independent_falsifiability": [("B_NNPDF40", "CLOSURE_AND_FUTURE_TESTS")],
+        "objective_change_risk": [("B_MSbar_POSITIVITY_2023", "LOW_SCALE_NEGATIVITY_REMAINS_POSSIBLE")],
+        "expected_evidence_value_if_review_fails": [("B_NNPDF40", "CLOSURE_AND_FUTURE_TESTS")],
+    },
+    C: {
+        "scientific_motivation": [("C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")],
+        "qcd_factorization_compatibility": [("C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")],
+        "pdf_interpretability": [("C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")],
+        "event_set_representation": [("C_DEEP_SETS", "PERMUTATION_INVARIANT_SET_FUNCTIONS")],
+        "calibration_and_coverage": [("C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR")],
+        "independent_falsifiability": [("C_HERA_COMBINED_DIS", "GAMMA_Z_XF3_EVIDENCE"), ("C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR")],
+        "expected_evidence_value_if_review_fails": [("C_HERA_COMBINED_DIS", "GAMMA_Z_XF3_EVIDENCE"), ("C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR")],
+    },
+    D: {
+        "scientific_motivation": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"), ("D_WEIGHTED_ERM", "TARGET_PROPOSAL_DOMINATION_AND_WEIGHTED_RISK")],
+        "event_set_representation": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE")],
+        "weight_semantics": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"), ("D_IMPORTANCE_ESS", "NORMALIZED_WEIGHT_ESS_DIAGNOSTICS")],
+        "strict_support_preservation": [("D_WEIGHTED_ERM", "TARGET_PROPOSAL_DOMINATION_AND_WEIGHTED_RISK")],
+        "bounded_planning_review_question": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"), ("D_WEIGHTED_ERM", "TARGET_PROPOSAL_DOMINATION_AND_WEIGHTED_RISK")],
+        "independent_falsifiability": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"), ("D_IMPORTANCE_ESS", "NORMALIZED_WEIGHT_ESS_DIAGNOSTICS")],
+        "objective_change_risk": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE")],
+        "expected_evidence_value_if_review_fails": [("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"), ("D_IMPORTANCE_ESS", "NORMALIZED_WEIGHT_ESS_DIAGNOSTICS")],
+    },
+    E: {
+        "scientific_motivation": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"), ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST")],
+        "qcd_factorization_compatibility": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS")],
+        "event_set_representation": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"), ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST")],
+        "weight_semantics": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"), ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST")],
+        "no_clipping_preservation": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS")],
+        "bounded_planning_review_question": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS")],
+        "independent_falsifiability": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"), ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST")],
+        "objective_change_risk": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS")],
+        "expected_evidence_value_if_review_fails": [("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"), ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST")],
+    },
+}
+
+V1_CELL_AUDIT = {
+    B: {
+        **{criterion: "SUPPORTED_WITH_QUALIFICATION" for criterion in AUDITED_QUALIFIED_CRITERIA[B]},
+        **{criterion: "OVERSTATED_IN_V1" for criterion in {"no_clipping_preservation", "strict_support_preservation", "reproducibility"}},
+    },
+    C: {
+        **{criterion: "SUPPORTED_WITH_QUALIFICATION" for criterion in AUDITED_QUALIFIED_CRITERIA[C]},
+        **{criterion: "OVERSTATED_IN_V1" for criterion in {"normalized_observation_measure", "posterior_target_coherence", "weight_semantics", "rate_shape_semantics", "reproducibility"}},
+        **{criterion: "MISBOUND_IN_V1" for criterion in {"detector_response_coherence", "no_clipping_preservation", "strict_support_preservation", "bounded_planning_review_question", "credible_end_to_end_mvp_path", "objective_change_risk"}},
+    },
+    D: {
+        **{criterion: "SUPPORTED_WITH_QUALIFICATION" for criterion in AUDITED_QUALIFIED_CRITERIA[D]},
+        **{criterion: "OVERSTATED_IN_V1" for criterion in {"normalized_observation_measure", "no_clipping_preservation", "reproducibility"}},
+    },
+    E: {
+        **{criterion: "SUPPORTED_WITH_QUALIFICATION" for criterion in AUDITED_QUALIFIED_CRITERIA[E]},
+        **{criterion: "OVERSTATED_IN_V1" for criterion in {"normalized_observation_measure", "posterior_target_coherence", "calibration_and_coverage", "credible_end_to_end_mvp_path", "reproducibility"}},
+    },
+}
+for _candidate in CANDIDATES:
+    for _criterion in CRITERIA:
+        V1_CELL_AUDIT[_candidate].setdefault(_criterion, "PRIMARY_EVIDENCE_UNAVAILABLE")
+
+
+def _claim_audit(
+    content_classification: str,
+    location: str,
+    supported: str,
+    unsupported: str,
+    load_bearing: bool,
+) -> dict[str, Any]:
+    return {
+        "content_classification": content_classification,
+        "exact_section_page_equation_or_table": location,
+        "concise_supported_statement": supported,
+        "unsupported_extensions": unsupported,
+        "load_bearing_allowed": load_bearing,
+    }
+
+
+CLAIM_CONTENT_AUDIT: dict[tuple[str, str], dict[str, Any]] = {
+    ("B_MSbar_POSITIVITY_2023", "PERTURBATIVE_MSBAR_NONNEGATIVITY_DOMAIN"): _claim_audit("DIRECTLY_SUPPORTED", "Abstract; sections 2-4; pages 1, 3, 9, 16-17", "A perturbative-domain MSbar nonnegativity argument is given.", "No new PartonSBI family, normalized event law, or deployment support is established.", True),
+    ("B_MSbar_POSITIVITY_2023", "LOW_SCALE_NEGATIVITY_REMAINS_POSSIBLE"): _claim_audit("DIRECTLY_SUPPORTED", "Abstract; sections 2-4; pages 1, 3, 9, 16-17", "The paper distinguishes its perturbative domain from low-scale behavior.", "It does not define PartonSBI theta support or a generator-safe family.", True),
+    ("B_NNPDF40", "POSITIVITY_AND_SUM_RULE_CONSTRAINTS"): _claim_audit("OVERSTATED_IN_V1", "Sections 8.2-8.3, page 88; appendix A, page 116", "NNPDF4.0 documents positivity and sum-rule constraints in its fitted methodology.", "Those constraints do not prove no-clipping or strict deployment support for an undefined new family.", True),
+    ("B_NNPDF40", "CLOSURE_AND_FUTURE_TESTS"): _claim_audit("SUPPORTED_WITH_QUALIFICATION", "Section 6, pages 55-71", "Closure and future tests supply qualified methodological motivation for bounded falsification questions.", "They do not constitute a PartonSBI family closure test or MVP.", True),
+    ("B_NNPDF40", "OPEN_METHOD_IMPLEMENTATION"): _claim_audit("OVERSTATED_IN_V1", "Abstract and implementation discussion", "An open methodology is reported for NNPDF4.0.", "It does not establish reproducibility of an undefined PartonSBI family.", False),
+    ("B_MSBAR_POSITIVITY_2020", "NLO_MSBAR_POSITIVITY_IS_PERTURBATIVE"): _claim_audit("OVERSTATED_IN_V1", "Abstract; sections 2-3; pages 1-26", "The positivity argument is perturbative and scheme-controlled.", "It does not prove strict support or generator deployment over the D0R box.", True),
+    ("C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE"): _claim_audit("OVERSTATED_IN_V1", "Sections 1-2; pages 6-9; equations 1-12", "HERA provides measured inclusive e+/e- neutral-current DIS cross sections and QCD structure.", "It does not define a normalized PartonSBI observation law, posterior, event weights, rate/shape contract, or MVP.", True),
+    ("C_HERA_COMBINED_DIS", "GAMMA_Z_XF3_EVIDENCE"): _claim_audit("OVERSTATED_IN_V1", "Pages 7-9; equations 2, 7, 8", "The source reports gamma-Z and xF3 structure relevant to falsifying an incomplete DIS formula.", "It does not alone bound or validate a complete PartonSBI MVP.", True),
+    ("C_HERA_COMBINED_DIS", "REDUCED_INCLUSIVE_SCOPE"): _claim_audit("OVERSTATED_IN_V1", "Sections 1-2; pages 6-7", "The measured inclusive scope is narrower than a full event generator.", "It does not prove no clipping, strict support, or implementation reproducibility.", False),
+    ("C_DAGOSTINI_UNFOLDING", "DETECTOR_RESPONSE_CONDITIONAL_PROBABILITIES"): _claim_audit("MISBOUND_IN_V1", "Publisher abstract and article metadata", "The article is contextual evidence for multidimensional Bayesian unfolding.", "The v1 arXiv bytes belonged to a different paper; no forward PartonSBI detector law, QCD claim, normalized measure, or MVP is established.", False),
+    ("C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR"): _claim_audit("OVERSTATED_IN_V1", "Abstract; sections 2-4; pages 1, 3-4", "SBC supplies calibration diagnostics when a generative model and posterior algorithm already exist.", "It does not establish that the proposed posterior or positive rate exists.", True),
+    ("C_DEEP_SETS", "PERMUTATION_INVARIANT_SET_FUNCTIONS"): _claim_audit("OVERSTATED_IN_V1", "Abstract; sections 1-3; pages 1-3", "Deep Sets supports permutation-invariant representation of set-valued inputs.", "It does not establish a normalized law, posterior, detector kernel, or end-to-end MVP.", True),
+    ("D_WEIGHTED_EMPIRICAL_MEASURES", "IMPORTANCE_WEIGHTED_EMPIRICAL_MEASURE"): _claim_audit("OVERSTATED_IN_V1", "Sections 2.2-3; pages 3, 6-7; equation 2.4", "Positive likelihood-ratio weights define weighted empirical-measure components under explicit target/proposal assumptions.", "They do not define the random observed-set law or posterior required here.", True),
+    ("D_IMPORTANCE_ESS", "NORMALIZED_WEIGHT_ESS_DIAGNOSTICS"): _claim_audit("OVERSTATED_IN_V1", "Abstract; sections 1-3; pages 1-4; equation 6", "ESS diagnoses concentration of normalized importance weights.", "It does not establish posterior coherence or reproducibility of the proposed objective.", True),
+    ("D_WEIGHTED_ERM", "TARGET_PROPOSAL_DOMINATION_AND_WEIGHTED_RISK"): _claim_audit("OVERSTATED_IN_V1", "Sections 2-3; pages 1-8", "Weighted-risk correction requires explicit domination and likelihood-ratio semantics.", "It does not define the PartonSBI observation law, posterior, or implementation.", True),
+    ("E_MCATNLO", "NEGATIVE_COMPLETE_EVENT_WEIGHTS_ARE_ESTIMATOR_CONTRIBUTIONS"): _claim_audit("OVERSTATED_IN_V1", "Section 2.2 page 6; section 4.5 page 29; conclusion page 39", "Negative complete-event weights occur as estimator contributions in matched predictions.", "They are not event probabilities and do not define a normalized observation law, posterior, calibration law, or MVP.", True),
+    ("E_SHERPA_NEGATIVE_WEIGHTS", "NEGATIVE_WEIGHTS_CAUSE_CANCELLATION_AND_COST"): _claim_audit("OVERSTATED_IN_V1", "Abstract; sections 1 and 3-5; pages 1-4 and 18", "Negative weights cause cancellation and efficiency costs in higher-order generation.", "Their handling does not establish signed posterior semantics or a complete PartonSBI MVP.", True),
+    ("E_PROPER_SCORING_RULES", "PROPER_SCORES_ELICIT_PROBABILITY_DISTRIBUTIONS"): _claim_audit("OVERSTATED_IN_V1", "Publisher abstract; section 2; pages 359-361", "Proper scores are defined for probabilistic forecasts and observations.", "This does not independently prove impossibility of every signed-weight research contract.", False),
+}
+
+
+def build_source_content_ledger(sources: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    ledger = []
+    for source_id in sorted(sources):
+        source_row = sources[source_id]
+        for claim_key in sorted(source_row["claim_scope"]):
+            claim_row = source_row["claim_scope"][claim_key]
+            audit = CLAIM_CONTENT_AUDIT[(source_id, claim_key)]
+            ledger.append({
+                "source_id": source_id,
+                "claim_key": claim_key,
+                "identity_classification": source_row["identity_classification"],
+                **copy.deepcopy(audit),
+                "option_scope": copy.deepcopy(claim_row["option_scope"]),
+                "criterion_scope": copy.deepcopy(claim_row["criterion_scope"]),
+                "maximum_supported_status": claim_row["maximum_supported_status"],
+                "limitations": source_row["limitations"],
+            })
+    require(len(ledger) == 18, "source-content ledger must contain all eighteen audited claims")
+    return ledger
+
+
+def _correction_reason(classification: str, criterion: str) -> str:
+    if classification == "SUPPORTED_WITH_QUALIFICATION":
+        return f"The independent audit retained only scoped qualified support for {criterion}."
+    if classification == "OVERSTATED_IN_V1":
+        return f"The v1 source established a component or context but not the complete {criterion} claim; v2 records primary evidence unavailable."
+    if classification == "MISBOUND_IN_V1":
+        return f"The v1 claim/source binding did not support {criterion}; v2 removes the binding and records primary evidence unavailable."
+    return f"The bounded audit found no independent primary evidence for the candidate-specific {criterion} claim."
+
+
+def build_scorecards(sources: dict[str, dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
+    ledger_by_key = {(row["source_id"], row["claim_key"]): row for row in build_source_content_ledger(sources)}
+    cards: dict[str, dict[str, dict[str, Any]]] = {}
+    for candidate in CANDIDATES:
+        cards[candidate] = {}
+        for criterion in CRITERIA:
+            status = "SUPPORTED_WITH_QUALIFICATION" if criterion in AUDITED_QUALIFIED_CRITERIA[candidate] else "PRIMARY_EVIDENCE_UNAVAILABLE"
+            pairs = AUDITED_BINDINGS.get(candidate, {}).get(criterion, [])
+            bindings = []
+            for source_id, claim_key in pairs:
+                ledger_row = ledger_by_key[(source_id, claim_key)]
+                require(ledger_row["load_bearing_allowed"], f"audited claim cannot be load-bearing: {source_id}/{claim_key}")
+                require(candidate in ledger_row["option_scope"] and criterion in ledger_row["criterion_scope"], f"audited claim scope mismatch: {candidate}/{criterion}")
+                bindings.append({
+                    "source_id": source_id,
+                    "claim_key": claim_key,
+                    "identity_classification": ledger_row["identity_classification"],
+                    "content_classification": ledger_row["content_classification"],
+                    "maximum_supported_status": ledger_row["maximum_supported_status"],
+                })
+            require((status in POSITIVE) == bool(bindings), f"audited cell/binding mismatch: {candidate}/{criterion}")
+            v1_classification = V1_CELL_AUDIT[candidate][criterion]
+            cards[candidate][criterion] = {
+                "candidate_id": candidate,
+                "criterion_id": criterion,
+                "status": status,
+                "evidence_class": "EXPLICIT_INFERENCE_FROM_PRIMARY_EVIDENCE" if bindings else "PRIMARY_EVIDENCE_UNAVAILABLE",
+                "source_content_bindings": bindings,
+                "explicit_inference": {
+                    "premises": [f"{row['source_id']}:{row['claim_key']}" for row in bindings],
+                    "conclusion": f"The audited sources support no more than {status} for {candidate}/{criterion}.",
+                } if bindings else None,
+                "candidate_specific_rationale": f"{RATIONALE_PREFIX[candidate]} {RATIONALE_DETAIL[criterion]} The independent source-content audit records {status} for this exact candidate-specific claim.",
+                "limitations": LIMITATIONS[candidate],
+                "load_bearing": bool(bindings),
+                "v1_audit_classification": v1_classification,
+                "correction_reason": _correction_reason(v1_classification, criterion),
+            }
+    return cards
+
+
 def build_candidates() -> dict[str, dict[str, Any]]:
     common = {
         "implementation_ready": False,
@@ -542,6 +837,7 @@ def build_candidates() -> dict[str, dict[str, Any]]:
     return {
         B: {
             **common,
+            "candidate_status": "SCIENTIFICALLY_MOTIVATED_BUT_PRIORITY_GATES_UNMET",
             "contract_scope": "A separately identified nonnegative evolved PDF family with new theta, prior, and family identity.",
             "not_a_D0R_correction": True,
             "no_hidden_repair": True,
@@ -549,6 +845,7 @@ def build_candidates() -> dict[str, dict[str, Any]]:
         },
         C: {
             **common,
+            "candidate_status": "SCIENTIFICALLY_MOTIVATED_COMPONENTS_PRESENT_BUT_PRIORITY_GATES_UNMET",
             "contract_scope": "z~p_theta(z), y~K(y|z), fixed-N D={y_i}, with p_theta proportional to the accepted-domain neutral-current DIS differential rate.",
             "no_hidden_repair": True,
             "full_generator_equivalence_claimed": False,
@@ -558,6 +855,7 @@ def build_candidates() -> dict[str, dict[str, Any]]:
         },
         D: {
             **common,
+            "candidate_status": "SCIENTIFICALLY_MOTIVATED_BUT_PRIORITY_GATES_UNMET",
             "contract_scope": "A random positive weighted empirical measure with explicit proposal, target, normalization, and ESS semantics.",
             "no_hidden_repair": True,
             "weights_positive_only": True,
@@ -566,6 +864,7 @@ def build_candidates() -> dict[str, dict[str, Any]]:
         },
         E: {
             **common,
+            "candidate_status": "SCIENTIFICALLY_MOTIVATED_BUT_PRIORITY_GATES_UNMET",
             "contract_scope": "Research on signed estimator samples only if a positive normalized observation law and coherent posterior can be constructed.",
             "no_hidden_repair": True,
             "signed_weights_are_probabilities": False,
@@ -584,19 +883,87 @@ GATE_CRITERIA = {
     "objective_change_understood": "objective_change_risk",
 }
 
+PREFERENCE_CRITICAL_CRITERIA = (
+    "normalized_observation_measure",
+    "posterior_target_coherence",
+    "scientific_motivation",
+    "bounded_planning_review_question",
+    "independent_falsifiability",
+    "credible_end_to_end_mvp_path",
+    "objective_change_risk",
+    "no_clipping_preservation",
+)
+
+MVP_COMPONENTS = {
+    "physical_data_law": "normalized_observation_measure",
+    "finite_positive_normalization": "normalized_observation_measure",
+    "detector_law": "detector_response_coherence",
+    "event_representation": "event_set_representation",
+    "posterior_or_training_target": "posterior_target_coherence",
+    "calibration": "calibration_and_coverage",
+    "implementation_boundary_plausibility": "reproducibility",
+    "validation_boundary_plausibility": "independent_falsifiability",
+    "repository_infrastructure_compatibility": "reproducibility",
+}
+
+
+def build_composite_mvp_contract(scorecards: dict[str, dict[str, dict[str, Any]]]) -> dict[str, dict[str, Any]]:
+    result = {}
+    for candidate in CANDIDATES:
+        components = {
+            component: {
+                "criterion_id": criterion,
+                "status": scorecards[candidate][criterion]["status"],
+            }
+            for component, criterion in MVP_COMPONENTS.items()
+        }
+        all_components_positive = all(row["status"] in POSITIVE for row in components.values())
+        explicit_mvp_positive = scorecards[candidate]["credible_end_to_end_mvp_path"]["status"] in POSITIVE
+        result[candidate] = {
+            "required_components": components,
+            "all_components_positive": all_components_positive,
+            "explicit_composite_inference_positive": explicit_mvp_positive,
+            "status": "SUPPORTED_WITH_QUALIFICATION" if all_components_positive and explicit_mvp_positive else "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "isolated_component_support_is_sufficient": False,
+        }
+    return result
+
 
 def derive_gates(record: dict[str, Any]) -> dict[str, dict[str, str]]:
     result: dict[str, dict[str, str]] = {}
     for candidate in CANDIDATES:
         cells = record["criterion_scorecards"][candidate]
         gates = {gate: cells[criterion]["status"] for gate, criterion in GATE_CRITERIA.items()}
+        gates["credible_MVP_path"] = record["composite_mvp_contract"][candidate]["status"]
+        # A bounded *planning* question needs motivated subject matter,
+        # falsifiability, and evidence value; it does not promote the distinct
+        # candidate-specific bounded-contract score or composite MVP.
+        gates["bounded_planning_review"] = (
+            "SUPPORTED_WITH_QUALIFICATION"
+            if all(cells[criterion]["status"] in POSITIVE for criterion in (
+                "scientific_motivation",
+                "independent_falsifiability",
+                "expected_evidence_value_if_review_fails",
+            ))
+            else "PRIMARY_EVIDENCE_UNAVAILABLE"
+        )
+        # Objective-change understanding is repository-owned prospective scope
+        # accounting, not independent scientific preference evidence.
+        gates["objective_change_understood"] = (
+            "SUPPORTED_WITH_QUALIFICATION"
+            if record["candidates"][candidate]["prospective_supersession_explicit"]
+            and bool(record["candidates"][candidate]["contract_scope"])
+            else "PRIMARY_EVIDENCE_UNAVAILABLE"
+        )
         gates["no_hidden_repair"] = cells["no_clipping_preservation"]["status"] if record["candidates"][candidate]["no_hidden_repair"] else "NOT_SUPPORTED"
         gates["prospective_supersession_explicit"] = "SUPPORTED" if record["candidates"][candidate]["prospective_supersession_explicit"] else "NOT_SUPPORTED"
-        primary_load_bearing = any(
-            cell["load_bearing"] and cell["evidence_class"] in {"DIRECT_PRIMARY_EVIDENCE", "EXPLICIT_INFERENCE_FROM_PRIMARY_EVIDENCE"} and cell["evidence_bindings"]
-            for cell in cells.values()
+        complete_critical_coverage = all(
+            cells[criterion]["status"] in POSITIVE
+            and cells[criterion]["load_bearing"]
+            and bool(cells[criterion]["source_content_bindings"])
+            for criterion in PREFERENCE_CRITICAL_CRITERIA
         )
-        gates["independent_evidence_available"] = "SUPPORTED" if primary_load_bearing else "PRIMARY_EVIDENCE_UNAVAILABLE"
+        gates["independent_evidence_available"] = "SUPPORTED" if complete_critical_coverage else "PRIMARY_EVIDENCE_UNAVAILABLE"
         result[candidate] = gates
     return result
 
@@ -620,7 +987,7 @@ def flattened_bindings(scorecards: dict[str, dict[str, dict[str, Any]]]) -> list
     result = []
     for candidate in CANDIDATES:
         for criterion in CRITERIA:
-            for binding in scorecards[candidate][criterion]["evidence_bindings"]:
+            for binding in scorecards[candidate][criterion]["source_content_bindings"]:
                 result.append({"candidate_id": candidate, "criterion_id": criterion, **copy.deepcopy(binding)})
     return result
 
@@ -643,9 +1010,15 @@ def build_precedence() -> dict[str, Any]:
 
 def build_record() -> dict[str, Any]:
     sources = build_sources()
+    source_content_ledger = build_source_content_ledger(sources)
     candidates = build_candidates()
     scorecards = build_scorecards(sources)
-    seed = {"candidates": candidates, "criterion_scorecards": scorecards}
+    composite_mvp = build_composite_mvp_contract(scorecards)
+    seed = {
+        "candidates": candidates,
+        "criterion_scorecards": scorecards,
+        "composite_mvp_contract": composite_mvp,
+    }
     gates = derive_gates(seed)
     eligibility = derive_eligibility(gates)
     decision = derive_decision(eligibility)
@@ -660,9 +1033,11 @@ def build_record() -> dict[str, Any]:
         },
         "candidates": candidates,
         "external_source_registry": sources,
+        "source_content_ledger": source_content_ledger,
         "repository_constraint_registry": build_repository_constraints(),
         "claim_bindings": flattened_bindings(scorecards),
         "criterion_scorecards": scorecards,
+        "composite_mvp_contract": composite_mvp,
         "mandatory_priority_gates": gates,
         "candidate_eligibility": eligibility,
         "unique_priority_rule": {
@@ -675,10 +1050,11 @@ def build_record() -> dict[str, Any]:
             "decision_from_unique_priority_rule": decision,
         },
         "limitations": [
-            "The external source bytes are not vendored; twelve versioned PDFs were retrieved and hashed under /tmp/partonsbi_d1g_sources on 2026-08-04.",
-            "The proper-scoring-rule source is pinned by peer-reviewed DOI without a committed or downloaded byte hash.",
+            "The external source bytes are not vendored; twelve versioned PDFs were retrieved and hashed under /tmp during the v1 source audit.",
+            "The corrected D'Agostini and proper-scoring-rule records are pinned by peer-reviewed DOI/publisher identity without an official downloaded byte hash.",
+            "The validator binds the accepted independent source-content audit ledger but does not read publications or independently prove their scientific content.",
             "Priority is planning-only and does not discharge scientific proof obligations or establish an executable simulator.",
-            "Candidate C is a reduced observation contract and is not equivalent to the paused full-generator line.",
+            "Candidate C has scientifically motivated components, but no normalized measure, posterior, detector law, or composite MVP has independent support.",
         ],
         "authorization": {flag: False for flag in AUTHORIZATION_FLAGS},
         "dependencies": {
@@ -688,15 +1064,37 @@ def build_record() -> dict[str, Any]:
             "roadmap": {"D2": "BLOCKED", "D3": "BACKLOG", "D4": "BACKLOG", "D5": "BACKLOG", "active_supersession": False},
         },
         "next_step": {
-            "action": "CREATE_SEPARATE_LOWER_LEVEL_DIS_CONTRACT_REVIEW_PROPOSAL",
-            "scope": "Planning proposal only; independently review all fourteen still-NOT_EVALUATED obligations before any implementation decision.",
+            "action": "MAINTAIN_PAUSE_PENDING_PREFERENCE_CRITICAL_EVIDENCE",
+            "scope": "New priority review only after independent evidence addresses a candidate's normalized measure, posterior, no-hidden-repair, and composite MVP gaps.",
             "implementation": False,
             "authorization_granted": False,
         },
         "validation": {
+            "validation_scope": "ARTIFACT_INTEGRITY_AND_AUDITED_LEDGER_BINDING",
+            "validator_proves": [
+                "deterministic artifact construction",
+                "source identity registry integrity",
+                "audited ledger integrity",
+                "option and criterion scope consistency",
+                "maximum-status compliance",
+                "gate and decision recomputation",
+                "authorization and roadmap boundaries",
+            ],
+            "validator_does_not_prove": [
+                "external-paper scientific correctness",
+                "future source availability",
+                "discharged physics obligations",
+                "executable simulator validity",
+            ],
             "external_source_count": len(sources),
             "source_count_per_candidate": {candidate: sum(candidate in row["option_scope"] for row in sources.values()) for candidate in CANDIDATES},
+            "v1_source_identity_audit_totals": dict(sorted(Counter(row["v1_identity_audit_classification"] for row in sources.values()).items())),
+            "corrected_source_identity_totals": dict(sorted(Counter(row["identity_classification"] for row in sources.values()).items())),
+            "source_content_ledger_totals": dict(sorted(Counter(row["content_classification"] for row in source_content_ledger).items())),
+            "v1_cell_audit_totals": dict(sorted(Counter(cell["v1_audit_classification"] for candidate in scorecards.values() for cell in candidate.values()).items())),
             "criterion_totals": score_totals(scorecards),
+            "independent_evidence_coverage": {candidate: gates[candidate]["independent_evidence_available"] for candidate in CANDIDATES},
+            "composite_mvp_result": {candidate: composite_mvp[candidate]["status"] for candidate in CANDIDATES},
             "option_C_obligation_count": len(OPTION_C_OBLIGATIONS),
             "deterministic_generation": True,
         },
@@ -710,18 +1108,42 @@ def validate_source_registry(record: dict[str, Any]) -> None:
     for source_id, row in sources.items():
         require(row["source_id"] == source_id, f"source id mismatch: {source_id}")
         require(row["primary_source_status"] == "PRIMARY_SOURCE_CONFIRMED", f"secondary source used: {source_id}")
+        require(row["identity_classification"] in {"VERIFIED", "VERIFIED_WITH_QUALIFICATION"}, f"unresolved corrected source identity: {source_id}")
+        require(row["publication_date_kind"] in {"FIRST_ARXIV_SUBMISSION_DATE", "JOURNAL_PUBLICATION_DATE", "JOURNAL_PUBLICATION_MONTH", "PUBLISHER_ARTICLE_DATE", "CONFERENCE_PUBLICATION_YEAR"}, f"publication date kind missing: {source_id}")
+        require(row["version_date_kind"] in {"ARXIV_REVISION_DATE", "ARXIV_VERSION_DATE", "NOT_APPLICABLE"}, f"version date kind missing: {source_id}")
         require(row["limitations"], f"source limitation missing: {source_id}")
         require("ADR-010" not in row["official_URL"] and "ADR-011" not in row["official_URL"], f"self/circular source used: {source_id}")
         require(row["maximum_supported_status"] in POSITIVE, f"invalid source maximum: {source_id}")
     counts = {candidate: sum(candidate in row["option_scope"] for row in sources.values()) for candidate in CANDIDATES}
     require(all(count <= 5 for count in counts.values()), "per-candidate source bound exceeded")
+    dagostini = sources["C_DAGOSTINI_UNFOLDING"]
+    require(dagostini["DOI_or_arXiv_or_official_identifier"] == "doi:10.1016/0168-9002(95)00274-X", "D'Agostini DOI identity changed")
+    require(dagostini["official_URL"] == "https://www.sciencedirect.com/science/article/pii/016890029500274X", "old or unverified D'Agostini URL used")
+    require(dagostini["retrieved_byte_SHA256_when_downloaded"] is None, "unverified D'Agostini bytes attached")
+    require(dagostini["publication_date"] == "1995-08-15" and dagostini["publication_date_kind"] == "PUBLISHER_ARTICLE_DATE", "D'Agostini publication/version dates conflated")
+
+
+def validate_source_content_ledger(record: dict[str, Any]) -> None:
+    sources = record["external_source_registry"]
+    ledger = record["source_content_ledger"]
+    expected = build_source_content_ledger(sources)
+    require(ledger == expected, "audited source-content ledger changed")
+    allowed = {"DIRECTLY_SUPPORTED", "SUPPORTED_WITH_QUALIFICATION", "OVERSTATED_IN_V1", "MISBOUND_IN_V1", "PRIMARY_EVIDENCE_UNAVAILABLE"}
+    require(all(row["content_classification"] in allowed for row in ledger), "invalid source-content classification")
+    require(dict(sorted(Counter(row["content_classification"] for row in ledger).items())) == {
+        "DIRECTLY_SUPPORTED": 2,
+        "MISBOUND_IN_V1": 1,
+        "OVERSTATED_IN_V1": 14,
+        "SUPPORTED_WITH_QUALIFICATION": 1,
+    }, "v1 source-content audit totals changed")
 
 
 def validate_cells(record: dict[str, Any]) -> None:
     cards = record["criterion_scorecards"]
     sources = record["external_source_registry"]
     require(set(cards) == set(CANDIDATES), "candidate scorecards incomplete")
-    expected_keys = {"candidate_id", "criterion_id", "status", "evidence_class", "evidence_bindings", "explicit_inference", "candidate_specific_rationale", "limitations", "load_bearing"}
+    ledger = {(row["source_id"], row["claim_key"]): row for row in record["source_content_ledger"]}
+    expected_keys = {"candidate_id", "criterion_id", "status", "evidence_class", "source_content_bindings", "explicit_inference", "candidate_specific_rationale", "limitations", "load_bearing", "v1_audit_classification", "correction_reason"}
     for candidate in CANDIDATES:
         require(set(cards[candidate]) == set(CRITERIA), f"criterion scorecard incomplete: {candidate}")
         rationales = []
@@ -730,15 +1152,21 @@ def validate_cells(record: dict[str, Any]) -> None:
             require(set(cell) == expected_keys, f"cell schema changed: {candidate}/{criterion}")
             require(cell["candidate_id"] == candidate and cell["criterion_id"] == criterion, f"cell identity changed: {candidate}/{criterion}")
             require(cell["status"] in STATUSES and cell["evidence_class"] in EVIDENCE_CLASSES, f"invalid score semantics: {candidate}/{criterion}")
+            expected_status = "SUPPORTED_WITH_QUALIFICATION" if criterion in AUDITED_QUALIFIED_CRITERIA[candidate] else "PRIMARY_EVIDENCE_UNAVAILABLE"
+            require(cell["status"] == expected_status, f"audited cell status changed: {candidate}/{criterion}")
+            require(cell["v1_audit_classification"] == V1_CELL_AUDIT[candidate][criterion], f"v1 correction provenance changed: {candidate}/{criterion}")
+            require(cell["correction_reason"] == _correction_reason(cell["v1_audit_classification"], criterion), f"correction reason changed: {candidate}/{criterion}")
             require(cell["limitations"], f"cell limitation missing: {candidate}/{criterion}")
             require(len(cell["candidate_specific_rationale"]) >= 100, f"cell rationale too shallow: {candidate}/{criterion}")
             rationales.append(cell["candidate_specific_rationale"])
             if cell["evidence_class"] in {"PROSPECTIVE_HYPOTHESIS", "PRIMARY_EVIDENCE_UNAVAILABLE", "NOT_APPLICABLE"}:
                 require(not cell["load_bearing"], f"non-evidence cell made load-bearing: {candidate}/{criterion}")
             if cell["load_bearing"]:
-                require(cell["evidence_bindings"], f"load-bearing cell lacks source: {candidate}/{criterion}")
+                require(cell["source_content_bindings"], f"load-bearing cell lacks source: {candidate}/{criterion}")
                 require(cell["evidence_class"] in {"DIRECT_PRIMARY_EVIDENCE", "EXPLICIT_INFERENCE_FROM_PRIMARY_EVIDENCE"}, f"load-bearing evidence class invalid: {candidate}/{criterion}")
-            for binding in cell["evidence_bindings"]:
+            expected_pairs = AUDITED_BINDINGS.get(candidate, {}).get(criterion, [])
+            require([(row["source_id"], row["claim_key"]) for row in cell["source_content_bindings"]] == expected_pairs, f"audited bindings changed: {candidate}/{criterion}")
+            for binding in cell["source_content_bindings"]:
                 source_id = binding["source_id"]
                 require(source_id in sources, f"repository/self reference used as independent evidence: {candidate}/{criterion}")
                 source_row = sources[source_id]
@@ -746,14 +1174,18 @@ def validate_cells(record: dict[str, Any]) -> None:
                 claim_key = binding["claim_key"]
                 require(claim_key in source_row["claim_scope"], f"unknown source claim: {source_id}/{claim_key}")
                 scope = source_row["claim_scope"][claim_key]
-                require(binding["option_scope"] == scope["option_scope"] and candidate in binding["option_scope"], f"wrong option scope: {candidate}/{criterion}/{source_id}")
-                require(binding["criterion_scope"] == scope["criterion_scope"] and criterion in binding["criterion_scope"], f"wrong criterion scope: {candidate}/{criterion}/{source_id}")
+                ledger_row = ledger[(source_id, claim_key)]
+                require(ledger_row["load_bearing_allowed"], f"non-load-bearing audited claim used: {candidate}/{criterion}/{source_id}")
+                require(candidate in ledger_row["option_scope"], f"wrong option scope: {candidate}/{criterion}/{source_id}")
+                require(criterion in ledger_row["criterion_scope"], f"wrong criterion scope: {candidate}/{criterion}/{source_id}")
+                require(binding["identity_classification"] == ledger_row["identity_classification"], f"identity audit binding changed: {candidate}/{criterion}/{source_id}")
+                require(binding["content_classification"] == ledger_row["content_classification"], f"content audit binding changed: {candidate}/{criterion}/{source_id}")
                 require(binding["maximum_supported_status"] == scope["maximum_supported_status"], f"source maximum changed: {candidate}/{criterion}/{source_id}")
                 if cell["status"] == "SUPPORTED":
                     require(binding["maximum_supported_status"] == "SUPPORTED", f"maximum-supported status exceeded: {candidate}/{criterion}/{source_id}")
             if cell["evidence_class"] == "EXPLICIT_INFERENCE_FROM_PRIMARY_EVIDENCE":
                 require(cell["explicit_inference"] is not None and cell["explicit_inference"]["premises"], f"inference lacks premises: {candidate}/{criterion}")
-                expected = [f"{row['source_id']}:{row['claim_key']}" for row in cell["evidence_bindings"]]
+                expected = [f"{row['source_id']}:{row['claim_key']}" for row in cell["source_content_bindings"]]
                 require(cell["explicit_inference"]["premises"] == expected, f"inference premises circular or changed: {candidate}/{criterion}")
                 require(all("ADR010" not in item and "ADR011" not in item for item in expected), f"ADR self-reference: {candidate}/{criterion}")
         require(len(set(rationales)) == len(CRITERIA), f"generic rationale reused: {candidate}")
@@ -764,6 +1196,7 @@ def validate_candidate_boundaries(record: dict[str, Any]) -> None:
     candidates = record["candidates"]
     require(set(candidates) == set(CANDIDATES), "candidate set changed")
     require(candidates[B]["not_a_D0R_correction"] is True, "new family represented as D0R correction")
+    require(candidates[C]["candidate_status"] == "SCIENTIFICALLY_MOTIVATED_COMPONENTS_PRESENT_BUT_PRIORITY_GATES_UNMET", "Candidate C priority status changed")
     require(candidates[C]["full_generator_equivalence_claimed"] is False, "lower-level model claims full-generator equivalence")
     require(candidates[C]["issue_10_completed"] is False, "lower-level model completes issue #10")
     require(set(candidates[C]["omitted_physics"]) == {"ISR", "parton_showering", "hadronization", "underlying_event", "beam_remnants"}, "lower-level omissions changed")
@@ -783,21 +1216,46 @@ def validate_record(record: dict[str, Any]) -> None:
     require(record.get("active_pause_state") == {"current_full_generator_line": "PAUSED_NO_BOUNDED_CONTINUATION_ESTABLISHED", "preferred_separate_contract_review_before_D1G": "NONE", "active_contract_changed": False}, "active pause changed")
     require(record.get("repository_constraint_registry") == build_repository_constraints(), "repository constraint identities changed")
     validate_source_registry(record)
+    validate_source_content_ledger(record)
     validate_candidate_boundaries(record)
     validate_cells(record)
+    expected_composite = build_composite_mvp_contract(record["criterion_scorecards"])
+    require(record["composite_mvp_contract"] == expected_composite, "composite MVP differs from nine-component recomputation")
+    require(all(row["status"] == "PRIMARY_EVIDENCE_UNAVAILABLE" for row in expected_composite.values()), "isolated components promoted to credible MVP")
     gates = derive_gates(record)
     require(record["mandatory_priority_gates"] == gates, "mandatory gates differ from evidence recomputation")
     eligibility = derive_eligibility(gates)
     require(record["candidate_eligibility"] == eligibility, "eligibility differs from mandatory gates")
+    require(all(not row["eligible"] for row in eligibility.values()), "candidate made eligible despite unavailable mandatory gate")
     decision = derive_decision(eligibility)
     require(record["decision"] == decision and decision in set(OUTCOMES.values()) | {PAUSE_OUTCOME}, "decision differs from unique-priority derivation")
     eligible = [candidate for candidate in CANDIDATES if eligibility[candidate]["eligible"]]
     require(record["derived_decision_inputs"] == {"eligible_candidates": eligible, "eligible_candidate_count": len(eligible), "decision_from_unique_priority_rule": decision}, "derived decision inputs changed")
+    require(eligible == [] and decision == PAUSE_OUTCOME, "audited v2 evidence does not derive the required pause")
     require(record["unique_priority_rule"] == {"rule": "Exactly one candidate must pass all mandatory gates; zero or multiple eligible candidates derive NO_UNIQUE_PRIORITY_MAINTAIN_PAUSE.", "manual_totals_or_labels_break_ties": False}, "unique-priority rule changed")
     require(record["authorization"] == {flag: False for flag in AUTHORIZATION_FLAGS}, "authorization flag became true")
     require(record["dependencies"] == {"planning_issue": {"number": 49, "state": "OPEN", "authorization": "PLANNING_ONLY"}, "issue_10": {"number": 10, "state": "OPEN_BLOCKED", "authorization": "NOT_AUTHORIZED", "completed_by_candidate_C": False}, "D2": "BLOCKED_AND_UNAUTHORIZED", "roadmap": {"D2": "BLOCKED", "D3": "BACKLOG", "D4": "BACKLOG", "D5": "BACKLOG", "active_supersession": False}}, "issue #10, D2, or roadmap changed")
-    require(record["next_step"] == {"action": "CREATE_SEPARATE_LOWER_LEVEL_DIS_CONTRACT_REVIEW_PROPOSAL", "scope": "Planning proposal only; independently review all fourteen still-NOT_EVALUATED obligations before any implementation decision.", "implementation": False, "authorization_granted": False}, "next step became implementation")
-    require(record["validation"] == {"external_source_count": len(record["external_source_registry"]), "source_count_per_candidate": {candidate: sum(candidate in row["option_scope"] for row in record["external_source_registry"].values()) for candidate in CANDIDATES}, "criterion_totals": score_totals(record["criterion_scorecards"]), "option_C_obligation_count": len(OPTION_C_OBLIGATIONS), "deterministic_generation": True}, "validation aggregates differ from recomputation")
+    require(record["next_step"] == {"action": "MAINTAIN_PAUSE_PENDING_PREFERENCE_CRITICAL_EVIDENCE", "scope": "New priority review only after independent evidence addresses a candidate's normalized measure, posterior, no-hidden-repair, and composite MVP gaps.", "implementation": False, "authorization_granted": False}, "next step creates or authorizes work")
+    sources = record["external_source_registry"]
+    ledger = record["source_content_ledger"]
+    cards = record["criterion_scorecards"]
+    expected_validation = {
+        "validation_scope": "ARTIFACT_INTEGRITY_AND_AUDITED_LEDGER_BINDING",
+        "validator_proves": ["deterministic artifact construction", "source identity registry integrity", "audited ledger integrity", "option and criterion scope consistency", "maximum-status compliance", "gate and decision recomputation", "authorization and roadmap boundaries"],
+        "validator_does_not_prove": ["external-paper scientific correctness", "future source availability", "discharged physics obligations", "executable simulator validity"],
+        "external_source_count": len(sources),
+        "source_count_per_candidate": {candidate: sum(candidate in row["option_scope"] for row in sources.values()) for candidate in CANDIDATES},
+        "v1_source_identity_audit_totals": dict(sorted(Counter(row["v1_identity_audit_classification"] for row in sources.values()).items())),
+        "corrected_source_identity_totals": dict(sorted(Counter(row["identity_classification"] for row in sources.values()).items())),
+        "source_content_ledger_totals": dict(sorted(Counter(row["content_classification"] for row in ledger).items())),
+        "v1_cell_audit_totals": dict(sorted(Counter(cell["v1_audit_classification"] for candidate in cards.values() for cell in candidate.values()).items())),
+        "criterion_totals": score_totals(cards),
+        "independent_evidence_coverage": {candidate: gates[candidate]["independent_evidence_available"] for candidate in CANDIDATES},
+        "composite_mvp_result": {candidate: expected_composite[candidate]["status"] for candidate in CANDIDATES},
+        "option_C_obligation_count": len(OPTION_C_OBLIGATIONS),
+        "deterministic_generation": True,
+    }
+    require(record["validation"] == expected_validation, "validation aggregates or validator boundary differ from recomputation")
 
 
 def serialized(record: dict[str, Any]) -> str:

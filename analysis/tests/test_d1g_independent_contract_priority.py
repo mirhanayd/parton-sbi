@@ -1,4 +1,4 @@
-"""Adversarial tests for the Phase 1B-D1G primary-evidence decision."""
+"""Adversarial tests for the corrected Phase 1B-D1G evidence ledger."""
 
 from __future__ import annotations
 
@@ -29,6 +29,27 @@ def rejected(record: dict) -> None:
         d1g.validate_record(record)
 
 
+def binding(source_id: str, claim_key: str) -> dict:
+    return {
+        "source_id": source_id,
+        "claim_key": claim_key,
+        "identity_classification": "VERIFIED_WITH_QUALIFICATION",
+        "content_classification": "OVERSTATED_IN_V1",
+        "maximum_supported_status": "SUPPORTED_WITH_QUALIFICATION",
+    }
+
+
+def promote(record: dict, candidate: str, criterion: str, source_id: str, claim_key: str) -> None:
+    cell = record["criterion_scorecards"][candidate][criterion]
+    cell.update(
+        status="SUPPORTED_WITH_QUALIFICATION",
+        evidence_class="EXPLICIT_INFERENCE_FROM_PRIMARY_EVIDENCE",
+        source_content_bindings=[binding(source_id, claim_key)],
+        explicit_inference={"premises": [f"{source_id}:{claim_key}"], "conclusion": "tampered"},
+        load_bearing=True,
+    )
+
+
 def test_committed_artifact_is_valid_and_deterministic(record: dict) -> None:
     path = REPO / d1g.ARTIFACT
     actual_text = path.read_text(encoding="utf-8")
@@ -38,23 +59,74 @@ def test_committed_artifact_is_valid_and_deterministic(record: dict) -> None:
     assert actual_text == d1g.serialized(record)
 
 
-def test_source_bounds_and_primary_identities(record: dict) -> None:
-    sources = record["external_source_registry"]
-    assert len(sources) == 13
-    assert record["validation"]["source_count_per_candidate"] == {B: 3, C: 4, D: 3, E: 3}
-    assert all(row["primary_source_status"] == "PRIMARY_SOURCE_CONFIRMED" for row in sources.values())
+def test_corrected_identity_and_content_audit_totals(record: dict) -> None:
+    assert len(record["external_source_registry"]) == 13
+    assert record["validation"]["v1_source_identity_audit_totals"] == {
+        "CONTRADICTED": 1,
+        "VERIFIED": 5,
+        "VERIFIED_WITH_QUALIFICATION": 7,
+    }
+    assert record["validation"]["corrected_source_identity_totals"] == {
+        "VERIFIED": 5,
+        "VERIFIED_WITH_QUALIFICATION": 8,
+    }
+    assert record["validation"]["source_content_ledger_totals"] == {
+        "DIRECTLY_SUPPORTED": 2,
+        "MISBOUND_IN_V1": 1,
+        "OVERSTATED_IN_V1": 14,
+        "SUPPORTED_WITH_QUALIFICATION": 1,
+    }
+    assert record["validation"]["v1_cell_audit_totals"] == {
+        "MISBOUND_IN_V1": 6,
+        "OVERSTATED_IN_V1": 16,
+        "PRIMARY_EVIDENCE_UNAVAILABLE": 19,
+        "SUPPORTED_WITH_QUALIFICATION": 31,
+    }
 
 
-def test_candidate_c_is_uniquely_eligible(record: dict) -> None:
-    assert record["derived_decision_inputs"]["eligible_candidates"] == [C]
-    assert record["decision"] == "PRIORITIZE_LOWER_LEVEL_DIS_CONTRACT_REVIEW"
-    assert d1g.derive_decision(record["candidate_eligibility"]) == record["decision"]
+def test_dagostini_identity_is_publisher_bound(record: dict) -> None:
+    row = record["external_source_registry"]["C_DAGOSTINI_UNFOLDING"]
+    assert row["DOI_or_arXiv_or_official_identifier"] == "doi:10.1016/0168-9002(95)00274-X"
+    assert row["publication_date"] == "1995-08-15"
+    assert row["publication_date_kind"] == "PUBLISHER_ARTICLE_DATE"
+    assert row["official_URL"].startswith("https://www.sciencedirect.com/")
+    assert row["retrieved_byte_SHA256_when_downloaded"] is None
 
 
-def test_option_c_obligations_remain_unevaluated(record: dict) -> None:
-    obligations = record["candidates"][C]["proof_obligations"]
-    assert [row["obligation_id"] for row in obligations] == list(d1g.OPTION_C_OBLIGATIONS)
-    assert all(row["status"] == "NOT_EVALUATED" for row in obligations)
+def test_corrected_scores_gates_and_pause(record: dict) -> None:
+    assert record["validation"]["criterion_totals"] == {
+        B: {"PRIMARY_EVIDENCE_UNAVAILABLE": 11, "SUPPORTED_WITH_QUALIFICATION": 7},
+        C: {"PRIMARY_EVIDENCE_UNAVAILABLE": 11, "SUPPORTED_WITH_QUALIFICATION": 7},
+        D: {"PRIMARY_EVIDENCE_UNAVAILABLE": 10, "SUPPORTED_WITH_QUALIFICATION": 8},
+        E: {"PRIMARY_EVIDENCE_UNAVAILABLE": 9, "SUPPORTED_WITH_QUALIFICATION": 9},
+    }
+    assert record["derived_decision_inputs"]["eligible_candidates"] == []
+    assert all(not row["eligible"] for row in record["candidate_eligibility"].values())
+    assert record["decision"] == d1g.PAUSE_OUTCOME
+    common = {
+        "normalized_measure_reviewability": "PRIMARY_EVIDENCE_UNAVAILABLE",
+        "posterior_reviewability": "PRIMARY_EVIDENCE_UNAVAILABLE",
+        "scientific_motivation": "SUPPORTED_WITH_QUALIFICATION",
+        "bounded_planning_review": "SUPPORTED_WITH_QUALIFICATION",
+        "independent_falsifiability": "SUPPORTED_WITH_QUALIFICATION",
+        "credible_MVP_path": "PRIMARY_EVIDENCE_UNAVAILABLE",
+        "prospective_supersession_explicit": "SUPPORTED",
+        "objective_change_understood": "SUPPORTED_WITH_QUALIFICATION",
+        "independent_evidence_available": "PRIMARY_EVIDENCE_UNAVAILABLE",
+    }
+    for candidate, gates in record["mandatory_priority_gates"].items():
+        assert {key: gates[key] for key in common} == common
+        assert gates["no_hidden_repair"] == ("SUPPORTED_WITH_QUALIFICATION" if candidate == E else "PRIMARY_EVIDENCE_UNAVAILABLE")
+    assert all(row["status"] == "PRIMARY_EVIDENCE_UNAVAILABLE" for row in record["composite_mvp_contract"].values())
+
+
+def test_candidate_c_status_and_obligations(record: dict) -> None:
+    candidate = record["candidates"][C]
+    assert candidate["candidate_status"] == "SCIENTIFICALLY_MOTIVATED_COMPONENTS_PRESENT_BUT_PRIORITY_GATES_UNMET"
+    assert candidate["full_generator_equivalence_claimed"] is False
+    assert candidate["issue_10_completed"] is False
+    assert [row["obligation_id"] for row in candidate["proof_obligations"]] == list(d1g.OPTION_C_OBLIGATIONS)
+    assert all(row["status"] == "NOT_EVALUATED" for row in candidate["proof_obligations"])
 
 
 def test_authorization_and_roadmap_remain_frozen(record: dict) -> None:
@@ -65,102 +137,96 @@ def test_authorization_and_roadmap_remain_frozen(record: dict) -> None:
     assert record["dependencies"]["roadmap"] == {"D2": "BLOCKED", "D3": "BACKLOG", "D4": "BACKLOG", "D5": "BACKLOG", "active_supersession": False}
 
 
-def m_secondary_source(record: dict) -> None:
-    record["external_source_registry"]["C_HERA_COMBINED_DIS"]["primary_source_status"] = "SECONDARY_SOURCE"
+def m_old_dagostini_bytes(record: dict) -> None:
+    row = record["external_source_registry"]["C_DAGOSTINI_UNFOLDING"]
+    row["official_URL"] = "https://arxiv.org/pdf/hep-ph/9509307"
+    row["retrieved_byte_SHA256_when_downloaded"] = "d3ad8e695c6a89c157e51d313e0f8254f9c7688920294cf0cf4f8467f679350a"
 
 
-def m_source_identity(record: dict) -> None:
-    record["external_source_registry"]["C_HERA_COMBINED_DIS"]["exact_version"] = "v2"
+def m_date_conflation(record: dict) -> None:
+    row = record["external_source_registry"]["B_MSbar_POSITIVITY_2023"]
+    row["publication_date"] = row["version_date"]
+    row.pop("publication_date_kind")
 
 
-def m_source_limitation(record: dict) -> None:
-    record["external_source_registry"]["D_IMPORTANCE_ESS"]["limitations"] = ""
+def m_promote_hard(record: dict, criterion: str, source: str, claim: str) -> None:
+    promote(record, C, criterion, source, claim)
 
 
-def m_wrong_candidate(record: dict) -> None:
-    record["criterion_scorecards"][C]["scientific_motivation"]["evidence_bindings"][0]["option_scope"] = [B]
+def m_c_normalized(record: dict) -> None:
+    m_promote_hard(record, "normalized_observation_measure", "C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")
 
 
-def m_wrong_criterion(record: dict) -> None:
-    record["criterion_scorecards"][C]["calibration_and_coverage"]["evidence_bindings"][0]["criterion_scope"] = ["reproducibility"]
+def m_c_posterior(record: dict) -> None:
+    m_promote_hard(record, "posterior_target_coherence", "C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")
 
 
-def m_exceed_maximum(record: dict) -> None:
-    record["criterion_scorecards"][B]["scientific_motivation"]["status"] = "SUPPORTED"
+def m_hera_weight(record: dict) -> None:
+    m_promote_hard(record, "weight_semantics", "C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")
 
 
-def m_adr010_independent(record: dict) -> None:
-    record["criterion_scorecards"][C]["scientific_motivation"]["evidence_bindings"][0]["source_id"] = "ADR010"
+def m_hera_rate_shape(record: dict) -> None:
+    m_promote_hard(record, "rate_shape_semantics", "C_HERA_COMBINED_DIS", "NC_EPLUS_EMINUS_STRUCTURE")
 
 
-def m_adr011_self_reference(record: dict) -> None:
-    record["criterion_scorecards"][C]["scientific_motivation"]["evidence_bindings"][0]["source_id"] = "ADR011"
+def m_hera_no_clip(record: dict) -> None:
+    m_promote_hard(record, "no_clipping_preservation", "C_HERA_COMBINED_DIS", "REDUCED_INCLUSIVE_SCOPE")
 
 
-def m_hypothesis_load_bearing(record: dict) -> None:
-    cell = record["criterion_scorecards"][B]["normalized_observation_measure"]
-    cell["evidence_class"] = "PROSPECTIVE_HYPOTHESIS"
-    cell["load_bearing"] = True
+def m_hera_strict_support(record: dict) -> None:
+    m_promote_hard(record, "strict_support_preservation", "C_HERA_COMBINED_DIS", "REDUCED_INCLUSIVE_SCOPE")
 
 
-def m_select_without_normalized_measure(record: dict) -> None:
-    record["candidate_eligibility"][B] = {"eligible": True, "failed_or_unavailable_gates": []}
-    record["decision"] = d1g.OUTCOMES[B]
+def m_deep_sets_mvp(record: dict) -> None:
+    m_promote_hard(record, "credible_end_to_end_mvp_path", "C_DEEP_SETS", "PERMUTATION_INVARIANT_SET_FUNCTIONS")
 
 
-def m_select_without_posterior(record: dict) -> None:
-    record["candidate_eligibility"][D] = {"eligible": True, "failed_or_unavailable_gates": []}
-    record["decision"] = d1g.OUTCOMES[D]
+def m_deep_sets_normalized(record: dict) -> None:
+    m_promote_hard(record, "normalized_observation_measure", "C_DEEP_SETS", "PERMUTATION_INVARIANT_SET_FUNCTIONS")
 
 
-def m_select_without_independent_motivation(record: dict) -> None:
-    cell = record["criterion_scorecards"][C]["scientific_motivation"]
-    cell.update(status="PRIMARY_EVIDENCE_UNAVAILABLE", evidence_class="PRIMARY_EVIDENCE_UNAVAILABLE", evidence_bindings=[], explicit_inference=None, load_bearing=False)
+def m_sbc_posterior(record: dict) -> None:
+    m_promote_hard(record, "posterior_target_coherence", "C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR")
 
 
-def m_candidate_c_mvp_without_evidence(record: dict) -> None:
-    cell = record["criterion_scorecards"][C]["credible_end_to_end_mvp_path"]
-    cell.update(status="PRIMARY_EVIDENCE_UNAVAILABLE", evidence_class="PRIMARY_EVIDENCE_UNAVAILABLE", evidence_bindings=[], explicit_inference=None, load_bearing=False)
+def m_sbc_positive_rate(record: dict) -> None:
+    m_promote_hard(record, "normalized_observation_measure", "C_SIMULATION_BASED_CALIBRATION", "SBC_REQUIRES_GENERATIVE_MODEL_AND_POSTERIOR")
 
 
-def m_option_c_obligation_pass(record: dict) -> None:
-    record["candidates"][C]["proof_obligations"][0]["status"] = "PASS"
+def m_dagostini_qcd(record: dict) -> None:
+    m_promote_hard(record, "qcd_factorization_compatibility", "C_DAGOSTINI_UNFOLDING", "DETECTOR_RESPONSE_CONDITIONAL_PROBABILITIES")
+
+
+def m_dagostini_mvp(record: dict) -> None:
+    m_promote_hard(record, "credible_end_to_end_mvp_path", "C_DAGOSTINI_UNFOLDING", "DETECTOR_RESPONSE_CONDITIONAL_PROBABILITIES")
+
+
+def m_unrelated_independent_gate(record: dict) -> None:
+    record["mandatory_priority_gates"][C]["independent_evidence_available"] = "SUPPORTED"
+
+
+def m_candidate_eligible(record: dict) -> None:
+    record["candidate_eligibility"][C] = {"eligible": True, "failed_or_unavailable_gates": []}
+
+
+def m_e_measure_not_supported(record: dict) -> None:
+    record["criterion_scorecards"][E]["normalized_observation_measure"]["status"] = "NOT_SUPPORTED"
+
+
+def m_e_posterior_not_supported(record: dict) -> None:
+    record["criterion_scorecards"][E]["posterior_target_coherence"]["status"] = "NOT_SUPPORTED"
 
 
 def m_option_c_obligation_removed(record: dict) -> None:
     record["candidates"][C]["proof_obligations"].pop()
 
 
-def m_weighted_as_iid(record: dict) -> None:
-    record["candidates"][D]["treated_as_iid_unweighted_events"] = True
-
-
-def m_signed_as_probability(record: dict) -> None:
-    record["candidates"][E]["signed_weights_are_probabilities"] = True
-
-
-def m_new_family_as_correction(record: dict) -> None:
-    record["candidates"][B]["not_a_D0R_correction"] = False
+def m_option_c_obligation_promoted(record: dict) -> None:
+    record["candidates"][C]["proof_obligations"][0]["status"] = "PASS"
 
 
 def m_c_completes_issue10(record: dict) -> None:
     record["candidates"][C]["issue_10_completed"] = True
-
-
-def m_force_preference_with_two(record: dict) -> None:
-    record["candidate_eligibility"][B] = {"eligible": True, "failed_or_unavailable_gates": []}
-
-
-def m_force_preference_with_none(record: dict) -> None:
-    record["candidate_eligibility"][C] = {"eligible": False, "failed_or_unavailable_gates": ["credible_MVP_path"]}
-
-
-def m_issue10_state(record: dict) -> None:
-    record["dependencies"]["issue_10"]["state"] = "CLOSED"
-
-
-def m_d2_state(record: dict) -> None:
-    record["dependencies"]["D2"] = "AUTHORIZED"
 
 
 def m_roadmap_supersession(record: dict) -> None:
@@ -171,53 +237,63 @@ def m_authorization(record: dict) -> None:
     record["authorization"]["LOWER_LEVEL_SIMULATOR_AUTHORIZED"] = True
 
 
-def m_next_step_implementation(record: dict) -> None:
-    record["next_step"].update(action="IMPLEMENT_LOWER_LEVEL_DIS_SIMULATOR", implementation=True, authorization_granted=True)
+def m_next_step_contract(record: dict) -> None:
+    record["next_step"].update(action="CREATE_LOWER_LEVEL_CONTRACT", implementation=True, authorization_granted=True)
+
+
+def m_manual_decision(record: dict) -> None:
+    record["decision"] = d1g.OUTCOMES[C]
 
 
 ADVERSARIAL_MUTATIONS: tuple[tuple[str, Callable[[dict], None]], ...] = (
-    ("secondary_source_load_bearing", m_secondary_source),
-    ("source_identity_changed", m_source_identity),
-    ("source_limitation_removed", m_source_limitation),
-    ("source_bound_to_wrong_candidate", m_wrong_candidate),
-    ("source_bound_to_wrong_criterion", m_wrong_criterion),
-    ("maximum_supported_status_exceeded", m_exceed_maximum),
-    ("adr010_used_as_independent_evidence", m_adr010_independent),
-    ("adr011_self_reference", m_adr011_self_reference),
-    ("hypothesis_made_load_bearing", m_hypothesis_load_bearing),
-    ("candidate_selected_without_normalized_measure", m_select_without_normalized_measure),
-    ("candidate_selected_without_posterior", m_select_without_posterior),
-    ("candidate_selected_without_independent_motivation", m_select_without_independent_motivation),
-    ("candidate_c_selected_without_mvp_evidence", m_candidate_c_mvp_without_evidence),
-    ("option_c_obligation_promoted", m_option_c_obligation_pass),
-    ("option_c_obligation_removed", m_option_c_obligation_removed),
-    ("weighted_events_treated_as_iid", m_weighted_as_iid),
-    ("signed_weights_treated_as_probability", m_signed_as_probability),
-    ("new_family_treated_as_d0r_correction", m_new_family_as_correction),
+    ("old_hocker_kartvelishvili_bytes_attached_to_dagostini", m_old_dagostini_bytes),
+    ("journal_date_replaced_by_revision_date", m_date_conflation),
+    ("hera_bound_to_normalized_measure", m_c_normalized),
+    ("hera_bound_to_posterior", m_c_posterior),
+    ("hera_bound_to_event_weight", m_hera_weight),
+    ("hera_bound_to_rate_shape", m_hera_rate_shape),
+    ("hera_bound_to_no_clipping", m_hera_no_clip),
+    ("hera_bound_to_strict_support", m_hera_strict_support),
+    ("deep_sets_bound_to_mvp", m_deep_sets_mvp),
+    ("deep_sets_bound_to_normalized_measure", m_deep_sets_normalized),
+    ("sbc_bound_to_posterior_existence", m_sbc_posterior),
+    ("sbc_bound_to_complete_rate_positivity", m_sbc_positive_rate),
+    ("dagostini_bound_to_qcd", m_dagostini_qcd),
+    ("dagostini_bound_to_mvp", m_dagostini_mvp),
+    ("candidate_c_normalized_promoted", m_c_normalized),
+    ("candidate_c_posterior_promoted", m_c_posterior),
+    ("candidate_c_mvp_promoted", m_deep_sets_mvp),
+    ("one_unrelated_source_satisfies_independent_gate", m_unrelated_independent_gate),
+    ("candidate_eligible_with_unavailable_gate", m_candidate_eligible),
+    ("candidate_e_measure_asserted_incompatible_without_source", m_e_measure_not_supported),
+    ("candidate_e_posterior_asserted_incompatible_without_source", m_e_posterior_not_supported),
+    ("candidate_c_obligation_removed", m_option_c_obligation_removed),
+    ("candidate_c_obligation_promoted", m_option_c_obligation_promoted),
     ("candidate_c_completes_issue10", m_c_completes_issue10),
-    ("preference_forced_with_two_eligible", m_force_preference_with_two),
-    ("preference_forced_with_no_eligible", m_force_preference_with_none),
-    ("issue10_state_changed", m_issue10_state),
-    ("d2_state_changed", m_d2_state),
     ("roadmap_supersession_activated", m_roadmap_supersession),
     ("authorization_flag_true", m_authorization),
-    ("next_step_becomes_implementation", m_next_step_implementation),
+    ("next_step_creates_contract_or_implementation", m_next_step_contract),
+    ("decision_manually_changed", m_manual_decision),
 )
 
 
 @pytest.mark.parametrize(("name", "mutate"), ADVERSARIAL_MUTATIONS)
-def test_adversarial_mutation_is_rejected(record: dict, name: str, mutate: Callable[[dict], None]) -> None:
+def test_semantic_adversarial_mutation_is_rejected(record: dict, name: str, mutate: Callable[[dict], None]) -> None:
     del name
     mutate(record)
     rejected(record)
 
 
-def test_unique_priority_rule_pauses_for_tie(record: dict) -> None:
+def test_one_unrelated_source_cannot_satisfy_complete_critical_coverage(record: dict) -> None:
+    assert any(cell["load_bearing"] for cell in record["criterion_scorecards"][C].values())
+    assert d1g.derive_gates(record)[C]["independent_evidence_available"] == "PRIMARY_EVIDENCE_UNAVAILABLE"
+
+
+def test_unique_priority_rule_pauses_for_tie() -> None:
     eligibility = {candidate: {"eligible": candidate in {B, C}, "failed_or_unavailable_gates": []} for candidate in d1g.CANDIDATES}
     assert d1g.derive_decision(eligibility) == d1g.PAUSE_OUTCOME
 
 
-def test_unique_priority_rule_pauses_for_zero_eligible(record: dict) -> None:
-    del record
+def test_unique_priority_rule_pauses_for_zero_eligible() -> None:
     eligibility = {candidate: {"eligible": False, "failed_or_unavailable_gates": ["normalized_measure_reviewability"]} for candidate in d1g.CANDIDATES}
     assert d1g.derive_decision(eligibility) == d1g.PAUSE_OUTCOME
