@@ -19,6 +19,15 @@ The maintenance-only [Phase 1B closeout](docs/PHASE1B_CLOSEOUT.md) and its
 accepted evidence identities, decisions, lineage, pause, and authorization
 boundaries without selecting further work.
 
+After that frozen closeout, the user authorized a separate planning-only
+[Reduced NC DIS research line](docs/reduced_nc_dis/README.md). Its
+[research question](docs/reduced_nc_dis/RESEARCH_QUESTION.md),
+[roadmap](docs/reduced_nc_dis/ROADMAP.md), and
+[machine-readable roadmap](docs/reduced_nc_dis/phase2_roadmap.json) preserve
+the set-level PDF SBI objective while reconsidering the observation contract.
+Only Phase 2A planning and primary-source contract review are authorized; no
+implementation phase is authorized.
+
 ## Implemented capabilities
 
 - exact finite-mass electron and proton beam four-vectors and inclusive DIS kinematics;

@@ -46,6 +46,20 @@
 
 # Current state
 
+- The Phase 1B closeout remains frozen. Its inventory correctly recorded no
+  selected next phase at that time and is not modified by subsequent work.
+- After closeout, the user explicitly authorized the independent,
+  planning-only [Phase 2 reduced NC DIS line](reduced_nc_dis/README.md). The
+  high-level set-level PDF SBI objective is unchanged; the simulator and
+  observation contract are being reconsidered through an explicit normalized,
+  detector-aware reduced model.
+- [Phase 2A](reduced_nc_dis/ROADMAP.md) is in mathematical planning and
+  primary-source contract review. It is not legacy D2. No Phase 2
+  implementation, numerical physics, event, dataset, detector, or neural work
+  is authorized.
+- Issues #49 and #51 are closed. Issue #10 remains open, blocked, not
+  evaluated, and unauthorized. Legacy D2 remains blocked; the full-generator
+  line remains paused.
 - The maintenance-only [Phase 1B closeout](PHASE1B_CLOSEOUT.md) and
   [identity manifest](phase1b_closeout_manifest.json) freeze the accepted
   evidence, ADR, merge-lineage, pause, and authorization record. They add no
@@ -87,7 +101,7 @@
 - The next action is `MAINTAIN_PAUSE_PENDING_PREFERENCE_CRITICAL_EVIDENCE`;
   no lower-level contract proposal or other task is authorized. The active
   policy remains `PAUSE_GENERATOR_COUPLING_WITHOUT_AUTHORIZATION`.
-- Issue #49 remains open planning work. Issue #10 remains open, blocked, and
+- Issue #49 is closed. Issue #10 remains open, blocked, and
   unauthorized; D2 remains Blocked; D3-D5 remain Backlog; no roadmap
   supersession is active and all twelve authorization flags remain false.
 - CLI and batch-oriented DIS research infrastructure.
