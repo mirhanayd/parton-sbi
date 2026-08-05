@@ -10,6 +10,14 @@ primary-source contract review. It does not authorize formula evaluation,
 simulation, event generation, datasets, detector implementation, or neural
 training.
 
+Schema v2 binds the `SELECTED_EVENT_CONDITIONED_V1` fixed-N law and separates
+latent acceptance `A_z`, the complete detector space `Y_full`, and selected
+observations `Y_obs`. It also requires a bounded later identifiability and
+information-content plan: calibration is necessary but does not by itself
+establish that the selected data are informative about theta. All 24 proof
+obligations remain `NOT_EVALUATED`; no external source review or experiment was
+performed by this correction.
+
 ## Authoritative planning records
 
 - [Research question and claim boundary](RESEARCH_QUESTION.md)

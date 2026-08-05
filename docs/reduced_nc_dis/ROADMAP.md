@@ -36,6 +36,36 @@ Every implementation phase requires a later, explicit authorization after its
 predecessor's binding acceptance criteria pass. A future Phase 2A PASS would
 authorize only a separate Phase 2B proposal, not implementation.
 
+## Phase 2A binding additions
+
+Phase 2A now contains 24 `NOT_EVALUATED` proof obligations and eleven PASS
+requirements. The two added requirements bind selected-event conditioning and
+a bounded identifiability/information-content plan. The fixed-N baseline is
+`SELECTED_EVENT_CONDITIONED_V1`: `A_z`, `Y_full`, and `Y_obs` are distinct;
+`K_full` is normalized on `Y_full`; efficiency and `alpha_theta` normalize the
+selected law; and `N` and selection are conditioned upon. Count information
+remains confined to optional Phase 2H.
+
+The identifiability contract distinguishes a calibrated posterior from an
+informative posterior. Later proposals must bind the prior, reported parameter
+combinations, observational equivalence, degeneracies, and a predeclared
+informativeness diagnostic without assuming every theta direction is
+identifiable.
+
+## Updated downstream planning scopes
+
+- Phase2D plans `Y_full`, `Y_obs`, null/rejected outcomes, `epsilon(z)`,
+  `alpha_theta`, selected-event forward-law closure, and perfect-detector
+  selected-law closure.
+- Phase2E plans the explicit theta prior, reported combinations, selected-event
+  fixed-N training law, prior-dominated posterior diagnostics, and no forced
+  reporting of non-identifiable directions.
+- Phase2F plans identifiability, information content, a predeclared contraction
+  or alternative informativeness diagnostic, calibration/informativeness
+  separation, and structural-degeneracy reporting.
+
 GitHub sub-issue and blocked-by relationships were created and verified for the
 graph above. The repository JSON remains the machine-validated scientific
-contract; its timestamped GitHub data are an external snapshot.
+contract. Only issue body text for #53, #54, #57, #58, and #59 changed; issue
+numbers, Project values, milestone, labels, and dependency relationships are
+unchanged. The timestamped GitHub data remain an external snapshot.

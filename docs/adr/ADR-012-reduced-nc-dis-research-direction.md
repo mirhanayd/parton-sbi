@@ -22,33 +22,54 @@ any accepted Phase 1 decision or closeout identity.
 ## Decision
 
 Keep the new line in `parton-sbi` as a monorepo with an independent research
-namespace. The operational observation law is
+namespace. The selected-event operational observation law is
 
 ```text
 z_i ~ p_theta(z)
-y_i ~ K(y | z_i)
-D = {y_i}_{i=1}^N
-
 p_theta(z) =
-  1_A(z) [d sigma_theta / dz]
-  / integral_A [d sigma_theta / dz] dz
+  1_{A_z}(z) [d sigma_theta / dz]
+  / integral_{A_z} [d sigma_theta / dz] dz
+
+integral_{Y_full} K_full(dy_star | z) = 1
+epsilon(z) = K_full(Y_obs | z)
+alpha_theta = integral_{A_z} p_theta(z) epsilon(z) dz
+
+q_theta(dy | selected) =
+  1_{Y_obs}(y) integral_{A_z} p_theta(z) K_full(dy | z) dz
+  / alpha_theta
+
+D = {y_1, ..., y_N}
+p(D | theta, N, selected) = product_i q_theta(y_i | selected)
 ```
 
-The baseline is fixed-N, shape-only, unbinned, set-level, detector-aware
-amortized posterior inference. The paper scope is proof-of-principle
-methodology under the declared reduced model.
+`A_z`, `Y_full`, and `Y_obs` are distinct. The baseline mode is
+`SELECTED_EVENT_CONDITIONED_V1`: `N` and selection are conditioned upon,
+`alpha_theta` normalizes selection-induced shape dependence, rejected/null
+outcomes are not in `D`, and no count likelihood enters. Phase 2H is the only
+optional count/rate extension.
+
+Posterior correctness is distinct from informativeness. Phase 2A must define
+observational equivalence, the theta domain and prior, reported combinations,
+structurally non-identifiable directions, and a bounded later information plan.
+Calibration and coverage alone do not establish information about theta. The
+paper scope remains proof-of-principle methodology under the declared reduced
+model.
 
 ## Claims and nonclaims
 
 Later validated work may claim a normalized NC DIS observation law,
 continuous-deformation set-level amortized inference, a normalized detector
-kernel, and calibration and repeated-sampling coverage under the reduced model.
+kernel, calibration and repeated-sampling coverage, and proof-of-principle
+sensitivity only for predeclared parameter combinations that pass later
+identifiability and information-content gates.
 
 It may not claim full PYTHIA equivalence; showering; ISR; hadronization;
 beam-remnant or underlying-event modelling; complete collider realism;
 production-grade detector simulation; unrestricted full-flavor PDF
 determination; replacement of a global PDF fit; legacy D2 completion; or
-full-generator closure.
+full-generator closure. It may not claim universal identifiability of all
+PDF-deformation parameters or guaranteed contraction for every theta
+direction.
 
 ## Dependencies
 
@@ -84,3 +105,6 @@ accepted Phase 2A contract is required before any code proposal. Even a Phase
 This ADR does not validate the observation law, discharge any proof
 obligation, evaluate physics formulae, or authorize implementation, numerical
 closure, events, datasets, detector simulation, neural training, or legacy D2.
+The 24 obligations, including selected-event conditioning and parameter
+identifiability/information content, remain `NOT_EVALUATED`. No information
+metric or experiment is selected or authorized here.

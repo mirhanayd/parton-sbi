@@ -13,8 +13,8 @@ ROADMAP_PATH = "docs/reduced_nc_dis/phase2_roadmap.json"
 SPEC_PATH = "docs/reduced_nc_dis/contracts/phase2a_contract_review_spec.json"
 CLOSEOUT_PATH = "docs/phase1b_closeout_manifest.json"
 
-ROADMAP_SCHEMA = "partonsbi.phase2.reduced-nc-dis-roadmap.v1"
-SPEC_SCHEMA = "partonsbi.phase2a.reduced-nc-dis-contract-review-spec.v1"
+ROADMAP_SCHEMA = "partonsbi.phase2.reduced-nc-dis-roadmap.v2"
+SPEC_SCHEMA = "partonsbi.phase2a.reduced-nc-dis-contract-review-spec.v2"
 MAIN_COMMIT = "c264eac23be09a91b09ac5b924aa1a079171ffcd"
 CLOSEOUT_SCHEMA = "partonsbi.phase1b.closeout-manifest.v2"
 CLOSEOUT_SHA256 = "ea509c228aa74021af15c5e1473b257dd0c1b6863118ac9f4be484358c7c8fd5"
@@ -55,6 +55,8 @@ NONCLAIMS = {
     "replacement of a global PDF fit",
     "legacy D2 completion",
     "full-generator closure",
+    "universal identifiability of all PDF-deformation parameters",
+    "guaranteed posterior contraction for every permitted theta direction",
 }
 
 ALLOWED_CLAIMS = {
@@ -64,7 +66,7 @@ ALLOWED_CLAIMS = {
     "unbinned event-set inference",
     "detector-aware inference through a normalized kernel",
     "posterior calibration and repeated-sampling coverage",
-    "proof-of-principle sensitivity under a declared reduced model",
+    "proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates",
 }
 
 OBLIGATION_IDS = [
@@ -90,6 +92,22 @@ OBLIGATION_IDS = [
     "INDEPENDENT_NUMERICAL_CLOSURE_PLAN",
     "POSTERIOR_TARGET_AND_PROPER_TRAINING_OBJECTIVE",
     "CALIBRATION_COVERAGE_AND_FAILURE_CRITERIA",
+    "OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING",
+    "PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT",
+]
+
+PASS_REQUIREMENTS = [
+    "exact_formula_contract",
+    "finite_positive_normalization_reviewability",
+    "posterior_target_coherence",
+    "strict_support_contract",
+    "normalized_detector_kernel_contract",
+    "no_hidden_clipping",
+    "fixed_n_shape_only_semantics",
+    "bounded_phase2b_validation_plan",
+    "paper_claim_boundary_consistency",
+    "selected_event_conditioning_coherence",
+    "bounded_identifiability_and_information_plan",
 ]
 
 OBLIGATION_FIELDS = {
@@ -109,6 +127,7 @@ TRUE_AUTHORIZATION_FLAGS = {
     "PHASE2_ROADMAP_AUTHORIZED",
     "PHASE2A_CONTRACT_REVIEW_AUTHORIZED",
     "PHASE2A_PRIMARY_SOURCE_REVIEW_AUTHORIZED",
+    "PHASE2A_PLANNING_AUTHORIZED",
 }
 
 FALSE_AUTHORIZATION_FLAGS = {
@@ -190,10 +209,85 @@ def graph_is_acyclic(nodes: set[str], edges: set[tuple[str, str]]) -> bool:
     return visited == len(nodes)
 
 
+def normalized_text(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    return json.dumps(value, sort_keys=True)
+
+
+def validate_selection_contract(selection: dict[str, Any], baseline: dict[str, Any]) -> None:
+    require(selection["BASELINE_SELECTION_MODE"] == "SELECTED_EVENT_CONDITIONED_V1", "selected-event conditioning mode changed")
+    latent = selection["latent_acceptance_region"]
+    spaces = selection["detector_output_spaces"]
+    require(latent["symbol"] == "A_z", "latent acceptance must use A_z")
+    require(spaces["full_space_symbol"] == "Y_full", "full detector output space must use Y_full")
+    require(spaces["selected_space_symbol"] == "Y_obs", "selected observed region must use Y_obs")
+    require(len({latent["symbol"], spaces["full_space_symbol"], spaces["selected_space_symbol"]}) == 3, "latent and observed regions reuse one symbol")
+    require(spaces["latent_and_observed_regions_are_distinct"] is True, "latent and observed acceptance are conflated")
+
+    kernel = selection["full_detector_kernel"]
+    require(kernel["symbol"] == "K_full(dy_star | z)" and kernel["nonnegative"] is True, "full detector kernel contract changed")
+    require("integral_{Y_full}" in kernel["normalization"] and "= 1" in kernel["normalization"], "K_full normalization on Y_full missing")
+    require(kernel["null_or_rejected_outcome_required_when_needed_for_normalization"] is True, "detector inefficiency lacks null/rejected semantics")
+
+    efficiency = selection["selection_efficiency"]
+    require(efficiency["symbol"] == "epsilon(z)" and efficiency["definition"] == "epsilon(z) = K_full(Y_obs | z)", "selection efficiency definition changed")
+    require(efficiency["measurable"] is True and efficiency["range"] == "[0, 1]", "epsilon measurability or range missing")
+
+    selected_fraction = selection["theta_dependent_selected_fraction"]
+    require(selected_fraction["symbol"] == "alpha_theta", "alpha_theta symbol missing")
+    require(selected_fraction["definition"] == "alpha_theta = integral_{A_z} p_theta(z) epsilon(z) dz", "alpha_theta definition changed")
+    require(selected_fraction["required_finite_for_every_allowed_theta"] is True, "alpha_theta not required finite for every theta")
+    require(selected_fraction["required_strictly_positive_for_every_allowed_theta"] is True, "alpha_theta not required positive for every theta")
+
+    density = selection["selected_observed_event_density"]
+    require("alpha_theta" in density["definition"], "selected-event law omits alpha_theta")
+    require("Y_obs" in density["definition"] and "A_z" in density["definition"], "selected-event density uses wrong support")
+    require(density["required_normalized_for_every_allowed_theta"] is True, "q_theta not required normalized")
+
+    fixed_n = selection["fixed_n_selected_set_law"]
+    require(fixed_n["likelihood"] == "p(D | theta, N, selected) = product_i q_theta(y_i | selected)", "fixed-N selected product law changed")
+    require(fixed_n["N_is_conditioned_upon"] is True, "N is not conditioned upon")
+    require(fixed_n["count_or_rate_likelihood_included"] is False, "count/rate information mixed into fixed-N baseline")
+    require(fixed_n["total_selected_event_count_information_excluded"] is True, "selected count information enters baseline")
+    require(fixed_n["rejected_or_null_outcomes_in_D"] is False, "rejected/null outcomes enter selected D")
+    require(selection["probability_mass_may_not_be_silently_discarded"] is True, "rejected probability mass may be silently dropped")
+    require(selection["alpha_theta_required_to_normalize_selected_shape_law"] is True, "alpha_theta normalization requirement disabled")
+    require(selection["phase2h_is_only_optional_count_or_rate_extension"] is True, "Phase 2H is no longer the only rate extension")
+    require(selection["lossless_detector_special_case"] == "epsilon(z) = 1", "lossless detector special case changed")
+    require("recovers the declared latent law" in selection["perfect_detector_limit"], "perfect-detector latent-law closure missing")
+    require(baseline["selection_mode"] == "SELECTED_EVENT_CONDITIONED_V1", "baseline selection mode mismatch")
+    require(baseline["count_or_rate_likelihood_included"] is False, "baseline contains count likelihood")
+    require(baseline["selected_event_shape_law_requires_alpha_theta"] is True, "baseline omits selected-event normalization")
+    require(baseline["rejected_probability_mass_silently_discarded"] is False, "baseline permits silent event deletion")
+
+
+def validate_identifiability_contract(contract: dict[str, Any]) -> None:
+    require(contract["posterior_correctness_distinct_from_posterior_informativeness"] is True, "posterior correctness and informativeness are conflated")
+    equivalence = contract["observational_equivalence"]
+    require(equivalence["notation"] == "theta ~ theta_prime", "observational-equivalence notation changed")
+    require(equivalence["definition"] == "q_theta(D | N, selected) = q_theta_prime(D | N, selected) on the declared observation space", "observational-equivalence definition changed")
+    required = {
+        "theta domain and prior", "reported theta parameters or combinations",
+        "structurally non-identifiable directions", "prior-dominated posterior diagnostic",
+        "nontrivial information-content diagnostic", "parameter-degeneracy reporting",
+        "allowed sensitivity claim",
+    }
+    require(set(contract["review_must_bind"]) == required, "identifiability review requirements changed")
+    require(contract["selected_metric"] is None, "an information metric was selected prematurely")
+    require(len(contract["candidate_later_metrics_without_preselection"]) == 7, "candidate information diagnostics changed")
+    require(contract["bounded_and_falsifiable_phase2e_phase2f_plan_required"] is True, "bounded identifiability plan omitted")
+    require(contract["calibration_and_coverage_alone_establish_informativeness"] is False, "calibration treated as sufficient information evidence")
+    require(contract["post_hoc_dropping_of_failed_parameters_allowed"] is False, "post-hoc parameter dropping permitted")
+    require(contract["actual_information_content_experiment_authorized"] is False, "information-content experiment authorized")
+    require(contract["actual_information_content_experiment_executed"] is False, "information-content experiment claimed executed")
+
+
 def validate_roadmap(roadmap: dict[str, Any], spec: dict[str, Any], root: Path, *, verify_files: bool = True) -> None:
     required_sections = {
         "schema_version", "generated_from_main", "predecessor_closeout", "user_authorized_direction",
-        "research_objective", "operational_research_question", "paper_scope", "nonclaims",
+        "research_objective", "operational_research_question", "observation_selection_contract",
+        "identifiability_and_information_content_contract", "paper_scope", "nonclaims",
         "repository_strategy", "split_triggers", "planned_repository_layout", "legacy_line", "phases",
         "dependency_graph", "github_roadmap_snapshot", "milestone", "labels", "project_fields",
         "authorization", "next_step", "validation",
@@ -233,7 +327,14 @@ def validate_roadmap(roadmap: dict[str, Any], spec: dict[str, Any], root: Path, 
     require(roadmap["operational_research_question"] == OPERATIONAL_QUESTION, "operational research question changed")
     require(roadmap["paper_scope"]["scope"] == "PROOF_OF_PRINCIPLE_METHODOLOGY", "paper scope expanded")
     require(set(roadmap["paper_scope"]["claims_allowed_only_if_later_validated"]) == ALLOWED_CLAIMS, "paper claim boundary changed")
+    require(roadmap["paper_scope"]["calibration_and_coverage_alone_establish_informativeness"] is False, "calibration treated as sufficient informativeness evidence")
     require(set(roadmap["nonclaims"]) == NONCLAIMS, "required nonclaims changed")
+    validate_selection_contract(roadmap["observation_selection_contract"], roadmap["observation_selection_contract"]["fixed_n_selected_set_law"] | {
+        "selection_mode": roadmap["observation_selection_contract"]["BASELINE_SELECTION_MODE"],
+        "selected_event_shape_law_requires_alpha_theta": roadmap["observation_selection_contract"]["alpha_theta_required_to_normalize_selected_shape_law"],
+        "rejected_probability_mass_silently_discarded": not roadmap["observation_selection_contract"]["probability_mass_may_not_be_silently_discarded"],
+    })
+    validate_identifiability_contract(roadmap["identifiability_and_information_content_contract"])
 
     strategy = roadmap["repository_strategy"]
     require(strategy["CURRENT_REPOSITORY"] == "parton-sbi", "current repository changed")
@@ -278,8 +379,16 @@ def validate_roadmap(roadmap: dict[str, Any], spec: dict[str, Any], root: Path, 
         require(phase_fields <= phase.keys(), f"{phase.get('phase_id')} lacks a required phase field")
         require(phase["implementation_allowed"] is False, f"{phase['phase_id']} permits implementation")
     require(phases[1]["authorization"] == "Planning Only", "Phase 2A is not planning-only")
+    require(phases[1]["binding_gate"] == "ALL_ELEVEN_GO_NO_GO_REQUIREMENTS_INDEPENDENTLY_SUPPORTED", "Phase 2A binding gate does not require eleven items")
     require(all(phase["authorization"] == "Not Authorized" for phase in phases[2:]), "later phase authorization enabled")
     require(phases[-1]["required_for_mvp"] is False, "Phase 2H made mandatory for MVP")
+    by_id = {phase["phase_id"]: phase for phase in phases}
+    phase2d_text = normalized_text(by_id["Phase2D"])
+    require(all(token in phase2d_text for token in ("Y_full", "Y_obs", "epsilon(z)", "alpha_theta", "Selected-event forward-law closure", "Perfect-detector selected-law closure")), "Phase2D lacks selection or efficiency closure")
+    phase2e_text = normalized_text(by_id["Phase2E"])
+    require(all(token in phase2e_text for token in ("Explicit theta prior", "Selected-event fixed-N training law", "Prior-dominated posterior diagnostics", "non-identifiable directions")), "Phase2E lacks selected-law or prior-dominated diagnostics")
+    phase2f_text = normalized_text(by_id["Phase2F"])
+    require(all(token in phase2f_text for token in ("Identifiability", "Information-content diagnostic", "Calibration/informativeness separation", "Structural-degeneracy reporting")), "Phase2F lacks identifiability or information-content diagnostics")
 
     edges = {(edge["from"], edge["to"]) for edge in roadmap["dependency_graph"]["edges"]}
     require(edges == EXPECTED_EDGES, "dependency graph changed")
@@ -303,6 +412,9 @@ def validate_roadmap(roadmap: dict[str, Any], spec: dict[str, Any], root: Path, 
     require(len(snapshot["native_sub_issue_links"]) == 8, "native sub-issue snapshot incomplete")
     require(len(snapshot["native_blocked_by_links"]) == 7, "native dependency snapshot incomplete")
     require(snapshot["labels"] == ["phase2", "reduced-nc-dis", "planning-only"], "label snapshot changed")
+    require(snapshot["issue_body_updates"] == [53, 54, 57, 58, 59], "issue-body correction inventory changed")
+    require(snapshot["only_issue_body_text_changed"] is True, "GitHub snapshot claims a non-body mutation")
+    require(snapshot["project_ids_values_labels_milestone_and_relationships_unchanged"] is True, "GitHub identity or relationship preservation not recorded")
     require(roadmap["milestone"]["number"] == 1 and roadmap["milestone"]["due_date"] is None, "milestone identity or due date changed")
     require(roadmap["project_fields"].get("field_value_source") == "TIMESTAMPED_GITHUB_PROJECT_V2_SNAPSHOT", "Project field provenance missing")
     require(roadmap["project_fields"]["Research Line"]["historical_items_bulk_edited"] is False, "historical Project items were bulk edited")
@@ -323,7 +435,9 @@ def validate_spec(spec: dict[str, Any]) -> None:
     required_sections = {
         "schema_version", "decision", "scientific_gate", "research_question", "inference_target",
         "latent_variables", "observed_variables", "fixed_n_shape_only_baseline", "optional_rate_extension_boundary",
-        "proof_obligations", "source_requirements", "go_no_go_rules", "nonclaims", "authorization", "next_step", "validation",
+        "observation_selection_contract", "identifiability_and_information_content_contract",
+        "proof_obligations", "source_requirements", "go_no_go_rules", "nonclaims", "paper_claim_boundary",
+        "authorization", "next_step", "validation",
     }
     require(required_sections <= spec.keys(), "Phase 2A spec is missing a required section")
     require(spec["schema_version"] == SPEC_SCHEMA, "Phase 2A spec schema mismatch")
@@ -338,34 +452,51 @@ def validate_spec(spec: dict[str, Any]) -> None:
         require(baseline[key] is True, f"baseline property disabled: {key}")
     require(baseline["weighted_events"] is False and baseline["signed_weights"] is False, "weighted baseline enabled")
     require(baseline["count_or_rate_likelihood_included"] is False, "rate semantics mixed into baseline")
-    require("integral_A" in baseline["latent_law"], "normalized latent law missing")
+    require("integral_{A_z}" in baseline["latent_law"], "normalized latent law on A_z missing")
+    validate_selection_contract(spec["observation_selection_contract"], baseline)
+    validate_identifiability_contract(spec["identifiability_and_information_content_contract"])
 
     rate = spec["optional_rate_extension_boundary"]
     require(rate["separate_from_baseline"] is True and rate["required_for_mvp"] is False, "rate extension merged into MVP")
     require(rate["requires_separate_observation_law"] is True, "rate extension lacks a separate law")
     require(rate["may_silently_change_phase2e_objective"] is False, "rate extension may silently alter Phase 2E")
+    require(rate["only_phase_for_count_or_rate_extension"] == "Phase2H", "Phase 2H is not the sole optional rate extension")
 
     obligations = spec["proof_obligations"]
-    require(len(obligations) == 22, "Phase 2A must contain exactly 22 obligations")
+    require(len(obligations) == 24, "Phase 2A must contain exactly 24 obligations")
     require([item["obligation_id"] for item in obligations] == OBLIGATION_IDS, "Phase 2A obligation inventory changed")
     for item in obligations:
         require(set(item) == OBLIGATION_FIELDS, f"{item.get('obligation_id')} fields changed")
         require(item["status"] == "NOT_EVALUATED", f"{item['obligation_id']} was evaluated prematurely")
+    by_id = {item["obligation_id"]: item for item in obligations}
+    selection_obligation = by_id["OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING"]
+    require(all(token in normalized_text(selection_obligation["required_equations_or_definitions"]) for token in ("A_z", "Y_full", "Y_obs", "K_full", "epsilon(z)", "alpha_theta", "q_theta(y | selected)", "p(D | theta, N, selected)")), "observation-selection obligation lacks required equations")
+    require("finite and strictly positive for every allowed theta" in normalized_text(selection_obligation["pass_condition"]), "selection obligation does not require finite positive alpha_theta")
+    require("no rejected probability mass is silently discarded" in normalized_text(selection_obligation["pass_condition"]), "selection obligation permits lost probability mass")
+    identifiability_obligation = by_id["PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT"]
+    require("posterior equals the prior" in normalized_text(identifiability_obligation["fail_condition"]), "prior-equal posterior may pass as sensitivity")
+    require("structurally non-identifiable" in normalized_text(identifiability_obligation), "structural non-identifiability is not represented")
 
     require(len(spec["source_requirements"]) == 6, "primary-source requirement inventory changed")
     rules = spec["go_no_go_rules"]
-    require(rules["pass_requires_all_independently_supported"] == [
-        "exact_formula_contract", "finite_positive_normalization_reviewability", "posterior_target_coherence",
-        "strict_support_contract", "normalized_detector_kernel_contract", "no_hidden_clipping",
-        "fixed_n_shape_only_semantics", "bounded_phase2b_validation_plan", "paper_claim_boundary_consistency",
-    ], "Phase 2A PASS requirements changed")
+    require(rules["pass_requires_all_independently_supported"] == PASS_REQUIREMENTS, "Phase 2A PASS requirements changed")
     require(rules["if_any_required_item_not_supported"] == "PHASE2A_DECISION = FAIL", "FAIL rule changed")
     require(rules["if_required_evidence_missing"] == "PHASE2A_DECISION = INCONCLUSIVE", "INCONCLUSIVE rule changed")
     require(rules["pass_authorizes"] == "A_SEPARATE_PHASE2B_PROPOSAL_ONLY", "PASS authorization expanded")
     require(rules["pass_directly_authorizes_implementation"] is False, "PASS directly authorizes implementation")
     require(set(spec["nonclaims"]) == NONCLAIMS, "Phase 2A nonclaims changed")
+    paper = spec["paper_claim_boundary"]
+    require(paper["allowed_sensitivity_claim"] in ALLOWED_CLAIMS, "sensitivity claim exceeds identifiability gates")
+    require(paper["calibration_and_coverage_do_not_by_themselves_establish_informativeness"] is True, "calibration treated as sufficient informativeness evidence")
+    authorization = spec["authorization"]
+    require({key for key, value in authorization.items() if value is True} == TRUE_AUTHORIZATION_FLAGS, "Phase 2A true authorization flags changed")
+    require(all(value is False for key, value in authorization.items() if key not in TRUE_AUTHORIZATION_FLAGS), "Phase 2A implementation or later authorization enabled")
     require(spec["next_step"] == "PHASE2A_SOURCE_BACKED_CONTRACT_REVIEW_ONLY", "Phase 2A next step changed")
     require(spec["validation"]["scientific_correctness_validated"] is False, "spec claims scientific correctness")
+    require(spec["validation"]["proof_obligation_count"] == 24, "validation obligation count changed")
+    require(spec["validation"]["phase2a_pass_requirement_count"] == 11, "validation PASS-requirement count changed")
+    require(spec["validation"]["information_content_experiment_authorized"] is False, "information experiment authorized")
+    require(spec["validation"]["information_content_experiment_executed"] is False, "information experiment claimed executed")
 
 
 def main() -> int:

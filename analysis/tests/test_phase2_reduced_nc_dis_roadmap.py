@@ -46,6 +46,25 @@ def duplicate_issue_number(roadmap: dict, _spec: dict) -> None:
     roadmap["phases"][-1]["issue_number"] = roadmap["phases"][-2]["issue_number"]
 
 
+def remove_obligation(spec: dict, obligation_id: str) -> None:
+    spec["proof_obligations"].remove(obligation(spec, obligation_id))
+
+
+def remove_phase2d_selection_scope(roadmap: dict, _spec: dict) -> None:
+    phase = next(row for row in roadmap["phases"] if row["phase_id"] == "Phase2D")
+    phase["deliverables"] = ["Normalized kernel", "Forward closure"]
+
+
+def remove_phase2e_prior_diagnostic(roadmap: dict, _spec: dict) -> None:
+    phase = next(row for row in roadmap["phases"] if row["phase_id"] == "Phase2E")
+    phase["deliverables"] = [item for item in phase["deliverables"] if item != "Prior-dominated posterior diagnostics"]
+
+
+def remove_phase2f_information_scope(roadmap: dict, _spec: dict) -> None:
+    phase = next(row for row in roadmap["phases"] if row["phase_id"] == "Phase2F")
+    phase["deliverables"] = ["Simulation-based calibration", "Coverage", "Failure criteria"]
+
+
 @pytest.mark.parametrize(
     "mutation",
     [
@@ -86,6 +105,36 @@ def test_adversarial_mutations_are_rejected(mutation) -> None:
     rejects(mutation)
 
 
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        lambda r, s: s["proof_obligations"].__setitem__(slice(None), s["proof_obligations"][:22]),
+        lambda r, s: remove_obligation(s, "OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING"),
+        lambda r, s: remove_obligation(s, "PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT"),
+        lambda r, s: s["observation_selection_contract"]["detector_output_spaces"].update({"selected_space_symbol": "A_z"}),
+        lambda r, s: s["observation_selection_contract"]["full_detector_kernel"].update({"null_or_rejected_outcome_required_when_needed_for_normalization": False}),
+        lambda r, s: s["observation_selection_contract"]["selected_observed_event_density"].update({"definition": "q_theta(dy | selected) = integral p_theta(z) K_full(dy | z) dz"}),
+        lambda r, s: s["observation_selection_contract"]["theta_dependent_selected_fraction"].update({"required_finite_for_every_allowed_theta": False}),
+        lambda r, s: s["observation_selection_contract"]["selected_observed_event_density"].update({"required_normalized_for_every_allowed_theta": False}),
+        lambda r, s: s["observation_selection_contract"].update({"probability_mass_may_not_be_silently_discarded": False}),
+        lambda r, s: s["fixed_n_shape_only_baseline"].update({"count_or_rate_likelihood_included": True}),
+        lambda r, s: s["observation_selection_contract"].update({"phase2h_is_only_optional_count_or_rate_extension": False}),
+        lambda r, s: s["identifiability_and_information_content_contract"].update({"calibration_and_coverage_alone_establish_informativeness": True}),
+        lambda r, s: obligation(s, "PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT").update({"fail_condition": ["uninformative posterior accepted"]}),
+        lambda r, s: r["nonclaims"].remove("universal identifiability of all PDF-deformation parameters"),
+        lambda r, s: s["go_no_go_rules"]["pass_requires_all_independently_supported"].remove("bounded_identifiability_and_information_plan"),
+        lambda r, s: s["go_no_go_rules"]["pass_requires_all_independently_supported"].remove("selected_event_conditioning_coherence"),
+        remove_phase2d_selection_scope,
+        remove_phase2e_prior_diagnostic,
+        remove_phase2f_information_scope,
+        lambda r, s: r["authorization"].update({"PHASE2D_AUTHORIZED": True}),
+    ],
+    ids=[f"scientific-contract-{index:02d}" for index in range(1, 21)],
+)
+def test_scientific_contract_mutations_are_rejected(mutation) -> None:
+    rejects(mutation)
+
+
 def test_committed_artifacts_validate() -> None:
     roadmap, spec = artifacts()
     roadmap_validator.validate_roadmap(roadmap, spec, ROOT, verify_files=True)
@@ -97,10 +146,46 @@ def test_nine_issues_are_eight_stages_plus_umbrella() -> None:
     assert len(roadmap["phases"]) == 9
 
 
-def test_twenty_two_obligations_are_not_evaluated() -> None:
+def test_twenty_four_obligations_are_not_evaluated() -> None:
     _, spec = artifacts()
-    assert len(spec["proof_obligations"]) == 22
+    assert len(spec["proof_obligations"]) == 24
+    assert [item["obligation_id"] for item in spec["proof_obligations"]] == roadmap_validator.OBLIGATION_IDS
     assert {item["status"] for item in spec["proof_obligations"]} == {"NOT_EVALUATED"}
+
+
+def test_eleven_phase2a_pass_requirements_are_bound() -> None:
+    _, spec = artifacts()
+    assert spec["go_no_go_rules"]["pass_requires_all_independently_supported"] == roadmap_validator.PASS_REQUIREMENTS
+    assert len(roadmap_validator.PASS_REQUIREMENTS) == 11
+
+
+def test_selected_event_conditioning_law_is_complete() -> None:
+    _, spec = artifacts()
+    selection = spec["observation_selection_contract"]
+    assert selection["BASELINE_SELECTION_MODE"] == "SELECTED_EVENT_CONDITIONED_V1"
+    assert selection["latent_acceptance_region"]["symbol"] == "A_z"
+    assert selection["detector_output_spaces"]["full_space_symbol"] == "Y_full"
+    assert selection["detector_output_spaces"]["selected_space_symbol"] == "Y_obs"
+    assert selection["full_detector_kernel"]["normalization"] == "integral_{Y_full} K_full(dy_star | z) = 1"
+    assert selection["selection_efficiency"]["definition"] == "epsilon(z) = K_full(Y_obs | z)"
+    assert selection["theta_dependent_selected_fraction"]["definition"] == "alpha_theta = integral_{A_z} p_theta(z) epsilon(z) dz"
+    assert selection["theta_dependent_selected_fraction"]["required_finite_for_every_allowed_theta"] is True
+    assert selection["theta_dependent_selected_fraction"]["required_strictly_positive_for_every_allowed_theta"] is True
+    assert selection["selected_observed_event_density"]["required_normalized_for_every_allowed_theta"] is True
+    assert selection["fixed_n_selected_set_law"]["likelihood"] == "p(D | theta, N, selected) = product_i q_theta(y_i | selected)"
+    assert selection["fixed_n_selected_set_law"]["count_or_rate_likelihood_included"] is False
+    assert selection["phase2h_is_only_optional_count_or_rate_extension"] is True
+
+
+def test_identifiability_and_information_contract_is_bounded() -> None:
+    roadmap, spec = artifacts()
+    contract = spec["identifiability_and_information_content_contract"]
+    assert contract["observational_equivalence"]["notation"] == "theta ~ theta_prime"
+    assert "q_theta(D | N, selected)" in contract["observational_equivalence"]["definition"]
+    assert contract["bounded_and_falsifiable_phase2e_phase2f_plan_required"] is True
+    assert contract["calibration_and_coverage_alone_establish_informativeness"] is False
+    assert contract["actual_information_content_experiment_authorized"] is False
+    assert roadmap["paper_scope"]["claims_allowed_only_if_later_validated"][-1] == "proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates"
 
 
 def test_phase2a_authorization_is_planning_only() -> None:
