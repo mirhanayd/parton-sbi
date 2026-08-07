@@ -63,7 +63,7 @@ with open('pr_body.txt', 'w') as f:
 
 subprocess.run(["git", "add", "."])
 subprocess.run(["git", "commit", "-m", "Complete the source-backed Phase 2A contract review"])
-subprocess.run(["git", "push", "-u", "origin", "phase2a/source-backed-contract-review"])
+subprocess.run(["git", "push", "-f", "-u", "origin", "phase2a/source-backed-contract-review"])
 
 pr_out = subprocess.check_output(["gh", "pr", "create", "--draft", "--title", "Review the source-backed Reduced NC DIS contract", "--body-file", "pr_body.txt"]).decode('utf-8')
 pr_url = pr_out.strip()
