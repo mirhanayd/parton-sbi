@@ -1,5 +1,5 @@
 {
-    "schema_version": "partonsbi.phase2b.reduced-nc-dis-validation-plan-proposal.v1",
+    "schema_version": "partonsbi.phase2b.reduced-nc-dis-validation-plan-proposal.v2",
     "formula_reference_plan": "Compare against independent NC DIS implementation.",
     "convention_closure_plan": "Audit numerical closure of chosen conventions.",
     "support_audit_plan": "Scan parameter space for positivity inside strict support.",
@@ -10,7 +10,9 @@
     "independent_reference_strategy": "Use APFEL++ native or LHAPDF grids as truth baseline.",
     "anchors": [],
     "grids": [],
-    "tolerances": [],
+    "tolerances": [
+        "Unresolved tolerance deferred to Phase 2B"
+    ],
     "convergence_rules": [],
     "failure_precedence": "Any negative rate inside support fails.",
     "resource_bound": "Max 2 hours on CPU.",
