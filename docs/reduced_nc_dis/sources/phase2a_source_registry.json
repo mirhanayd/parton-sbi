@@ -1,5 +1,5 @@
 {
-    "schema_version": "partonsbi.phase2a.source-registry.v2",
+    "schema_version": "partonsbi.phase2a.source-registry.v3",
     "generated_from_main": "388086193b8ef428c1332c3ef190baeb000cfbe7",
     "review_scope": "PHASE2A_PRIMARY_SOURCE_REVIEW",
     "source_identity_policy": "Strict primary or authoritative source for load-bearing claims.",
@@ -12,8 +12,8 @@
                 "journal_or_publisher": "Eur. Phys. J. C"
             },
             "source_class": "ORIGINAL_EXPERIMENTAL_PUBLICATION",
-            "publication_date": "2015-12-01",
-            "version_date": "2015-06-24",
+            "publication_date": "2015-12-08",
+            "version_date": "2015-06-19",
             "persistent_identifiers": {
                 "DOI": "10.1140/epjc/s10052-015-3710-4",
                 "arXiv_id": "1506.06042"
@@ -94,7 +94,7 @@
                 "journal_or_publisher": "PoS"
             },
             "source_class": "OFFICIAL_SOFTWARE_DOCUMENTATION",
-            "publication_date": "2018-01-01",
+            "publication_date": "2017-10-23",
             "version_date": "2017-08-01",
             "persistent_identifiers": {
                 "DOI": "10.22323/1.314.0201",
@@ -133,8 +133,8 @@
                 "journal_or_publisher": "arXiv"
             },
             "source_class": "ORIGINAL_MATHEMATICAL_PUBLICATION",
-            "publication_date": "2018-04-10",
-            "version_date": "2018-04-10",
+            "publication_date": "2018-04-18",
+            "version_date": "2018-04-18",
             "persistent_identifiers": {
                 "DOI": null,
                 "arXiv_id": "1804.06788"

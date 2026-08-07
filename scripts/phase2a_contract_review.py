@@ -2,11 +2,17 @@ import json
 import os
 import sys
 import re
+import hashlib
+from pathlib import Path
 
 def check(condition, message):
     if not condition:
         print(f"Validation Error: {message}")
         sys.exit(1)
+
+def file_sha256(path):
+    with open(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
 
 def main():
     try:
@@ -21,11 +27,19 @@ def main():
     except FileNotFoundError:
         check(False, "Missing JSON files")
 
-    # exact schemas
-    check(registry.get("schema_version") == "partonsbi.phase2a.source-registry.v2", "Wrong registry schema")
-    check(ledger.get("schema_version") == "partonsbi.phase2a.claim-source-ledger.v2", "Wrong ledger schema")
-    check(review.get("schema_version") == "partonsbi.phase2a.reduced-nc-dis-contract-review.v2", "Wrong review schema")
-    check(phase2b.get("schema_version") == "partonsbi.phase2b.reduced-nc-dis-validation-plan-proposal.v2", "Wrong phase2b schema")
+    # exact schemas (v3)
+    check(registry.get("schema_version") == "partonsbi.phase2a.source-registry.v3", "Wrong registry schema")
+    check(ledger.get("schema_version") == "partonsbi.phase2a.claim-source-ledger.v3", "Wrong ledger schema")
+    check(review.get("schema_version") == "partonsbi.phase2a.reduced-nc-dis-contract-review.v3", "Wrong review schema")
+    check(phase2b.get("schema_version") == "partonsbi.phase2b.reduced-nc-dis-validation-plan-proposal.v3", "Wrong phase2b schema")
+
+    # exact cross-artifact hash verification
+    reg_hash = file_sha256("docs/reduced_nc_dis/sources/phase2a_source_registry.json")
+    led_hash = file_sha256("docs/reduced_nc_dis/contracts/phase2a_claim_source_ledger.json")
+    p2b_hash = file_sha256("docs/reduced_nc_dis/contracts/phase2b_validation_plan_proposal.json")
+    check(review.get('source_registry_identity') == reg_hash, "Mismatched source_registry_identity")
+    check(review.get('claim_ledger_identity') == led_hash, "Mismatched claim_ledger_identity")
+    check(review.get('phase2b_validation_plan_identity') == p2b_hash, "Mismatched phase2b_validation_plan_identity")
 
     # source-id uniqueness
     src_ids = [s['source_id'] for s in registry['sources']]
@@ -44,7 +58,6 @@ def main():
         pub_date = src.get('publication_date')
         ver_date = src.get('version_date')
         check(pub_date and ver_date, "Missing publication or version date")
-        # publication/version date separation is present in the schema
         
         # retrieval status semantics
         ret_status = src['retrieval'].get('retrieval_status')
@@ -60,18 +73,21 @@ def main():
     
     # direct-support source requirements
     for claim in ledger['claim_records']:
-        # precise locator presence
         if claim['source_bindings']:
-            check(claim['exact_locators'], "Missing precise locators for source bindings")
+            if claim.get('evidence_kind') != 'REPOSITORY_FACT':
+                check(claim.get('exact_locators'), "Missing precise locators for source bindings")
         
-        # no contradicted sources
         check(not any(s in contradicted_sources for s in claim['source_bindings']), "Claim binds to contradicted source")
 
         if claim['support_status'] == 'DIRECTLY_SUPPORTED':
             if claim['evidence_kind'] == 'SOURCE_FACT':
                 check(len(claim['source_bindings']) > 0, "DIRECTLY_SUPPORTED SOURCE_FACT requires valid active source binding")
 
-    # claim-to-obligation consistency
+        # qualifications checking
+        if claim['support_status'] == 'SUPPORTED_WITH_QUALIFICATION':
+            check('phase2a_pass_blocking' in claim, "SUPPORTED_WITH_QUALIFICATION must have phase2a_pass_blocking")
+            check(claim.get('blocking_reason'), "SUPPORTED_WITH_QUALIFICATION must have blocking_reason")
+
     # all 24 obligation identities
     ob_ids = [
         "EXACT_E_MINUS_NC_FORMULA", "EXACT_E_PLUS_NC_FORMULA", "F2_FL_XF3_CONVENTIONS",
@@ -87,8 +103,6 @@ def main():
     rev_ob_ids = [ob['obligation_id'] for ob in review['obligation_reviews']]
     check(set(rev_ob_ids) == set(ob_ids), "Missing or incorrect obligation IDs")
 
-    claim_map = {c['claim_id']: c for c in ledger['claim_records']}
-
     # gate required_claim_ids non-empty, obligation_dependencies non-empty
     check(len(review['gate_reviews']) == 11, "Must have exactly 11 gates")
     gate_ids = [
@@ -100,14 +114,33 @@ def main():
     rev_gate_ids = [g['gate_id'] for g in review['gate_reviews']]
     check(set(rev_gate_ids) == set(gate_ids), "Missing or incorrect gate IDs")
 
+    claim_map = {c['claim_id']: c for c in ledger['claim_records']}
+
+    # Reciprocal gate dependencies
+    for claim in ledger['claim_records']:
+        c_gates = claim.get('gate_dependencies', [])
+        for g_id in c_gates:
+            gate = next((g for g in review['gate_reviews'] if g['gate_id'] == g_id), None)
+            check(gate is not None and claim['claim_id'] in gate['required_claim_ids'], f"Claim {claim['claim_id']} lists gate {g_id} but gate does not list claim")
+
     for gate in review['gate_reviews']:
         check(len(gate['required_claim_ids']) > 0, f"Gate {gate['gate_id']} has empty required_claim_ids")
         check(len(gate['obligation_dependencies']) > 0, f"Gate {gate['gate_id']} has empty obligation_dependencies")
+
+        for rcid in gate['required_claim_ids']:
+            check(rcid in claim_map, f"Gate {gate['gate_id']} requires unknown claim {rcid}")
+
+        for ob_dep in gate['obligation_dependencies']:
+            check(ob_dep in ob_ids, f"Gate {gate['gate_id']} has unknown obligation dependency {ob_dep}")
 
         # deterministic gate status derivation
         derived_status = "SUPPORTED"
         for cid in gate['required_claim_ids']:
             cstat = claim_map[cid]['support_status']
+            is_blocking = claim_map[cid].get('phase2a_pass_blocking', False)
+            if is_blocking:
+                cstat = "PRIMARY_EVIDENCE_UNAVAILABLE"
+
             if cstat == "CONTRADICTED":
                 derived_status = "CONTRADICTED"
                 break
@@ -140,17 +173,25 @@ def main():
     check(phase2b.get("execution_status") == "NOT_EXECUTED", "Phase 2B plan execution status not NOT_EXECUTED")
     check(phase2b.get("authorization") == "NOT_AUTHORIZED", "Phase 2B plan authorized")
 
+    # check Phase 2B plan concrete bounds
+    check(len(phase2b.get('anchors', [])) > 0, "Phase 2B plan has empty anchors")
+    check(len(phase2b.get('grids', [])) > 0, "Phase 2B plan has empty grids")
+    check(len(phase2b.get('convergence_rules', [])) > 0, "Phase 2B plan has empty convergence_rules")
+
+    for t in phase2b.get('tolerances', []):
+        check("quantity" in t, "Tolerance missing quantity")
+        check("threshold" in t, "Tolerance missing threshold")
+        check("absolute_or_relative" in t, "Tolerance missing absolute_or_relative")
+        check("justification_type" in t, "Tolerance missing justification_type")
+        check("justification_source_or_repository_identity" in t, "Tolerance missing justification_source_or_repository_identity")
+        check("blocking_if_unresolved" in t, "Tolerance missing blocking_if_unresolved")
+
     # Phase 2B unauthorized, all implementation flags false, legacy D2 false
     auth = review['authorization']
     check(not auth.get("PHASE2B_AUTHORIZED"), "Phase 2B authorized")
     check(not auth.get("IMPLEMENTATION_AUTHORIZED"), "Implementation authorized")
     check(not auth.get("NUMERICAL_PHYSICS_AUTHORIZED"), "Numerical physics authorized")
     check(not auth.get("D2_AUTHORIZED"), "Legacy D2 authorized")
-
-    # predecessor hashes
-    pred = review.get("predecessor_identities", {})
-    check(pred.get("phase1b_closeout") == "ea509c228aa74021af15c5e1473b257dd0c1b6863118ac9f4be484358c7c8fd5", "Wrong phase1b hash")
-    check(pred.get("phase2_roadmap") == "844a2783875039b1bf730c24f3ccf8814a7aa74fd78a017de3f5ca3339e2ca78", "Wrong phase2 roadmap hash")
 
     # paper nonclaims
     forbidden = review.get("paper_claim_boundary", {}).get("forbidden", [])

@@ -158,3 +158,39 @@ def test_wrong_schema(base_data, tmp_path):
     assert rc != 0
     assert "Wrong registry schema" in out
 
+def test_missing_cross_artifact_hashes(base_data, tmp_path):
+    reg, led, rev, p2b = copy.deepcopy(base_data)
+    rev['source_registry_identity'] = "badhash"
+    rc, out = run_validator(reg, led, rev, p2b, tmp_path)
+    assert rc != 0
+    assert "Mismatched source_registry_identity" in out
+
+def test_missing_pass_blocking_flag(base_data, tmp_path):
+    reg, led, rev, p2b = copy.deepcopy(base_data)
+    # Add a qualified claim without blocking flag
+    led['claim_records'][0]['support_status'] = "SUPPORTED_WITH_QUALIFICATION"
+    if 'phase2a_pass_blocking' in led['claim_records'][0]:
+        del led['claim_records'][0]['phase2a_pass_blocking']
+    rc, out = run_validator(reg, led, rev, p2b, tmp_path)
+    assert rc != 0
+    assert "SUPPORTED_WITH_QUALIFICATION must have phase2a_pass_blocking" in out
+
+def test_pass_blocking_derivation(base_data, tmp_path):
+    reg, led, rev, p2b = copy.deepcopy(base_data)
+    # Give it pass blocking
+    led['claim_records'][0]['support_status'] = "SUPPORTED_WITH_QUALIFICATION"
+    led['claim_records'][0]['phase2a_pass_blocking'] = True
+    led['claim_records'][0]['blocking_reason'] = "Test blocking"
+    # To isolate, we don't change the gate status, meaning derivation will fail
+    rc, out = run_validator(reg, led, rev, p2b, tmp_path)
+    assert rc != 0
+    assert "does not match derived PRIMARY_EVIDENCE_UNAVAILABLE" in out
+
+def test_empty_p2b_bounds(base_data, tmp_path):
+    reg, led, rev, p2b = copy.deepcopy(base_data)
+    p2b['anchors'] = []
+    rc, out = run_validator(reg, led, rev, p2b, tmp_path)
+    assert rc != 0
+    assert "Phase 2B plan has empty anchors" in out
+
+

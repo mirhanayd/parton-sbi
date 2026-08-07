@@ -1,5 +1,5 @@
 {
-    "schema_version": "partonsbi.phase2a.claim-source-ledger.v2",
+    "schema_version": "partonsbi.phase2a.claim-source-ledger.v3",
     "claim_records": [
         {
             "claim_id": "CLAIM_KINEMATICS",
@@ -123,7 +123,7 @@
             "exact_locators": {
                 "SRC_APFEL_2014": "Section 2.2"
             },
-            "support_status": "DIRECTLY_SUPPORTED",
+            "support_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "support_scope": "Scheme semantics.",
             "qualification": null,
             "explicit_noncoverage": [
@@ -134,7 +134,8 @@
             ],
             "derivation_dependencies": [],
             "methodology_choice": "Adopted VFNS NLO.",
-            "limitations": "None."
+            "limitations": "None.",
+            "content": "Exact NLO VFNS scheme details not fully specified."
         },
         {
             "claim_id": "CLAIM_PDF_EVALUATOR",
@@ -185,7 +186,9 @@
             ],
             "derivation_dependencies": [],
             "methodology_choice": "Enforced by contract.",
-            "limitations": "Requires strict numerical validation."
+            "limitations": "Requires strict numerical validation.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
         },
         {
             "claim_id": "CLAIM_RATE_POSITIVITY",
@@ -208,7 +211,9 @@
             ],
             "derivation_dependencies": [],
             "methodology_choice": "Must be mathematically and numerically verified.",
-            "limitations": "Requires Phase 2B closure."
+            "limitations": "Requires Phase 2B closure.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
         },
         {
             "claim_id": "CLAIM_LATENT_OBSERVATION",
@@ -237,9 +242,12 @@
                 "selected_event_conditioning_coherence",
                 "paper_claim_boundary_consistency"
             ],
-            "derivation_dependencies": [],
+            "derivation_dependencies": [
+                "CLAIM_IDENTIFIABILITY"
+            ],
             "methodology_choice": "PartonSBI specific derivation.",
-            "limitations": "None."
+            "limitations": "None.",
+            "content": "Derived from standard conditional probability rules and Bayes theorem."
         },
         {
             "claim_id": "CLAIM_DETECTOR_KERNEL",
@@ -262,7 +270,9 @@
             ],
             "derivation_dependencies": [],
             "methodology_choice": "Perfect detector identity kernel.",
-            "limitations": "None."
+            "limitations": "None.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
         },
         {
             "claim_id": "CLAIM_POSTERIOR_TARGET",
@@ -271,7 +281,7 @@
             ],
             "exact_claim": "Amortized inference yields posterior.",
             "claim_class": "STATISTICAL_MODEL",
-            "evidence_kind": "SOURCE_FACT",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
             "load_bearing": true,
             "source_bindings": [
                 "SRC_SBI_FRONTIER_2020"
@@ -286,9 +296,12 @@
             "gate_dependencies": [
                 "posterior_target_coherence"
             ],
-            "derivation_dependencies": [],
+            "derivation_dependencies": [
+                "CLAIM_IDENTIFIABILITY"
+            ],
             "methodology_choice": "Target is p(theta|D,N,selected).",
-            "limitations": "None."
+            "limitations": "None.",
+            "content": "Derived from standard conditional probability rules and Bayes theorem."
         },
         {
             "claim_id": "CLAIM_CALIBRATION",
@@ -364,7 +377,9 @@
             ],
             "derivation_dependencies": [],
             "methodology_choice": "Explicit metrics must be tested.",
-            "limitations": "None."
+            "limitations": "None.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
         },
         {
             "claim_id": "CLAIM_NON_CLAIMS",
@@ -409,6 +424,17 @@
             "derivation_dependencies": [],
             "methodology_choice": "Phase 2B planning.",
             "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_PDF_FAMILY_REPOSITORY_FACT",
+            "claim_class": "MATHEMATICAL_CONSTRAINT",
+            "evidence_kind": "REPOSITORY_FACT",
+            "source_bindings": [
+                "docs/phase1a_strict_support_decision.json",
+                "docs/adr/ADR-001-continuous-pdf-family.md"
+            ],
+            "content": "PDF family is CT18NLO with strict grid support policy.",
+            "support_status": "DIRECTLY_SUPPORTED"
         }
     ]
 }

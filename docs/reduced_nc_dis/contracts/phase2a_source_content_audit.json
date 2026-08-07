@@ -1,46 +1,46 @@
 {
-  "schema_version": "partonsbi.phase2a.source-content-audit.v1",
-  "audited_head": "d11113de7f14f31ed094380652d3c7501930bb9d",
-  "audit_scope": "INDEPENDENT_SOURCE_CONTENT_AUDIT_AND_REPAIR",
-  "repository_artifact_findings": {
-    "defect_A": "Repository source registry contains 4 sources, while PR metadata claims 17.",
-    "defect_D": "Repository contract review records PASS, while current PR metadata claims INCONCLUSIVE.",
-    "defect_K": "Current helper automation hardcodes source counts, claim counts, all obligations SUPPORTED, all gates SUPPORTED, and PASS."
-  },
-  "github_metadata_findings": {
-    "defect_E": "Issue #54 contains contradictory draft progress records for PASS vs INCONCLUSIVE, and 4 vs 17 sources."
-  },
-  "source_identity_findings": {
-    "defect_B": "Repository source registry records sources as VERIFIED while their retrieval records say NOT_RETRIEVED, with null retrieval URLs and hashes.",
-    "defect_C": "Recorded access timestamps are from 2023, not this 2026 review."
-  },
-  "claim_binding_findings": {
-    "defect_F": "Current obligation records use inadequate or incorrect claim bindings. For example, APFEL documentation does not guarantee complete-rate positivity, and SBC does not cover identifiability."
-  },
-  "obligation_findings": {
-    "defect_F2": "Obligations are marked SUPPORTED despite inadequate claim bindings."
-  },
-  "gate_derivation_findings": {
-    "defect_G": "Current gate records have empty required_claim_ids and empty obligation_dependencies.",
-    "defect_H": "Current PASS is not genuinely derived from load-bearing claim evidence."
-  },
-  "validator_findings": {
-    "defect_I": "Current validator uses synthetic _test_ sentinel fields instead of validating real mutated structures.",
-    "defect_J": "Current validator does not genuinely verify DOI identity, publication vs version dates, hashes, claim-to-gate propagation, or complete decision precedence."
-  },
-  "test_findings": {
-    "defect_I2": "Adversarial tests rely on synthetic sentinels rather than real structure mutations."
-  },
-  "repository_hygiene_findings": {
-    "defect_L": "PR #63 contains unwanted workflow-generation files (pr_body.txt, scripts/finalize.py, scripts/generate_phase2a_jsons.py)."
-  },
-  "required_corrections": [
-    "Delete unwanted workflow-generation files",
-    "Replace v1 JSON schemas with v2, ensuring strict derivation, non-empty gate dependencies, and real source retrieval",
-    "Rewrite scripts/phase2a_contract_review.py to validate real structure logic and remove sentinel bypassing",
-    "Rewrite adversarial tests to mutate real fields",
-    "Update GitHub PR and issue metadata consistently"
-  ],
-  "audit_decision": "CORRECTION_REQUIRED",
-  "limitations": "None."
+    "schema_version": "partonsbi.phase2a.source-content-audit.v2",
+    "audited_head": "d11113de7f14f31ed094380652d3c7501930bb9d",
+    "audit_scope": "INDEPENDENT_SOURCE_CONTENT_AUDIT_AND_REPAIR",
+    "repository_artifact_findings": {
+        "defect_A": "Repository source registry contains 4 sources, while PR metadata claims 17.",
+        "defect_D": "Repository contract review records PASS, while current PR metadata claims INCONCLUSIVE.",
+        "defect_K": "Current helper automation hardcodes source counts, claim counts, all obligations SUPPORTED, all gates SUPPORTED, and PASS."
+    },
+    "github_metadata_findings": {
+        "defect_E": "Issue #54 contains contradictory draft progress records for PASS vs INCONCLUSIVE, and 4 vs 17 sources."
+    },
+    "source_identity_findings": {
+        "defect_B": "Repository source registry records sources as VERIFIED while their retrieval records say NOT_RETRIEVED, with null retrieval URLs and hashes.",
+        "defect_C": "Recorded access timestamps are from 2023, not this 2026 review."
+    },
+    "claim_binding_findings": {
+        "defect_F": "Current obligation records use inadequate or incorrect claim bindings. For example, APFEL documentation does not guarantee complete-rate positivity, and SBC does not cover identifiability."
+    },
+    "obligation_findings": {
+        "defect_F2": "Obligations are marked SUPPORTED despite inadequate claim bindings."
+    },
+    "gate_derivation_findings": {
+        "defect_G": "Current gate records have empty required_claim_ids and empty obligation_dependencies.",
+        "defect_H": "Current PASS is not genuinely derived from load-bearing claim evidence."
+    },
+    "validator_findings": {
+        "defect_I": "Current validator uses synthetic _test_ sentinel fields instead of validating real mutated structures.",
+        "defect_J": "Current validator does not genuinely verify DOI identity, publication vs version dates, hashes, claim-to-gate propagation, or complete decision precedence."
+    },
+    "test_findings": {
+        "defect_I2": "Adversarial tests rely on synthetic sentinels rather than real structure mutations."
+    },
+    "repository_hygiene_findings": {
+        "defect_L": "PR #63 contains unwanted workflow-generation files (pr_body.txt, scripts/finalize.py, scripts/generate_phase2a_jsons.py)."
+    },
+    "required_corrections": [
+        "Delete unwanted workflow-generation files",
+        "Replace v1 JSON schemas with v2, ensuring strict derivation, non-empty gate dependencies, and real source retrieval",
+        "Rewrite scripts/phase2a_contract_review.py to validate real structure logic and remove sentinel bypassing",
+        "Rewrite adversarial tests to mutate real fields",
+        "Update GitHub PR and issue metadata consistently"
+    ],
+    "audit_decision": "CORRECTION_REQUIRED",
+    "limitations": "None."
 }

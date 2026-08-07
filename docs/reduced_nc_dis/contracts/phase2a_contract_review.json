@@ -1,5 +1,5 @@
 {
-    "schema_version": "partonsbi.phase2a.reduced-nc-dis-contract-review.v2",
+    "schema_version": "partonsbi.phase2a.reduced-nc-dis-contract-review.v3",
     "generated_from_main": "388086193b8ef428c1332c3ef190baeb000cfbe7",
     "predecessor_identities": {
         "phase1b_closeout": "ea509c228aa74021af15c5e1473b257dd0c1b6863118ac9f4be484358c7c8fd5",
@@ -8,8 +8,8 @@
     },
     "review_question": "Does the reduced NC DIS observation model have a valid source-backed mathematical contract?",
     "review_scope": "Phase 2A",
-    "source_registry_identity": "14e9aabd9c8f4c16b7edee9c6505fe774c3633c56b47d1ae4840c4c026abc047",
-    "claim_ledger_identity": "d6e05599f29edef8f9c71e516e2df6ef0837349d38d8cf3ecef57d4b186592e2",
+    "source_registry_identity": "a9a3b9ce917ac509897bb4001c5d7f5083d023b1e30aa4c2efa89a1c1a692d2f",
+    "claim_ledger_identity": "341eb3f9fe9b815019825948cad47601ed00907cc5f96c7dd5bc79f692aacbea",
     "exact_baseline_contract": {
         "formula": "Standard NC DIS differential cross section",
         "electroweak": "G_F scheme",
@@ -433,7 +433,7 @@
     "gate_reviews": [
         {
             "gate_id": "exact_formula_contract",
-            "status": "SUPPORTED",
+            "status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "required_claim_ids": [
                 "CLAIM_KINEMATICS",
                 "CLAIM_STRUCTURE_FUNCTIONS",
@@ -447,7 +447,7 @@
                 "EXACT_E_PLUS_NC_FORMULA"
             ],
             "unresolved_items": [],
-            "decision_effect": "SUPPORTED",
+            "decision_effect": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "limitations": "none"
         },
         {
@@ -515,7 +515,7 @@
             ],
             "source_coverage": "Yes",
             "obligation_dependencies": [
-                "NO_HIDDEN_CLIPPING"
+                "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE"
             ],
             "unresolved_items": [],
             "decision_effect": "SUPPORTED_WITH_QUALIFICATION",
@@ -595,7 +595,7 @@
             "limitations": "none"
         }
     ],
-    "phase2b_validation_plan_identity": "e4c573be765a9e205a1c4943c57b65f7c9774d9e6ae3cd23eb27c0c3df3ee62c",
+    "phase2b_validation_plan_identity": "ebef0dbdcc8f75745b3e7eebaf74ccc547e992d52d89752364d9dfbed80bf0ab",
     "paper_claim_boundary": {
         "allowed": [
             "proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates"
@@ -617,8 +617,8 @@
             "full-generator closure"
         ]
     },
-    "scientific_decision": "PASS",
-    "decision_derivation": "Derived deterministically from 11 gate statuses without hardcoding.",
+    "scientific_decision": "INCONCLUSIVE",
+    "decision_derivation": "CLAIM_HEAVY_FLAVOR is PRIMARY_EVIDENCE_UNAVAILABLE, causing exact_formula_contract to become PRIMARY_EVIDENCE_UNAVAILABLE, which yields INCONCLUSIVE.",
     "authorization": {
         "PHASE2_ROADMAP_AUTHORIZED": true,
         "PHASE2A_CONTRACT_REVIEW_AUTHORIZED": true,
