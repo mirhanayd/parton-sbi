@@ -1,0 +1,26 @@
+{
+    "schema_version": "partonsbi.phase2b.reduced-nc-dis-validation-plan-proposal.v1",
+    "formula_reference_plan": "Compare against independent NC DIS implementation.",
+    "convention_closure_plan": "Audit numerical closure of chosen conventions.",
+    "support_audit_plan": "Scan parameter space for positivity inside strict support.",
+    "normalization_plan": "Numerical integration to verify finite non-zero Z_theta.",
+    "positivity_plan": "Verify non-negativity of differential rate.",
+    "coordinate_and_jacobian_plan": "Verify Jacobian matching to generation variables.",
+    "selected_event_normalization_plan": "Verify integration of conditional probability.",
+    "independent_reference_strategy": "Use APFEL++ native or LHAPDF grids as truth baseline.",
+    "anchors": [],
+    "grids": [],
+    "tolerances": [],
+    "convergence_rules": [],
+    "failure_precedence": "Any negative rate inside support fails.",
+    "resource_bound": "Max 2 hours on CPU.",
+    "provenance": "Deterministically seeded.",
+    "prohibited_repairs": [
+        "No clipping, no dynamic support repair"
+    ],
+    "expected_outputs": [
+        "PASS/FAIL status"
+    ],
+    "authorization": "NOT_AUTHORIZED",
+    "execution_status": "NOT_EXECUTED"
+}

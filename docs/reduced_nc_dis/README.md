@@ -31,3 +31,5 @@ performed by this correction.
 The machine-readable artifacts and their validator record the authorization
 boundary. The GitHub snapshot is external provenance; the offline validator
 does not contact or verify live GitHub state.
+
+Phase 2A review is a source-backed contract review; later numerical closure remains unexecuted. Phase 2B remains unauthorized. ADR-013 remains Proposed. The result is not accepted until independent review and merge.
