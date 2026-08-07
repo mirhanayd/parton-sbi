@@ -79,10 +79,8 @@ def test_gate_derivation_fail(base_data, tmp_path):
 
 def test_decision_derivation_fail(base_data, tmp_path):
     reg, led, rev, p2b = copy.deepcopy(base_data)
-    # Change a gate to PRIMARY_EVIDENCE_UNAVAILABLE but leave decision PASS
-    rev['gate_reviews'][0]['status'] = "PRIMARY_EVIDENCE_UNAVAILABLE"
-    # we must also fix the claim so gate derivation passes, to isolate decision derivation
-    led['claim_records'][0]['support_status'] = "PRIMARY_EVIDENCE_UNAVAILABLE"
+    # The decision is natively INCONCLUSIVE in v3. We change it to PASS to trigger failure.
+    rev['scientific_decision'] = "PASS"
     rc, out = run_validator(reg, led, rev, p2b, tmp_path)
     assert rc != 0
     assert "does not match derived INCONCLUSIVE" in out
@@ -181,7 +179,9 @@ def test_pass_blocking_derivation(base_data, tmp_path):
     led['claim_records'][0]['support_status'] = "SUPPORTED_WITH_QUALIFICATION"
     led['claim_records'][0]['phase2a_pass_blocking'] = True
     led['claim_records'][0]['blocking_reason'] = "Test blocking"
-    # To isolate, we don't change the gate status, meaning derivation will fail
+    # The gate is exact_formula_contract which is natively PRIMARY_EVIDENCE_UNAVAILABLE
+    # To trigger a failure, we change the gate status to something else (e.g. SUPPORTED)
+    rev['gate_reviews'][0]['status'] = "SUPPORTED"
     rc, out = run_validator(reg, led, rev, p2b, tmp_path)
     assert rc != 0
     assert "does not match derived PRIMARY_EVIDENCE_UNAVAILABLE" in out
