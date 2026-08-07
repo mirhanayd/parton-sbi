@@ -7,36 +7,18 @@
     "positivity_plan": "Verify non-negativity of differential rate.",
     "coordinate_and_jacobian_plan": "Verify Jacobian matching to generation variables.",
     "selected_event_normalization_plan": "Verify integration of conditional probability.",
-    "independent_reference_strategy": "Use APFEL++ native or LHAPDF grids as truth baseline.",
-    "anchors": [
-        {
-            "name": "nominal",
-            "theta": {
-                "param1": 0.0
-            }
-        }
-    ],
-    "grids": [
-        {
-            "name": "q2_x",
-            "q2_min": 3.5,
-            "q2_max": 10000,
-            "x_min": 0.0001,
-            "x_max": 0.8
-        }
-    ],
-    "tolerances": [
-        {
-            "quantity": "cross_section_pb",
-            "threshold": 0.0001,
-            "absolute_or_relative": "relative",
-            "justification_type": "NUMERICAL_ANALYSIS_ARGUMENT",
-            "justification_source_or_repository_identity": "Standard MC tolerance",
-            "blocking_if_unresolved": true
-        }
-    ],
-    "convergence_rules": [
-        "Relative error < 1e-4 for 3 successive epochs"
+    "independent_reference_strategy": "Unresolved",
+    "anchors": [],
+    "grids": [],
+    "tolerances": [],
+    "convergence_rules": [],
+    "plan_completeness": "INCOMPLETE",
+    "unresolved_items": [
+        "exact theta anchor",
+        "tolerance justification",
+        "independent reference",
+        "resource bounds",
+        "convergence criteria"
     ],
     "failure_precedence": "Fail fast on positivity violation",
     "resource_bound": "Max 2 hours on CPU.",
@@ -50,14 +32,12 @@
     "authorization": "NOT_AUTHORIZED",
     "execution_status": "NOT_EXECUTED",
     "beam_configuration": "e- p, 27.5 GeV / 920 GeV",
-    "support_boundary_probes": "Grid edge evaluation",
-    "formula_reference_points": "Standard HERA points",
-    "normalization_integration_strategy": "Monte Carlo integration over phase space",
-    "positivity_scan_strategy": "Grid sampling across active domain",
-    "selected_event_normalization_strategy": "Direct evaluation against total rate",
-    "independent_reference_implementation_strategy": "None planned",
-    "cpu_resource_bound": "10 hours maximum",
-    "outputs": [
-        "validation_report.json"
-    ]
+    "support_boundary_probes": "Unresolved",
+    "formula_reference_points": "Unresolved",
+    "normalization_integration_strategy": "Unresolved",
+    "positivity_scan_strategy": "Unresolved",
+    "selected_event_normalization_strategy": "Unresolved",
+    "independent_reference_implementation_strategy": "Unresolved",
+    "cpu_resource_bound": "Unresolved",
+    "outputs": []
 }

@@ -103,6 +103,48 @@ def main():
     rev_ob_ids = [ob['obligation_id'] for ob in review['obligation_reviews']]
     check(set(rev_ob_ids) == set(ob_ids), "Missing or incorrect obligation IDs")
 
+    claim_map = {c['claim_id']: c for c in ledger['claim_records']}
+
+    for ob in review['obligation_reviews']:
+        ob_id = ob['obligation_id']
+        derived_status = "SUPPORTED"
+        for cid in ob['source_claim_ids']:
+            if cid not in claim_map:
+                continue
+            cstat = claim_map[cid]['support_status']
+            is_blocking = claim_map[cid].get('phase2a_pass_blocking', False)
+            
+            # evaluate for this claim
+            eff_stat = cstat
+            if is_blocking and cstat == "SUPPORTED_WITH_QUALIFICATION":
+                eff_stat = "PRIMARY_EVIDENCE_UNAVAILABLE"
+
+            if eff_stat == "CONTRADICTED":
+                derived_status = "CONTRADICTED"
+                break
+            elif eff_stat == "NOT_SUPPORTED" and derived_status != "CONTRADICTED":
+                derived_status = "NOT_SUPPORTED"
+            elif eff_stat == "PRIMARY_EVIDENCE_UNAVAILABLE" and derived_status not in ["CONTRADICTED", "NOT_SUPPORTED"]:
+                derived_status = "PRIMARY_EVIDENCE_UNAVAILABLE"
+            elif eff_stat == "SUPPORTED_WITH_QUALIFICATION" and derived_status == "SUPPORTED":
+                derived_status = "SUPPORTED_WITH_QUALIFICATION"
+
+        check(ob['contract_review_status'] == derived_status, f"Obligation {ob_id} status {ob['contract_review_status']} does not match derived {derived_status}")
+
+    # Reciprocal obligation dependencies
+    for claim in ledger['claim_records']:
+        c_obs = claim.get('obligation_ids', [])
+        for o_id in c_obs:
+            ob = next((o for o in review['obligation_reviews'] if o['obligation_id'] == o_id), None)
+            check(ob is not None, f"Claim {claim['claim_id']} lists unknown obligation ID {o_id}")
+            check(claim['claim_id'] in ob['source_claim_ids'], f"Claim {claim['claim_id']} lists obligation {o_id} but obligation does not list claim")
+
+    for ob in review['obligation_reviews']:
+        for cid in ob['source_claim_ids']:
+            check(cid in claim_map, f"Obligation {ob['obligation_id']} lists unknown claim {cid}")
+            c_obs = claim_map[cid].get('obligation_ids', [])
+            check(ob['obligation_id'] in c_obs, f"Obligation {ob['obligation_id']} lists claim {cid} but claim does not list obligation")
+
     # gate required_claim_ids non-empty, obligation_dependencies non-empty
     check(len(review['gate_reviews']) == 11, "Must have exactly 11 gates")
     gate_ids = [
@@ -114,9 +156,7 @@ def main():
     rev_gate_ids = [g['gate_id'] for g in review['gate_reviews']]
     check(set(rev_gate_ids) == set(gate_ids), "Missing or incorrect gate IDs")
 
-    claim_map = {c['claim_id']: c for c in ledger['claim_records']}
-
-    # Reciprocal gate dependencies
+    # gate required_claim_ids non-empty, obligation_dependencies non-empty
     for claim in ledger['claim_records']:
         c_gates = claim.get('gate_dependencies', [])
         for g_id in c_gates:
@@ -173,18 +213,19 @@ def main():
     check(phase2b.get("execution_status") == "NOT_EXECUTED", "Phase 2B plan execution status not NOT_EXECUTED")
     check(phase2b.get("authorization") == "NOT_AUTHORIZED", "Phase 2B plan authorized")
 
-    # check Phase 2B plan concrete bounds
-    check(len(phase2b.get('anchors', [])) > 0, "Phase 2B plan has empty anchors")
-    check(len(phase2b.get('grids', [])) > 0, "Phase 2B plan has empty grids")
-    check(len(phase2b.get('convergence_rules', [])) > 0, "Phase 2B plan has empty convergence_rules")
+    # check Phase 2B plan concrete bounds if COMPLETE
+    if phase2b.get("plan_completeness") != "INCOMPLETE":
+        check(len(phase2b.get('anchors', [])) > 0, "Phase 2B plan has empty anchors")
+        check(len(phase2b.get('grids', [])) > 0, "Phase 2B plan has empty grids")
+        check(len(phase2b.get('convergence_rules', [])) > 0, "Phase 2B plan has empty convergence_rules")
 
-    for t in phase2b.get('tolerances', []):
-        check("quantity" in t, "Tolerance missing quantity")
-        check("threshold" in t, "Tolerance missing threshold")
-        check("absolute_or_relative" in t, "Tolerance missing absolute_or_relative")
-        check("justification_type" in t, "Tolerance missing justification_type")
-        check("justification_source_or_repository_identity" in t, "Tolerance missing justification_source_or_repository_identity")
-        check("blocking_if_unresolved" in t, "Tolerance missing blocking_if_unresolved")
+        for t in phase2b.get('tolerances', []):
+            check("quantity" in t, "Tolerance missing quantity")
+            check("threshold" in t, "Tolerance missing threshold")
+            check("absolute_or_relative" in t, "Tolerance missing absolute_or_relative")
+            check("justification_type" in t, "Tolerance missing justification_type")
+            check("justification_source_or_repository_identity" in t, "Tolerance missing justification_source_or_repository_identity")
+            check("blocking_if_unresolved" in t, "Tolerance missing blocking_if_unresolved")
 
     # Phase 2B unauthorized, all implementation flags false, legacy D2 false
     auth = review['authorization']
@@ -192,6 +233,10 @@ def main():
     check(not auth.get("IMPLEMENTATION_AUTHORIZED"), "Implementation authorized")
     check(not auth.get("NUMERICAL_PHYSICS_AUTHORIZED"), "Numerical physics authorized")
     check(not auth.get("D2_AUTHORIZED"), "Legacy D2 authorized")
+
+    # Predecessor checks
+    pred = review.get('predecessor_identities', {})
+    check(pred.get('phase1bd_revision') == file_sha256("docs/phase1bd_d0_revision_decision.json"), "Wrong phase1bd hash")
 
     # paper nonclaims
     forbidden = review.get("paper_claim_boundary", {}).get("forbidden", [])

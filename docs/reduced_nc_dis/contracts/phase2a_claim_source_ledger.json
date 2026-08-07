@@ -184,7 +184,9 @@
                 "strict_support_contract",
                 "finite_positive_normalization_reviewability"
             ],
-            "derivation_dependencies": [],
+            "derivation_dependencies": [
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
+            ],
             "methodology_choice": "Enforced by contract.",
             "limitations": "Requires strict numerical validation.",
             "phase2a_pass_blocking": false,
@@ -193,8 +195,7 @@
         {
             "claim_id": "CLAIM_RATE_POSITIVITY",
             "obligation_ids": [
-                "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE",
-                "NO_HIDDEN_CLIPPING"
+                "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE"
             ],
             "exact_claim": "The complete differential cross section is non-negative on the accepted support.",
             "claim_class": "MATHEMATICAL_CONSTRAINT",
@@ -202,18 +203,23 @@
             "load_bearing": true,
             "source_bindings": [],
             "exact_locators": {},
-            "support_status": "SUPPORTED_WITH_QUALIFICATION",
+            "support_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "support_scope": "Required for probability measure.",
-            "qualification": "Must be numerically validated in Phase 2B; sources do not prove exact global positivity.",
+            "qualification": "Sources do not prove exact global positivity without complete heavy flavor scheme.",
             "explicit_noncoverage": [],
             "gate_dependencies": [
                 "no_hidden_clipping"
             ],
-            "derivation_dependencies": [],
+            "derivation_dependencies": [
+                "CLAIM_KINEMATICS",
+                "CLAIM_STRUCTURE_FUNCTIONS",
+                "CLAIM_HEAVY_FLAVOR",
+                "CLAIM_STRICT_SUPPORT"
+            ],
             "methodology_choice": "Must be mathematically and numerically verified.",
-            "limitations": "Requires Phase 2B closure.",
-            "phase2a_pass_blocking": false,
-            "blocking_reason": "Numerical validation required in Phase 2B"
+            "limitations": "Requires complete heavy flavor scheme and Phase 2B closure.",
+            "phase2a_pass_blocking": true,
+            "blocking_reason": "Missing complete heavy flavor premise"
         },
         {
             "claim_id": "CLAIM_LATENT_OBSERVATION",
@@ -243,7 +249,8 @@
                 "paper_claim_boundary_consistency"
             ],
             "derivation_dependencies": [
-                "CLAIM_IDENTIFIABILITY"
+                "CLAIM_RATE_POSITIVITY",
+                "CLAIM_DETECTOR_KERNEL"
             ],
             "methodology_choice": "PartonSBI specific derivation.",
             "limitations": "None.",
@@ -268,7 +275,9 @@
             "gate_dependencies": [
                 "normalized_detector_kernel_contract"
             ],
-            "derivation_dependencies": [],
+            "derivation_dependencies": [
+                "CLAIM_KINEMATICS"
+            ],
             "methodology_choice": "Perfect detector identity kernel.",
             "limitations": "None.",
             "phase2a_pass_blocking": false,
@@ -297,7 +306,7 @@
                 "posterior_target_coherence"
             ],
             "derivation_dependencies": [
-                "CLAIM_IDENTIFIABILITY"
+                "CLAIM_LATENT_OBSERVATION"
             ],
             "methodology_choice": "Target is p(theta|D,N,selected).",
             "limitations": "None.",
@@ -375,7 +384,9 @@
             "gate_dependencies": [
                 "bounded_identifiability_and_information_plan"
             ],
-            "derivation_dependencies": [],
+            "derivation_dependencies": [
+                "CLAIM_POSTERIOR_TARGET"
+            ],
             "methodology_choice": "Explicit metrics must be tested.",
             "limitations": "None.",
             "phase2a_pass_blocking": false,
@@ -414,7 +425,7 @@
             "load_bearing": true,
             "source_bindings": [],
             "exact_locators": {},
-            "support_status": "DIRECTLY_SUPPORTED",
+            "support_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "support_scope": "Validation planning.",
             "qualification": null,
             "explicit_noncoverage": [],
@@ -427,14 +438,29 @@
         },
         {
             "claim_id": "CLAIM_PDF_FAMILY_REPOSITORY_FACT",
+            "obligation_ids": [
+                "PDF_FAMILY_AND_TRANSPORT_IDENTITY",
+                "STRICT_PDF_SUPPORT_INTERSECTION"
+            ],
             "claim_class": "MATHEMATICAL_CONSTRAINT",
             "evidence_kind": "REPOSITORY_FACT",
+            "load_bearing": true,
             "source_bindings": [
-                "docs/phase1a_strict_support_decision.json",
-                "docs/adr/ADR-001-continuous-pdf-family.md"
+                "docs/phase1bd_d0_revision_decision.json",
+                "docs/adr/ADR-004-d0-baseline-and-admissibility.md"
             ],
-            "content": "PDF family is CT18NLO with strict grid support policy.",
-            "support_status": "DIRECTLY_SUPPORTED"
+            "exact_locators": {},
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Baseline identity.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "strict_support_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Versioned sum-rule-projected baseline.",
+            "limitations": "None.",
+            "content": "PDF family is ct18nlo_two_parameter_boundary_v2 (projected baseline) with strict grid support."
         }
     ]
 }

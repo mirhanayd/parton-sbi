@@ -2,14 +2,14 @@
     "schema_version": "partonsbi.phase2a.reduced-nc-dis-contract-review.v3",
     "generated_from_main": "388086193b8ef428c1332c3ef190baeb000cfbe7",
     "predecessor_identities": {
-        "phase1b_closeout": "ea509c228aa74021af15c5e1473b257dd0c1b6863118ac9f4be484358c7c8fd5",
         "phase2_roadmap": "844a2783875039b1bf730c24f3ccf8814a7aa74fd78a017de3f5ca3339e2ca78",
-        "phase2a_spec": "a6284fa8751855c36008d40bf9357b96017c02da3f3b7db1659e582842fbceaf"
+        "phase2a_spec": "a6284fa8751855c36008d40bf9357b96017c02da3f3b7db1659e582842fbceaf",
+        "phase1bd_revision": "ef44ec6b230d06edce4b30b435d30ee382e3e151a8dfe3a9f8098e4ac6747873"
     },
     "review_question": "Does the reduced NC DIS observation model have a valid source-backed mathematical contract?",
     "review_scope": "Phase 2A",
     "source_registry_identity": "a9a3b9ce917ac509897bb4001c5d7f5083d023b1e30aa4c2efa89a1c1a692d2f",
-    "claim_ledger_identity": "341eb3f9fe9b815019825948cad47601ed00907cc5f96c7dd5bc79f692aacbea",
+    "claim_ledger_identity": "9d84a10c939a263fe518949f7733fbb1a393aee6724e7993fe5d55a8f334678d",
     "exact_baseline_contract": {
         "formula": "Standard NC DIS differential cross section",
         "electroweak": "G_F scheme",
@@ -124,27 +124,36 @@
         },
         {
             "obligation_id": "FLAVOR_AND_HEAVY_QUARK_SCHEME",
-            "contract_review_status": "SUPPORTED",
+            "contract_review_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "later_execution_status": "NOT_EXECUTED",
             "source_claim_ids": [
                 "CLAIM_HEAVY_FLAVOR"
             ],
             "source_coverage": "Adequate coverage provided by claims",
-            "exact_binding_definition": "Strict adherence to the underlying claims for FLAVOR_AND_HEAVY_QUARK_SCHEME",
+            "exact_binding_definition": "No single complete internally consistent heavy-flavor scheme is bound.",
             "unresolved_questions": [
-                "None"
+                "exact scheme/variant",
+                "alpha_s identity",
+                "heavy-quark mass definitions",
+                "active-flavor convention",
+                "threshold semantics",
+                "matching semantics",
+                "coefficient-function order",
+                "central mu_F",
+                "central mu_R"
             ],
             "phase2b_or_later_dependency": true,
-            "pass_basis": "Derived from claims",
-            "fail_basis": null,
-            "limitations": "Must be verified numerically in Phase 2B"
+            "pass_basis": null,
+            "fail_basis": "Missing primary evidence",
+            "limitations": "Must be resolved before Phase 2B"
         },
         {
             "obligation_id": "PDF_FAMILY_AND_TRANSPORT_IDENTITY",
             "contract_review_status": "SUPPORTED",
             "later_execution_status": "NOT_EXECUTED",
             "source_claim_ids": [
-                "CLAIM_PDF_EVALUATOR"
+                "CLAIM_PDF_EVALUATOR",
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
             ],
             "source_coverage": "Adequate coverage provided by claims",
             "exact_binding_definition": "Strict adherence to the underlying claims for PDF_FAMILY_AND_TRANSPORT_IDENTITY",
@@ -195,10 +204,11 @@
             "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
             "later_execution_status": "NOT_EXECUTED",
             "source_claim_ids": [
-                "CLAIM_STRICT_SUPPORT"
+                "CLAIM_STRICT_SUPPORT",
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
             ],
             "source_coverage": "Adequate coverage provided by claims",
-            "exact_binding_definition": "Strict adherence to the underlying claims for STRICT_PDF_SUPPORT_INTERSECTION",
+            "exact_binding_definition": "Intersection of PDF support provides strict positive domain bounds.",
             "unresolved_questions": [
                 "Numerical validation required in Phase 2B"
             ],
@@ -226,14 +236,15 @@
         },
         {
             "obligation_id": "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE",
-            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "contract_review_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "later_execution_status": "NOT_EXECUTED",
             "source_claim_ids": [
                 "CLAIM_RATE_POSITIVITY"
             ],
             "source_coverage": "Adequate coverage provided by claims",
-            "exact_binding_definition": "Strict adherence to the underlying claims for NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE",
+            "exact_binding_definition": "Differential cross section is strictly non-negative.",
             "unresolved_questions": [
+                "Complete heavy flavor scheme",
                 "Numerical validation required in Phase 2B"
             ],
             "phase2b_or_later_dependency": true,
@@ -345,7 +356,7 @@
         },
         {
             "obligation_id": "INDEPENDENT_NUMERICAL_CLOSURE_PLAN",
-            "contract_review_status": "SUPPORTED",
+            "contract_review_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "later_execution_status": "NOT_EXECUTED",
             "source_claim_ids": [
                 "CLAIM_NUMERICAL_CLOSURE_PLAN"
@@ -483,7 +494,8 @@
             "status": "SUPPORTED_WITH_QUALIFICATION",
             "required_claim_ids": [
                 "CLAIM_PDF_EVALUATOR",
-                "CLAIM_STRICT_SUPPORT"
+                "CLAIM_STRICT_SUPPORT",
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
             ],
             "source_coverage": "Yes",
             "obligation_dependencies": [
@@ -509,7 +521,7 @@
         },
         {
             "gate_id": "no_hidden_clipping",
-            "status": "SUPPORTED_WITH_QUALIFICATION",
+            "status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "required_claim_ids": [
                 "CLAIM_RATE_POSITIVITY"
             ],
@@ -537,7 +549,7 @@
         },
         {
             "gate_id": "bounded_phase2b_validation_plan",
-            "status": "SUPPORTED",
+            "status": "PRIMARY_EVIDENCE_UNAVAILABLE",
             "required_claim_ids": [
                 "CLAIM_NUMERICAL_CLOSURE_PLAN"
             ],
@@ -595,7 +607,7 @@
             "limitations": "none"
         }
     ],
-    "phase2b_validation_plan_identity": "ebef0dbdcc8f75745b3e7eebaf74ccc547e992d52d89752364d9dfbed80bf0ab",
+    "phase2b_validation_plan_identity": "6cee0ca7ecea52c54417fd5882efb782169776d222e6167bb6fb3f3c4789bdd9",
     "paper_claim_boundary": {
         "allowed": [
             "proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates"
@@ -628,7 +640,8 @@
         "PHASE2B_AUTHORIZED": false,
         "IMPLEMENTATION_AUTHORIZED": false,
         "NUMERICAL_PHYSICS_AUTHORIZED": false,
-        "D2_AUTHORIZED": false
+        "D2_AUTHORIZED": false,
+        "GENERATOR_TRANSPORT_SELECTED": false
     },
     "next_step": "Propose Phase 2B validation plan",
     "validation": "Passed all gates",
