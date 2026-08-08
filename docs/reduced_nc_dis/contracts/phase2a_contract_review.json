@@ -9,8 +9,8 @@
     },
     "review_question": "Does the reduced NC DIS observation model have a valid source-backed mathematical contract?",
     "review_scope": "Phase 2A",
-    "source_registry_identity": "a9a3b9ce917ac509897bb4001c5d7f5083d023b1e30aa4c2efa89a1c1a692d2f",
-    "claim_ledger_identity": "9d84a10c939a263fe518949f7733fbb1a393aee6724e7993fe5d55a8f334678d",
+    "source_registry_identity": "2a7d6d537c778161ba76d1f3e45f73be7f01587224fa80f24f9334117bccc6e9",
+    "claim_ledger_identity": "ca2eb35d38c59b2f5f79435acd0171b60cc80d9577d6f4db35f10d98f329f0fc",
     "exact_baseline_contract": {
         "formula": "Standard NC DIS differential cross section",
         "electroweak": "G_F scheme",
@@ -608,7 +608,7 @@
             "limitations": "none"
         }
     ],
-    "phase2b_validation_plan_identity": "6cee0ca7ecea52c54417fd5882efb782169776d222e6167bb6fb3f3c4789bdd9",
+    "phase2b_validation_plan_identity": "e60846b5975cd12284b17ef2e28b873760b8ff17cc03f8cb3a85929af6a71786",
     "paper_claim_boundary": {
         "allowed": [
             "proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates"

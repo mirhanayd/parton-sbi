@@ -67,8 +67,8 @@ def base_data():
     return reg, led, rev, p2b
 
 def test_valid():
-    rc = subprocess.run([sys.executable, "scripts/phase2a_contract_review.py"], capture_output=True, text=True).returncode
-    assert rc == 0
+    result = subprocess.run([sys.executable, "scripts/phase2a_contract_review.py"], capture_output=True, text=True)
+    assert result.returncode == 0, f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
 
 def test_wrong_doi(base_data, tmp_path):
     reg, led, rev, p2b = copy.deepcopy(base_data)
