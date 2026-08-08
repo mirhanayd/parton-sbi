@@ -44,21 +44,20 @@ def run_validator(reg_data, led_data, rev_data, phase2b_data, tmp_path, synchron
     script_content = script_content.replace('"docs/reduced_nc_dis/contracts/phase2a_claim_source_ledger.json"', f"'{led_path.as_posix()}'")
     script_content = script_content.replace('"docs/reduced_nc_dis/contracts/phase2b_validation_plan_proposal.json"', f"'{p2b_path.as_posix()}'")
     script_content = script_content.replace('"docs/reduced_nc_dis/contracts/phase2a_contract_review.json"', f"'{rev_path.as_posix()}'")
-    # For ADR check
-    script_content = script_content.replace("'docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md'", "'docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md'")
-    
-    test_script_path = tmp_path / "test_script.py"
-    with open(test_script_path, "w") as f:
-        f.write(script_content)
-
-    env = os.environ.copy()
     if adr_text is not None:
         adr_path = tmp_path / "ADR-013-reduced-nc-dis-observation-law-contract.md"
         with open(adr_path, "w") as f:
             f.write(adr_text)
-        env["PHASE2A_ADR013_PATH"] = str(adr_path)
+        script_content = script_content.replace(
+            '"docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md"',
+            f"'{adr_path.as_posix()}'",
+        )
 
-    res = subprocess.run([sys.executable, str(test_script_path)], capture_output=True, text=True, env=env)
+    test_script_path = tmp_path / "test_script.py"
+    with open(test_script_path, "w") as f:
+        f.write(script_content)
+
+    res = subprocess.run([sys.executable, str(test_script_path)], capture_output=True, text=True)
     return res.returncode, res.stdout
 
 @pytest.fixture

@@ -15,10 +15,7 @@ def file_sha256(path):
         return hashlib.sha256(f.read()).hexdigest()
 
 def check_adr013_consistency(review, phase2b):
-    adr_path = Path(os.environ.get(
-        "PHASE2A_ADR013_PATH",
-        "docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md",
-    ))
+    adr_path = Path("docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md")
     try:
         adr = adr_path.read_text()
     except FileNotFoundError:

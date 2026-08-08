@@ -28,7 +28,8 @@ not converted into support.
 - Electroweak scheme: `G_F` scheme.
 - Perturbative scheme: NLO VFNS remains incompletely bound for the full
   heavy-flavor contract.
-- PDF family: accepted CT18NLO Phase 1a strict-support family boundary.
+- PDF family: `ct18nlo_two_parameter_boundary_v2`, the accepted versioned
+  sum-rule-projected baseline, with strict grid support.
 
 ## Selected-Event Law
 
