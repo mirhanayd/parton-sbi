@@ -5,7 +5,7 @@ import subprocess
 import copy
 import sys
 
-def run_validator(reg_data, led_data, rev_data, phase2b_data, tmp_path, synchronize_dependency_hashes=True):
+def run_validator(reg_data, led_data, rev_data, phase2b_data, tmp_path, synchronize_dependency_hashes=True, adr_text=None):
     reg_path = tmp_path / "phase2a_source_registry.json"
     led_path = tmp_path / "phase2a_claim_source_ledger.json"
     p2b_path = tmp_path / "phase2b_validation_plan_proposal.json"
@@ -50,8 +50,15 @@ def run_validator(reg_data, led_data, rev_data, phase2b_data, tmp_path, synchron
     test_script_path = tmp_path / "test_script.py"
     with open(test_script_path, "w") as f:
         f.write(script_content)
-        
-    res = subprocess.run([sys.executable, str(test_script_path)], capture_output=True, text=True)
+
+    env = os.environ.copy()
+    if adr_text is not None:
+        adr_path = tmp_path / "ADR-013-reduced-nc-dis-observation-law-contract.md"
+        with open(adr_path, "w") as f:
+            f.write(adr_text)
+        env["PHASE2A_ADR013_PATH"] = str(adr_path)
+
+    res = subprocess.run([sys.executable, str(test_script_path)], capture_output=True, text=True, env=env)
     return res.returncode, res.stdout
 
 @pytest.fixture
@@ -215,3 +222,15 @@ def test_empty_p2b_bounds(base_data, tmp_path):
     rc, out = run_validator(reg, led, rev, p2b, tmp_path)
     assert rc != 0
     assert "Phase 2B plan has empty anchors" in out
+
+def test_stale_adr_pass_decision_rejected(base_data, tmp_path):
+    reg, led, rev, p2b = copy.deepcopy(base_data)
+    with open("docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md") as f:
+        adr = f.read()
+    stale_adr = adr.replace(
+        "scientific decision is `INCONCLUSIVE`",
+        "scientific decision is `PASS`",
+    )
+    rc, out = run_validator(reg, led, rev, p2b, tmp_path, adr_text=stale_adr)
+    assert rc != 0
+    assert "ADR-013 decision does not match review" in out

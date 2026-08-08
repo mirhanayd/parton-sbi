@@ -23,7 +23,7 @@ Phase 2H is optional and does not block Phase 2G.
 | Phase | Issue | Planned purpose | Status | Authorization |
 |---|---:|---|---|---|
 | Phase2 | #53 | Umbrella and claim boundary | In Progress | Planning Only |
-| Phase2A | #54 | Define the observation-law contract | In Progress | Planning Only |
+| Phase2A | #54 | Define the observation-law contract | Done | Completed / INCONCLUSIVE |
 | Phase2B | #55 | Formula and normalization closure | Backlog | Not Authorized |
 | Phase2C | #56 | Normalized latent-event sampler | Backlog | Not Authorized |
 | Phase2D | #57 | Detector response kernel | Backlog | Not Authorized |
@@ -33,12 +33,32 @@ Phase 2H is optional and does not block Phase 2G.
 | Phase2H | #61 | Optional rate-inclusive extension | Backlog | Not Authorized |
 
 Every implementation phase requires a later, explicit authorization after its
-predecessor's binding acceptance criteria pass. A future Phase 2A PASS would
-authorize only a separate Phase 2B proposal, not implementation.
+predecessor's binding acceptance criteria pass. Phase 2A did not PASS; it is a
+completed source-backed review with final scientific decision `INCONCLUSIVE`.
+Phase 2B remains Backlog, Not Evaluated, and Not Authorized.
+
+## Phase 2A closeout
+
+PR #63 merged at `e798a64265afd806bb7030218e2fac60e1656a78`, and issue #54 is
+closed/completed. Phase 2A's accepted gate grouping is:
+
+- `SUPPORTED`: `posterior_target_coherence`,
+  `fixed_n_shape_only_semantics`, `paper_claim_boundary_consistency`,
+  `selected_event_conditioning_coherence`.
+- `SUPPORTED_WITH_QUALIFICATION`:
+  `finite_positive_normalization_reviewability`, `strict_support_contract`,
+  `normalized_detector_kernel_contract`,
+  `bounded_identifiability_and_information_plan`.
+- `PRIMARY_EVIDENCE_UNAVAILABLE`: `exact_formula_contract`,
+  `no_hidden_clipping`, `bounded_phase2b_validation_plan`.
+
+The Phase 2B proposal remains `INCOMPLETE`, `NOT_AUTHORIZED`, and
+`NOT_EXECUTED`. Legacy issue #10 remains Blocked, Not Evaluated, and Not
+Authorized.
 
 ## Phase 2A binding additions
 
-Phase 2A now contains 24 `NOT_EVALUATED` proof obligations and eleven PASS
+Phase 2A contains 24 reviewed proof obligations and eleven binding gate
 requirements. The two added requirements bind selected-event conditioning and
 a bounded identifiability/information-content plan. The fixed-N baseline is
 `SELECTED_EVENT_CONDITIONED_V1`: `A_z`, `Y_full`, and `Y_obs` are distinct;
@@ -70,4 +90,5 @@ contract. Only issue body text for #53, #54, #57, #58, and #59 changed; issue
 numbers, Project values, milestone, labels, and dependency relationships are
 unchanged. The timestamped GitHub data remain an external snapshot.
 
-Phase 2A review is a source-backed contract review; later numerical closure remains unexecuted. Phase 2B remains unauthorized. ADR-013 remains Proposed. The result is not accepted until independent review and merge.
+Phase 2A review is complete; later numerical closure remains unexecuted. Phase
+2B remains unauthorized. ADR-013 remains Proposed.
