@@ -514,3 +514,7 @@ unimplemented hypotheses.
 - Maintenance: GPT-5.6 Sol — Medium
 - Scientific implementation: GPT-5.6 Sol — High
 - Cross-phase architecture review: GPT-5.6 Sol — High
+
+# Phase 2A Review
+
+Phase 2A review is a source-backed contract review; later numerical closure remains unexecuted. Phase 2B remains unauthorized. ADR-013 remains Proposed. The result is not accepted until independent review and merge.

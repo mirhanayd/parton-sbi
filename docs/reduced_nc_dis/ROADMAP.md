@@ -69,3 +69,5 @@ graph above. The repository JSON remains the machine-validated scientific
 contract. Only issue body text for #53, #54, #57, #58, and #59 changed; issue
 numbers, Project values, milestone, labels, and dependency relationships are
 unchanged. The timestamped GitHub data remain an external snapshot.
+
+Phase 2A review is a source-backed contract review; later numerical closure remains unexecuted. Phase 2B remains unauthorized. ADR-013 remains Proposed. The result is not accepted until independent review and merge.

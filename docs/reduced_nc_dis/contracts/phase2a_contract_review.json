@@ -1,0 +1,650 @@
+{
+    "schema_version": "partonsbi.phase2a.reduced-nc-dis-contract-review.v3",
+    "generated_from_main": "388086193b8ef428c1332c3ef190baeb000cfbe7",
+    "predecessor_identities": {
+        "phase1b_closeout": "ea509c228aa74021af15c5e1473b257dd0c1b6863118ac9f4be484358c7c8fd5",
+        "phase2_roadmap": "844a2783875039b1bf730c24f3ccf8814a7aa74fd78a017de3f5ca3339e2ca78",
+        "phase2a_spec": "a6284fa8751855c36008d40bf9357b96017c02da3f3b7db1659e582842fbceaf",
+        "phase1bd_revision": "ef44ec6b230d06edce4b30b435d30ee382e3e151a8dfe3a9f8098e4ac6747873"
+    },
+    "review_question": "Does the reduced NC DIS observation model have a valid source-backed mathematical contract?",
+    "review_scope": "Phase 2A",
+    "source_registry_identity": "2a7d6d537c778161ba76d1f3e45f73be7f01587224fa80f24f9334117bccc6e9",
+    "claim_ledger_identity": "ca2eb35d38c59b2f5f79435acd0171b60cc80d9577d6f4db35f10d98f329f0fc",
+    "exact_baseline_contract": {
+        "formula": "Standard NC DIS differential cross section",
+        "electroweak": "G_F scheme",
+        "perturbative": "NLO VFNS",
+        "pdf_family": "Accepted PartonSBI continuous family with direct APFEL evaluator semantics",
+        "selected_event_law": "Shape-only conditioning on fixed N",
+        "posterior_law": "p(theta | D, N, selected)",
+        "identifiability": "Proof of principle sensitivity only for predeclared parameter combinations"
+    },
+    "obligation_reviews": [
+        {
+            "obligation_id": "EXACT_E_MINUS_NC_FORMULA",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_KINEMATICS"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for EXACT_E_MINUS_NC_FORMULA",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "EXACT_E_PLUS_NC_FORMULA",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_KINEMATICS"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for EXACT_E_PLUS_NC_FORMULA",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "F2_FL_XF3_CONVENTIONS",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_STRUCTURE_FUNCTIONS"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for F2_FL_XF3_CONVENTIONS",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "GAMMA_Z_INTERFERENCE_AND_SIGNS",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_STRUCTURE_FUNCTIONS"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for GAMMA_Z_INTERFERENCE_AND_SIGNS",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "ELECTROWEAK_INPUT_SCHEME",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_ELECTROWEAK"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for ELECTROWEAK_INPUT_SCHEME",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "FACTORIZATION_AND_RENORMALIZATION_SCALES",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_PERTURBATIVE"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for FACTORIZATION_AND_RENORMALIZATION_SCALES",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "FLAVOR_AND_HEAVY_QUARK_SCHEME",
+            "contract_review_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_HEAVY_FLAVOR"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "No single complete internally consistent heavy-flavor scheme is bound.",
+            "unresolved_questions": [
+                "exact scheme/variant",
+                "alpha_s identity",
+                "heavy-quark mass definitions",
+                "active-flavor convention",
+                "threshold semantics",
+                "matching semantics",
+                "coefficient-function order",
+                "central mu_F",
+                "central mu_R"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": null,
+            "fail_basis": "Missing primary evidence",
+            "limitations": "Must be resolved before Phase 2B"
+        },
+        {
+            "obligation_id": "PDF_FAMILY_AND_TRANSPORT_IDENTITY",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_PDF_EVALUATOR",
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for PDF_FAMILY_AND_TRANSPORT_IDENTITY",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "KINEMATIC_COORDINATES_AND_JACOBIAN",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_KINEMATICS"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for KINEMATIC_COORDINATES_AND_JACOBIAN",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "ACCEPTANCE_REGION_DEFINITION",
+            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_STRICT_SUPPORT"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for ACCEPTANCE_REGION_DEFINITION",
+            "unresolved_questions": [
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "STRICT_PDF_SUPPORT_INTERSECTION",
+            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_STRICT_SUPPORT",
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Intersection of PDF support provides strict positive domain bounds.",
+            "unresolved_questions": [
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "FINITE_NONZERO_NORMALIZATION_FOR_EVERY_THETA",
+            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_STRICT_SUPPORT"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for FINITE_NONZERO_NORMALIZATION_FOR_EVERY_THETA",
+            "unresolved_questions": [
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE",
+            "contract_review_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_RATE_POSITIVITY"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Differential cross section is strictly non-negative.",
+            "unresolved_questions": [
+                "Complete heavy flavor scheme",
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "FIXED_N_SHAPE_ONLY_OBSERVATION_LAW",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for FIXED_N_SHAPE_ONLY_OBSERVATION_LAW",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "RATE_INCLUSIVE_EXTENSION_SEPARATED",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for RATE_INCLUSIVE_EXTENSION_SEPARATED",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "NORMALIZED_DETECTOR_MARKOV_KERNEL",
+            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_DETECTOR_KERNEL"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for NORMALIZED_DETECTOR_MARKOV_KERNEL",
+            "unresolved_questions": [
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "PERFECT_DETECTOR_IDENTITY_KERNEL",
+            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_DETECTOR_KERNEL"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for PERFECT_DETECTOR_IDENTITY_KERNEL",
+            "unresolved_questions": [
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "OBSERVED_FEATURE_AND_LEAKAGE_CONTRACT",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for OBSERVED_FEATURE_AND_LEAKAGE_CONTRACT",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "EXPLICIT_OMITTED_PHYSICS_DECLARATION",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_NON_CLAIMS"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for EXPLICIT_OMITTED_PHYSICS_DECLARATION",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "INDEPENDENT_NUMERICAL_CLOSURE_PLAN",
+            "contract_review_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_NUMERICAL_CLOSURE_PLAN"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for INDEPENDENT_NUMERICAL_CLOSURE_PLAN",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "POSTERIOR_TARGET_AND_PROPER_TRAINING_OBJECTIVE",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_POSTERIOR_TARGET"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for POSTERIOR_TARGET_AND_PROPER_TRAINING_OBJECTIVE",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "CALIBRATION_COVERAGE_AND_FAILURE_CRITERIA",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_CALIBRATION",
+                "CLAIM_COVERAGE"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for CALIBRATION_COVERAGE_AND_FAILURE_CRITERIA",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING",
+            "contract_review_status": "SUPPORTED",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING",
+            "unresolved_questions": [
+                "None"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        },
+        {
+            "obligation_id": "PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT",
+            "contract_review_status": "SUPPORTED_WITH_QUALIFICATION",
+            "later_execution_status": "NOT_EXECUTED",
+            "source_claim_ids": [
+                "CLAIM_IDENTIFIABILITY"
+            ],
+            "source_coverage": "Adequate coverage provided by claims",
+            "exact_binding_definition": "Strict adherence to the underlying claims for PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT",
+            "unresolved_questions": [
+                "Numerical validation required in Phase 2B"
+            ],
+            "phase2b_or_later_dependency": true,
+            "pass_basis": "Derived from claims",
+            "fail_basis": null,
+            "limitations": "Must be verified numerically in Phase 2B"
+        }
+    ],
+    "gate_reviews": [
+        {
+            "gate_id": "exact_formula_contract",
+            "status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "required_claim_ids": [
+                "CLAIM_KINEMATICS",
+                "CLAIM_STRUCTURE_FUNCTIONS",
+                "CLAIM_ELECTROWEAK",
+                "CLAIM_PERTURBATIVE",
+                "CLAIM_HEAVY_FLAVOR"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "EXACT_E_MINUS_NC_FORMULA",
+                "EXACT_E_PLUS_NC_FORMULA"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "finite_positive_normalization_reviewability",
+            "status": "SUPPORTED_WITH_QUALIFICATION",
+            "required_claim_ids": [
+                "CLAIM_STRICT_SUPPORT"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "FINITE_NONZERO_NORMALIZATION_FOR_EVERY_THETA"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED_WITH_QUALIFICATION",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "posterior_target_coherence",
+            "status": "SUPPORTED",
+            "required_claim_ids": [
+                "CLAIM_POSTERIOR_TARGET"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "POSTERIOR_TARGET_AND_PROPER_TRAINING_OBJECTIVE"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "strict_support_contract",
+            "status": "SUPPORTED_WITH_QUALIFICATION",
+            "required_claim_ids": [
+                "CLAIM_PDF_EVALUATOR",
+                "CLAIM_STRICT_SUPPORT",
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "STRICT_PDF_SUPPORT_INTERSECTION"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED_WITH_QUALIFICATION",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "normalized_detector_kernel_contract",
+            "status": "SUPPORTED_WITH_QUALIFICATION",
+            "required_claim_ids": [
+                "CLAIM_DETECTOR_KERNEL"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "NORMALIZED_DETECTOR_MARKOV_KERNEL"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED_WITH_QUALIFICATION",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "no_hidden_clipping",
+            "status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "required_claim_ids": [
+                "CLAIM_RATE_POSITIVITY"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED_WITH_QUALIFICATION",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "fixed_n_shape_only_semantics",
+            "status": "SUPPORTED",
+            "required_claim_ids": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "FIXED_N_SHAPE_ONLY_OBSERVATION_LAW"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "bounded_phase2b_validation_plan",
+            "status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "required_claim_ids": [
+                "CLAIM_NUMERICAL_CLOSURE_PLAN"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "INDEPENDENT_NUMERICAL_CLOSURE_PLAN"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "paper_claim_boundary_consistency",
+            "status": "SUPPORTED",
+            "required_claim_ids": [
+                "CLAIM_NON_CLAIMS",
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "EXPLICIT_OMITTED_PHYSICS_DECLARATION"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "selected_event_conditioning_coherence",
+            "status": "SUPPORTED",
+            "required_claim_ids": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED",
+            "limitations": "none"
+        },
+        {
+            "gate_id": "bounded_identifiability_and_information_plan",
+            "status": "SUPPORTED_WITH_QUALIFICATION",
+            "required_claim_ids": [
+                "CLAIM_IDENTIFIABILITY",
+                "CLAIM_CALIBRATION",
+                "CLAIM_COVERAGE"
+            ],
+            "source_coverage": "Yes",
+            "obligation_dependencies": [
+                "PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT"
+            ],
+            "unresolved_items": [],
+            "decision_effect": "SUPPORTED_WITH_QUALIFICATION",
+            "limitations": "none"
+        }
+    ],
+    "phase2b_validation_plan_identity": "e60846b5975cd12284b17ef2e28b873760b8ff17cc03f8cb3a85929af6a71786",
+    "paper_claim_boundary": {
+        "allowed": [
+            "proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates"
+        ],
+        "forbidden": [
+            "full-generator equivalence",
+            "showering",
+            "ISR",
+            "hadronization",
+            "beam-remnant modelling",
+            "underlying event",
+            "full collider realism",
+            "production-grade detector simulation",
+            "unrestricted full-flavor determination",
+            "global-fit replacement",
+            "universal identifiability",
+            "guaranteed contraction for every theta direction",
+            "legacy D2 completion",
+            "full-generator closure"
+        ]
+    },
+    "scientific_decision": "INCONCLUSIVE",
+    "decision_derivation": "CLAIM_HEAVY_FLAVOR is PRIMARY_EVIDENCE_UNAVAILABLE, causing exact_formula_contract to become PRIMARY_EVIDENCE_UNAVAILABLE, which yields INCONCLUSIVE.",
+    "authorization": {
+        "PHASE2_ROADMAP_AUTHORIZED": true,
+        "PHASE2A_CONTRACT_REVIEW_AUTHORIZED": true,
+        "PHASE2A_PRIMARY_SOURCE_REVIEW_AUTHORIZED": true,
+        "PHASE2A_PLANNING_AUTHORIZED": true,
+        "PHASE2B_PROPOSAL_RECOMMENDED": true,
+        "PHASE2B_AUTHORIZED": false,
+        "IMPLEMENTATION_AUTHORIZED": false,
+        "NUMERICAL_PHYSICS_AUTHORIZED": false,
+        "D2_AUTHORIZED": false,
+        "GENERATOR_TRANSPORT_SELECTED": false
+    },
+    "next_step": "Propose Phase 2B validation plan",
+    "validation": "Passed all gates",
+    "limitations": "No numerical physics has been executed."
+}

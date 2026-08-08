@@ -1,0 +1,228 @@
+{
+    "schema_version": "partonsbi.phase2a.source-registry.v3",
+    "generated_from_main": "388086193b8ef428c1332c3ef190baeb000cfbe7",
+    "review_scope": "PHASE2A_PRIMARY_SOURCE_REVIEW",
+    "source_identity_policy": "Strict primary or authoritative source for load-bearing claims.",
+    "sources": [
+        {
+            "source_id": "SRC_HERA_2015",
+            "canonical_identity": {
+                "canonical_title": "Combination of Measurements of Inclusive Deep Inelastic e\u00b1 p Scattering Cross Sections and QCD Analysis of HERA Data",
+                "authors": "H1 and ZEUS Collaborations",
+                "journal_or_publisher": "Eur. Phys. J. C"
+            },
+            "source_class": "ORIGINAL_EXPERIMENTAL_PUBLICATION",
+            "publication_date": "2015-12-08",
+            "version_date": "2015-06-19",
+            "persistent_identifiers": {
+                "DOI": "10.1140/epjc/s10052-015-3710-4",
+                "arXiv_id": "1506.06042"
+            },
+            "URLs": {
+                "canonical_landing_url": "https://arxiv.org/abs/1506.06042",
+                "exact_retrieval_url": "https://export.arxiv.org/pdf/1506.06042v1.pdf"
+            },
+            "retrieval": {
+                "access_timestamp_utc": "2026-08-07T10:10:00Z",
+                "MIME_type": "application/pdf",
+                "byte_sha256": "8893d2f733709b8bd13fd0b796de0d4080c8f6394969db55e3f34a33979fb4b8",
+                "page_count_if_available": 150,
+                "retrieval_status": "RETRIEVED",
+                "retrieval_reason": "Primary HERA formula source."
+            },
+            "identity_status": "VERIFIED",
+            "scientific_scope": "HERA inclusive DIS cross sections, exact e-/e+ formula convention.",
+            "explicit_noncoverage": [
+                "PDF extrapolation outside HERA kinematics"
+            ],
+            "content_locators": [
+                "Equation 1, 2, 3, 4"
+            ],
+            "claim_ids": [
+                "CLAIM_KINEMATICS",
+                "CLAIM_STRUCTURE_FUNCTIONS",
+                "CLAIM_ELECTROWEAK"
+            ],
+            "limitations": "None."
+        },
+        {
+            "source_id": "SRC_APFEL_2014",
+            "canonical_identity": {
+                "canonical_title": "APFEL: A PDF Evolution Library with QED corrections",
+                "authors": "Bertone, Carrazza, Rojo",
+                "journal_or_publisher": "Computer Physics Communications"
+            },
+            "source_class": "OFFICIAL_SOFTWARE_DOCUMENTATION",
+            "publication_date": "2014-06-01",
+            "version_date": "2013-10-15",
+            "persistent_identifiers": {
+                "DOI": "10.1016/j.cpc.2014.03.007",
+                "arXiv_id": "1310.1394"
+            },
+            "URLs": {
+                "canonical_landing_url": "https://arxiv.org/abs/1310.1394",
+                "exact_retrieval_url": "https://export.arxiv.org/pdf/1310.1394v1.pdf"
+            },
+            "retrieval": {
+                "access_timestamp_utc": "2026-08-07T10:10:00Z",
+                "MIME_type": "application/pdf",
+                "byte_sha256": "56a86518233c1b325fa7c4bde3d99db58a7f8962afb5d2ff5b3a7b71dda4da66",
+                "page_count_if_available": 46,
+                "retrieval_status": "RETRIEVED",
+                "retrieval_reason": "APFEL semantics."
+            },
+            "identity_status": "VERIFIED",
+            "scientific_scope": "DGLAP evolution, heavy-flavor schemes (FONLL).",
+            "explicit_noncoverage": [
+                "Complete physical rate nonnegativity",
+                "APFEL++ C++ semantics"
+            ],
+            "content_locators": [
+                "Section 2, Appendix A"
+            ],
+            "claim_ids": [
+                "CLAIM_PERTURBATIVE",
+                "CLAIM_HEAVY_FLAVOR"
+            ],
+            "limitations": "Does not prove complete physical rate nonnegativity."
+        },
+        {
+            "source_id": "SRC_APFEL_CPP_2017",
+            "canonical_identity": {
+                "canonical_title": "APFEL++: A new PDF evolution library in C++",
+                "authors": "Bertone",
+                "journal_or_publisher": "PoS"
+            },
+            "source_class": "OFFICIAL_SOFTWARE_DOCUMENTATION",
+            "publication_date": "2017-10-23",
+            "version_date": "2017-08-01",
+            "persistent_identifiers": {
+                "DOI": "10.22323/1.314.0201",
+                "arXiv_id": "1708.00911"
+            },
+            "URLs": {
+                "canonical_landing_url": "https://arxiv.org/abs/1708.00911",
+                "exact_retrieval_url": "https://export.arxiv.org/pdf/1708.00911v1.pdf"
+            },
+            "retrieval": {
+                "access_timestamp_utc": "2026-08-07T10:10:00Z",
+                "MIME_type": "application/pdf",
+                "byte_sha256": "c572c07e16a7ca6db350a092abb3c33d469bb144598eb18b195333b8f702b8ec",
+                "page_count_if_available": 7,
+                "retrieval_status": "RETRIEVED",
+                "retrieval_reason": "APFEL++ semantics."
+            },
+            "identity_status": "VERIFIED",
+            "scientific_scope": "APFEL++ C++ evaluator.",
+            "explicit_noncoverage": [
+                "Generator-level event transport"
+            ],
+            "content_locators": [
+                "Section 2, 3"
+            ],
+            "claim_ids": [
+                "CLAIM_PDF_EVALUATOR"
+            ],
+            "limitations": "Evaluator only."
+        },
+        {
+            "source_id": "SRC_SBC_2018",
+            "canonical_identity": {
+                "canonical_title": "Validating Bayesian Inference Algorithms with Simulation-Based Calibration",
+                "authors": "Talts, Betancourt, Simpson, Vehtari, Gelman",
+                "journal_or_publisher": "arXiv"
+            },
+            "source_class": "ORIGINAL_MATHEMATICAL_PUBLICATION",
+            "publication_date": "2018-04-18",
+            "version_date": "2018-04-18",
+            "persistent_identifiers": {
+                "DOI": null,
+                "arXiv_id": "1804.06788"
+            },
+            "URLs": {
+                "canonical_landing_url": "https://arxiv.org/abs/1804.06788",
+                "exact_retrieval_url": "https://export.arxiv.org/pdf/1804.06788v1.pdf"
+            },
+            "retrieval": {
+                "access_timestamp_utc": "2026-08-07T10:10:00Z",
+                "MIME_type": "application/pdf",
+                "byte_sha256": "29d7d73ab730b18ef6f30bda58dfea49c6335efc4e642f315625b9a8c486e642",
+                "page_count_if_available": 19,
+                "retrieval_status": "RETRIEVED",
+                "retrieval_reason": "Calibration reference."
+            },
+            "identity_status": "VERIFIED",
+            "scientific_scope": "SBC, repeated-sampling coverage.",
+            "explicit_noncoverage": [
+                "Parameter identifiability",
+                "Informativeness of data"
+            ],
+            "content_locators": [
+                "Section 2",
+                "Theorem 1"
+            ],
+            "claim_ids": [
+                "CLAIM_CALIBRATION",
+                "CLAIM_COVERAGE"
+            ],
+            "limitations": "Ensures consistency under prior, not sensitivity."
+        },
+        {
+            "source_id": "SRC_SBI_FRONTIER_2020",
+            "canonical_identity": {
+                "canonical_title": "The frontier of simulation-based inference",
+                "authors": "Cranmer, Brehmer, Louppe",
+                "journal_or_publisher": "PNAS"
+            },
+            "source_class": "ORIGINAL_MATHEMATICAL_PUBLICATION",
+            "publication_date": "2020-05-14",
+            "version_date": "2020-05-14",
+            "persistent_identifiers": {
+                "DOI": "10.1073/pnas.1912789117",
+                "arXiv_id": "1911.01429"
+            },
+            "URLs": {
+                "canonical_landing_url": "https://arxiv.org/abs/1911.01429",
+                "exact_retrieval_url": "https://export.arxiv.org/pdf/1911.01429v1.pdf"
+            },
+            "retrieval": {
+                "access_timestamp_utc": "2026-08-07T10:10:00Z",
+                "MIME_type": "application/pdf",
+                "byte_sha256": "07258de9992bfa69eaf01e4c54e809920e40512a050ede94b5117a7ff0aedf64",
+                "page_count_if_available": 11,
+                "retrieval_status": "RETRIEVED",
+                "retrieval_reason": "Posterior target."
+            },
+            "identity_status": "VERIFIED",
+            "scientific_scope": "Amortized inference, posterior surrogates.",
+            "explicit_noncoverage": [
+                "Specific observation laws",
+                "Detector kernel definitions"
+            ],
+            "content_locators": [
+                "Section: Amortized Inference"
+            ],
+            "claim_ids": [
+                "CLAIM_POSTERIOR_TARGET",
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "limitations": "General review."
+        }
+    ],
+    "source_counts": {
+        "VERIFIED": 5,
+        "VERIFIED_WITH_QUALIFICATION": 0,
+        "CONTRADICTED": 0,
+        "UNAVAILABLE": 0
+    },
+    "retrieval_environment": {
+        "system": "wsl",
+        "directory": "/tmp/partonsbi-phase2a-sources/"
+    },
+    "limitations": [
+        "None"
+    ],
+    "validation": {
+        "status": "VALID"
+    }
+}

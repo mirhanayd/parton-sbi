@@ -1,0 +1,466 @@
+{
+    "schema_version": "partonsbi.phase2a.claim-source-ledger.v3",
+    "claim_records": [
+        {
+            "claim_id": "CLAIM_KINEMATICS",
+            "obligation_ids": [
+                "KINEMATIC_COORDINATES_AND_JACOBIAN",
+                "EXACT_E_MINUS_NC_FORMULA",
+                "EXACT_E_PLUS_NC_FORMULA"
+            ],
+            "exact_claim": "Standard DIS kinematic invariants and unpolarized e-/e+ cross sections.",
+            "claim_class": "PHYSICS_CONVENTION",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_HERA_2015"
+            ],
+            "exact_locators": {
+                "SRC_HERA_2015": "Equation 1, 2, 3, 4"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Formula convention.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "exact_formula_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Adopted HERA formulae.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_STRUCTURE_FUNCTIONS",
+            "obligation_ids": [
+                "F2_FL_XF3_CONVENTIONS",
+                "GAMMA_Z_INTERFERENCE_AND_SIGNS"
+            ],
+            "exact_claim": "F2, FL, xF3 structure functions.",
+            "claim_class": "PHYSICS_CONVENTION",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_HERA_2015"
+            ],
+            "exact_locators": {
+                "SRC_HERA_2015": "Equation 1, 2"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Formula convention.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "exact_formula_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Adopted precisely.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_ELECTROWEAK",
+            "obligation_ids": [
+                "ELECTROWEAK_INPUT_SCHEME"
+            ],
+            "exact_claim": "Electroweak parameters scheme: G_F scheme.",
+            "claim_class": "PHYSICS_CONVENTION",
+            "evidence_kind": "METHODOLOGY_CHOICE",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_HERA_2015"
+            ],
+            "exact_locators": {
+                "SRC_HERA_2015": "Section 2 / Eq 1,2"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Standard definition.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "exact_formula_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Adopted G_F scheme.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_PERTURBATIVE",
+            "obligation_ids": [
+                "FACTORIZATION_AND_RENORMALIZATION_SCALES"
+            ],
+            "exact_claim": "mu_F, mu_R scale variations.",
+            "claim_class": "PHYSICS_CONVENTION",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_APFEL_2014"
+            ],
+            "exact_locators": {
+                "SRC_APFEL_2014": "Section 2.1"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Scales.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "exact_formula_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Standard variations.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_HEAVY_FLAVOR",
+            "obligation_ids": [
+                "FLAVOR_AND_HEAVY_QUARK_SCHEME"
+            ],
+            "exact_claim": "FONLL-like variable flavor number scheme semantics (NLO VFNS).",
+            "claim_class": "PHYSICS_CONVENTION",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_APFEL_2014"
+            ],
+            "exact_locators": {
+                "SRC_APFEL_2014": "Section 2.2"
+            },
+            "support_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "support_scope": "Scheme semantics.",
+            "qualification": null,
+            "explicit_noncoverage": [
+                "Complete physical rate nonnegativity"
+            ],
+            "gate_dependencies": [
+                "exact_formula_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Adopted VFNS NLO.",
+            "limitations": "None.",
+            "content": "Exact NLO VFNS scheme details not fully specified."
+        },
+        {
+            "claim_id": "CLAIM_PDF_EVALUATOR",
+            "obligation_ids": [
+                "PDF_FAMILY_AND_TRANSPORT_IDENTITY"
+            ],
+            "exact_claim": "APFEL++ can evaluate PDFs given standard continuous inputs.",
+            "claim_class": "SOFTWARE_CAPABILITY",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_APFEL_CPP_2017"
+            ],
+            "exact_locators": {
+                "SRC_APFEL_CPP_2017": "Section 2, 3"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Evaluator semantics.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "strict_support_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Direct APFEL++ evaluator.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_STRICT_SUPPORT",
+            "obligation_ids": [
+                "STRICT_PDF_SUPPORT_INTERSECTION",
+                "ACCEPTANCE_REGION_DEFINITION",
+                "FINITE_NONZERO_NORMALIZATION_FOR_EVERY_THETA"
+            ],
+            "exact_claim": "Intersection of PDF support provides strict bounds.",
+            "claim_class": "MATHEMATICAL_CONSTRAINT",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
+            "load_bearing": true,
+            "source_bindings": [],
+            "exact_locators": {},
+            "support_status": "SUPPORTED_WITH_QUALIFICATION",
+            "support_scope": "Derived requirement.",
+            "qualification": "Requires explicit numerical testing in Phase 2B.",
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "strict_support_contract",
+                "finite_positive_normalization_reviewability"
+            ],
+            "derivation_dependencies": [
+                "CLAIM_PDF_FAMILY_REPOSITORY_FACT"
+            ],
+            "methodology_choice": "Enforced by contract.",
+            "limitations": "Requires strict numerical validation.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
+        },
+        {
+            "claim_id": "CLAIM_RATE_POSITIVITY",
+            "obligation_ids": [
+                "NONNEGATIVE_COMPLETE_DIFFERENTIAL_RATE"
+            ],
+            "exact_claim": "The complete differential cross section is non-negative on the accepted support.",
+            "claim_class": "MATHEMATICAL_CONSTRAINT",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
+            "load_bearing": true,
+            "source_bindings": [],
+            "exact_locators": {},
+            "support_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "support_scope": "Required for probability measure.",
+            "qualification": "Sources do not prove exact global positivity without complete heavy flavor scheme.",
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "no_hidden_clipping"
+            ],
+            "derivation_dependencies": [
+                "CLAIM_KINEMATICS",
+                "CLAIM_STRUCTURE_FUNCTIONS",
+                "CLAIM_HEAVY_FLAVOR",
+                "CLAIM_STRICT_SUPPORT"
+            ],
+            "methodology_choice": "Must be mathematically and numerically verified.",
+            "limitations": "Requires complete heavy flavor scheme and Phase 2B closure.",
+            "phase2a_pass_blocking": true,
+            "blocking_reason": "Missing complete heavy flavor premise"
+        },
+        {
+            "claim_id": "CLAIM_LATENT_OBSERVATION",
+            "obligation_ids": [
+                "FIXED_N_SHAPE_ONLY_OBSERVATION_LAW",
+                "RATE_INCLUSIVE_EXTENSION_SEPARATED",
+                "OBSERVATION_SELECTION_AND_FIXED_N_CONDITIONING",
+                "OBSERVED_FEATURE_AND_LEAKAGE_CONTRACT"
+            ],
+            "exact_claim": "Fixed-N conditioned shape-only observation law p(D | theta, N, selected).",
+            "claim_class": "STATISTICAL_MODEL",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_SBI_FRONTIER_2020"
+            ],
+            "exact_locators": {
+                "SRC_SBI_FRONTIER_2020": "General probability rules"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Valid conditioning logic.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "fixed_n_shape_only_semantics",
+                "selected_event_conditioning_coherence",
+                "paper_claim_boundary_consistency"
+            ],
+            "derivation_dependencies": [
+                "CLAIM_RATE_POSITIVITY",
+                "CLAIM_DETECTOR_KERNEL"
+            ],
+            "methodology_choice": "PartonSBI specific derivation.",
+            "limitations": "None.",
+            "content": "Derived from standard conditional probability rules and Bayes theorem."
+        },
+        {
+            "claim_id": "CLAIM_DETECTOR_KERNEL",
+            "obligation_ids": [
+                "NORMALIZED_DETECTOR_MARKOV_KERNEL",
+                "PERFECT_DETECTOR_IDENTITY_KERNEL"
+            ],
+            "exact_claim": "Normalized Markov kernel K_full(dy | z) integrating to 1 over Y_full.",
+            "claim_class": "STATISTICAL_MODEL",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
+            "load_bearing": true,
+            "source_bindings": [],
+            "exact_locators": {},
+            "support_status": "SUPPORTED_WITH_QUALIFICATION",
+            "support_scope": "Standard probability text.",
+            "qualification": "Derivable from standard Markov kernel definition, no primary PDF source needed.",
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "normalized_detector_kernel_contract"
+            ],
+            "derivation_dependencies": [
+                "CLAIM_KINEMATICS"
+            ],
+            "methodology_choice": "Perfect detector identity kernel.",
+            "limitations": "None.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
+        },
+        {
+            "claim_id": "CLAIM_POSTERIOR_TARGET",
+            "obligation_ids": [
+                "POSTERIOR_TARGET_AND_PROPER_TRAINING_OBJECTIVE"
+            ],
+            "exact_claim": "Amortized inference yields posterior.",
+            "claim_class": "STATISTICAL_MODEL",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_SBI_FRONTIER_2020"
+            ],
+            "exact_locators": {
+                "SRC_SBI_FRONTIER_2020": "Amortized Inference"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Target.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "posterior_target_coherence"
+            ],
+            "derivation_dependencies": [
+                "CLAIM_LATENT_OBSERVATION"
+            ],
+            "methodology_choice": "Target is p(theta|D,N,selected).",
+            "limitations": "None.",
+            "content": "Derived from standard conditional probability rules and Bayes theorem."
+        },
+        {
+            "claim_id": "CLAIM_CALIBRATION",
+            "obligation_ids": [
+                "CALIBRATION_COVERAGE_AND_FAILURE_CRITERIA"
+            ],
+            "exact_claim": "SBC provides a test of calibration.",
+            "claim_class": "VALIDATION_METHOD",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_SBC_2018"
+            ],
+            "exact_locators": {
+                "SRC_SBC_2018": "Theorem 1"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Calibration testing.",
+            "qualification": null,
+            "explicit_noncoverage": [
+                "Identifiability"
+            ],
+            "gate_dependencies": [
+                "bounded_identifiability_and_information_plan"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Required validation method.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_COVERAGE",
+            "obligation_ids": [
+                "CALIBRATION_COVERAGE_AND_FAILURE_CRITERIA"
+            ],
+            "exact_claim": "Repeated-sampling coverage testing.",
+            "claim_class": "VALIDATION_METHOD",
+            "evidence_kind": "SOURCE_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "SRC_SBC_2018"
+            ],
+            "exact_locators": {
+                "SRC_SBC_2018": "Section 2"
+            },
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Coverage.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "bounded_identifiability_and_information_plan"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Required validation method.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_IDENTIFIABILITY",
+            "obligation_ids": [
+                "PARAMETER_IDENTIFIABILITY_AND_INFORMATION_CONTENT"
+            ],
+            "exact_claim": "Identifiability requires specific metric testing.",
+            "claim_class": "VALIDATION_METHOD",
+            "evidence_kind": "MATHEMATICAL_DERIVATION",
+            "load_bearing": true,
+            "source_bindings": [],
+            "exact_locators": {},
+            "support_status": "SUPPORTED_WITH_QUALIFICATION",
+            "support_scope": "Statistical principle.",
+            "qualification": "Standard info theory applies; no specific external source downloaded.",
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "bounded_identifiability_and_information_plan"
+            ],
+            "derivation_dependencies": [
+                "CLAIM_POSTERIOR_TARGET"
+            ],
+            "methodology_choice": "Explicit metrics must be tested.",
+            "limitations": "None.",
+            "phase2a_pass_blocking": false,
+            "blocking_reason": "Numerical validation required in Phase 2B"
+        },
+        {
+            "claim_id": "CLAIM_NON_CLAIMS",
+            "obligation_ids": [
+                "EXPLICIT_OMITTED_PHYSICS_DECLARATION"
+            ],
+            "exact_claim": "Explicitly omitting full-generator claims.",
+            "claim_class": "PROJECT_BOUNDARY",
+            "evidence_kind": "METHODOLOGY_CHOICE",
+            "load_bearing": true,
+            "source_bindings": [],
+            "exact_locators": {},
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Boundary enforcement.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "paper_claim_boundary_consistency"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Strict adherence.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_NUMERICAL_CLOSURE_PLAN",
+            "obligation_ids": [
+                "INDEPENDENT_NUMERICAL_CLOSURE_PLAN"
+            ],
+            "exact_claim": "A bounded numerical closure plan is required.",
+            "claim_class": "PROJECT_BOUNDARY",
+            "evidence_kind": "REPOSITORY_FACT",
+            "load_bearing": true,
+            "source_bindings": [],
+            "exact_locators": {},
+            "support_status": "PRIMARY_EVIDENCE_UNAVAILABLE",
+            "support_scope": "Validation planning.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "bounded_phase2b_validation_plan"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Phase 2B planning.",
+            "limitations": "None."
+        },
+        {
+            "claim_id": "CLAIM_PDF_FAMILY_REPOSITORY_FACT",
+            "obligation_ids": [
+                "PDF_FAMILY_AND_TRANSPORT_IDENTITY",
+                "STRICT_PDF_SUPPORT_INTERSECTION"
+            ],
+            "claim_class": "MATHEMATICAL_CONSTRAINT",
+            "evidence_kind": "REPOSITORY_FACT",
+            "load_bearing": true,
+            "source_bindings": [
+                "docs/phase1bd_d0_revision_decision.json",
+                "docs/adr/ADR-004-d0-baseline-and-admissibility.md"
+            ],
+            "exact_locators": {},
+            "support_status": "DIRECTLY_SUPPORTED",
+            "support_scope": "Baseline identity.",
+            "qualification": null,
+            "explicit_noncoverage": [],
+            "gate_dependencies": [
+                "strict_support_contract"
+            ],
+            "derivation_dependencies": [],
+            "methodology_choice": "Versioned sum-rule-projected baseline.",
+            "limitations": "None.",
+            "content": "PDF family is ct18nlo_two_parameter_boundary_v2 (projected baseline) with strict grid support."
+        }
+    ]
+}
