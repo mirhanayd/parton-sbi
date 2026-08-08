@@ -236,6 +236,7 @@ def main():
 
     # Predecessor checks
     pred = review.get('predecessor_identities', {})
+    check(pred.get('phase1b_closeout') == "ea509c228aa74021af15c5e1473b257dd0c1b6863118ac9f4be484358c7c8fd5", "Wrong phase1b closeout hash")
     check(pred.get('phase1bd_revision') == file_sha256("docs/phase1bd_d0_revision_decision.json"), "Wrong phase1bd hash")
 
     # paper nonclaims

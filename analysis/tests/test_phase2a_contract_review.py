@@ -164,6 +164,13 @@ def test_wrong_predecessor(base_data, tmp_path):
     assert rc != 0
     assert "Wrong phase1bd hash" in out
 
+def test_wrong_phase1b_closeout_predecessor(base_data, tmp_path):
+    reg, led, rev, p2b = copy.deepcopy(base_data)
+    rev['predecessor_identities']['phase1b_closeout'] = "bad"
+    rc, out = run_validator(reg, led, rev, p2b, tmp_path)
+    assert rc != 0
+    assert "Wrong phase1b closeout hash" in out
+
 def test_wrong_schema(base_data, tmp_path):
     reg, led, rev, p2b = copy.deepcopy(base_data)
     reg['schema_version'] = "v1"
