@@ -517,4 +517,23 @@ unimplemented hypotheses.
 
 # Phase 2A Review
 
-Phase 2A review is a source-backed contract review; later numerical closure remains unexecuted. Phase 2B remains unauthorized. ADR-013 remains Proposed. The result is not accepted until independent review and merge.
+Phase 2A review is complete. PR #63 merged at
+`e798a64265afd806bb7030218e2fac60e1656a78`, issue #54 is closed/completed,
+and the final scientific decision is `INCONCLUSIVE`.
+
+The accepted gate grouping is:
+
+- `SUPPORTED`: `posterior_target_coherence`,
+  `fixed_n_shape_only_semantics`, `paper_claim_boundary_consistency`,
+  `selected_event_conditioning_coherence`.
+- `SUPPORTED_WITH_QUALIFICATION`:
+  `finite_positive_normalization_reviewability`, `strict_support_contract`,
+  `normalized_detector_kernel_contract`,
+  `bounded_identifiability_and_information_plan`.
+- `PRIMARY_EVIDENCE_UNAVAILABLE`: `exact_formula_contract`,
+  `no_hidden_clipping`, `bounded_phase2b_validation_plan`.
+
+Phase 2B issue #55 remains Backlog with Gate Decision Not Evaluated,
+Authorization Not Authorized, and execution `NOT_EXECUTED`; its proposal is
+`INCOMPLETE`. Phase 2 umbrella issue #53 remains In Progress. Legacy issue #10
+remains Blocked, Not Evaluated, and Not Authorized. ADR-013 remains Proposed.

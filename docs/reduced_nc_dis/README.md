@@ -5,18 +5,18 @@ normalized neutral-current DIS observation model. It preserves the repository's
 set-level PDF inference objective while leaving the legacy full-generator line
 paused.
 
-Phase 2 currently authorizes only the roadmap and Phase 2A mathematical and
-primary-source contract review. It does not authorize formula evaluation,
-simulation, event generation, datasets, detector implementation, or neural
-training.
+Phase 2 currently has a completed Phase 2A mathematical and primary-source
+contract review with final scientific decision `INCONCLUSIVE`. It does not
+authorize formula evaluation, simulation, event generation, datasets, detector
+implementation, or neural training.
 
 Schema v2 binds the `SELECTED_EVENT_CONDITIONED_V1` fixed-N law and separates
 latent acceptance `A_z`, the complete detector space `Y_full`, and selected
 observations `Y_obs`. It also requires a bounded later identifiability and
 information-content plan: calibration is necessary but does not by itself
-establish that the selected data are informative about theta. All 24 proof
-obligations remain `NOT_EVALUATED`; no external source review or experiment was
-performed by this correction.
+establish that the selected data are informative about theta. Phase 2A reviewed
+all 24 proof obligations and ended `INCONCLUSIVE` because required primary
+evidence remains unavailable.
 
 ## Authoritative planning records
 
@@ -32,4 +32,8 @@ The machine-readable artifacts and their validator record the authorization
 boundary. The GitHub snapshot is external provenance; the offline validator
 does not contact or verify live GitHub state.
 
-Phase 2A review is a source-backed contract review; later numerical closure remains unexecuted. Phase 2B remains unauthorized. ADR-013 remains Proposed. The result is not accepted until independent review and merge.
+Phase 2A review is complete: PR #63 merged at
+`e798a64265afd806bb7030218e2fac60e1656a78`, and issue #54 is
+closed/completed. Later numerical closure remains unexecuted. Phase 2B issue
+#55 remains Backlog with Gate Decision Not Evaluated, Authorization Not
+Authorized, and execution `NOT_EXECUTED`. ADR-013 remains Proposed.

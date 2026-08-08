@@ -6,57 +6,100 @@ Proposed
 
 ## Context
 
-Phase 2A requires defining a mathematical and scientific contract for the Reduced NC DIS observation model, strictly backed by primary or authoritative sources. The contract must bind the physics formulae, perturbative conventions, probability laws, detector kinematics, and simulation-based inference (SBI) objectives.
+Phase 2A defined the mathematical and scientific contract for the Reduced NC
+DIS observation model using primary or authoritative source evidence. The
+review binds the selected-event law, posterior target, paper claim boundary,
+and the gates that must pass before any later numerical closure phase can be
+authorized.
+
+PR #63 merged the Phase 2A source-backed contract review. The accepted
+machine-readable decision is conservative: Phase 2A is complete, but its final
+scientific decision is `INCONCLUSIVE`.
 
 ## Primary-Source Methodology
 
-Every load-bearing claim relies on authoritative references (e.g., PDG, APFEL++ documentation, canonical SBI literature) to prevent unverified assumptions.
+Every load-bearing claim relies on authoritative references or repository facts
+recorded in the source registry and claim ledger. Missing primary evidence is
+not converted into support.
 
 ## Exact Contract
 
 - Formula: Standard NC DIS differential cross section.
-- Electroweak Scheme: G_F scheme.
-- Perturbative Scheme: NLO VFNS.
-- PDF Family: Accepted continuous family.
+- Electroweak scheme: `G_F` scheme.
+- Perturbative scheme: NLO VFNS remains incompletely bound for the full
+  heavy-flavor contract.
+- PDF family: `ct18nlo_two_parameter_boundary_v2`, the accepted versioned
+  sum-rule-projected baseline, with strict grid support.
 
 ## Selected-Event Law
 
-Conditioned fixed-N shape-only observation law without counting information.
+The accepted baseline is a selected-event, fixed-`N`, shape-only observation
+law. Count/rate information is not part of the Phase 2A baseline.
 
 ## Posterior Law
 
-The posterior probability target is `p(theta | D, N, selected)`.
+The posterior target is `p(theta | D, N, selected)` for an event set `D`, not an
+instantaneous single-proton PDF inferred from one event.
 
-## Identifiability Boundary
+## Gate Summary
 
-Proof-of-principle sensitivity only for predeclared parameter combinations that pass the later identifiability and information-content gates.
+The accepted Phase 2A gate grouping is:
 
-## Phase 2B Proposal Boundary
+- `SUPPORTED`: `posterior_target_coherence`,
+  `fixed_n_shape_only_semantics`, `paper_claim_boundary_consistency`,
+  `selected_event_conditioning_coherence`.
+- `SUPPORTED_WITH_QUALIFICATION`:
+  `finite_positive_normalization_reviewability`, `strict_support_contract`,
+  `normalized_detector_kernel_contract`,
+  `bounded_identifiability_and_information_plan`.
+- `PRIMARY_EVIDENCE_UNAVAILABLE`: `exact_formula_contract`,
+  `no_hidden_clipping`, `bounded_phase2b_validation_plan`.
 
-A bounded validation plan is proposed for numerical closure, but NOT authorized in this phase.
+The unresolved `exact_formula_contract` includes the `CLAIM_HEAVY_FLAVOR`
+limitation: the review does not bind a single complete, internally consistent
+heavy-flavor scheme from primary evidence. The full differential-rate
+positivity premise is therefore not established by Phase 2A.
 
 ## Decision Derivation
 
-All 11 binding gates evaluate to SUPPORTED. The provisional decision is PASS.
+Because required primary evidence remains unavailable, the final Phase 2A
+scientific decision is `INCONCLUSIVE`.
 
-## Consequences
+This is neither a PASS nor a FAIL. It is a completed conservative review result
+that blocks Phase 2B authorization until the missing evidence and validation
+plan details are addressed by a later reviewed decision.
 
-Recommends the Phase 2B validation proposal.
+## Phase 2B Boundary
+
+The Phase 2B proposal remains:
+
+- `plan_completeness = INCOMPLETE`
+- `authorization = NOT_AUTHORIZED`
+- `execution_status = NOT_EXECUTED`
+
+Anchors, grids, tolerances, convergence rules, and independent-reference
+details remain unresolved. No Phase 2B numerical work is authorized by this
+ADR or by the Phase 2A closeout.
 
 ## Nonclaims
 
-Does not claim full-generator equivalence, real detector simulation, or legacy D2 completion.
+The bounded paper nonclaims remain in force. The review does not claim
+full-generator equivalence, showering, ISR, hadronization, beam-remnant
+modelling, underlying event, full collider realism, production-grade detector
+simulation, unrestricted full-flavor determination, global-fit replacement,
+universal identifiability, guaranteed contraction for every theta direction,
+legacy D2 completion, or full-generator closure.
 
 ## Authorization
 
-- PHASE2A_CONTRACT_REVIEW_AUTHORIZED = True
-- PHASE2B_AUTHORIZED = False
-- NUMERICAL_PHYSICS_AUTHORIZED = False
+- `PHASE2A_CONTRACT_REVIEW_AUTHORIZED = true`
+- `PHASE2B_AUTHORIZED = false`
+- `NUMERICAL_PHYSICS_AUTHORIZED = false`
+- `IMPLEMENTATION_AUTHORIZED = false`
+- `D2_AUTHORIZED = false`
 
-## Unresolved Items
+## Consequences
 
-Tolerances and specific detector model specifics are deferred to Phase 2B/2C.
-
-## Source Limitations
-
-Sources do not guarantee full-rate numerical positivity; this must be verified numerically.
+Phase 2A is closed as a completed source-backed contract review with an
+`INCONCLUSIVE` scientific decision. Phase 2B issue #55 remains Backlog,
+Not Evaluated, and Not Authorized.

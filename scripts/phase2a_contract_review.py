@@ -14,6 +14,40 @@ def file_sha256(path):
     with open(path, "rb") as f:
         return hashlib.sha256(f.read()).hexdigest()
 
+def check_adr013_consistency(review, phase2b):
+    adr_path = Path("docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md")
+    try:
+        adr = adr_path.read_text()
+    except FileNotFoundError:
+        check(False, "Missing ADR-013")
+
+    check(re.search(r'## Status\s+Proposed', adr, re.IGNORECASE), "ADR-013 is not Proposed")
+
+    decision = review['scientific_decision']
+    check(f"scientific decision is `{decision}`" in adr, "ADR-013 decision does not match review")
+
+    unavailable_gate_ids = [
+        gate['gate_id']
+        for gate in review['gate_reviews']
+        if gate['status'] == "PRIMARY_EVIDENCE_UNAVAILABLE"
+    ]
+    for gate_id in unavailable_gate_ids:
+        check(gate_id in adr, f"ADR-013 missing unavailable gate {gate_id}")
+
+    check(f"plan_completeness = {phase2b.get('plan_completeness')}" in adr, "ADR-013 Phase 2B completeness mismatch")
+    check(f"authorization = {phase2b.get('authorization')}" in adr, "ADR-013 Phase 2B authorization mismatch")
+    check(f"execution_status = {phase2b.get('execution_status')}" in adr, "ADR-013 Phase 2B execution mismatch")
+
+    if decision != "PASS":
+        stale_pass_claims = [
+            "All 11 binding gates evaluate to SUPPORTED",
+            "provisional decision is PASS",
+            "decision is PASS",
+            "Recommends the Phase 2B validation proposal",
+        ]
+        for claim in stale_pass_claims:
+            check(claim not in adr, f"ADR-013 contains stale PASS claim: {claim}")
+
 def main():
     try:
         with open('docs/reduced_nc_dis/sources/phase2a_source_registry.json') as f:
@@ -246,13 +280,7 @@ def main():
     # no committed source bytes
     check(not os.path.exists("docs/reduced_nc_dis/sources/papers"), "Paper bytes committed")
 
-    # ADR-013 Proposed
-    try:
-        with open("docs/adr/ADR-013-reduced-nc-dis-observation-law-contract.md") as f:
-            adr = f.read()
-            check(re.search(r'Status.*Proposed', adr, re.IGNORECASE | re.DOTALL), "ADR-013 is not Proposed")
-    except FileNotFoundError:
-        check(False, "Missing ADR-013")
+    check_adr013_consistency(review, phase2b)
 
     print("VALID phase2a.contract_review")
 
