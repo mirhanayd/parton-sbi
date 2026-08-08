@@ -9,10 +9,10 @@ The Phase 2A source-backed contract review has been repaired and final derivatio
 - Phase 2B Proposal: `e60846b5975cd12284b17ef2e28b873760b8ff17cc03f8cb3a85929af6a71786`
 
 ### Details
-- The decision is `INCONCLUSIVE` because `CLAIM_HEAVY_FLAVOR` cannot bind a single complete, internally consistent scheme using only the primary documentation, triggering `PRIMARY_EVIDENCE_UNAVAILABLE` on the formula gate.
+- The decision is `INCONCLUSIVE` because `CLAIM_HEAVY_FLAVOR` cannot bind a single complete, internally consistent scheme using only the primary documentation; `exact_formula_contract`, `no_hidden_clipping`, and `bounded_phase2b_validation_plan` remain `PRIMARY_EVIDENCE_UNAVAILABLE`.
 - The PDF family is now correctly bounded (`CLAIM_PDF_FAMILY_REPOSITORY_FACT`) to the `CT18NLO` Phase 1a strict-support decision.
 - Source publication dates are strictly aligned (HERA 2015-12-08, SBC 2018-04-18, APFEL++ 2017-10-23).
-- Bounded validation plans (exact `anchors`, `grids`, and `tolerances`) have been populated in the Phase 2B proposal.
+- The Phase 2B proposal remains `INCOMPLETE`, `NOT_AUTHORIZED`, and `NOT_EXECUTED`; anchors, grids, tolerances, convergence rules, and independent-reference details remain unresolved.
 - Qualification semantics (`phase2a_pass_blocking`) have been hard-linked to the derived validator gates.
 
-*This concludes the final acceptance repair. CI is currently verifying the integrity.*
+*This concludes the final acceptance repair. GitHub Actions run 31259992506 (#83) passed all five CI jobs.*

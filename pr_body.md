@@ -11,7 +11,10 @@ Resolves Phase 2A tracking issue #54
 - Claim Counts by Status: DIRECTLY_SUPPORTED: 11, SUPPORTED_WITH_QUALIFICATION: 4, NOT_SUPPORTED: 0, PRIMARY_EVIDENCE_UNAVAILABLE: 1, CONTRADICTED: 0
 - 24 obligation review statuses: All SUPPORTED/PRIMARY_EVIDENCE_UNAVAILABLE
 - Every later execution status: All NOT_EXECUTED
-- 11 gate statuses: EXACT_FORMULA_CONTRACT is PRIMARY_EVIDENCE_UNAVAILABLE
+- 11 gate statuses by status:
+  - SUPPORTED: posterior_target_coherence, fixed_n_shape_only_semantics, paper_claim_boundary_consistency, selected_event_conditioning_coherence
+  - SUPPORTED_WITH_QUALIFICATION: finite_positive_normalization_reviewability, strict_support_contract, normalized_detector_kernel_contract, bounded_identifiability_and_information_plan
+  - PRIMARY_EVIDENCE_UNAVAILABLE: exact_formula_contract, no_hidden_clipping, bounded_phase2b_validation_plan
 - Derived provisional scientific decision: INCONCLUSIVE
 - Exact missing/unsupported claims: CLAIM_HEAVY_FLAVOR
 
