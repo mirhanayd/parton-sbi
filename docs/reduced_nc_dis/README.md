@@ -88,3 +88,13 @@ remains Not Authorized and `NOT_EXECUTED`.
 
 - [Phase 2B v2 execution authorization review](PHASE2B_EXECUTION_AUTHORIZATION_REVIEW_V2.md)
 - [Machine-readable v2 execution authorization review](contracts/phase2b_execution_authorization_review_v2.json)
+
+The Phase 2B preauthorization V3 scientific successor derives
+`V3R6_MULTIPLE_BLOCKERS_REMAIN`. It closes the PDF-bridge and implemented-rate
+sign designs, but keeps alpha, massless execution, numerical runtime identity,
+grid/quadrature remainder rules, and the FONLL comparator explicitly blocked.
+Phase 2B remains Not Authorized and `NOT_EXECUTED`; no new authorization review
+is warranted from this blocked record.
+
+- [Phase 2B preauthorization plan V3](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V3.md)
+- [Machine-readable Phase 2B preauthorization V3 plan](contracts/phase2b_preauthorization_validation_plan_v3.json)

@@ -150,3 +150,16 @@ parent error allowance or equal split. Its post-authorization test identities,
 per-flavor-segment resource cap, and load-bearing NumPy resolution also require
 revision. Phase 2B remains Open/Backlog, Gate Decision Not Evaluated, Not
 Authorized and `NOT_EXECUTED`; Phase 2C remains Not Authorized.
+
+## Phase 2B preauthorization V3 successor
+
+The V3 successor derives `V3R6_MULTIPLE_BLOCKERS_REMAIN`. Gate-local bridge and
+strict implemented-rate sign specifications replace part of the invalid
+global-budget architecture. Alpha and massless execution specifications, the
+numerical runtime identity, grid/quadrature remainder rules, and an exact finite
+FONLL comparator remain blocked. No aggregate execution maximum or
+execution-ready plan is claimed.
+
+This result does not alter the dependency graph or issue metadata. Phase 2B
+remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
+`NOT_EXECUTED`; Phase 2C remains Not Authorized.

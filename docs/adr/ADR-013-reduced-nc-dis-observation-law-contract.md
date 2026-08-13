@@ -187,3 +187,18 @@ the per-flavor-segment resource count, and the load-bearing NumPy pin.
 Historical Phase 2A remains `INCONCLUSIVE`; ADR-013 remains Proposed. Phase 2B
 remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
 authorized.
+
+## Follow-on Phase 2B preauthorization V3 successor
+
+The V3 scientific successor derives `V3R6_MULTIPLE_BLOCKERS_REMAIN`. It
+replaces the rejected global/equal-share budget and upstream sign-envelope
+model with gate-local validation, an exact PDF bridge contract, and strict
+implemented-rate nonnegativity. Its proposed continuous finite-provider AS2
+design remains explicitly blocked rather than being called a certificate.
+
+V3 is not complete: alpha and massless-reference execution semantics and the
+numerical runtime identity remain underbound, grid and quadrature remainder
+acceptance remains scientifically underived, and the FONLL component comparator
+is not fully executable from frozen inputs. Historical Phase 2A remains
+`INCONCLUSIVE`; this ADR remains Proposed. Phase 2B remains `NOT_AUTHORIZED`
+and `NOT_EXECUTED`, and no downstream phase is authorized.
