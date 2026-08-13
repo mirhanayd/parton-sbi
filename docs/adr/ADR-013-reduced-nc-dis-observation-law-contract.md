@@ -133,3 +133,18 @@ pre-authorization evidence. Pointwise complete-rate positivity is not proved.
 Actual positivity scans, normalization integrations, and independent numerical
 closure are post-authorization validation and have not occurred. Phase 2B
 remains `NOT_AUTHORIZED` and `NOT_EXECUTED`.
+
+## Follow-on Phase 2B pre-authorization plan
+
+The subsequent versioned pre-authorization plan derives
+`P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW`. It binds
+the mass/coupling configuration, anchors, domain, grids, justified tolerances,
+convergence, independent-reference decomposition, resource bounds, positivity
+policy and normalization strategy. This does not rewrite this ADR's historical
+review result: Historical Phase 2A remains `INCONCLUSIVE`, and ADR-013 remains
+Proposed.
+
+Planning completeness is not execution authority. Phase 2B remains `NOT_AUTHORIZED` and `NOT_EXECUTED`;
+issue #55 remains Backlog with Gate
+Decision Not Evaluated. No numerical positivity, normalization or independent
+closure result is asserted.

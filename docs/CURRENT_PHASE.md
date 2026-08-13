@@ -555,3 +555,20 @@ resource bound remain unresolved pre-authorization evidence. Phase 2B remains
 unauthorized, incomplete, and unexecuted. No formula evaluation, positivity
 scan, normalization integration, event generation, dataset, detector
 implementation, or neural work has occurred.
+
+## Phase 2B pre-authorization validation plan
+
+The versioned follow-on plan derives
+`P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW`. It binds
+the heavy-quark pole masses, shared `alpha_s` identity, nine theta anchors,
+physics domain, coordinate/Jacobian convention, deterministic grids,
+source/error-budget tolerances, convergence rules, an independent-reference
+decomposition, finite resource bounds, no-clipping positivity policy,
+normalization closure and failure precedence.
+
+This is planning completeness only. Historical Phase 2A remains complete with
+scientific decision `INCONCLUSIVE`; ADR-013 remains Proposed. Phase 2B remains Not Authorized,
+issue #55 remains Open/Backlog with Gate Decision Not
+Evaluated, and execution remains `NOT_EXECUTED`. No APFEL numerical physics,
+positivity or normalization scan, event, dataset, detector, or neural work was
+performed.

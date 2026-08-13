@@ -108,3 +108,12 @@ completed with `INCONCLUSIVE`; Phase 2B remains Backlog, Not Evaluated, Not
 Authorized, `INCOMPLETE`, and `NOT_EXECUTED`. A later review must first bind
 the remaining mass, `alpha_s`, anchors, grids, tolerances, convergence,
 independent-reference, and resource-bound evidence.
+
+## Phase 2B pre-authorization plan follow-on
+
+The later review has now bound those planning inputs and derives
+`P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW`. The new
+plan is `COMPLETE` as a reviewable plan only. It does not change the dependency
+graph or the historical incomplete proposal: Phase 2B remains Backlog, Gate
+Decision Not Evaluated, Not Authorized, and `NOT_EXECUTED`. A separate future
+authorization decision is required before any plan execution.

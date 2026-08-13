@@ -48,3 +48,12 @@ or numerical execution.
 
 - [FONLL-A contract-selection review](PHASE2_FONLL_A_CONTRACT_AMENDMENT.md)
 - [Machine-readable FONLL-A amendment](contracts/phase2_fonll_a_contract_amendment.json)
+
+A later planning-only review now records a complete Phase 2B pre-authorization
+validation plan. It resolves the amendment's eight planning questions without
+executing them and derives
+`P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW`. Phase 2B
+remains Not Authorized and `NOT_EXECUTED`.
+
+- [Phase 2B pre-authorization validation plan](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN.md)
+- [Machine-readable Phase 2B pre-authorization plan](contracts/phase2b_preauthorization_validation_plan.json)

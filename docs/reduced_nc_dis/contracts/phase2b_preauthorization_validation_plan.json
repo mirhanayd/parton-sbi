@@ -1,0 +1,576 @@
+{
+  "schema_version": "partonsbi.phase2b.preauthorization-validation-plan.v1",
+  "record_type": "PRE_AUTHORIZATION_VALIDATION_PLAN",
+  "outcome": "P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW",
+  "plan_completeness": "COMPLETE",
+  "historical_phase2a": {
+    "status": "COMPLETE",
+    "scientific_decision": "INCONCLUSIVE",
+    "changed": false
+  },
+  "adr_013_status": "Proposed",
+  "predecessor_identities": {
+    "phase2_fonll_a_contract_amendment": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8",
+    "phase2a_contract_review": "4ce2b5b8e910edda6f2183fe7a7e24ec1f0d5e99bd603b708f587c178d1d237b",
+    "phase2a_claim_source_ledger": "ca2eb35d38c59b2f5f79435acd0171b60cc80d9577d6f4db35f10d98f329f0fc",
+    "phase2b_validation_plan_proposal": "e60846b5975cd12284b17ef2e28b873760b8ff17cc03f8cb3a85929af6a71786",
+    "phase1bd_d0_revision": "ef44ec6b230d06edce4b30b435d30ee382e3e151a8dfe3a9f8098e4ac6747873",
+    "phase1bd_d0r_decision": "40e75fda281578f45d193858667eeed2c1747a07d64f53672adec10145c9e775",
+    "phase1bd_d1_decision": "3cdb3e6e11fae63aa9b4bb9e0094c0610a8c01eb636eecc25571e3c2f11e9881"
+  },
+  "accepted_contract": {
+    "scheme": "FONLL-A",
+    "perturbative_order": "NLO",
+    "software": {
+      "name": "APFEL",
+      "version": "3.1.1",
+      "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a"
+    },
+    "pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "pdf_baseline": "ct18nlo_member0_sumrule_projected_boundary_v2",
+    "pdf_support": {
+      "x_min": 1e-09,
+      "x_max": 1.0,
+      "q_min_gev": 1.295,
+      "q_max_gev": 100000.0,
+      "policy": "STRICT_INTERSECTION_NO_EXTRAPOLATION"
+    }
+  },
+  "source_registry": [
+    {
+      "source_id": "HERA_2015_V3",
+      "identity": "H1 and ZEUS, Combination of Measurements of Inclusive Deep Inelastic e+-p Scattering Cross Sections and QCD Analysis of HERA Data, arXiv:1506.06042v3",
+      "official_url": "https://arxiv.org/pdf/1506.06042v3",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "04971dfad54401348e66d6bf39ea6ef43ac8e5b854ad313381d68df045ab40bc",
+      "publication_or_version_date": "2015-12-08 publication; arXiv v3",
+      "locators": [
+        "Section 2, equations (1)-(4): NC e-/e+ formula and y=Q2/(s*x_Bj)",
+        "Introduction: published NC range 0.045<=Q2<=50000 GeV2, 6e-7<=x_Bj<=0.65, 0.005<=y<=0.95",
+        "Section 6.1: Q2>=3.5 GeV2 perturbative-QCD fit floor and mu_R2=mu_F2=Q2"
+      ]
+    },
+    {
+      "source_id": "APFEL_2014_V3",
+      "identity": "Bertone, Carrazza and Rojo, APFEL: A PDF Evolution Library with QED corrections, arXiv:1310.1394v3",
+      "official_url": "https://arxiv.org/pdf/1310.1394v3",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "3699f4efd19eee7a178c07bb64136c2fab83690d9e84024478f237a88453b5da",
+      "publication_or_version_date": "2014-03-04 arXiv v3; 2014 journal publication",
+      "locators": [
+        "Appendix A.2: SetAlphaQCDRef, SetPoleMasses, SetMSbarMasses and threshold semantics",
+        "Appendix A.3: pto=1 with FONLL selects FONLL-A",
+        "Section 5.4 and Figure 10: independent APFEL/FONLLdis benchmark and maximum reported 1.3 percent discrepancy"
+      ]
+    },
+    {
+      "source_id": "FONLL_2010_V2",
+      "identity": "Forte, Laenen, Nason and Rojo, Heavy quarks in deep-inelastic scattering, arXiv:1001.2312v2",
+      "official_url": "https://arxiv.org/pdf/1001.2312v2",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "f1c40c70edd6debd649d2cead24cdf297f5eb18c8ed8065100731c150d20989b",
+      "publication_or_version_date": "2010-03-05 arXiv v2",
+      "locators": [
+        "Section 2: F_FONLL=F_massive+(F_massless-F_massive_zero)",
+        "Section 2.3: threshold matching and damping choices",
+        "Section 3.3: FONLL-A perturbative ordering"
+      ]
+    },
+    {
+      "source_id": "APFEL_SOURCE_3_1_1",
+      "identity": "Official APFEL source release 3.1.1",
+      "official_url": "https://github.com/scarrazza/apfel/archive/72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a.tar.gz",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "e5c4b3d955f8d33e8e8ff2d9d1687da57f2ee99245abc579f9d32caa616f0f53",
+      "publication_or_version_date": "commit timestamp 2023-12-09T08:30:34Z; tag 3.1.1",
+      "locators": [
+        "src/DIS/initParametersDIS.f: FONLL-A and damping controls",
+        "src/Evolution/initParameters.f: coupling, mass and threshold controls",
+        "examples/TabulationExternal.f: external boundary interface"
+      ]
+    },
+    {
+      "source_id": "CT18NLO_DATAVERSION_1",
+      "identity": "Official LHAPDF CT18NLO set, DataVersion 1",
+      "official_url": "https://lhapdfsets.web.cern.ch/lhapdfsets/current/CT18NLO.tar.gz",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "c9127231e77e97cbec79cb5839203ab00f8db77237a061b61f9420f2b7b9c213",
+      "publication_or_version_date": "CT18 DataVersion 1; associated CT18 publication arXiv v3 dated 2020-11-13",
+      "locators": [
+        "CT18NLO/CT18NLO.info: DataVersion, OrderQCD, FlavorScheme, NumFlavors, support, masses, AlphaS_MZ, AlphaS_OrderQCD and AlphaS_Type"
+      ]
+    },
+    {
+      "source_id": "CT18_2021_V3",
+      "identity": "Hou et al., New CTEQ global analysis of quantum chromodynamics with high-precision data from the LHC, arXiv:1912.10053v3",
+      "official_url": "https://arxiv.org/pdf/1912.10053v3",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "98d4b253c3c926d543f053b1e849cc7ff3fad76facc47fb52761cb2640406fd3",
+      "publication_or_version_date": "2020-11-13 arXiv v3; Phys. Rev. D 103 (2021)",
+      "locators": [
+        "Section II and Table II: CT18 theory settings",
+        "Section III.F and Figure 15: charm pole-mass convention and mc=1.3 GeV",
+        "Summary: mb=4.75 GeV and alpha_s(MZ)=0.118"
+      ]
+    },
+    {
+      "source_id": "FONLL_BENCHMARK_2011_V3",
+      "identity": "Ball et al., Impact of Heavy Quark Masses on Parton Distributions and LHC Phenomenology, arXiv:1101.1300v3",
+      "official_url": "https://arxiv.org/pdf/1101.1300v3",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "8337734859fb71b48364b63efabcffd35e3e381bd5f38f338fc27d959fd31eff",
+      "publication_or_version_date": "2011-11-10 arXiv v3; 2011 journal publication",
+      "locators": [
+        "Section 3.1: NC FONLL-A construction",
+        "Appendix A, Tables 14-15: FONLLdis/FastKernel F2c and FLc benchmark values and discrepancies"
+      ]
+    },
+    {
+      "source_id": "MASSLESS_DIS_BENCHMARK_2024_V1",
+      "identity": "Bertone and Karlberg, Benchmark of deep-inelastic-scattering structure functions at O(alpha_s^3), arXiv:2404.15711v1",
+      "official_url": "https://arxiv.org/pdf/2404.15711v1",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "63463c39073bd9a09e3b99e53532a9a0bdf2d9a6c29e9d22e4e6542126dc9696",
+      "publication_or_version_date": "2024-04-24 arXiv v1; 2024 journal publication",
+      "locators": [
+        "Sections 2-3: independent APFEL++/HOPPET setup",
+        "Section 3 and Figure 2: NC reduced-cross-section agreement better than 1e-5",
+        "Appendix B, Tables B.2-B.4: NLO lookup values"
+      ]
+    },
+    {
+      "source_id": "MASSLESS_DIS_BENCHMARK_CODE_D895EA3",
+      "identity": "Bertone-Karlberg APFEL++/HOPPET DIS benchmark code",
+      "official_url": "https://github.com/alexanderkarlberg/n3lo-structure-function-benchmarks/archive/d895ea3ff40593f17762e940b84aba3a02c589aa.tar.gz",
+      "retrieved_utc": "2026-08-13T12:36:23Z",
+      "sha256": "3cb9b2758dbb3b5367685838b2bfd54213512b400ea23e10fc31e56ca668c668",
+      "publication_or_version_date": "commit d895ea3ff40593f17762e940b84aba3a02c589aa dated 2026-06-12T20:06:26Z",
+      "locators": [
+        "README.md: two-code benchmark contract",
+        "code/StructureFunctionsJoint.cc: independent APFEL++ and HOPPET calculations",
+        "tables/: published lookup-table construction"
+      ]
+    }
+  ],
+  "planning_categories": {
+    "heavy_quark_mass_convention_and_values": "RESOLVED",
+    "shared_alpha_s_identity": "RESOLVED",
+    "theta_anchors": "RESOLVED",
+    "kinematic_domain_and_grids": "RESOLVED",
+    "tolerances": "RESOLVED",
+    "convergence_rules": "RESOLVED",
+    "independent_reference_strategy": "RESOLVED",
+    "resource_bound": "RESOLVED"
+  },
+  "heavy_quark_contract": {
+    "mass_renormalization_convention": {
+      "value": "POLE",
+      "classification": "PROJECT_METHODOLOGY_CHOICE",
+      "rationale": "The accepted CT18 family uses a charm pole-mass convention and serializes 1.3 and 4.75 GeV; selecting APFEL pole masses avoids converting a repository-bound family to an unreviewed running-mass contract."
+    },
+    "charm_mass_gev": {
+      "value": 1.3,
+      "classification": "SOURCE_SUPPORTED_DEFAULT",
+      "rationale": "CT18NLO DataVersion 1 serializes MCharm=1.3000 and the CT18 publication identifies mc=1.3 GeV as a pole mass."
+    },
+    "bottom_mass_gev": {
+      "value": 4.75,
+      "classification": "SOURCE_SUPPORTED_DEFAULT",
+      "rationale": "CT18NLO DataVersion 1 and the CT18 publication bind mb=4.75 GeV."
+    },
+    "threshold_relationship": {
+      "value": "mu_c=mc_pole; mu_b=mb_pole; top inactive below the five-flavor project ceiling",
+      "classification": "SOURCE_REQUIRED_VALUE",
+      "rationale": "APFEL SetPoleMasses uses pole masses as VFN thresholds; this also matches the accepted family metadata."
+    },
+    "software_controls": [
+      "SetPoleMasses(1.3,4.75,172.0)",
+      "SetMaxFlavourPDFs(5)",
+      "SetMaxFlavourAlpha(5)",
+      "SetMassScheme(\"FONLL-A\")",
+      "EnableDampingFONLL(1)",
+      "SetDampingPowerFONLL(2,2,2)"
+    ],
+    "unresolved": []
+  },
+  "alpha_s_contract": {
+    "identity": "ct18nlo_as_mz_0p118_nlo_vfns_mc1p3_mb4p75_nfmax5_v1",
+    "alpha_s_reference_value": 0.118,
+    "reference_scale_gev": 91.187,
+    "perturbative_evolution_order": "NLO_TWO_LOOP",
+    "threshold_matching_semantics": "VARIABLE_FLAVOR_MATCHING_AT_MU_H_EQUALS_M_H_POLE",
+    "active_flavor_relation": "nf changes at 1.3 and 4.75 GeV and is capped at nf=5; top is outside scope",
+    "identity_source": "CT18NLO DataVersion 1 metadata plus the accepted repository evolution precedent",
+    "apfel_binding": "APFEL internally evolves alpha_s from the repository-owned reference tuple through SetAlphaQCDRef(0.118,91.187), perturbative order 1, pole-mass thresholds and nf ceiling 5; no APFEL default supplies a load-bearing value.",
+    "independent_reference_binding": "Independent references receive the same reference tuple but evolve it in their own implementation; copying APFEL's sampled alpha_s table would not be independent.",
+    "software_controls": [
+      "SetAlphaQCDRef(0.118,91.187)",
+      "SetPerturbativeOrder(1)"
+    ],
+    "classification": "PROJECT_METHODOLOGY_CHOICE_CONSTRAINED_BY_REPOSITORY_PROVENANCE",
+    "unresolved": []
+  },
+  "theta_domain": {
+    "parameters": ["delta_v", "lambda_sea"],
+    "bounds": {
+      "delta_v": [-0.2, 0.2],
+      "lambda_sea": [-0.25, 0.25]
+    },
+    "prior_selected": false,
+    "scope": "accepted validation domain only"
+  },
+  "theta_anchors": [
+    {"anchor_id": "CENTER", "delta_v": 0.0, "lambda_sea": 0.0, "role": "center"},
+    {"anchor_id": "DELTA_V_MIN", "delta_v": -0.2, "lambda_sea": 0.0, "role": "axis_extreme"},
+    {"anchor_id": "DELTA_V_MAX", "delta_v": 0.2, "lambda_sea": 0.0, "role": "axis_extreme"},
+    {"anchor_id": "LAMBDA_SEA_MIN", "delta_v": 0.0, "lambda_sea": -0.25, "role": "axis_extreme"},
+    {"anchor_id": "LAMBDA_SEA_MAX", "delta_v": 0.0, "lambda_sea": 0.25, "role": "axis_extreme"},
+    {"anchor_id": "CORNER_MIN_MIN", "delta_v": -0.2, "lambda_sea": -0.25, "role": "corner"},
+    {"anchor_id": "CORNER_MIN_MAX", "delta_v": -0.2, "lambda_sea": 0.25, "role": "corner"},
+    {"anchor_id": "CORNER_MAX_MIN", "delta_v": 0.2, "lambda_sea": -0.25, "role": "corner"},
+    {"anchor_id": "CORNER_MAX_MAX", "delta_v": 0.2, "lambda_sea": 0.25, "role": "corner"}
+  ],
+  "anchor_rationale": "The nine points are the Cartesian center, four axis endpoints and four corners of the already accepted two-parameter validation box. They are fixed before execution and cannot be replaced adaptively.",
+  "coordinate_contract": {
+    "coordinates": ["x_Bj", "Q2"],
+    "differential_quantity": "d2sigma_dx_Bj_dQ2",
+    "beam": {"lepton": "e-", "proton": "p", "electron_energy_gev": 27.5, "proton_energy_gev": 920.0},
+    "s_massless_gev2": 101200.0,
+    "y_definition": "y=Q2/(s*x_Bj)",
+    "apfel_native_measure": "d2sigma_dx_Bj_dy",
+    "jacobian": "dy/dQ2 at fixed x_Bj = 1/(s*x_Bj)",
+    "conversion": "d2sigma_dx_Bj_dQ2 = d2sigma_dx_Bj_dy/(s*x_Bj)"
+  },
+  "physics_validity_domain": {
+    "domain_id": "HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1",
+    "definition": "A_z={(x_Bj,Q2): 6e-7<=x_Bj<=0.65, 3.5<=Q2<=50000 GeV2, 0.005<=Q2/(101200*x_Bj)<=0.95}",
+    "x_bj_bounds": [6e-07, 0.65],
+    "q2_bounds_gev2": [3.5, 50000.0],
+    "y_bounds": [0.005, 0.95],
+    "effective_x_min": "3.5/(101200*0.95)",
+    "pdf_support_relation": "The entire effective domain lies inside x in [1e-9,1] and Q in [1.295,1e5] GeV; every query is nevertheless checked before evaluation.",
+    "boundary_semantics": "Closed validation and normalization domain; boundary values are included and never deleted after observing results.",
+    "rationale": "The HERA publication supplies the beam-scale kinematic envelope. The lower Q2 boundary is explicitly raised to the HERA perturbative-QCD fit floor of 3.5 GeV2; this is an analysis-validity choice, not a claim that the experimental range defines theory validity.",
+    "distinct_from_numerical_grid": true
+  },
+  "validation_grids": [
+    {
+      "grid_id": "DOMAIN_TENSOR_L0",
+      "n": 17,
+      "x_nodes": "x_i=x_eff_min*(0.65/x_eff_min)^(i/16), i=0..16",
+      "q2_nodes": "Q2_j=3.5*(50000/3.5)^(j/16), j=0..16",
+      "filter": "retain only points in HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1"
+    },
+    {
+      "grid_id": "DOMAIN_TENSOR_L1",
+      "n": 33,
+      "x_nodes": "x_i=x_eff_min*(0.65/x_eff_min)^(i/32), i=0..32",
+      "q2_nodes": "Q2_j=3.5*(50000/3.5)^(j/32), j=0..32",
+      "filter": "retain only points in HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1"
+    },
+    {
+      "grid_id": "DOMAIN_TENSOR_L2",
+      "n": 65,
+      "x_nodes": "x_i=x_eff_min*(0.65/x_eff_min)^(i/64), i=0..64",
+      "q2_nodes": "Q2_j=3.5*(50000/3.5)^(j/64), j=0..64",
+      "filter": "retain only points in HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1"
+    },
+    {
+      "grid_id": "BOUNDARY_AND_THRESHOLD_AUGMENTATION",
+      "applied_at_each_level": true,
+      "curves": [
+        "y=0.005 and y=0.95 at every x node",
+        "Q2=3.5 and Q2=50000 GeV2 at every admissible x node",
+        "Q2=mb^2*(1-2^-10), mb^2, mb^2*(1+2^-10) at every admissible x node",
+        "x=Q2/(Q2+4*mh^2) times (1-2^-10), 1, (1+2^-10) for h=c,b at every admissible Q2 node"
+      ],
+      "charm_evolution_threshold_note": "Q2=mc^2 is below the declared Q2 floor; it is not pulled into the physics domain. Charm and bottom production-threshold curves are still probed where admissible.",
+      "rationale": "The tensor grids cover the interior while exact boundary and one-sided threshold curves test support, evolution-threshold and heavy-production-threshold sensitivity without result-adaptive point insertion."
+    },
+    {
+      "grid_id": "NORMALIZATION_GL_CC_LEVELS",
+      "variables": ["log(x_Bj)", "log(Q2)"],
+      "primary_orders": [16, 32, 64],
+      "independent_orders": [17, 33, 65],
+      "primary_rule": "tensor Gauss-Legendre",
+      "independent_rule": "tensor Clenshaw-Curtis implemented without APFEL integration utilities",
+      "domain_mapping": "For each x, Q2_low=max(3.5,101200*x*0.005) and Q2_high=min(50000,101200*x*0.95); skip empty intervals and include the x*Q2 log-coordinate Jacobian.",
+      "rationale": "Nested fixed-order rules make all evaluation locations and costs predeclared and provide an algorithmically distinct redundant integral."
+    }
+  ],
+  "tolerances": [
+    {
+      "tolerance_id": "TOL_FONLL_PUBLISHED_COMPONENT",
+      "quantity": "relative discrepancy for published FONLL/FONLLdis heavy structure-function benchmark values",
+      "threshold": 0.013,
+      "absolute_relative_or_mixed": "RELATIVE",
+      "comparison_reference": "APFEL 2014 Section 5.4/Figure 10 and FONLL benchmark Tables 14-15",
+      "numerical_precision_context": "binary64 calculation compared with published benchmark precision",
+      "justification_class": "SOURCE_BOUND",
+      "justification_text": "The APFEL source reports discrepancies below one percent for F2c and at most 1.3 percent for the light component; the plan does not demand accuracy tighter than that independent reference.",
+      "failure_consequence": "REFERENCE_CLOSURE_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_MASSLESS_NC_REFERENCE",
+      "quantity": "relative discrepancy for massless NLO NC structure functions and reduced cross sections",
+      "threshold": 1e-05,
+      "absolute_relative_or_mixed": "RELATIVE",
+      "comparison_reference": "Bertone-Karlberg APFEL++/HOPPET benchmark at NLO",
+      "numerical_precision_context": "binary64, published x and Q lookup points",
+      "justification_class": "SOURCE_BOUND",
+      "justification_text": "The published independent-code benchmark reports relative agreement at 1e-5 or better over its declared range.",
+      "failure_consequence": "REFERENCE_CLOSURE_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_INTEGRATION_AND_GRID_BUDGET",
+      "quantity": "successive normalization-integral or extrema change",
+      "threshold": 0.0013,
+      "absolute_relative_or_mixed": "RELATIVE",
+      "comparison_reference": "successive fixed refinement levels and the independent quadrature rule",
+      "numerical_precision_context": "binary64 evaluations with deterministic log-coordinate quadrature",
+      "justification_class": "ANALYTIC_ERROR_BUDGET",
+      "justification_text": "The numerical discretization budget is one tenth of the 0.013 published full-scheme component-comparison envelope, keeping integration/grid error subdominant to the weakest independent physics reference.",
+      "failure_consequence": "NORMALIZATION_FAILURE or INCONCLUSIVE when only convergence is unresolved"
+    },
+    {
+      "tolerance_id": "TOL_NORMALIZED_LAW",
+      "quantity": "absolute residual of integral_A p_theta dx dQ2 and lossless selected-event normalization from one",
+      "threshold": 0.0013,
+      "absolute_relative_or_mixed": "ABSOLUTE",
+      "comparison_reference": "unit normalization",
+      "numerical_precision_context": "dimensionless normalized integral from both fixed quadrature implementations",
+      "justification_class": "ANALYTIC_ERROR_BUDGET",
+      "justification_text": "For a unit target, the same subdominant 0.0013 numerical budget is an absolute probability-mass budget.",
+      "failure_consequence": "NORMALIZATION_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_ALPHA_S_IDENTITY",
+      "quantity": "relative discrepancy between APFEL alpha_s and an independent high-precision two-loop solution",
+      "threshold": 7.993605777301127e-15,
+      "absolute_relative_or_mixed": "RELATIVE",
+      "comparison_reference": "independent two-loop implicit RGE solver with residual <=8*u, u=2^-53",
+      "numerical_precision_context": "binary64 APFEL result against at least binary128 reference",
+      "justification_class": "ANALYTIC_ERROR_BUDGET",
+      "justification_text": "The threshold is 72*u: 64*u for the bounded binary64 evaluation path plus 8*u for the independent solver residual, rather than a decimal convention.",
+      "failure_consequence": "SHARED_ALPHA_S_IDENTITY_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_JACOBIAN",
+      "quantity": "relative discrepancy of numerical and analytic dy/dQ2",
+      "threshold": 8.881784197001252e-16,
+      "absolute_relative_or_mixed": "RELATIVE",
+      "comparison_reference": "analytic 1/(s*x_Bj)",
+      "numerical_precision_context": "binary64, 8*u with u=2^-53",
+      "justification_class": "ANALYTIC_ERROR_BUDGET",
+      "justification_text": "Eight unit roundoffs cover the two products/divisions and comparison against the analytic expression.",
+      "failure_consequence": "COORDINATE_CONTRACT_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_NEGATIVE_ROUNDOFF_ENVELOPE",
+      "quantity": "negative complete differential rate attributable only to floating-point assembly",
+      "threshold": "gamma_32*S where gamma_32=32*u/(1-32*u)=3.5527136788005136e-15 and S is the sum of absolute assembled rate terms",
+      "absolute_relative_or_mixed": "MIXED_LOCAL_BACKWARD_ERROR",
+      "comparison_reference": "same point recomputed with at least binary128 arithmetic",
+      "numerical_precision_context": "binary64 primary and at least binary128 sign adjudication",
+      "justification_class": "ANALYTIC_ERROR_BUDGET",
+      "justification_text": "gamma_32 is the standard forward-error envelope for at most 32 rounded elementary operations in the declared outer rate assembly. A point is roundoff-compatible only when its magnitude is within this envelope and the higher-precision recomputation is nonnegative.",
+      "failure_consequence": "NEGATIVE_RATE unless both roundoff conditions hold; no value is repaired"
+    }
+  ],
+  "convergence_rules": [
+    {
+      "convergence_id": "INTEGRATION_CONVERGENCE",
+      "pass": "For both quadrature families, |I2-I1|/|I2|<=0.0013 and either I1=I0=I2 or |I2-I1|<=0.5*|I1-I0|; the two I2 values also agree within 0.0013 relative.",
+      "fail": "Any estimate is nonfinite or nonpositive, or the two converged methods disagree beyond 0.0013 after level 2.",
+      "inconclusive": "All estimates are finite and positive but the fixed three-level reduction test is not met."
+    },
+    {
+      "convergence_id": "GRID_REFINEMENT_STABILITY",
+      "pass": "L1 and L2 have the same finite/support/positivity classification and reported extrema change by at most 0.0013 relative when their local scale is nonzero.",
+      "fail": "A predeclared point is unsupported/nonfinite or a physical negative rate is found at any level.",
+      "inconclusive": "Classifications are admissible but extrema do not stabilize by L2."
+    },
+    {
+      "convergence_id": "SUPPORT_BOUNDARY_STABILITY",
+      "pass": "All exact boundary and one-sided sequences remain in declared support, require no extrapolation, and have stable finite/positivity classifications between L1 and L2.",
+      "fail": "Any evaluation extrapolates, clips, deletes a point, or produces a nonfinite/physical negative rate.",
+      "inconclusive": "No hard failure occurs but a one-sided classification changes at the final level."
+    },
+    {
+      "convergence_id": "POSITIVITY_RESULT_STABILITY",
+      "pass": "Every level is nonnegative, except recorded roundoff-compatible negatives satisfying TOL_NEGATIVE_ROUNDOFF_ENVELOPE, and no new non-roundoff negative appears at L2.",
+      "fail": "Any higher-precision result is negative or any binary64 negative exceeds gamma_32*S.",
+      "inconclusive": "The higher-precision sign or local error scale cannot be established within the fixed resource bound."
+    },
+    {
+      "convergence_id": "INDEPENDENT_REFERENCE_DISCREPANCY_STABILITY",
+      "pass": "Every reference discrepancy is within its source-bound tolerance and changes by no more than one tenth of that tolerance under the final internal refinement.",
+      "fail": "A stable discrepancy exceeds its source-bound tolerance or a reference identity/configuration mismatch is found.",
+      "inconclusive": "The discrepancy has not stabilized by the final allowed refinement or the pinned reference cannot execute reproducibly."
+    }
+  ],
+  "independent_reference_hierarchy": {
+    "full_end_to_end_fonll_a_observable_reference_available": false,
+    "gate_interpretation": "A decomposition is sufficient because the accepted gate asks for an independent plan for formulae, normalization, support and sampling, and the FONLL observable is an explicit additive composition. Every load-bearing layer has an independent or analytic check; no APFEL wrapper is credited as independent. A future result must report layer failures separately and may not promote component agreement to an unqualified full-code equivalence claim.",
+    "references": [
+      {
+        "reference_id": "REF_FONLLDIS_PUBLISHED",
+        "evidence_class": "PUBLISHED_BENCHMARK",
+        "independent": true,
+        "covers": ["massive F2c", "massive FLc", "FONLL-A matched heavy structure-function construction"],
+        "does_not_cover": ["accepted theta family end to end", "complete gamma/Z e- rate", "normalization"],
+        "source_ids": ["APFEL_2014_V3", "FONLL_BENCHMARK_2011_V3"]
+      },
+      {
+        "reference_id": "REF_HOPPET_MASSLESS_NC",
+        "evidence_class": "COMPONENT_LEVEL_INDEPENDENT_REFERENCE",
+        "independent": true,
+        "covers": ["massless NLO NC structure functions", "massless NC reduced cross sections", "independent alpha_s/PDF evolution path"],
+        "does_not_cover": ["massive FONLL terms"],
+        "source_ids": ["MASSLESS_DIS_BENCHMARK_2024_V1", "MASSLESS_DIS_BENCHMARK_CODE_D895EA3"]
+      },
+      {
+        "reference_id": "REF_ANALYTIC_HERA_ASSEMBLY",
+        "evidence_class": "ANALYTIC_REFERENCE_POINT",
+        "independent": true,
+        "covers": ["e-/e+ charge signs", "Y+ and Y- factors", "dxdy to dxdQ2 Jacobian", "dimensional consistency", "lossless normalized-law identity"],
+        "does_not_cover": ["APFEL coefficient functions"],
+        "source_ids": ["HERA_2015_V3"]
+      },
+      {
+        "reference_id": "REF_FIXED_INDEPENDENT_QUADRATURE",
+        "evidence_class": "COMPONENT_LEVEL_INDEPENDENT_REFERENCE",
+        "independent": true,
+        "covers": ["normalization integration", "finite positive Z_theta", "unit-normalized p_theta", "lossless selected-event normalization"],
+        "does_not_cover": ["physics correctness of the shared integrand"],
+        "source_ids": ["HERA_2015_V3"]
+      },
+      {
+        "reference_id": "REF_APFEL_WRAPPER_REPETITION",
+        "evidence_class": "INTERNAL_REPETITION",
+        "independent": false,
+        "covers": ["deterministic API repetition only"],
+        "does_not_cover": ["any independent physics gate"],
+        "source_ids": ["APFEL_SOURCE_3_1_1"]
+      }
+    ],
+    "fake_independence_forbidden": [
+      "APFEL called through another language binding",
+      "a second front end around the same APFEL library",
+      "copying APFEL alpha_s samples into the comparator",
+      "repeating the same quadrature implementation with a different seed"
+    ]
+  },
+  "resource_bounds": {
+    "maximum_theta_anchors": 9,
+    "maximum_refinement_levels": 3,
+    "point_grid_candidate_formula_per_level": "N^2+13*N for N in [17,33,65] before deterministic domain filtering",
+    "maximum_point_grid_evaluations": 63882,
+    "maximum_normalization_integrand_evaluations": 98811,
+    "maximum_independent_reference_evaluations": 310,
+    "maximum_total_declared_evaluations": 163003,
+    "maximum_output_bytes": 67108864,
+    "wall_clock_rule": "No arbitrary scientific wall-clock gate. Exceeding any structural count or output bound stops with INCONCLUSIVE; wall time is recorded only as provenance.",
+    "derivation": "63882=9*((17^2+13*17)+(33^2+13*33)+(65^2+13*65)); 98811=9*((16^2+32^2+64^2)+(17^2+33^2+65^2)); 310=64 FONLL published records+30 massless benchmark coordinates+9*24 analytic project points. The 64 MiB output cap allocates about 32 MiB for <=63882 compact point records and the remainder for integration, references and provenance."
+  },
+  "positivity_no_hidden_clipping_contract": {
+    "quantity": "complete APFEL FONLL-A NLO unpolarized e- p d2sigma/dx_Bj/dQ2 including gamma/Z terms",
+    "domain_id": "HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1",
+    "required_nonnegative": true,
+    "roundoff_semantics": "A negative binary64 value is only ROUND_OFF_COMPATIBLE_NEGATIVE when |rate|<=gamma_32*S and an at-least-binary128 recomputation is nonnegative. It remains recorded with its raw sign and is never changed.",
+    "clipping_allowed": false,
+    "abs_allowed": false,
+    "max_rate_zero_allowed": false,
+    "post_hoc_support_deletion_allowed": false,
+    "hidden_rejected_point_removal_allowed": false,
+    "repair_mechanism": null,
+    "physical_negative_consequence": "FAIL at NEGATIVE_RATE or contract-review trigger before normalization or downstream use"
+  },
+  "normalization_closure_contract": {
+    "definition": "Z_theta=integral_A_z [d2sigma_theta/dx_Bj/dQ2] dx_Bj dQ2; p_theta=1_A_z*(d2sigma/dx_Bj/dQ2)/Z_theta",
+    "integration_variables": ["log(x_Bj)", "log(Q2)"],
+    "domain_id": "HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1",
+    "primary_evaluation": "fixed tensor Gauss-Legendre orders 16,32,64",
+    "independent_evaluation": "separately implemented fixed tensor Clenshaw-Curtis orders 17,33,65",
+    "convergence_rule_id": "INTEGRATION_CONVERGENCE",
+    "finite_required": true,
+    "strictly_positive_required": true,
+    "selected_event_check": "For the Phase 2B lossless-detector closure epsilon(z)=1, alpha_theta=1 and q_theta=p_theta; both quadratures must give integral q_theta=1 within TOL_NORMALIZED_LAW. A nontrivial detector kernel remains Phase 2D work.",
+    "fixed_n_shape_only_preserved": true,
+    "count_or_rate_likelihood_included": false,
+    "failure_precedence": "Any nonfinite, nonpositive or unconverged Z_theta blocks normalized-law construction and all later sampling."
+  },
+  "failure_precedence": [
+    "CONTRACT_IDENTITY_FAILURE",
+    "NONFINITE_RATE",
+    "NEGATIVE_RATE",
+    "OUTSIDE_SUPPORT",
+    "SHARED_ALPHA_S_IDENTITY_FAILURE",
+    "COORDINATE_CONTRACT_FAILURE",
+    "NORMALIZATION_FAILURE",
+    "REFERENCE_CLOSURE_FAILURE",
+    "CONVERGENCE_INCONCLUSIVE",
+    "RESOURCE_BOUND_EXCEEDED"
+  ],
+  "pre_auth_post_auth_separation": {
+    "pre_auth_complete": [
+      "heavy_quark_mass_convention_and_values",
+      "shared_alpha_s_identity",
+      "theta_anchors",
+      "physics_validity_domain",
+      "coordinate_and_jacobian_convention",
+      "validation_grids",
+      "tolerances_with_justification",
+      "convergence_rules",
+      "independent_reference_hierarchy",
+      "resource_bounds",
+      "positivity_no_clipping_policy",
+      "normalization_closure_strategy",
+      "failure_precedence"
+    ],
+    "post_auth_not_executed": [
+      "APFEL_FONLL_A_EVALUATIONS",
+      "POSITIVITY_SCAN",
+      "NORMALIZATION_INTEGRATION",
+      "CONVERGENCE_STUDY",
+      "CROSS_IMPLEMENTATION_COMPARISON",
+      "SELECTED_EVENT_NORMALIZATION_EVALUATION"
+    ]
+  },
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false
+  },
+  "phase2b_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "project_status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized",
+    "plan_completeness": "COMPLETE",
+    "execution_status": "NOT_EXECUTED"
+  },
+  "validation_state": {
+    "source_bytes_committed": false,
+    "numerical_result_fields_present": false,
+    "apfel_numerical_physics_executed": false,
+    "positivity_scan_executed": false,
+    "normalization_scan_executed": false,
+    "independent_numerical_closure_executed": false,
+    "events_or_datasets_created": false
+  },
+  "remaining_limitations": [
+    "No single independent implementation covers the complete accepted theta-dependent gamma/Z FONLL-A observable end to end; the plan uses an explicit independently checked decomposition and forbids an unqualified full-code-equivalence claim.",
+    "Pointwise positivity, finite positive normalization, convergence and independent numerical agreement remain untested post-authorization questions.",
+    "The nine validation anchors are not a prior and do not prove behavior at every interior theta without the separately authorized fixed-grid study.",
+    "Inclusive NC e-p data do not provide unrestricted full-flavor separation."
+  ],
+  "next_step": "A separate authorization review may decide whether to authorize execution of this fixed Phase 2B validation plan; this record does not authorize execution."
+}
