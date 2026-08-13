@@ -602,3 +602,19 @@ Open/Backlog, Gate Decision Not Evaluated and `NOT_EXECUTED`; every actual DIS,
 positivity, normalization, convergence and reference comparison remains
 unexecuted. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`, ADR-013
 remains Proposed, and Phase 2C and all downstream work remain unauthorized.
+
+## Phase 2B v2 execution authorization review
+
+The independent successor review derives
+`AR2_PREAUTH_V2_REVISION_REQUIRED`. Its critical classifications are
+`BUDGET_PARENT_NOT_JUSTIFIED`, `ERROR_BUDGET_STRUCTURE_INVALID`,
+`AS2_REVISION_REQUIRED`, and `BRIDGE_PLAN_REVISION_REQUIRED`. The published
+approximately 0.1% APFEL/MassiveDISsFunction component discrepancy is not a
+formal parent allowance for the complete rate and normalized law. The frozen
+503,284 resource cap also undercounts RK4 work required per flavor segment,
+and load-bearing NumPy remains unpinned.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
+ADR-013 remains Proposed. Phase 2C and all event, dataset, detector, neural,
+legacy D2, and full-generator work remain unauthorized.
