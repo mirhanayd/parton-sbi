@@ -37,3 +37,14 @@ Phase 2A review is complete: PR #63 merged at
 closed/completed. Later numerical closure remains unexecuted. Phase 2B issue
 #55 remains Backlog with Gate Decision Not Evaluated, Authorization Not
 Authorized, and execution `NOT_EXECUTED`. ADR-013 remains Proposed.
+
+A versioned follow-on contract amendment now selects source-bound APFEL
+FONLL-A at NLO as the heavy-flavor convention. The selection disambiguates the
+historical generic NLO-VFNS wording while preserving the historical Phase 2A
+`INCONCLUSIVE` result, accepted PDF family, observation law, research question,
+and paper nonclaims. Required mass, `alpha_s`, validation-plan, and independent
+closure details remain unresolved; the amendment does not authorize Phase 2B
+or numerical execution.
+
+- [FONLL-A contract-selection review](PHASE2_FONLL_A_CONTRACT_AMENDMENT.md)
+- [Machine-readable FONLL-A amendment](contracts/phase2_fonll_a_contract_amendment.json)

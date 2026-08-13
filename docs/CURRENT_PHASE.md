@@ -537,3 +537,21 @@ Phase 2B issue #55 remains Backlog with Gate Decision Not Evaluated,
 Authorization Not Authorized, and execution `NOT_EXECUTED`; its proposal is
 `INCOMPLETE`. Phase 2 umbrella issue #53 remains In Progress. Legacy issue #10
 remains Blocked, Not Evaluated, and Not Authorized. ADR-013 remains Proposed.
+
+## Phase 2 follow-on heavy-flavor contract amendment
+
+A bounded post-closeout source review selected
+`D1_PREPARE_FONLL_A_NLO_CONTRACT_AMENDMENT`. APFEL FONLL-A at NLO is the only
+eligible reviewed candidate: it preserves the accepted PDF family and reduced
+NC DIS question and has a pinned APFEL 3.1.1 configuration surface. RTOPT has
+no bound implementation path, FFN requires a new PDF contract, and ZM-VFN
+requires a predeclared high-`Q2` validity-domain narrowing.
+
+This is a follow-on amendment, not a retroactive Phase 2A PASS. Historical
+Phase 2A remains complete and `INCONCLUSIVE`; ADR-013 remains Proposed. The
+mass convention and values, shared `alpha_s` identity, anchors, grids,
+tolerances, convergence rules, complete independent FONLL-A reference, and
+resource bound remain unresolved pre-authorization evidence. Phase 2B remains
+unauthorized, incomplete, and unexecuted. No formula evaluation, positivity
+scan, normalization integration, event generation, dataset, detector
+implementation, or neural work has occurred.

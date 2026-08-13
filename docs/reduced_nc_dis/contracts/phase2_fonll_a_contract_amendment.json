@@ -1,0 +1,375 @@
+{
+  "schema_version": "partonsbi.phase2.fonll-a-contract-amendment.v1",
+  "record_type": "FOLLOW_ON_CONTRACT_AMENDMENT",
+  "decision": "D1_PREPARE_FONLL_A_NLO_CONTRACT_AMENDMENT",
+  "historical_phase2a": {
+    "status": "COMPLETE",
+    "scientific_decision": "INCONCLUSIVE",
+    "historical_result_changed": false,
+    "adr_013_status": "Proposed"
+  },
+  "predecessor_identities": {
+    "phase2a_contract_review": "4ce2b5b8e910edda6f2183fe7a7e24ec1f0d5e99bd603b708f587c178d1d237b",
+    "phase2a_claim_source_ledger": "ca2eb35d38c59b2f5f79435acd0171b60cc80d9577d6f4db35f10d98f329f0fc",
+    "phase2b_validation_plan_proposal": "e60846b5975cd12284b17ef2e28b873760b8ff17cc03f8cb3a85929af6a71786",
+    "phase1bd_d0_revision": "ef44ec6b230d06edce4b30b435d30ee382e3e151a8dfe3a9f8098e4ac6747873",
+    "phase1bd_d0r_decision": "40e75fda281578f45d193858667eeed2c1747a07d64f53672adec10145c9e775",
+    "phase1bd_d1_decision": "3cdb3e6e11fae63aa9b4bb9e0094c0610a8c01eb636eecc25571e3c2f11e9881"
+  },
+  "evidence_cache": {
+    "initial_status": "EVIDENCE_CACHE_INCOMPLETE",
+    "reason": "The requested temporary cache was absent at preflight in this execution environment.",
+    "bounded_retrieval_performed": true,
+    "retrieval_scope": "Only the previously identified HERA, APFEL, FONLL and APFEL++ versions and the official APFEL release were retrieved.",
+    "repository_source_bytes_committed": false
+  },
+  "source_evidence": [
+    {
+      "source_id": "HERA_2015_V3",
+      "identity": "H1 and ZEUS, Combination of Measurements of Inclusive Deep Inelastic e+-p Scattering Cross Sections and QCD Analysis of HERA Data, arXiv:1506.06042v3",
+      "canonical_url": "https://arxiv.org/pdf/1506.06042v3",
+      "retrieved_utc": "2026-08-13T00:21:33Z",
+      "sha256": "04971dfad54401348e66d6bf39ea6ef43ac8e5b854ad313381d68df045ab40bc",
+      "locators": [
+        "Section 2, equations (1)-(4): unpolarized e-/e+ NC reduced cross sections and gamma/Z decomposition",
+        "Section 6.1: mu_r^2 = mu_f^2 = Q^2 and RTOPT heavy-flavor setup",
+        "Section 6.3: alternative FONLL, RTOPT, FF3A and FF3B schemes"
+      ]
+    },
+    {
+      "source_id": "APFEL_2014_V3",
+      "identity": "Bertone, Carrazza and Rojo, APFEL: A PDF Evolution Library with QED corrections, arXiv:1310.1394v3",
+      "canonical_url": "https://arxiv.org/pdf/1310.1394v3",
+      "retrieved_utc": "2026-08-13T00:21:33Z",
+      "sha256": "3699f4efd19eee7a178c07bb64136c2fab83690d9e84024478f237a88453b5da",
+      "locators": [
+        "Section 2.2: NC reduced cross sections, light/heavy decomposition, FONLL/FFN/ZM-VFN semantics",
+        "Appendix A.2: SetPerturbativeOrder, SetAlphaQCDRef, mass, threshold, scale and flavor controls",
+        "Appendix A.3: DIS_xsec proc=NC, scheme=FONLL and pto=1 implies FONLL-A"
+      ]
+    },
+    {
+      "source_id": "FONLL_2010_V2",
+      "identity": "Forte, Laenen, Nason and Rojo, Heavy quarks in deep-inelastic scattering, arXiv:1001.2312v2",
+      "canonical_url": "https://arxiv.org/pdf/1001.2312v2",
+      "retrieved_utc": "2026-08-13T00:21:33Z",
+      "sha256": "f1c40c70edd6debd649d2cead24cdf297f5eb18c8ed8065100731c150d20989b",
+      "locators": [
+        "Section 2, equations defining F_FONLL = F_massive + (F_massless - F_massive_zero)",
+        "Section 2.3: matching continuity and threshold-region choices",
+        "Section 3.3: perturbative orderings A-C"
+      ]
+    },
+    {
+      "source_id": "APFELXX_2017_V1",
+      "identity": "Bertone, APFEL++: A new PDF evolution library in C++, arXiv:1708.00911v1",
+      "canonical_url": "https://arxiv.org/pdf/1708.00911v1",
+      "retrieved_utc": "2026-08-13T00:21:33Z",
+      "sha256": "c572c07e16a7ca6db350a092abb3c33d469bb144598eb18b195333b8f702b8ec",
+      "locators": [
+        "Sections 2-3: APFEL++ evolution and DIS structure-function convolution interfaces"
+      ]
+    },
+    {
+      "source_id": "APFEL_SOURCE_3_1_1",
+      "identity": "Official APFEL source release 3.1.1",
+      "canonical_url": "https://github.com/scarrazza/apfel/tree/72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a",
+      "retrieved_utc": "2026-08-13T00:28:00Z",
+      "tag": "3.1.1",
+      "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a",
+      "archive_url": "https://github.com/scarrazza/apfel/archive/72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a.tar.gz",
+      "archive_sha256": "e5c4b3d955f8d33e8e8ff2d9d1687da57f2ee99245abc579f9d32caa616f0f53",
+      "pinned_files": {
+        "CMakeLists.txt": "ecf1f782f4e120a6795e4b95c7c2032dfa889b59e99925477eeb8b4677148ba7",
+        "include/APFEL/APFELobs.h": "d2b55bda1901f206c873923d5e851c41503854fca4f880baf4c01fe51bdbb9d3",
+        "include/APFEL/APFELevol.h": "de70eaa26195ed5258fd8bf59485733b3c9fea0a40ff2de46e5a11fe6fa536b0",
+        "src/DIS/initParametersDIS.f": "63e56cefa0c2fff8033a0f2eca27f4cd1d6c12948fa1d459e329a74d89670396",
+        "src/DIS/ComputeDISOperators.f": "4f4b17bac6cf360fe1406b00fe7d20078053f99e624c6b403b93bf3a8aa65990",
+        "src/Evolution/initParameters.f": "1acd6161a8870cfb9f22b20fc0bc7ee11dcac7d5211237b42ab7d55f72d5bbc4",
+        "examples/DISObservablesCxx.cc": "9f9baea4dda1fd49f4a742cb841cd572add61a8e3f2dd75bd44d12a550b3b887",
+        "examples/TabulationExternal.f": "ae313bb89fdcda815c37b7487e63fd4a204114e3be93805259c0271b631c0a31"
+      },
+      "locators": [
+        "src/DIS/initParametersDIS.f: accepted FONLL-A/B/C values, NLO/NNLO consistency checks, damping defaults",
+        "include/APFEL/APFELobs.h: mass-scheme, process, damping and observable API",
+        "examples/DISObservablesCxx.cc: NC structure-function configuration",
+        "examples/TabulationExternal.f: ExternalSetAPFEL boundary interface selected by SetPDFSet(\"external\")"
+      ]
+    }
+  ],
+  "candidate_assessments": {
+    "APFEL_FONLL_A_NLO": {
+      "exact_physics_identity": {"status": "SUPPORTED", "rationale": "FONLL combines the massive result with the massless result minus the massless limit of the massive result.", "evidence_ids": ["FONLL_2010_V2", "APFEL_2014_V3"]},
+      "perturbative_order": {"status": "SUPPORTED", "rationale": "APFEL maps FONLL with pto=1, and release 3.1.1 maps FONLL-A, to NLO.", "evidence_ids": ["APFEL_2014_V3", "APFEL_SOURCE_3_1_1"]},
+      "active_flavor_treatment": {"status": "SUPPORTED", "rationale": "FONLL is a general-mass variable-flavor-number construction with matched n_l and n_l+1 descriptions.", "evidence_ids": ["FONLL_2010_V2"]},
+      "heavy_quark_masses_and_mass_convention": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "APFEL exposes pole and MSbar mass controls, but project values and convention remain a pre-authorization choice.", "evidence_ids": ["APFEL_2014_V3", "APFEL_SOURCE_3_1_1"]},
+      "flavor_thresholds": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "APFEL ties evolution thresholds to selected heavy-quark masses; exact values remain unresolved with the mass choice.", "evidence_ids": ["APFEL_2014_V3"]},
+      "matching_conditions": {"status": "SUPPORTED", "rationale": "The FONLL subtraction and n_l to n_l+1 matching are explicitly defined; continuity is not imposed as an independent condition.", "evidence_ids": ["FONLL_2010_V2"]},
+      "coefficient_function_order": {"status": "SUPPORTED", "rationale": "FONLL-A is the APFEL NLO ordering and APFEL exposes the individual NC structure functions.", "evidence_ids": ["APFEL_2014_V3", "APFEL_SOURCE_3_1_1"]},
+      "threshold_treatment": {"status": "SUPPORTED", "rationale": "The amendment selects the APFEL 3.1.1 enabled damping construction with power two, an explicit source-visible choice.", "evidence_ids": ["FONLL_2010_V2", "APFEL_SOURCE_3_1_1"]},
+      "factorization_scale_convention": {"status": "SUPPORTED", "rationale": "The amendment selects mu_F^2=Q^2, matching the HERA analysis convention.", "evidence_ids": ["HERA_2015_V3"]},
+      "renormalization_scale_convention": {"status": "SUPPORTED", "rationale": "The amendment selects mu_R^2=Q^2 and APFEL exposes the renormalization/factorization ratio.", "evidence_ids": ["HERA_2015_V3", "APFEL_2014_V3"]},
+      "alpha_s_identity": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "APFEL exposes alpha_s reference and flavor controls; the exact shared project alpha_s object remains pre-authorization evidence.", "evidence_ids": ["APFEL_2014_V3", "APFEL_SOURCE_3_1_1"]},
+      "electron_positron_nc_applicability": {"status": "SUPPORTED", "rationale": "The HERA formula binds both e- and e+ signs and APFEL exposes NC observables.", "evidence_ids": ["HERA_2015_V3", "APFEL_2014_V3"]},
+      "accepted_pdf_family_compatibility": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "The accepted NLO boundary family can enter through ExternalSetAPFEL without changing its identity; the bridge remains unimplemented and must be validated before authorization.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "software_exposure": {"status": "SUPPORTED", "rationale": "Pinned APFEL 3.1.1 exposes FONLL-A, NC structure functions, external PDFs, masses, scales, alpha_s and damping controls.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "predeclared_validity_domain": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "A strict intersection of PDF support, DIS kinematics and implementation validity is mandatory but its numerical bounds remain pre-authorization work.", "evidence_ids": ["FONLL_2010_V2", "APFEL_2014_V3"]},
+      "positivity_implications": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "Neither FONLL nor APFEL proves pointwise nonnegativity of the complete differential rate over the project domain.", "evidence_ids": ["FONLL_2010_V2", "APFEL_2014_V3"]},
+      "later_no_clipping_testability": {"status": "SUPPORTED", "rationale": "The explicit formula and software configuration permit later direct failure on nonfinite or negative rates without repair.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "independent_closure_possibilities": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "Massless components can be cross-checked independently, but a complete independent FONLL-A NC reference remains unresolved.", "evidence_ids": ["APFEL_2014_V3", "APFELXX_2017_V1"]},
+      "paper_research_question_impact": {"status": "SUPPORTED", "rationale": "This narrows the heavy-flavor convention without adding full-generator claims or changing the selected-event question.", "evidence_ids": ["HERA_2015_V3"]},
+      "contract_impact": {"status": "SUPPORTED", "rationale": "The amendment disambiguates generic NLO VFNS wording; it does not replace the PDF family or historical Phase 2A result.", "evidence_ids": ["APFEL_2014_V3"]},
+      "elimination_checks": {
+        "incompatible_with_accepted_pdf_family": false,
+        "physics_identity_not_source_defined": false,
+        "software_configuration_not_reproducibly_bindable": false,
+        "requires_hidden_repair": false,
+        "requires_research_question_change_when_viable_preserving_candidate_exists": false,
+        "cannot_support_meaningful_later_validation": false
+      },
+      "eligible": true
+    },
+    "HERA_RTOPT_NLO_VFNS": {
+      "exact_physics_identity": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA identifies RTOPT and its fit settings, but the reviewed sources do not fully bind the implementation equations used by the project.", "evidence_ids": ["HERA_2015_V3"]},
+      "perturbative_order": {"status": "SUPPORTED", "rationale": "The HERA source documents an NLO RTOPT fit configuration.", "evidence_ids": ["HERA_2015_V3"]},
+      "active_flavor_treatment": {"status": "SUPPORTED", "rationale": "RTOPT is explicitly a variable-flavor-number scheme.", "evidence_ids": ["HERA_2015_V3"]},
+      "heavy_quark_masses_and_mass_convention": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA reports fitted mass parameters, including M_c=1.47 GeV and M_b=4.5 GeV at NLO, but the implementation convention is not fully reproduced by the cached sources.", "evidence_ids": ["HERA_2015_V3"]},
+      "flavor_thresholds": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "The HERA setup places the starting scale below M_c, but the full implementation threshold contract is not bound.", "evidence_ids": ["HERA_2015_V3"]},
+      "matching_conditions": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "The reviewed HERA record names RTOPT but does not provide a complete project-implementable matching specification.", "evidence_ids": ["HERA_2015_V3"]},
+      "coefficient_function_order": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA states the RTOPT NLO order and FL ordering, but no pinned project software path is established.", "evidence_ids": ["HERA_2015_V3"]},
+      "threshold_treatment": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "The exact RTOPT threshold implementation is not bound by the reviewed source cache.", "evidence_ids": ["HERA_2015_V3"]},
+      "factorization_scale_convention": {"status": "SUPPORTED", "rationale": "HERA selects mu_F^2=Q^2.", "evidence_ids": ["HERA_2015_V3"]},
+      "renormalization_scale_convention": {"status": "SUPPORTED", "rationale": "HERA selects mu_R^2=Q^2.", "evidence_ids": ["HERA_2015_V3"]},
+      "alpha_s_identity": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA reports alpha_s(M_Z)=0.118 at NLO, but no project integration identity is bound.", "evidence_ids": ["HERA_2015_V3"]},
+      "electron_positron_nc_applicability": {"status": "SUPPORTED", "rationale": "RTOPT was used for the combined e+-p NC analysis.", "evidence_ids": ["HERA_2015_V3"]},
+      "accepted_pdf_family_compatibility": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "A VFNS is conceptually compatible, but no exact RTOPT transport of the accepted boundary family is established.", "evidence_ids": ["HERA_2015_V3"]},
+      "software_exposure": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "No pinned, maintained RTOPT implementation with a bound accepted-family interface is present in the reviewed evidence.", "evidence_ids": ["HERA_2015_V3"]},
+      "predeclared_validity_domain": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA provides a fit domain, but the project observation domain remains to be declared.", "evidence_ids": ["HERA_2015_V3"]},
+      "positivity_implications": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "The HERA fit does not prove pointwise positivity for the deformed project family.", "evidence_ids": ["HERA_2015_V3"]},
+      "later_no_clipping_testability": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "Without a pinned implementation path, later exact no-repair testing is not reproducibly specified.", "evidence_ids": ["HERA_2015_V3"]},
+      "independent_closure_possibilities": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA compared fit programs, but that comparison does not supply an independent project RTOPT implementation.", "evidence_ids": ["HERA_2015_V3"]},
+      "paper_research_question_impact": {"status": "SUPPORTED", "rationale": "RTOPT would preserve the reduced NC DIS question.", "evidence_ids": ["HERA_2015_V3"]},
+      "contract_impact": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "RTOPT would narrow the heavy-flavor scheme but require a new software responsibility contract.", "evidence_ids": ["HERA_2015_V3"]},
+      "elimination_checks": {
+        "incompatible_with_accepted_pdf_family": false,
+        "physics_identity_not_source_defined": false,
+        "software_configuration_not_reproducibly_bindable": true,
+        "requires_hidden_repair": false,
+        "requires_research_question_change_when_viable_preserving_candidate_exists": false,
+        "cannot_support_meaningful_later_validation": true
+      },
+      "eligible": false
+    },
+    "APFEL_FFN": {
+      "exact_physics_identity": {"status": "SUPPORTED", "rationale": "APFEL defines fixed-flavor predictions with massive heavy flavors in coefficient functions.", "evidence_ids": ["APFEL_2014_V3", "HERA_2015_V3"]},
+      "perturbative_order": {"status": "SUPPORTED", "rationale": "APFEL exposes FFNS at pto=1 for NLO.", "evidence_ids": ["APFEL_2014_V3"]},
+      "active_flavor_treatment": {"status": "SUPPORTED", "rationale": "SetFFNS(NF) fixes three to six active PDF flavors while heavy flavors occur in matrix elements.", "evidence_ids": ["APFEL_2014_V3"]},
+      "heavy_quark_masses_and_mass_convention": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "APFEL exposes pole and MSbar masses, but a project convention and values are not selected.", "evidence_ids": ["APFEL_2014_V3"]},
+      "flavor_thresholds": {"status": "NOT_APPLICABLE", "rationale": "The selected PDF flavor count is fixed; heavy production thresholds remain in massive coefficient functions rather than PDF activation.", "evidence_ids": ["APFEL_2014_V3"]},
+      "matching_conditions": {"status": "NOT_APPLICABLE", "rationale": "There is no VFNS PDF matching across active-flavor thresholds in a fixed-flavor contract.", "evidence_ids": ["APFEL_2014_V3"]},
+      "coefficient_function_order": {"status": "SUPPORTED", "rationale": "APFEL exposes NLO FFNS DIS coefficient functions.", "evidence_ids": ["APFEL_2014_V3"]},
+      "threshold_treatment": {"status": "SUPPORTED", "rationale": "Massive heavy-quark coefficient functions retain production-threshold physics.", "evidence_ids": ["APFEL_2014_V3", "HERA_2015_V3"]},
+      "factorization_scale_convention": {"status": "SUPPORTED", "rationale": "APFEL exposes scale controls and the HERA convention supplies mu_F^2=Q^2.", "evidence_ids": ["APFEL_2014_V3", "HERA_2015_V3"]},
+      "renormalization_scale_convention": {"status": "SUPPORTED", "rationale": "APFEL exposes mu_R/mu_F and HERA supplies mu_R^2=Q^2.", "evidence_ids": ["APFEL_2014_V3", "HERA_2015_V3"]},
+      "alpha_s_identity": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "Fixed-flavor alpha_s and flavor count are configurable, but they differ from the accepted VFNS-family evolution contract.", "evidence_ids": ["APFEL_2014_V3", "HERA_2015_V3"]},
+      "electron_positron_nc_applicability": {"status": "SUPPORTED", "rationale": "APFEL FFNS is exposed for NC observables.", "evidence_ids": ["APFEL_2014_V3"]},
+      "accepted_pdf_family_compatibility": {"status": "NOT_SUPPORTED", "rationale": "The accepted family is a versioned VFNS boundary/evolution family; a fixed-flavor input and alpha_s contract would be a new PDF-family contract.", "evidence_ids": ["APFEL_2014_V3"]},
+      "software_exposure": {"status": "SUPPORTED", "rationale": "Pinned APFEL exposes FFNS and fixed active-flavor controls.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "predeclared_validity_domain": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "A domain must control the range where fixed-order heavy-flavor logarithms remain acceptable.", "evidence_ids": ["APFEL_2014_V3"]},
+      "positivity_implications": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "The sources do not prove pointwise positivity for the deformed family.", "evidence_ids": ["APFEL_2014_V3"]},
+      "later_no_clipping_testability": {"status": "SUPPORTED", "rationale": "The explicit APFEL FFNS formula is directly testable without repair.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "independent_closure_possibilities": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "HERA documents independent FFNS implementations, but matching the exact project family would still need a bound reference.", "evidence_ids": ["HERA_2015_V3"]},
+      "paper_research_question_impact": {"status": "NOT_SUPPORTED", "rationale": "Adopting FFN would supersede the accepted VFNS PDF-family contract, a larger scientific change than heavy-flavor disambiguation.", "evidence_ids": ["APFEL_2014_V3"]},
+      "contract_impact": {"status": "NOT_SUPPORTED", "rationale": "A fixed-flavor input family and coupling identity require a separately reviewed PDF contract outside this task.", "evidence_ids": ["APFEL_2014_V3"]},
+      "elimination_checks": {
+        "incompatible_with_accepted_pdf_family": true,
+        "physics_identity_not_source_defined": false,
+        "software_configuration_not_reproducibly_bindable": false,
+        "requires_hidden_repair": false,
+        "requires_research_question_change_when_viable_preserving_candidate_exists": true,
+        "cannot_support_meaningful_later_validation": false
+      },
+      "eligible": false
+    },
+    "APFEL_ZM_VFN": {
+      "exact_physics_identity": {"status": "SUPPORTED", "rationale": "APFEL defines the ZM-VFN option as massless active heavy flavors.", "evidence_ids": ["APFEL_2014_V3"]},
+      "perturbative_order": {"status": "SUPPORTED", "rationale": "APFEL exposes ZM-VFN at pto=1 for NLO.", "evidence_ids": ["APFEL_2014_V3"]},
+      "active_flavor_treatment": {"status": "SUPPORTED", "rationale": "Heavy flavors become massless active partons across flavor thresholds.", "evidence_ids": ["APFEL_2014_V3"]},
+      "heavy_quark_masses_and_mass_convention": {"status": "NOT_APPLICABLE", "rationale": "Mass dependence is omitted from the ZM coefficient functions.", "evidence_ids": ["APFEL_2014_V3"]},
+      "flavor_thresholds": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "Active-flavor thresholds are configurable, but the massless approximation is not valid near physical production thresholds.", "evidence_ids": ["APFEL_2014_V3"]},
+      "matching_conditions": {"status": "SUPPORTED", "rationale": "APFEL provides variable-flavor PDF evolution and threshold controls.", "evidence_ids": ["APFEL_2014_V3"]},
+      "coefficient_function_order": {"status": "SUPPORTED", "rationale": "APFEL exposes NLO massless DIS coefficient functions.", "evidence_ids": ["APFEL_2014_V3"]},
+      "threshold_treatment": {"status": "NOT_SUPPORTED", "rationale": "The source affirmatively states ZM-VFN is accurate at Q^2 much larger than the heavy mass and not near threshold.", "evidence_ids": ["APFEL_2014_V3", "FONLL_2010_V2"]},
+      "factorization_scale_convention": {"status": "SUPPORTED", "rationale": "The HERA-like mu_F^2=Q^2 choice is available.", "evidence_ids": ["HERA_2015_V3", "APFEL_2014_V3"]},
+      "renormalization_scale_convention": {"status": "SUPPORTED", "rationale": "The HERA-like mu_R^2=Q^2 choice is available.", "evidence_ids": ["HERA_2015_V3", "APFEL_2014_V3"]},
+      "alpha_s_identity": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "APFEL exposes alpha_s controls; the exact project identity remains pre-authorization work.", "evidence_ids": ["APFEL_2014_V3"]},
+      "electron_positron_nc_applicability": {"status": "SUPPORTED", "rationale": "APFEL exposes ZM-VFN for NC observables and the HERA e-/e+ formula is independent of the mass scheme.", "evidence_ids": ["APFEL_2014_V3", "HERA_2015_V3"]},
+      "accepted_pdf_family_compatibility": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "It can consume the accepted VFNS family, but only after narrowing the observation domain away from heavy thresholds.", "evidence_ids": ["APFEL_2014_V3"]},
+      "software_exposure": {"status": "SUPPORTED", "rationale": "Pinned APFEL exposes ZM-VFNS and the external PDF boundary.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "predeclared_validity_domain": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "A high-Q^2 validity domain is mandatory and is not presently part of the accepted observation contract.", "evidence_ids": ["APFEL_2014_V3"]},
+      "positivity_implications": {"status": "PRIMARY_EVIDENCE_UNAVAILABLE", "rationale": "The massless approximation does not prove complete-rate positivity for the project family.", "evidence_ids": ["APFEL_2014_V3"]},
+      "later_no_clipping_testability": {"status": "SUPPORTED", "rationale": "The explicit formula is testable without clipping inside a predeclared high-Q^2 domain.", "evidence_ids": ["APFEL_SOURCE_3_1_1"]},
+      "independent_closure_possibilities": {"status": "SUPPORTED", "rationale": "Massless DIS admits stronger independent comparisons than the complete FONLL construction.", "evidence_ids": ["APFEL_2014_V3", "APFELXX_2017_V1"]},
+      "paper_research_question_impact": {"status": "NOT_SUPPORTED", "rationale": "Selecting ZM-VFN would narrow the accepted kinematic question to avoid threshold regions while FONLL-A preserves it.", "evidence_ids": ["APFEL_2014_V3"]},
+      "contract_impact": {"status": "SUPPORTED_WITH_QUALIFICATION", "rationale": "The software choice is simple, but the mandatory high-Q^2 domain would be a material contract narrowing.", "evidence_ids": ["APFEL_2014_V3"]},
+      "elimination_checks": {
+        "incompatible_with_accepted_pdf_family": false,
+        "physics_identity_not_source_defined": false,
+        "software_configuration_not_reproducibly_bindable": false,
+        "requires_hidden_repair": false,
+        "requires_research_question_change_when_viable_preserving_candidate_exists": true,
+        "cannot_support_meaningful_later_validation": false
+      },
+      "eligible": false
+    }
+  },
+  "special_classifications": {
+    "ffn": "FFN_REQUIRES_NEW_PDF_CONTRACT",
+    "zm_vfn": "ZMVFN_REQUIRES_PREDECLARED_VALIDITY_DOMAIN",
+    "rtopt": "RTOPT_IMPLEMENTATION_PATH_NOT_BOUND"
+  },
+  "fonll_a_special_findings": {
+    "contract_effect": "DISAMBIGUATES_CURRENT_GENERIC_NLO_VFNS_WORDING",
+    "apfel_controls_sufficient_for_reproducible_configuration": true,
+    "apfelxx_full_heavy_flavor_required_by_accepted_record": false,
+    "apfel_complete_fonll_a_nc_compatible_with_reduced_research_direction": true,
+    "qualification": "Compatibility is a contract result, not implementation or numerical closure; the external-boundary bridge and shared alpha_s identity remain pre-authorization evidence."
+  },
+  "decision_matrix": {
+    "APFEL_FONLL_A_NLO": {
+      "preservation_of_research_objective": {"score": "HIGH", "reason": "Preserves the reduced NC DIS question and accepted family while narrowing heavy-flavor semantics."},
+      "exact_source_binding": {"score": "HIGH", "reason": "FONLL equations, APFEL mapping and release source are pinned."},
+      "compatibility_with_accepted_pdf_family": {"score": "MEDIUM", "reason": "ExternalSetAPFEL can consume the family, but the bridge is unimplemented."},
+      "reproducible_software_configuration": {"score": "HIGH", "reason": "APFEL 3.1.1 and all relevant controls are immutable and explicit."},
+      "minimal_contract_change": {"score": "HIGH", "reason": "Disambiguates NLO VFNS without replacing the observation law or PDF family."},
+      "threshold_physics_fidelity": {"score": "HIGH", "reason": "Retains massive threshold terms and selects an explicit damping prescription."},
+      "later_no_clipping_testability": {"score": "HIGH", "reason": "The explicit evaluator permits direct fail-on-negative testing."},
+      "independent_closure_strength": {"score": "MEDIUM", "reason": "Massless components have references; complete independent FONLL-A closure remains unresolved."},
+      "paper_claim_preservation": {"score": "HIGH", "reason": "No full-generator or full-flavor claim is added."},
+      "reversibility": {"score": "HIGH", "reason": "The follow-on amendment is versioned and does not rewrite Phase 2A history."}
+    },
+    "HERA_RTOPT_NLO_VFNS": {
+      "preservation_of_research_objective": {"score": "HIGH", "reason": "Would preserve the reduced HERA-like question."},
+      "exact_source_binding": {"score": "MEDIUM", "reason": "HERA settings are precise, but the full RTOPT implementation contract is not cached."},
+      "compatibility_with_accepted_pdf_family": {"score": "MEDIUM", "reason": "VFNS is conceptually aligned, but no accepted-family RTOPT bridge is bound."},
+      "reproducible_software_configuration": {"score": "LOW", "reason": "No pinned maintained implementation path was established."},
+      "minimal_contract_change": {"score": "MEDIUM", "reason": "Physics narrowing is small but a new software responsibility decision is required."},
+      "threshold_physics_fidelity": {"score": "HIGH", "reason": "RTOPT is a general-mass HERA heavy-flavor treatment."},
+      "later_no_clipping_testability": {"score": "LOW", "reason": "A missing implementation path prevents a reproducible test oracle."},
+      "independent_closure_strength": {"score": "LOW", "reason": "The reviewed sources do not expose an independent project implementation."},
+      "paper_claim_preservation": {"score": "HIGH", "reason": "The HERA-like physics scope is preserved."},
+      "reversibility": {"score": "MEDIUM", "reason": "Reversal is possible but software investment would precede physics closure."}
+    },
+    "APFEL_FFN": {
+      "preservation_of_research_objective": {"score": "MEDIUM", "reason": "Reduced DIS remains, but the accepted VFNS family would be superseded."},
+      "exact_source_binding": {"score": "HIGH", "reason": "APFEL and HERA sources define FFN semantics and controls."},
+      "compatibility_with_accepted_pdf_family": {"score": "LOW", "reason": "A fixed-flavor PDF and alpha_s contract is a new family."},
+      "reproducible_software_configuration": {"score": "HIGH", "reason": "Pinned APFEL exposes FFNS directly."},
+      "minimal_contract_change": {"score": "LOW", "reason": "Requires a separately reviewed PDF-family replacement."},
+      "threshold_physics_fidelity": {"score": "HIGH", "reason": "Massive coefficient functions retain threshold physics."},
+      "later_no_clipping_testability": {"score": "HIGH", "reason": "The explicit FFN evaluator is directly testable."},
+      "independent_closure_strength": {"score": "MEDIUM", "reason": "Other FFN implementations exist, but an exact project reference is unbound."},
+      "paper_claim_preservation": {"score": "MEDIUM", "reason": "The question survives, but the accepted family statement changes."},
+      "reversibility": {"score": "LOW", "reason": "Changing the PDF family propagates through the scientific contract."}
+    },
+    "APFEL_ZM_VFN": {
+      "preservation_of_research_objective": {"score": "MEDIUM", "reason": "Requires removing threshold-region coverage from the observation domain."},
+      "exact_source_binding": {"score": "HIGH", "reason": "APFEL source defines the massless scheme and controls."},
+      "compatibility_with_accepted_pdf_family": {"score": "HIGH", "reason": "The accepted VFNS family can be consumed without changing identity."},
+      "reproducible_software_configuration": {"score": "HIGH", "reason": "Pinned APFEL exposes ZM-VFNS directly."},
+      "minimal_contract_change": {"score": "MEDIUM", "reason": "Software change is small, but the validity domain must be narrowed."},
+      "threshold_physics_fidelity": {"score": "LOW", "reason": "Massless coefficient functions are not accurate near heavy thresholds."},
+      "later_no_clipping_testability": {"score": "HIGH", "reason": "A declared high-Q^2 domain can be tested without repair."},
+      "independent_closure_strength": {"score": "HIGH", "reason": "Massless DIS has multiple independent comparison possibilities."},
+      "paper_claim_preservation": {"score": "MEDIUM", "reason": "The paper domain would need an explicit high-Q^2 restriction."},
+      "reversibility": {"score": "HIGH", "reason": "The massless option is easy to replace, but it does not dominate a viable GM-VFN route."}
+    }
+  },
+  "eligibility": {
+    "eligible_candidates": ["APFEL_FONLL_A_NLO"],
+    "eliminated_candidates": {
+      "HERA_RTOPT_NLO_VFNS": ["RTOPT_IMPLEMENTATION_PATH_NOT_BOUND", "NO_REPRODUCIBLE_LATER_NO_CLIPPING_ORACLE"],
+      "APFEL_FFN": ["FFN_REQUIRES_NEW_PDF_CONTRACT"],
+      "APFEL_ZM_VFN": ["ZMVFN_REQUIRES_PREDECLARED_VALIDITY_DOMAIN", "FONLL_A_PRESERVES_THRESHOLD_SCOPE_WITHOUT_DOMAIN_NARROWING"]
+    }
+  },
+  "contract_amendment": {
+    "scheme": "FONLL-A",
+    "perturbative_order": "NLO",
+    "software": {"name": "APFEL", "version": "3.1.1", "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a"},
+    "pdf_boundary_interface": "ExternalSetAPFEL via SetPDFSet(\"external\")",
+    "pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "pdf_baseline": "ct18nlo_member0_sumrule_projected_boundary_v2",
+    "active_flavors": "VARIABLE_FLAVOR_WITH_FIVE_FLAVOR_PROJECT_CEILING",
+    "top_treatment": "OUTSIDE_DECLARED_FIVE_FLAVOR_STUDY",
+    "heavy_quark_mass_convention": "UNRESOLVED_PRE_AUTH_PROJECT_CHOICE",
+    "heavy_quark_masses": "UNRESOLVED_PRE_AUTH_PROJECT_CHOICE",
+    "flavor_threshold_values": "UNRESOLVED_PRE_AUTH_PROJECT_CHOICE",
+    "matching_semantics": "F_FONLL = F_massive + F_massless - F_massive_zero",
+    "coefficient_function_order": "APFEL_FONLL_A_NLO",
+    "threshold_semantics": "APFEL_3_1_1_DAMPING_ENABLED_POWER_2",
+    "alpha_s_identity": "UNRESOLVED_PRE_AUTH_PROJECT_CHOICE_SHARED_BY_EVOLUTION_AND_COEFFICIENT_FUNCTIONS",
+    "mu_f": "Q",
+    "mu_r": "Q",
+    "nc_formula": "HERA_2015_UNPOLARIZED_E_MINUS_E_PLUS_NC_GAMMA_Z",
+    "latent_coordinates": ["x_Bj", "Q2"],
+    "differential_measure": "d2sigma_dx_dQ2",
+    "jacobian_from_apfel_dxdy": "dy/dQ2 at fixed x_Bj = 1/(s*x_Bj)",
+    "support_policy": "STRICT_INTERSECTION_NO_EXTRAPOLATION",
+    "clipping_allowed": false,
+    "absolute_value_repair_allowed": false,
+    "post_hoc_support_deletion_allowed": false,
+    "failure_precedence": ["NONFINITE_RATE", "NEGATIVE_RATE", "OUTSIDE_SUPPORT", "NORMALIZATION_FAILURE", "REFERENCE_CLOSURE_FAILURE"],
+    "paper_nonclaims_preserved": true
+  },
+  "pre_auth_contract_evidence": {
+    "required": [
+      "exact_formula_identity",
+      "exact_heavy_flavor_convention",
+      "heavy_quark_mass_convention_and_values",
+      "shared_alpha_s_identity",
+      "support_and_validity_policy",
+      "no_clipping_rule",
+      "planned_theta_anchors",
+      "planned_kinematic_grids",
+      "planned_tolerances_with_justification",
+      "convergence_rules",
+      "independent_reference_strategy",
+      "resource_bound",
+      "failure_precedence"
+    ],
+    "currently_resolved": ["exact_formula_identity", "exact_heavy_flavor_convention", "support_and_validity_policy", "no_clipping_rule", "failure_precedence"],
+    "currently_unresolved": ["heavy_quark_mass_convention_and_values", "shared_alpha_s_identity", "planned_theta_anchors", "planned_kinematic_grids", "planned_tolerances_with_justification", "convergence_rules", "independent_reference_strategy", "resource_bound"]
+  },
+  "post_auth_numerical_validation": {
+    "permitted_only_after_separate_authorization": true,
+    "not_executed": ["positivity_scan", "normalization_integration", "independent_numerical_closure"]
+  },
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false
+  },
+  "phase2b_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "project_status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized",
+    "plan_completeness": "INCOMPLETE",
+    "execution_status": "NOT_EXECUTED"
+  },
+  "validation": {
+    "decision_is_derived": true,
+    "source_bytes_committed": false,
+    "numerical_physics_executed": false,
+    "phase2b_execution_occurred": false
+  },
+  "next_step": "A separate review must complete every unresolved pre-authorization contract item and the bounded Phase 2B plan; this amendment does not authorize that work or its execution."
+}

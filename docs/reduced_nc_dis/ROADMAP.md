@@ -92,3 +92,19 @@ unchanged. The timestamped GitHub data remain an external snapshot.
 
 Phase 2A review is complete; later numerical closure remains unexecuted. Phase
 2B remains unauthorized. ADR-013 remains Proposed.
+
+## Follow-on heavy-flavor selection
+
+The bounded four-candidate review derives
+`D1_PREPARE_FONLL_A_NLO_CONTRACT_AMENDMENT`. APFEL FONLL-A NLO is selected as
+the only eligible contract amendment because it preserves the accepted
+`ct18nlo_two_parameter_boundary_v2` family and current research question while
+providing a pinned observable and boundary-interface contract. RTOPT is not
+implementation-bound, FFN requires a new PDF-family contract, and ZM-VFN
+requires a high-`Q2` domain narrowing.
+
+This decision does not advance the dependency graph. Phase 2A remains
+completed with `INCONCLUSIVE`; Phase 2B remains Backlog, Not Evaluated, Not
+Authorized, `INCOMPLETE`, and `NOT_EXECUTED`. A later review must first bind
+the remaining mass, `alpha_s`, anchors, grids, tolerances, convergence,
+independent-reference, and resource-bound evidence.

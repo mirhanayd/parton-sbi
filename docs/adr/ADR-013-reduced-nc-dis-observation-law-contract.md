@@ -103,3 +103,33 @@ legacy D2 completion, or full-generator closure.
 Phase 2A is closed as a completed source-backed contract review with an
 `INCONCLUSIVE` scientific decision. Phase 2B issue #55 remains Backlog,
 Not Evaluated, and Not Authorized.
+
+## Follow-on FONLL-A contract amendment
+
+A later bounded source review is recorded in
+`docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json`. Its
+derived outcome is `D1_PREPARE_FONLL_A_NLO_CONTRACT_AMENDMENT`. The historical
+Phase 2A result remains `INCONCLUSIVE`; this is a versioned follow-on
+disambiguation, not a retroactive Phase 2A PASS.
+
+The amendment selects APFEL FONLL-A at NLO for the reduced NC DIS formula. It
+pins APFEL 3.1.1 at commit
+`72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a`, the NC `e-/e+` HERA convention,
+`mu_F = mu_R = Q`, the `(x_Bj,Q2)` differential measure and its `dx dy` to
+`dx dQ2` Jacobian, APFEL's enabled power-two FONLL damping, the accepted
+`ct18nlo_two_parameter_boundary_v2` family, and the strict no-extrapolation,
+no-clipping, no-absolute-value and no-post-hoc-support-deletion policy.
+
+This selection narrows the previous generic `FONLL-like NLO VFNS` wording. It
+does not change the observation law, PDF-family identity, research question,
+or paper nonclaims. The accepted records do not require complete heavy-flavor
+structure functions specifically from APFEL++; pinned APFEL exposes the
+complete FONLL-A NC observable and an external boundary interface.
+
+The heavy-quark mass convention and values, exact shared `alpha_s` identity,
+theta anchors, kinematic grids, justified tolerances, convergence rules,
+complete independent FONLL-A reference, and resource bound remain unresolved
+pre-authorization evidence. Pointwise complete-rate positivity is not proved.
+Actual positivity scans, normalization integrations, and independent numerical
+closure are post-authorization validation and have not occurred. Phase 2B
+remains `NOT_AUTHORIZED` and `NOT_EXECUTED`.
