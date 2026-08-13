@@ -1,0 +1,549 @@
+{
+  "schema_version": "partonsbi.phase2b.preauthorization-validation-plan.v2",
+  "record_type": "PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_SUCCESSOR_REVISION",
+  "starting_main_sha": "4597b5f0896c133861222b6b0c123fb0cd6b7362",
+  "predecessors": {
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8"
+    },
+    "preauthorization_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan.json",
+      "schema": "partonsbi.phase2b.preauthorization-validation-plan.v1",
+      "sha256": "7eb8834eb8435532a85bd7d49b173b03e57a268f69f9676e0effbd877903672b",
+      "historical_outcome": "P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW",
+      "bytes_immutable": true
+    },
+    "execution_authorization_review_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review.json",
+      "schema": "partonsbi.phase2b.execution-authorization-review.v1",
+      "sha256": "03d8119efb819b7a8b51161d5f2ce58fe59dd385b63f2dbfd6203692dac1f9e2",
+      "historical_decision": "AR2_PREAUTH_PLAN_REVISION_REQUIRED",
+      "bytes_immutable": true
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "phase2a_changed": false,
+    "adr_013_status": "Proposed",
+    "fonll_a_contract_changed": false,
+    "preauthorization_v1_changed": false,
+    "authorization_review_v1_changed": false
+  },
+  "accepted_contract": {
+    "scheme": "FONLL-A",
+    "perturbative_order": "NLO",
+    "software": {
+      "name": "APFEL",
+      "version": "3.1.1",
+      "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a"
+    },
+    "pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "pdf_baseline": "ct18nlo_member0_sumrule_projected_boundary_v2",
+    "strict_support": true,
+    "theta_domain": {
+      "delta_v": [-0.2, 0.2],
+      "lambda_sea": [-0.25, 0.25]
+    },
+    "theta_anchor_count": 9,
+    "physics_domain_id": "HERA_PQCD_STRICT_SUPPORT_INTERSECTION_V1",
+    "resource_geometry_inherited": true
+  },
+  "ar2_blocker_resolution": {
+    "B1_SHARED_ALPHA_S_IDENTITY": "RESOLVED_AT_PLAN_LEVEL_BY_AS2",
+    "B2_NEGATIVE_RATE_ADJUDICATION": "RESOLVED_AT_PLAN_LEVEL_BY_NR2",
+    "B3_REFERENCE_AND_BRIDGE_INDEPENDENCE": "RESOLVED_AT_PLAN_LEVEL_BY_BOUND_BRIDGE_QUADRATURES_AND_COMPONENT_ORACLES",
+    "B4_TOLERANCE_AND_NEAR_ZERO_ERROR_BUDGETS": "RESOLVED_AT_PLAN_LEVEL_BY_MIXED_COMPARISONS_AND_PROPAGATED_BUDGETS"
+  },
+  "source_policy": {
+    "cache_path": "/tmp/partonsbi-phase2b-preauth-v2-review/",
+    "source_bytes_committed": false,
+    "new_sources_limited_to_ar2_blockers": true,
+    "inherited_sources_remain_bound_by_predecessor_hashes": true
+  },
+  "source_registry_additions": [
+    {
+      "source_id": "NNPDF_CHARM_2016_V3",
+      "title": "A Determination of the Charm Content of the Proton",
+      "authors_or_project": "NNPDF Collaboration; R. D. Ball et al.",
+      "official_url": "https://arxiv.org/abs/1605.06515v3",
+      "publication_or_version": "arXiv:1605.06515v3, 2016-11-23",
+      "retrieved_utc": "2026-08-13T16:11:17Z",
+      "byte_streams": [
+        {"kind": "PDF", "sha256": "e77630247ee7e60a115918b3a7cce27bf5c138bf727a9f41d291fb13b44328bd"},
+        {"kind": "TEX_SOURCE", "sha256": "14719f6141494003411e1e071acc5642ab7f3bb0bca83c502eeb33dd0eda7413"}
+      ],
+      "exact_locators": [
+        "sec-fitsettings.tex lines 211-231: MassiveDISsFunction implementation and approximately 0.1 percent or better APFEL agreement",
+        "Figure 2 caption: F2c and FLc, Q=5 GeV, full matched FONLL-A and massless results",
+        "bibliography item 76: original MassiveDISsFunction project URL"
+      ],
+      "claim_supported": "Published independent-code evidence for matched and component charm FONLL-A structure functions.",
+      "qualification": "The plotted benchmark uses NNPDF30_nlo_as_0118_IC5 with toy intrinsic charm and does not reproduce the PartonSBI PDF, masses, full gamma/Z rate, domain or normalization.",
+      "explicit_noncoverage": "No PartonSBI end-to-end rate or normalization closure; figures explicitly show F2c and FLc, not a complete inclusive observable."
+    },
+    {
+      "source_id": "MASSIVEDISFUNCTION_1_2",
+      "title": "massiveDISsFunction v1.2",
+      "authors_or_project": "Luca Rottoli; developers Marco Bonvini and Luca Rottoli",
+      "official_url": "https://www.roma1.infn.it/~bonvini/massivedis/",
+      "publication_or_version": "v1.2, 2016-01-29",
+      "retrieved_utc": "2026-08-13T16:11:17Z",
+      "byte_streams": [
+        {"kind": "PROJECT_PAGE", "sha256": "2361fb39f047f42ad1f964f49b43ecd619a599c3afecc8137435c32e79fda420"},
+        {"kind": "SOURCE_TARBALL", "sha256": "ccdcbc5147da8532cf80c41d890cc117adee10d3a9141164de752780cfd8f9f2"}
+      ],
+      "exact_locators": [
+        "README: independent C++ code, LHAPDF6 and GSL dependencies, FO/ZM/old FONLL-A/FONLL-A schemes, NC/CC F1/F2/F3/FL",
+        "inc/common.hh: distinct DISNC process, F1/F2/F3/FL and FO/FONLL/ACOT/ZM scheme enumerations",
+        "src/massiveDIS.cc lines 56-150: independently assembled massive, massless and subtraction terms",
+        "src/PDFinterface.cc lines 35-149: LHAPDF xfxQ and alphasQ provider calls"
+      ],
+      "claim_supported": "A source-inspectable implementation-independent heavy/FONLL component oracle can be configured for later exact-project component checks.",
+      "qualification": "No-intrinsic-charm old FONLL-A is the compatible S-ACOT special case; the ACOT/fitted-charm path is not substituted for the accepted perturbative-charm contract.",
+      "explicit_noncoverage": "It is not a second implementation of the complete PartonSBI light-plus-heavy gamma/Z rate, PDF bridge, Jacobian or normalization."
+    },
+    {
+      "source_id": "SCIPY_1_15_3_SDIST",
+      "title": "SciPy 1.15.3 source distribution",
+      "authors_or_project": "SciPy project",
+      "official_url": "https://files.pythonhosted.org/packages/0f/37/6964b830433e654ec7485e45a00fc9a27cf868d622838f6b6d9c5ec0d532/scipy-1.15.3.tar.gz",
+      "publication_or_version": "SciPy 1.15.3",
+      "retrieved_utc": "2026-08-13T17:13:02Z",
+      "byte_streams": [
+        {"kind": "SOURCE_TARBALL", "sha256": "eae3cf522bc7df64b42cad3925c876e1b0b6c35c1337c93e12c0f366f55b0eaf"}
+      ],
+      "exact_locators": [
+        "scipy/special/_orthogonal.py lines 160-205: banded eigenvalue roots, Newton update and weight construction",
+        "scipy/special/_orthogonal.py lines 2507-2598: roots_legendre API and polynomial exactness"
+      ],
+      "claim_supported": "Exact implementation provenance for future fixed Gauss-Legendre normalization path A.",
+      "qualification": "Only generic quadrature construction is covered.",
+      "explicit_noncoverage": "No DIS integrand, physics correctness or convergence result."
+    },
+    {
+      "source_id": "WALDVOGEL_CC_2006",
+      "title": "Fast Construction of the Fejer and Clenshaw-Curtis Quadrature Rules",
+      "authors_or_project": "Jorg Waldvogel, ETH Zurich",
+      "official_url": "https://people.math.ethz.ch/~joergw/Papers/waldvogel.pdf",
+      "publication_or_version": "BIT Numerical Mathematics 46 (2006) 195-202",
+      "retrieved_utc": "2026-08-13T16:17:18Z",
+      "byte_streams": [
+        {"kind": "PDF", "sha256": "183264aa174aa7cd542e69715d41dfb4f28e057a3a898c47ad90f85bd7632128"}
+      ],
+      "exact_locators": [
+        "Sections 2-3: Chebyshev-extrema nodes and explicit Clenshaw-Curtis weight construction",
+        "Abstract and Section 4: nested rules and independent weight generation"
+      ],
+      "claim_supported": "Algorithmic provenance for the repository-owned direct Clenshaw-Curtis path B.",
+      "qualification": "The repository implementation uses direct cosine sums rather than the paper's optional FFT acceleration.",
+      "explicit_noncoverage": "No DIS integrand, physics correctness or convergence result."
+    },
+    {
+      "source_id": "MPMATH_1_3_0_SDIST",
+      "title": "mpmath 1.3.0 source distribution",
+      "authors_or_project": "The mpmath development team",
+      "official_url": "https://files.pythonhosted.org/packages/e0/47/dd32fa426cc72114383ac549964eecb20ecfd886d1e5ccf5340b55b02f57/mpmath-1.3.0.tar.gz",
+      "publication_or_version": "mpmath 1.3.0",
+      "retrieved_utc": "2026-08-13T16:49:39Z",
+      "byte_streams": [
+        {"kind": "SOURCE_TARBALL", "sha256": "7a28eb2a9774d00c7bc92411c19a89209d5da7c4c9a9e227be8330a23a25b91f"}
+      ],
+      "exact_locators": [
+        "mpmath/ctx_mp_python.py: arbitrary-precision mpf context and precision control",
+        "mpmath/calculus/odes.py: high-precision ODE support; the future contract instead fixes an explicit classical-RK4 refinement sequence"
+      ],
+      "claim_supported": "Pinned arbitrary-precision arithmetic provenance for the future independent APFEL RK4 truncation-envelope calculation.",
+      "qualification": "The future evaluator must set mp.dps=80 and use the contract's explicit threshold-split RK4 sequence; a library default ODE tolerance is not accepted.",
+      "explicit_noncoverage": "No alpha_s result, provider equivalence, DIS observable or physics closure is supplied by the source distribution."
+    }
+  ],
+  "massivedisfunction_assessment": {
+    "classification": "MASSIVE_FONLL_COMPONENT_ORACLE",
+    "implementation_independent_from_apfel": true,
+    "source_basis": "Independent C++/GSL/LHAPDF code with its own coefficient, convolution and FONLL assembly paths.",
+    "covered_components": [
+      "NC charm F1, F2, F3 and FL interfaces at NLO",
+      "massive fixed-order contribution",
+      "massless contribution",
+      "subtraction and FONLL matching terms",
+      "old FONLL-A S-ACOT no-intrinsic-charm special case",
+      "published intrinsic-charm matched F2c and FLc comparison"
+    ],
+    "published_benchmark_configuration": {
+      "pdf": "NNPDF30_nlo_as_0118_IC5 toy intrinsic-charm input",
+      "alpha_s_mz": 0.118,
+      "q_gev": 5.0,
+      "displayed_components": ["F2c", "FLc", "full matched FONLL-A", "massless"],
+      "reported_agreement": "approximately 0.1 percent or better"
+    },
+    "compatible_special_case": "With the initial charm density set to zero, the source's old FONLL-A branch is the no-intrinsic-charm S-ACOT case compatible with the accepted perturbative-charm contract.",
+    "future_configuration": "At each predeclared component point use the accepted masses, PDF member and alpha_s inputs and explicitly call SetPrec(6.25e-5). In the test-only MassiveDIS build, pass a non-null error pointer to every GSL qags convolution, retain every reported absolute error and propagate their absolute weighted sum; independently retain the APFEL refinement envelope. Require each implementation envelope to be no larger than half T_SF=0.000125 on the local absolute scale before comparing them.",
+    "not_covered": [
+      "exact PartonSBI deformed PDF family unless configured in the future test",
+      "complete light-plus-heavy gamma/Z e-p rate",
+      "coordinate Jacobian",
+      "normalization"
+    ],
+    "future_status": "DEFINED_NOT_EXECUTED"
+  },
+  "alpha_s_architecture": {
+    "choice": "AS2_DUAL_PROVIDER_PREDECLARED_EQUIVALENCE_TEST",
+    "plan_resolution": "RESOLVED_AT_PLAN_LEVEL",
+    "scientific_rationale": "APFEL 3.1.1 exposes reference-value and evolution controls but no external alpha_s callback. Exact provider identity is therefore unavailable; numerical equivalence over the bounded domain is the relevant closure question.",
+    "provider_a": {
+      "identity": "CT18NLO DataVersion 1 member 0 LHAPDF6 alphasQ provider",
+      "representation": "AlphaS_Type=ipol over the 37 serialized AlphaS_Qs/AlphaS_Vals produced from a HOPPET running solution; LHAPDF 6.5.6 uses piecewise cubic Hermite interpolation in log(Q2)",
+      "metadata": "MZ=91.1870 GeV; AlphaS_MZ=0.118000; AlphaS_OrderQCD=1; variable flavor; NumFlavors=5; MCharm=1.3000; MBottom=4.7500"
+    },
+    "provider_b": {
+      "identity": "APFEL 3.1.1 commit 72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a AlphaQCD exact evolution (source-fixed 10-step classical RK4 per flavor segment)",
+      "controls": [
+        "SetAlphaQCDRef(0.118,91.187)",
+        "SetAlphaEvolution(\"exact\")",
+        "SetPerturbativeOrder(1)",
+        "SetPoleMasses(1.3,4.75,172.0)",
+        "SetMaxFlavourAlpha(5)"
+      ]
+    },
+    "future_equivalence_test": {
+      "status": "DEFINED_NOT_EXECUTED",
+      "q_domain_gev": ["sqrt(3.5)", "sqrt(50000)"],
+      "comparison_points": "257 fixed log-Q nodes including endpoints, all 21 CT18 AlphaS_Qs inside the domain, MZ=91.187, and mb*(1-2^-20), mb, mb*(1+2^-20); duplicates remain recorded; maximum 282 calls per provider",
+      "threshold_semantics": "Evaluate and label below, exact and above sides separately; no cross-side interpolation or averaging is allowed.",
+      "ct18_interpolation_envelope": "E_CT18_ipol(Q) is the half-width from an 80-decimal directed-rounding replay of the exact LHAPDF 6.5.6 log(Q2) cubic formula, with every authoritative six-decimal AlphaS_Val independently enclosed by +/-5e-7; threshold subgrids are replayed separately.",
+      "apfel_precision_envelope": "Using mpmath 1.3.0 with mp.dps=80, independently replay the NLO beta function and matching at every threshold with classical RK4 step counts 20,40,80,160 per flavor segment. With d_n=|A_n-A_(n/2)| require d_80<=d_40/8 and d_160<=d_80/8, then E_APFEL_RK4=|alpha_APFEL-A_160|+d_160/7+1e-70. Failure of either ratio is INCONCLUSIVE_PROVIDER_PRECISION.",
+      "criterion": "|alpha_CT18-alpha_APFEL| <= E_CT18_ipol(Q)+E_APFEL_RK4(Q)+(32*2^-53)*max(|alpha_CT18|,|alpha_APFEL|) at every point",
+      "atol_derivation": "atol(Q)=E_CT18_ipol(Q)+E_APFEL_RK4(Q): the first term propagates half-last-decimal CT18 table intervals through the actual cubic interpolant; the second bounds APFEL's fixed-10-step RK4 against a converged 80-decimal refinement sequence.",
+      "rtol_derivation": "32 binary64 unit roundoffs cover only Q conversion, returned-value transport and final subtraction; provider interpolation and RK4 truncation are carried in the absolute envelopes.",
+      "budget_gate": "The propagated alpha_s rate contribution, including both absolute envelopes and the transport term, must be <=T_ALPHA_S_EQUIVALENCE*S_node with T_ALPHA_S_EQUIVALENCE=0.000125; otherwise the result is NUMERICAL_BUDGET_FAILURE or INCONCLUSIVE, never PASS.",
+      "near_zero_rule": "alpha_s is strictly positive on the bounded domain; a nonpositive or nonfinite value is CONTRACT_IDENTITY_FAILURE, not a relative comparison.",
+      "failure": "Any finite discrepancy outside the mixed bound is ALPHA_S_EQUIVALENCE_FAILURE; missing provider/point or unresolved threshold-side behavior is INCONCLUSIVE, never PASS."
+    },
+    "actual_equivalence_result": "NOT_EXECUTED"
+  },
+  "pdf_apfel_bridge_contract": {
+    "classification": "BRIDGE_STATICALLY_BOUND_AND_POSTAUTH_TESTABLE",
+    "accepted_pdf_artifact": "ct18nlo_two_parameter_boundary_v2 / ct18nlo_member0_sumrule_projected_boundary_v2 at each of nine theta anchors",
+    "apfel_interface": "ExternalSetAPFEL(x,Q,xf) selected by SetPDFSet(\"external\")",
+    "q_interpretation": "Q is an energy scale in GeV, not Q2; the accepted boundary is evaluated only at its exact Q0 and any other callback Q fails the bridge contract.",
+    "value_convention": "ContinuousPdfPoint::densities returns number densities f_i; the bridge returns x*f_i exactly once.",
+    "flavor_map": {
+      "-6": "topbar=0",
+      "-5": "x*bottombar",
+      "-4": "x*charmbar",
+      "-3": "x*strangebar",
+      "-2": "x*upbar",
+      "-1": "x*downbar",
+      "0": "x*gluon from PDG 21",
+      "1": "x*down",
+      "2": "x*up",
+      "3": "x*strange",
+      "4": "x*charm",
+      "5": "x*bottom",
+      "6": "top=0",
+      "7": "photon=0"
+    },
+    "support_policy": "Every x,Q query is checked before evaluation; no extrapolation, zero continuation, clamping or post-hoc deletion is permitted on the declared physics domain.",
+    "alpha_s_responsibility": "The callback provides PDFs only. APFEL provider_b supplies observable/evolution alpha_s; provider equivalence is separately governed by AS2.",
+    "future_validation_test": {
+      "status": "DEFINED_NOT_EXECUTED",
+      "synthetic_test": "Inject 14 distinct exactly representable sentinel x*f values and require exact slot recovery, including PDG-21 to APFEL-0 and zero top/photon slots.",
+      "accepted_value_test": "At all nine theta anchors and every x node of the fixed 17/33/65 levels at exact Q0, instrument callback outputs and compare all 14 slots with x*ContinuousPdfPoint::densities(x).",
+      "criterion": "|bridge-expected| <= (16*u)*max(|bridge|,|expected|), u=2^-53; exact-zero heavy/top/photon slots must be bitwise +0.0.",
+      "near_zero_rule": "There is no absolute floor: exact-zero slots must be bitwise +0.0, while any nonzero sign disagreement or value outside the homogeneous transport bound fails.",
+      "failure": "Any flavor, convention, Q, support, finiteness, signed-zero or tolerance mismatch is BRIDGE_IDENTITY_FAILURE."
+    },
+    "actual_bridge_result": "NOT_EXECUTED"
+  },
+  "quadrature_contract": {
+    "shared_integrand_allowed": true,
+    "shared_node_weight_or_accumulation_core_allowed": false,
+    "path_a": {
+      "algorithm": "fixed tensor Gauss-Legendre",
+      "implementation": "scipy.special.roots_legendre",
+      "integration_entrypoint": "analysis/validation/phase2b_quadrature_oracles.py::scipy_gauss_legendre_integrate",
+      "version": "SciPy 1.15.3",
+      "source_sha256": "eae3cf522bc7df64b42cad3925c876e1b0b6c35c1337c93e12c0f366f55b0eaf",
+      "precision": "binary64",
+      "orders": [16, 32, 64],
+      "node_generation": "SciPy banded symmetric eigenproblem followed by one Newton correction",
+      "weight_generation": "SciPy orthogonal-polynomial derivative formula and normalization",
+      "accumulation": "vector evaluation followed by scipy/numpy binary64 weighted sum",
+      "refinement": "exactly the three fixed orders; no adaptive extension"
+    },
+    "path_b": {
+      "algorithm": "fixed tensor Clenshaw-Curtis",
+      "implementation": "analysis/validation/phase2b_quadrature_oracles.py::clenshaw_curtis_rule",
+      "integration_entrypoint": "analysis/validation/phase2b_quadrature_oracles.py::clenshaw_curtis_integrate",
+      "implementation_sha256": "3d2e783124c032c10094325726b25da23fbc37d891e949f26251f337239bf8a7",
+      "provenance": "Waldvogel 2006/Trefethen direct cosine-sum construction",
+      "source_sha256": "183264aa174aa7cd542e69715d41dfb4f28e057a3a898c47ad90f85bd7632128",
+      "precision": "binary64",
+      "node_counts": [17, 33, 65],
+      "node_generation": "Python math.cos at Chebyshev extrema",
+      "weight_generation": "direct scalar cosine sums with no FFT, SciPy, NumPy or linear algebra",
+      "accumulation": "Python math.fsum",
+      "refinement": "exactly the three nested fixed node counts; no adaptive extension"
+    },
+    "anti_shared_core_proof": "Path A imports SciPy roots_legendre; path B imports only Python math and contains a direct independent node/weight construction. Static import/source tests reject shared quadrature calls.",
+    "analytic_software_tests": {
+      "status": "EXECUTED_GENERIC_MATH_ONLY",
+      "strategy": "For each declared level, verify finite ordered nodes, positive weights, weight sum 2, symmetry, and exactness on monomials through min(12, formal degree); also integrate 1, x, x^2, x^3 and exp only as non-DIS software tests.",
+      "physics_integrals_executed": false
+    }
+  },
+  "independent_reference_coverage": [
+    {"node": "complete_nc_rate", "classification": "PARTIAL", "oracle": "component composition plus cross-check graph", "future_test": "All child nodes must pass; result may only be called bounded component closure, not full independent-code equivalence.", "load_bearing": true},
+    {"node": "electroweak_assembly", "classification": "FULLY_INDEPENDENT", "oracle": "APFEL-free analytic HERA gamma/Z e-/e+ assembly", "future_test": "Predeclared symbolic identities and fixed analytic points.", "load_bearing": true},
+    {"node": "massless_coefficients", "classification": "PUBLISHED_INDEPENDENT_BENCHMARK", "oracle": "APFEL++/HOPPET NLO NC benchmark", "future_test": "Published coordinates with mixed tolerance and exact configuration labels.", "load_bearing": true},
+    {"node": "massive_contribution", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "massiveDISsFunction v1.2 plus published APFEL comparison", "future_test": "Exact accepted mass/PDF/alpha configuration at 64 fixed component coordinates.", "load_bearing": true},
+    {"node": "fonll_matching_difference_term", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "massiveDISsFunction v1.2 independently separated FO/ZM/subtraction/FONLL terms", "future_test": "Compare each signed component before matched summation; no cancellation-only pass.", "load_bearing": true},
+    {"node": "pdf_provider", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "accepted Rust evaluator against the emitted immutable LHAPDF member", "future_test": "Nine anchors, fixed x levels, all eleven accepted PDG flavors and strict support.", "load_bearing": true},
+    {"node": "pdf_to_apfel_bridge", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "instrumented ExternalSetAPFEL callback against ContinuousPdfPoint", "future_test": "Synthetic flavor sentinels plus all fixed accepted-value bridge points.", "load_bearing": true},
+    {"node": "alpha_s", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "CT18/LHAPDF ipol provider against APFEL exact two-loop provider", "future_test": "AS2 282-point mixed comparison including threshold sides.", "load_bearing": true},
+    {"node": "coordinate_jacobian", "classification": "FULLY_INDEPENDENT", "oracle": "analytic y=Q2/(sx) and dy/dQ2=1/(sx)", "future_test": "Fixed-domain analytic arithmetic check.", "load_bearing": true},
+    {"node": "quadrature_a", "classification": "FULLY_INDEPENDENT", "oracle": "SciPy 1.15.3 roots_legendre path", "future_test": "Generic analytic unit integrals then fixed physics integration if separately authorized.", "load_bearing": true},
+    {"node": "quadrature_b", "classification": "FULLY_INDEPENDENT", "oracle": "repository direct Clenshaw-Curtis path", "future_test": "Generic analytic unit integrals then fixed physics integration if separately authorized.", "load_bearing": true},
+    {"node": "normalization_assembly", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "cross-normalized A/B estimates and interval propagation", "future_test": "No same-path self-normalization may count as closure.", "load_bearing": true}
+  ],
+  "reference_sufficiency": {
+    "unvalidated_load_bearing_nodes": [],
+    "full_end_to_end_independent_comparator_claimed": false,
+    "component_decomposition_sufficient_for_bounded_claim": true,
+    "qualification": "The complete rate remains PARTIAL. RV1 means every load-bearing node has a bound oracle or a defined post-authorization test, not that any numerical closure has passed."
+  },
+  "comparison_policy": {
+    "generic_mixed_form": "|a-b| <= atol_pair + rtol_source*max(|a|,|b|)",
+    "atol_pair": "E_num_a + E_num_b, with each E_num independently derived from fixed-refinement/rounding bounds and never fitted to the observed discrepancy",
+    "near_zero_boundary": "max(|a|,|b|) <= atol_pair/rtol_source when rtol_source>0",
+    "near_zero_semantics": "A near-zero point can PASS only when an analytic exact zero is expected and both values lie in atol_pair; otherwise it is INCONCLUSIVE_NEAR_ZERO and prevents global PASS.",
+    "nonfinite_semantics": "Any nonfinite value is FAIL.",
+    "post_hoc_tuning_allowed": false
+  },
+  "comparator_tolerances": [
+    {
+      "tolerance_id": "TOL_MASSIVEDIS_FONLL_COMPONENT",
+      "quantity": "Matched and separated heavy FONLL component values",
+      "rtol": 0.001,
+      "atol": "E_APFEL_component + E_MASSIVEDIS_component",
+      "derivation": "arXiv:1605.06515v3 reports approximately 0.1 percent or better APFEL/MassiveDISsFunction agreement; numerical absolute envelopes supply zero behavior.",
+      "scope": "Exact-project future points are a component test; source benchmark configuration differences are recorded and no complete-rate claim follows.",
+      "near_zero": "Generic INCONCLUSIVE_NEAR_ZERO rule unless the separated term is analytically zero.",
+      "failure": "REFERENCE_CLOSURE_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_MASSLESS_NC_REFERENCE",
+      "quantity": "Massless NLO NC structure functions and reduced cross sections",
+      "rtol": 0.00001,
+      "atol": "E_APFEL_massless + E_HOPPET_massless + E_published_last_digit",
+      "derivation": "Published APFEL++/HOPPET agreement is 1e-5 or better; the absolute term is the sum of independently recorded numerical and table-serialization bounds.",
+      "scope": "Only published nonzero lookup points and exact future configuration points.",
+      "near_zero": "Generic INCONCLUSIVE_NEAR_ZERO rule.",
+      "failure": "REFERENCE_CLOSURE_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_ALPHA_S_PROVIDER_EQUIVALENCE",
+      "quantity": "CT18/LHAPDF ipol alpha_s versus APFEL exact alpha_s",
+      "rtol": "32*2^-53",
+      "atol": "E_CT18_ipol(Q)+E_APFEL_RK4(Q)",
+      "derivation": "Directed-rounding interval replay propagates CT18's half-last-serialized-decimal uncertainty through its actual cubic interpolant; an independent 80-decimal, threshold-split fixed-RK4 refinement sequence bounds APFEL's source-fixed 10-step RK4 truncation. The relative term covers only binary64 transport.",
+      "scope": "AS2 fixed Q grid with threshold sides.",
+      "near_zero": "Nonpositive alpha_s is contract failure; relative near-zero semantics are inapplicable on this positive bounded domain.",
+      "failure": "ALPHA_S_EQUIVALENCE_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_PDF_APFEL_BRIDGE",
+      "quantity": "Each x*f flavor value entering APFEL",
+      "rtol": "16*2^-53",
+      "atol": 0.0,
+      "derivation": "The homogeneous 16-unit-roundoff relative term covers one binary64 multiply, callback copy and subtraction. The absolute term is exactly zero because no interpolation, continuation or additive offset is permitted; exact-zero slots are tested bitwise.",
+      "scope": "Synthetic sentinels and all fixed accepted bridge points.",
+      "near_zero": "Exact-zero heavy/top/photon slots must be bitwise +0.0; other sign changes fail.",
+      "failure": "BRIDGE_IDENTITY_FAILURE"
+    },
+    {
+      "tolerance_id": "TOL_JACOBIAN",
+      "quantity": "Analytic versus evaluated dy/dQ2",
+      "rtol": "8*2^-53",
+      "atol": 0.0,
+      "derivation": "Eight unit roundoffs cover s*x, reciprocal, independent expression and subtraction under the bounded finite positive domain.",
+      "scope": "Local analytic arithmetic only.",
+      "near_zero": "The Jacobian is strictly positive and bounded away from zero on the domain.",
+      "failure": "COORDINATE_CONTRACT_FAILURE"
+    }
+  ],
+  "numerical_error_budget": {
+    "parent": {
+      "name": "T_external",
+      "value": 0.001,
+      "scale": "S_node=sum of absolute signed complete-rate assembly terms before cancellation",
+      "source": "The strongest applicable published full matched heavy-component APFEL/MassiveDISsFunction envelope is approximately 0.1 percent.",
+      "interpretation": "An internal numerical allowance, not evidence that the complete PartonSBI rate agrees end to end."
+    },
+    "allocation_rule": "Eight load-bearing relative contributions receive equal worst-case triangle-inequality shares because no pre-execution evidence justifies privileging one numerical path.",
+    "components": [
+      {"id": "PDF_BRIDGE", "relative_share": 0.000125, "bound": "Propagated per-flavor mixed bridge bounds through recorded coefficient weights."},
+      {"id": "ALPHA_S_EQUIVALENCE", "relative_share": 0.000125, "bound": "Propagate the AS2 alpha bound through separately recorded NLO alpha-dependent terms."},
+      {"id": "STRUCTURE_FUNCTION_EVALUATION", "relative_share": 0.000125, "bound": "Maximum fixed internal refinement envelope for F2, FL and xF3 before outer assembly."},
+      {"id": "COORDINATE_JACOBIAN", "relative_share": 0.000125, "bound": "Analytic 8*u Jacobian error propagated multiplicatively."},
+      {"id": "GRID_DISCRETIZATION", "relative_share": 0.000125, "bound": "Final two predeclared point-grid levels' extrema/classification envelope."},
+      {"id": "QUADRATURE_A", "relative_share": 0.000125, "bound": "Final two fixed Gauss-Legendre estimates and rule roundoff."},
+      {"id": "QUADRATURE_B", "relative_share": 0.000125, "bound": "Final two fixed Clenshaw-Curtis estimates and rule roundoff."},
+      {"id": "NORMALIZATION_PROPAGATION", "relative_share": 0.000125, "bound": "Interval propagation from delta-r and delta-Z, without a standalone residual constant."}
+    ],
+    "relative_sum": 0.001,
+    "sum_rule": "sum_i T_i = 8*0.000125 = 0.001 = T_external",
+    "absolute_floors": "Provider serialization and binary64 roundoff floors are carried explicitly in E_i and E_total; if they dominate S_node, the point is near-zero/inconclusive rather than relaxed to PASS.",
+    "double_counting_policy": "Each primitive discrepancy is assigned once. Comparator observed differences are acceptance checks, not additional terms added to the propagated rate envelope.",
+    "failure": "Any component above its share is NUMERICAL_BUDGET_FAILURE; an unresolved fixed refinement is INCONCLUSIVE."
+  },
+  "negative_rate_policy": {
+    "choice": "NR2_ERROR_ENVELOPE_WITH_INCONCLUSIVE_BAND",
+    "plan_resolution": "RESOLVED_AT_PLAN_LEVEL",
+    "complete_binary128_oracle_claimed": false,
+    "assembly_definition": "r_hat=K*(c2*F2_hat+cL*FL_hat+c3*xF3_hat), with signed coefficients fixed by the accepted e-p HERA convention",
+    "absolute_term_scale": "S_assembly=|K|*(|c2*F2_hat|+|cL*FL_hat|+|c3*xF3_hat|)",
+    "upstream_envelope": "E_upstream=|K|*(|c2|*E_F2+|cL|*E_FL+|c3|*E_xF3)+E_bridge_rate+E_alpha_rate+E_grid_rate+E_jacobian_rate",
+    "outer_roundoff": "E_outer=gamma_32*S_assembly, gamma_32=(32*u)/(1-32*u), u=2^-53",
+    "total_formula": "E_total=E_upstream+E_outer; every primitive error term is recorded once and must satisfy its numerical sub-budget",
+    "classification": {
+      "rate_below_negative_envelope": "r_hat < -E_total => FAIL_NEGATIVE_RATE",
+      "inconclusive_band": "|r_hat| <= E_total => INCONCLUSIVE_SIGN",
+      "positive": "r_hat > E_total => NUMERICALLY_POSITIVE_FOR_BOUNDED_CLAIM"
+    },
+    "global_semantics": "Any INCONCLUSIVE_SIGN point prevents a global positivity PASS.",
+    "raw_signed_rate_retained": true,
+    "clipping_allowed": false,
+    "abs_allowed": false,
+    "max_rate_zero_allowed": false,
+    "support_deletion_allowed": false,
+    "retry_until_positive_allowed": false,
+    "optional_binary128_outer_assembly": "Diagnostic only; it may reduce E_outer evidence but cannot erase E_upstream or change INCONCLUSIVE_SIGN to PASS by itself.",
+    "actual_sign_result": "NOT_EXECUTED"
+  },
+  "normalized_law_error_propagation": {
+    "definitions": "q=r/Z; estimates r_hat and Z_hat have |r-r_hat|<=E_r and |Z-Z_hat|<=E_Z",
+    "precondition": "Z_hat>E_Z and Z_hat>0; otherwise normalization is INCONCLUSIVE or FAIL if a nonpositive value is established.",
+    "pointwise_bound": "|q_hat-q| <= E_r/(Z_hat-E_Z) + |r_hat|*E_Z/(Z_hat*(Z_hat-E_Z))",
+    "near_zero_rate": "When r_hat is near zero, the first absolute term remains; no division by r_hat and no relative-only rule is used.",
+    "z_estimate": "Z_hat=(Z_A+Z_B)/2 and E_Z=(|Z_A-Z_B|+E_A+E_B)/2 after both independent fixed paths satisfy their allocated budgets.",
+    "cross_normalization": "Evaluate I_A[r]/Z_B and I_B[r]/Z_A; same-path I_A[r]/Z_A=1 is algebraic and cannot count as closure.",
+    "closure_bound": "Each cross residual is bounded by the corresponding interval expression derived from E_A, E_B and the positive lower denominator; there is no standalone residual threshold.",
+    "failure": "Residual outside the propagated interval is NORMALIZATION_FAILURE; overlapping but nonconverged intervals are INCONCLUSIVE.",
+    "actual_normalization_result": "NOT_EXECUTED"
+  },
+  "jacobian_audit": {
+    "result": "RETAIN_8U",
+    "tolerance": "8*2^-53 relative",
+    "forward_error_argument": "The positive finite calculation uses one multiplication for s*x, one reciprocal/division, an independently ordered analytic evaluation and one comparison subtraction; eight unit roundoffs conservatively cover these operations without cancellation in the Jacobian itself.",
+    "actual_check": "NOT_EXECUTED"
+  },
+  "resource_bounds": {
+    "maximum_theta_anchors": 9,
+    "maximum_refinement_levels": 3,
+    "maximum_point_grid_evaluations": 63882,
+    "maximum_normalization_integrand_evaluations": 98811,
+    "legacy_reference_evaluations": 310,
+    "alpha_s_provider_calls": 564,
+    "alpha_s_high_precision_envelope_calls": 282,
+    "alpha_s_high_precision_beta_rhs_evaluations": 338400,
+    "bridge_callback_comparisons": 1035,
+    "maximum_reference_and_contract_evaluations": 2191,
+    "maximum_total_declared_evaluations": 503284,
+    "maximum_output_bytes": 67108864,
+    "derivation": "63882+98811+310+2*282+9*(17+33+65)+282+338400=503284. The 282 high-precision envelope calls each fix 20+40+80+160=300 RK4 steps with four beta-RHS evaluations per step, hence 282*1200=338400; no adaptive continuation is allowed.",
+    "unbounded_adaptive_loop": false,
+    "continue_until_pass_allowed": false,
+    "exhaustion_result": "INCONCLUSIVE"
+  },
+  "failure_precedence": [
+    "CONTRACT_IDENTITY_FAILURE",
+    "NONFINITE_RATE",
+    "FAIL_NEGATIVE_RATE",
+    "OUTSIDE_SUPPORT",
+    "BRIDGE_IDENTITY_FAILURE",
+    "ALPHA_S_EQUIVALENCE_FAILURE",
+    "COORDINATE_CONTRACT_FAILURE",
+    "NUMERICAL_BUDGET_FAILURE",
+    "REFERENCE_CLOSURE_FAILURE",
+    "NORMALIZATION_FAILURE",
+    "INCONCLUSIVE_SIGN",
+    "CONVERGENCE_INCONCLUSIVE",
+    "RESOURCE_BOUND_EXCEEDED"
+  ],
+  "pre_auth_post_auth": {
+    "pre_auth_resolved": [
+      "AS2_alpha_s_provider_contract",
+      "NR2_negative_rate_envelope",
+      "PDF_APFEL_bridge_specification",
+      "quadrature_implementation_independence",
+      "reference_coverage_graph",
+      "mixed_near_zero_comparison_policy",
+      "numerical_error_budget",
+      "normalized_law_interval_propagation"
+    ],
+    "post_auth_defined_not_executed": [
+      "ALPHA_S_PROVIDER_EQUIVALENCE",
+      "PDF_APFEL_BRIDGE_COMPARISON",
+      "MASSIVEDIS_FONLL_COMPONENT_COMPARISON",
+      "MASSLESS_REFERENCE_COMPARISON",
+      "APFEL_FONLL_A_EVALUATIONS",
+      "POSITIVITY_SCAN",
+      "NORMALIZATION_INTEGRATIONS",
+      "CONVERGENCE_STUDY",
+      "INDEPENDENT_REFERENCE_CLOSURE",
+      "SELECTED_EVENT_NORMALIZATION_EVALUATION"
+    ],
+    "post_auth_status": "DEFINED_NOT_EXECUTED"
+  },
+  "decision_criteria": {
+    "B1_alpha_s_plan": "PASS",
+    "B2_negative_rate_plan": "PASS",
+    "B3_reference_bridge_quadrature_plan": "PASS",
+    "B4_tolerance_error_budget_plan": "PASS",
+    "no_unvalidated_load_bearing_node": "PASS",
+    "historical_immutability": "PASS",
+    "non_authorization_boundary": "PASS"
+  },
+  "outcome": "RV1_PREAUTH_V2_COMPLETE_READY_FOR_NEW_AUTHORIZATION_REVIEW",
+  "outcome_derivation": "All four AR2 blockers are resolved at the specification level, every load-bearing graph node has an oracle or a fixed post-authorization test, and no physics result is used. Actual checks remain unexecuted and require a new authorization review.",
+  "plan_completeness": "COMPLETE",
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "PHASE2B_EXECUTION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "TRAINING_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "FULL_GENERATOR_EXECUTION_AUTHORIZED": false
+  },
+  "execution_state": {
+    "phase2b": "NOT_EXECUTED",
+    "dis_numerical_physics_executed": false,
+    "positivity_or_normalization_executed": false,
+    "reference_closure_executed": false,
+    "events_data_detector_or_neural_work": false,
+    "generic_analytic_quadrature_tests_only": true
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized"
+  },
+  "remaining_limitations": [
+    "The complete NC rate still lacks a wholly independent end-to-end implementation; only bounded component closure is planned.",
+    "The nine theta anchors do not establish every interior theta.",
+    "All alpha_s, bridge, FONLL, positivity, convergence and normalization results remain post-authorization and unexecuted.",
+    "Inclusive NC e-p data do not establish unrestricted flavor separation."
+  ],
+  "next_action": "Conduct a new execution-authorization review of this exact v2 artifact; do not execute Phase 2B unless that later review returns authorization."
+}
