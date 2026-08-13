@@ -66,3 +66,15 @@ execution can be authorized. Phase 2B remains Not Authorized and
 
 - [Phase 2B execution authorization review](PHASE2B_EXECUTION_AUTHORIZATION_REVIEW.md)
 - [Machine-readable authorization review](contracts/phase2b_execution_authorization_review.json)
+
+A preauthorization v2 successor now resolves the four AR2 blockers at the
+planning level and derives
+`RV1_PREAUTH_V2_COMPLETE_READY_FOR_NEW_AUTHORIZATION_REVIEW`. It binds a dual
+provider `alpha_s` test, propagated negative-rate uncertainty, an instrumented
+PDF/APFEL bridge, independent quadrature implementations, mixed near-zero
+comparisons and a complete numerical sub-budget. No physics comparison was
+executed. Phase 2B remains Not Authorized and `NOT_EXECUTED` pending a new
+authorization review.
+
+- [Phase 2B preauthorization plan v2](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V2.md)
+- [Machine-readable Phase 2B preauthorization v2 plan](contracts/phase2b_preauthorization_validation_plan_v2.json)

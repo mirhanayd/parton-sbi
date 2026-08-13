@@ -587,3 +587,18 @@ Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
 and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE` and
 ADR-013 remains Proposed. Phase 2C and all event, dataset, detector, neural,
 legacy D2, and full-generator work remain unauthorized.
+
+## Phase 2B preauthorization v2 successor
+
+The scientific successor plan derives
+`RV1_PREAUTH_V2_COMPLETE_READY_FOR_NEW_AUTHORIZATION_REVIEW`. It addresses the
+four AR2 blockers at the planning level by binding an AS2 dual-provider
+`alpha_s` comparison, an NR2 propagated sign envelope, an exact future
+PDF/APFEL bridge test, independently implemented normalization quadratures,
+mixed near-zero comparator rules and a complete numerical error allocation.
+
+This is not an execution authorization. Phase 2B remains Not Authorized,
+Open/Backlog, Gate Decision Not Evaluated and `NOT_EXECUTED`; every actual DIS,
+positivity, normalization, convergence and reference comparison remains
+unexecuted. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`, ADR-013
+remains Proposed, and Phase 2C and all downstream work remain unauthorized.

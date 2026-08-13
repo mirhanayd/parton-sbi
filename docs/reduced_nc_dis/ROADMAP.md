@@ -126,3 +126,17 @@ withheld pending bounded amendments to coupling identity, high-precision sign
 adjudication, exact PDF-bridge/reference coverage, quadrature independence and
 tolerance error budgets. Phase 2B remains Open/Backlog, Gate Decision Not
 Evaluated, Not Authorized and `NOT_EXECUTED`; Phase 2C remains Not Authorized.
+
+## Phase 2B preauthorization v2 successor
+
+The successor plan derives
+`RV1_PREAUTH_V2_COMPLETE_READY_FOR_NEW_AUTHORIZATION_REVIEW`. It resolves the
+four AR2 blockers at the plan level through AS2 coupling equivalence, NR2
+sign uncertainty, a fixed PDF/APFEL bridge test, separately sourced
+Gauss-Legendre and Clenshaw-Curtis paths, mixed near-zero comparisons and a
+triangle-inequality numerical budget. All actual physics checks remain
+post-authorization and `NOT_EXECUTED`.
+
+This planning result does not alter the dependency graph or issue metadata.
+Phase 2B remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized;
+Phase 2C remains Not Authorized.

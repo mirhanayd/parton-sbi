@@ -161,3 +161,15 @@ quadrature implementation independence, and tolerance/error-budget semantics.
 Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed. Phase
 2B remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
 authorized.
+
+## Follow-on Phase 2B preauthorization v2 successor
+
+The planning successor derives
+`RV1_PREAUTH_V2_COMPLETE_READY_FOR_NEW_AUTHORIZATION_REVIEW`. It resolves the
+four AR2 planning blockers with a predeclared dual-provider coupling test,
+propagated negative-rate uncertainty, exact bridge and quadrature provenance,
+mixed near-zero comparison semantics, and an explicit numerical error budget.
+
+Historical Phase 2A remains `INCONCLUSIVE`; ADR-013 remains Proposed. The v1
+plan and AR2 review remain immutable historical records. Phase 2B remains
+`NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is authorized.
