@@ -140,3 +140,13 @@ post-authorization and `NOT_EXECUTED`.
 This planning result does not alter the dependency graph or issue metadata.
 Phase 2B remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized;
 Phase 2C remains Not Authorized.
+
+## Phase 2B v2 execution authorization review
+
+The successor authorization review derives
+`AR2_PREAUTH_V2_REVISION_REQUIRED`. The v2 plan remains a complete planning
+record, but its observed component benchmark does not justify a complete-rate
+parent error allowance or equal split. Its post-authorization test identities,
+per-flavor-segment resource cap, and load-bearing NumPy resolution also require
+revision. Phase 2B remains Open/Backlog, Gate Decision Not Evaluated, Not
+Authorized and `NOT_EXECUTED`; Phase 2C remains Not Authorized.

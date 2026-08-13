@@ -78,3 +78,13 @@ authorization review.
 
 - [Phase 2B preauthorization plan v2](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V2.md)
 - [Machine-readable Phase 2B preauthorization v2 plan](contracts/phase2b_preauthorization_validation_plan_v2.json)
+
+A new independent v2 execution authorization review derives
+`AR2_PREAUTH_V2_REVISION_REQUIRED`. It finds that the observed 0.1% component
+benchmark does not justify the plan's parent error allowance or equal
+eight-way split, and it records bounded revisions for AS2/bridge reference
+identity, resource arithmetic, and dependency reproducibility. Phase 2B
+remains Not Authorized and `NOT_EXECUTED`.
+
+- [Phase 2B v2 execution authorization review](PHASE2B_EXECUTION_AUTHORIZATION_REVIEW_V2.md)
+- [Machine-readable v2 execution authorization review](contracts/phase2b_execution_authorization_review_v2.json)

@@ -173,3 +173,17 @@ mixed near-zero comparison semantics, and an explicit numerical error budget.
 Historical Phase 2A remains `INCONCLUSIVE`; ADR-013 remains Proposed. The v1
 plan and AR2 review remain immutable historical records. Phase 2B remains
 `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is authorized.
+
+## Follow-on Phase 2B v2 execution authorization review
+
+The independent successor review derives
+`AR2_PREAUTH_V2_REVISION_REQUIRED`. It does not accept the observed
+approximately 0.1% APFEL/MassiveDISsFunction component discrepancy as a
+formal parent budget for the complete rate, and the equal eight-way allocation
+is not a derived error structure. Additional bounded revisions are required
+for AS2 and bridge claim coverage, frozen post-authorization test identities,
+the per-flavor-segment resource count, and the load-bearing NumPy pin.
+
+Historical Phase 2A remains `INCONCLUSIVE`; ADR-013 remains Proposed. Phase 2B
+remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
+authorized.

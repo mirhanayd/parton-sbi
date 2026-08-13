@@ -1,0 +1,286 @@
+{
+  "schema_version": "partonsbi.phase2b.execution-authorization-review.v2",
+  "record_type": "PHASE2B_EXECUTION_AUTHORIZATION_REVIEW_V2",
+  "starting_main_sha": "d2d2d4d95a6a405200ac9aba78d50ab19e67ead6",
+  "integrity_preflight": {
+    "classification": "TEMP_A_NOT_TRACKED",
+    "inspected_path": "C:/tmp/partonsbi-phase2b-preauth-v2-pr-body.md",
+    "tracked_path_result": [],
+    "cleanup_performed": false,
+    "cleanup_main_sha": "d2d2d4d95a6a405200ac9aba78d50ab19e67ead6",
+    "qualification": "The tracked root pr_body.md is a historical Phase 2A artifact and is neither the named Phase 2B v2 temporary file nor an active dependency of this review."
+  },
+  "predecessors": {
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8"
+    },
+    "preauthorization_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan.json",
+      "sha256": "7eb8834eb8435532a85bd7d49b173b03e57a268f69f9676e0effbd877903672b"
+    },
+    "authorization_review_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review.json",
+      "sha256": "03d8119efb819b7a8b51161d5f2ce58fe59dd385b63f2dbfd6203692dac1f9e2"
+    },
+    "preauthorization_v2": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v2.json",
+      "schema": "partonsbi.phase2b.preauthorization-validation-plan.v2",
+      "accepted_outcome": "RV1_PREAUTH_V2_COMPLETE_READY_FOR_NEW_AUTHORIZATION_REVIEW",
+      "sha256": "a79e87538fae4d3f20793756b321af4d7521c1277ee08580e1b773a7452a9cd2"
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "adr_013_status": "Proposed",
+    "accepted_pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "phase2a_changed": false,
+    "fonll_a_amendment_changed": false,
+    "preauthorization_v1_changed": false,
+    "authorization_review_v1_changed": false,
+    "preauthorization_v2_changed": false
+  },
+  "rv1_derivation_audit": {
+    "classification": "RV1_INDEPENDENTLY_DERIVED_AS_PLAN_COMPLETENESS_ONLY",
+    "result": "PASS_WITH_AUTHORIZATION_BLOCKERS",
+    "finding": "V2 serializes each AR2 planning topic and keeps every numerical result unexecuted. RV1 is reproducible only as a planning-completeness label; it supplies no presumption of AR1 and several frozen specifications are not yet execution-authorizable."
+  },
+  "budget_parent_audit": {
+    "classification": "BUDGET_PARENT_NOT_JUSTIFIED",
+    "value": 0.001,
+    "source_meaning": "An observed, rounded approximately 0.1 percent agreement statement for APFEL versus MassiveDISsFunction structure-function benchmarks, illustrated for matched charm F2c and FLc at Q=5 GeV with an intrinsic-charm PDF setup; it is not a formal accuracy guarantee.",
+    "covered_scope": [
+      "published APFEL/MassiveDISsFunction structure-function comparison",
+      "massive and matched heavy-component benchmark configurations",
+      "the paper's stated NC and CC structure-function implementation comparison"
+    ],
+    "not_covered_scope": [
+      "accepted theta-dependent PDF bridge",
+      "CT18/LHAPDF versus APFEL alpha_s equivalence",
+      "complete gamma/Z PartonSBI rate",
+      "coordinate Jacobian",
+      "point-grid discretization",
+      "either normalization quadrature",
+      "normalized selected-event law"
+    ],
+    "error_kind": "OBSERVED_RELATIVE_COMPONENT_BENCHMARK_DISCREPANCY",
+    "formal_guarantee": false,
+    "project_parent_allowance_derived": false,
+    "commensurable_additive_parent_established": false,
+    "near_zero_relative_decomposition_valid": false,
+    "authorization_consequence": "AR1_FORBIDDEN"
+  },
+  "equal_split_audit": {
+    "classification": "ERROR_BUDGET_STRUCTURE_INVALID",
+    "serialized_share_count": 8,
+    "serialized_share": 0.000125,
+    "arithmetic_sum": 0.001,
+    "finding": "Arithmetic closure does not create a scientific budget. Bridge and Jacobian roundoff are orders of magnitude below an equal relative share; alpha_s propagation, grid and structure-function refinement, two quadratures, and normalization do not enter with identical linear sensitivity. The normalization bound includes denominator amplification, and the primitive-error definitions do not exclude overlap between refinement, quadrature, and comparator discrepancies.",
+    "absolute_relative_units_compatible": false,
+    "double_counting_excluded": false,
+    "normalization_amplification_in_allocation": false,
+    "authorization_consequence": "REVISION_REQUIRED"
+  },
+  "alpha_s_audit": {
+    "classification": "AS2_REVISION_REQUIRED",
+    "required_identity": "NUMERICAL_EQUIVALENCE_WITHIN_BOUNDED_TOLERANCE",
+    "identical_alpha_s_object_required": false,
+    "metadata_reviewed": true,
+    "threshold_side_probes_present": true,
+    "mpmath_version_pinned": true,
+    "finding": "A bounded numerical-equivalence test is scientifically sufficient; APFEL 3.1.1 cannot accept the LHAPDF alpha_s object directly. The frozen 282-point sample establishes only pointwise sampled agreement, not equivalence throughout the continuous Q domain, and no interpolation/remainder argument bridges those points. Its rate gate also depends on the unjustified parent budget, and the exact mpmath beta/matching implementation is described but not source-bound.",
+    "actual_result": "NOT_EXECUTED"
+  },
+  "bridge_audit": {
+    "classification": "BRIDGE_PLAN_REVISION_REQUIRED",
+    "flavor_mapping_reviewed": true,
+    "xf_conversion_once_intent": true,
+    "support_and_q0_policy_reviewed": true,
+    "sentinel_count": 14,
+    "theta_anchor_count": 9,
+    "grid_levels": [17, 33, 65],
+    "tolerance": "16*2^-53 relative with exact +0.0 zeros",
+    "finding": "The declared mapping and x*f-once rule can expose permutations, signs, support, Q and most normalization-convention errors. The test does not freeze an immutable emitted LHAPDF member identity or hash, so callback and comparator could share the same wrong member. The synthetic test is phrased as injected x*f values rather than a separately bound f-to-x*f path, and the 16u claim lacks an operation inventory for the eventual bridge implementation.",
+    "actual_result": "NOT_EXECUTED"
+  },
+  "quadrature_audit": {
+    "classification": "QUADRATURE_INDEPENDENCE_QUALIFIED",
+    "path_a": "SciPy 1.15.3 scipy.special.roots_legendre plus NumPy dot",
+    "path_b": "repository direct cosine-sum Clenshaw-Curtis plus math.fsum",
+    "shared_node_generation": false,
+    "shared_weight_generation": false,
+    "shared_polynomial_recurrence": false,
+    "shared_accumulation_core": false,
+    "shared_convergence_estimator": true,
+    "generic_tests": ["symmetry", "positive weights", "weight sum two", "monomials degree zero through twelve", "exp"],
+    "finding": "The node, weight and accumulation implementations have distinct numerical algorithms and provenance, and the generic tests detect sign, symmetry, normalization and low-order moment defects. Both physics paths nevertheless use the same final-level successive-difference policy and shared integrand/domain map, while load-bearing NumPy semantics are unpinned. Independence is useful but qualified."
+  },
+  "massivedis_audit": {
+    "classification": "MASSIVE_FONLL_COMPONENT_ORACLE_QUALIFIED",
+    "runnable_later": true,
+    "source_restorable": true,
+    "full_rate_oracle": false,
+    "coverage": {
+      "F2": "SUPPORTED_COMPONENT_INTERFACE",
+      "FL": "SUPPORTED_COMPONENT_INTERFACE",
+      "F3": "SUPPORTED_WHERE_APPLICABLE_BY_INTERFACE_NOT_BY_THE_ILLUSTRATED_CHARM_PLOT",
+      "light": "COMPONENT_INTERFACE_PRESENT",
+      "heavy": "SUPPORTED_COMPONENT_INTERFACE_AND_PUBLISHED_BENCHMARK",
+      "fonll_difference": "COMPONENT_INTERFACE_PRESENT",
+      "intrinsic_heavy": "PUBLISHED_ILLUSTRATION_USES_A_TOY_INTRINSIC_CHARM_SETUP; ACCEPTED_NO_INTRINSIC_OLD_FONLL_A_IS_A_SPECIAL_CASE",
+      "neutral_current": "SUPPORTED",
+      "pdf_mass_alpha_scale": "MUST_BE_REBOUND_TO_THE_ACCEPTED_CONFIGURATION_POSTAUTH"
+    },
+    "finding": "MassiveDISsFunction v1.2 is an independent component oracle, not complete rate or normalization closure. V2 does not serialize the promised 64 component coordinates or a hash of the required test-only GSL error-estimate patch, so the post-authorization executable comparison is not fully frozen."
+  },
+  "reference_graph": [
+    {"node": "complete_nc_rate", "classification": "PARTIAL", "load_bearing": true, "authorization_finding": "No independent end-to-end rate oracle is claimed."},
+    {"node": "electroweak_assembly", "classification": "FULLY_INDEPENDENT", "load_bearing": true, "authorization_finding": "Analytic oracle is valid but fixed points are not serialized."},
+    {"node": "massless_coefficients", "classification": "PUBLISHED_INDEPENDENT_BENCHMARK", "load_bearing": true, "authorization_finding": "Published coordinates are referenced generically rather than enumerated."},
+    {"node": "massive_contribution", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "load_bearing": true, "authorization_finding": "The stated 64 fixed coordinates are absent."},
+    {"node": "fonll_matching_difference_term", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "load_bearing": true, "authorization_finding": "Signed component comparison is appropriate; exact coordinates remain absent."},
+    {"node": "pdf_provider", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "load_bearing": true, "authorization_finding": "Emitted member identity and hash are not frozen."},
+    {"node": "pdf_to_apfel_bridge", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "load_bearing": true, "authorization_finding": "Mapping is specified but wrong-member independence is not closed."},
+    {"node": "alpha_s", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "load_bearing": true, "authorization_finding": "Pointwise test does not prove the continuous-domain claim."},
+    {"node": "coordinate_jacobian", "classification": "FULLY_INDEPENDENT", "load_bearing": true, "authorization_finding": "Analytic identity and local bound are adequate."},
+    {"node": "quadrature_a", "classification": "FULLY_INDEPENDENT", "load_bearing": true, "authorization_finding": "Algorithm is distinct; NumPy dependency is unpinned."},
+    {"node": "quadrature_b", "classification": "FULLY_INDEPENDENT", "load_bearing": true, "authorization_finding": "Direct scalar implementation is distinct."},
+    {"node": "normalization_assembly", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "load_bearing": true, "authorization_finding": "Cross-normalization is sound only after compatible absolute budgets exist."}
+  ],
+  "postauth_circularity_audit": {
+    "classification": "POSTAUTH_SPECIFICATION_UNDERDEFINED",
+    "no_nominal_unvalidated_node": true,
+    "failure_can_fail_phase2b": true,
+    "posthoc_repair_forbidden": true,
+    "all_test_specs_fully_fixed": false,
+    "finding": "The graph is not circular merely because tests execute after authorization, but several load-bearing coordinates, source-built comparator bytes and member identities are not fixed before authorization. A later failure is allowed to fail Phase 2B, yet the missing specifications leave room for post-hoc completion and require revision before execution."
+  },
+  "nr2_audit": {
+    "classification": "NR2_REVISION_REQUIRED",
+    "formula": "E_total=E_upstream+gamma_32*S_assembly",
+    "negative_beyond_envelope": "FAIL_NEGATIVE_RATE",
+    "inside_envelope": "INCONCLUSIVE_SIGN",
+    "positive_beyond_envelope": "BOUNDED_POSITIVE",
+    "inconclusive_any_required_point_blocks_global_pass": true,
+    "averaging_allowed": false,
+    "point_removal_allowed": false,
+    "clipping_allowed": false,
+    "finding": "The sign ordering and no-repair policy are conservative. E_F2, E_FL, E_xF3, bridge, alpha, grid and Jacobian terms are not operationally reduced to compatible absolute rate units; some inherit the invalid relative allocation and may overlap. gamma_32 is adequate only for the stated outer operation ceiling and cannot cover APFEL internals."
+  },
+  "normalized_law_audit": {
+    "classification": "NORMALIZED_BOUND_FORMALLY_VALID_INPUT_BUDGET_REVISION_REQUIRED",
+    "bound": "E_r/(Z_hat-E_Z)+abs(r_hat)*E_Z/(Z_hat*(Z_hat-E_Z))",
+    "requires_z_hat_greater_than_e_z": true,
+    "requires_positive_true_z": true,
+    "z_hat_le_e_z_result": "INCONCLUSIVE_OR_FAIL_NEVER_PASS",
+    "near_zero_rate_safe": true,
+    "compatible_absolute_units_established": false,
+    "finding": "The algebraic interval bound is correct under its positive-denominator assumptions and the frozen failure semantics do not permit PASS when Z_hat<=E_Z. Its inputs are not yet execution-authorizable because E_r and E_Z inherit an invalid mixed relative/absolute allocation."
+  },
+  "jacobian_audit": {
+    "classification": "JACOBIAN_BOUND_AUTHORIZED",
+    "bound": "8*2^-53 relative",
+    "operation_path": "one multiplication s*x, one reciprocal or division, an independently ordered analytic evaluation, and one comparison subtraction",
+    "input_representation_uncertainty": "EXCLUDED_FROM_LOCAL_ARITHMETIC_BOUND_AND_MUST_BE_RECORDED_SEPARATELY",
+    "finding": "Eight unit roundoffs conservatively cover the positive finite local Jacobian arithmetic without cancellation."
+  },
+  "resource_audit": {
+    "classification": "RESOURCE_BOUND_REVISION_REQUIRED",
+    "serialized_arithmetic_total": 503284,
+    "serialized_components": {
+      "point_evaluations": 63882,
+      "normalization_evaluations": 98811,
+      "legacy_references": 310,
+      "alpha_provider_calls": 564,
+      "bridge_callbacks": 1035,
+      "high_precision_envelope_calls": 282,
+      "high_precision_beta_rhs": 338400
+    },
+    "serialized_arithmetic_reproduces": true,
+    "corrected_conservative_upper_bound": 841685,
+    "corrected_derivation": "63882+98811+310+2*282+9*(17+33+65)+282+282*2*(20+40+80+160)*4+1=841685",
+    "correction_basis": "The AS2 contract says 20/40/80/160 RK4 steps per flavor segment. A conservative domain-wide upper bound requires two segments per Q call because points below mb evolve across nf=5 and nf=4 segments. One additional comparison accounts for the separately declared synthetic bridge sentinel callback test.",
+    "finite": true,
+    "deterministic": true,
+    "unbounded_adaptive_extension": false,
+    "retry_until_pass": false,
+    "finding": "The serialized formula sums to 503284 but is not a conservative bound under its own per-flavor-segment language."
+  },
+  "dependency_audit": {
+    "classification": "UNPINNED_LOAD_BEARING_DEPENDENCY",
+    "python_version_pinned": false,
+    "scipy": "==1.15.3",
+    "scipy_api": "scipy.special.roots_legendre is available for the exact pin",
+    "numpy": ">=1.26.0",
+    "numpy_load_bearing": true,
+    "mpmath": "==1.3.0",
+    "network_policy": "No runtime retrieval beyond ordinary pre-execution package installation is specified.",
+    "finding": "Quadrature A uses NumPy float64 arrays and numpy.dot, but NumPy is only lower-bounded and Python itself is not fixed. Resolver-selected BLAS/NumPy versions can change load-bearing accumulation semantics, so reproducibility requires revision."
+  },
+  "failure_policy_audit": {
+    "no_clipping": true,
+    "no_abs_repair": true,
+    "no_max_zero": true,
+    "no_support_deletion": true,
+    "inconclusive_is_pass": false,
+    "one_bad_point_can_be_averaged_away": false
+  },
+  "authorization_criteria": {
+    "rv1_derivable": "PASS",
+    "budget_parent": "BLOCKED_REVISION",
+    "equal_split": "BLOCKED_REVISION",
+    "alpha_s_as2": "BLOCKED_REVISION",
+    "pdf_apfel_bridge": "BLOCKED_REVISION",
+    "quadrature_independence": "PASS_WITH_QUALIFICATION",
+    "reference_graph": "BLOCKED_REVISION",
+    "nr2": "BLOCKED_REVISION",
+    "normalized_law": "BLOCKED_REVISION",
+    "jacobian": "PASS",
+    "resource_bound": "BLOCKED_REVISION",
+    "dependency_reproducibility": "BLOCKED_REVISION",
+    "failure_policy": "PASS"
+  },
+  "decision": "AR2_PREAUTH_V2_REVISION_REQUIRED",
+  "decision_derivation": "The FONLL-A research line remains viable, so AR3 is not warranted. AR1 is forbidden because the 0.001 parent is not source-justified and because the frozen plan also has an invalid allocation structure, underdefined post-authorization tests, a nonconservative resource cap, and an unpinned load-bearing NumPy dependency. These are bounded plan revisions, therefore AR2.",
+  "blocking_revisions": [
+    "Derive a complete-rate error target from the scientific claim and express nonoverlapping primitive errors in compatible absolute units; do not promote the observed 0.1 percent component benchmark into a parent allowance.",
+    "Replace the equal split with sensitivity- and propagation-derived bounds, including normalization denominator amplification and near-zero behavior.",
+    "Freeze the AS2 continuous-domain claim or add a remainder bound, source-bind the independent beta/matching implementation, and derive alpha-to-rate propagation independently of the rejected parent budget.",
+    "Freeze the emitted PDF member identity, comparator patch and all post-authorization reference coordinates; derive the bridge operation bound from the implementation path.",
+    "Correct the resource cap for every flavor segment and every declared bridge test.",
+    "Pin Python and the load-bearing NumPy resolution used by quadrature A."
+  ],
+  "authorization": {
+    "PHASE2B_BOUNDED_NUMERICAL_VALIDATION_AUTHORIZED": false,
+    "PHASE2B_EXECUTION_AUTHORIZED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "TRAINING_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "FULL_GENERATOR_EXECUTION_AUTHORIZED": false
+  },
+  "execution_state": {
+    "phase2b": "NOT_EXECUTED",
+    "dis_numerical_physics_executed": false,
+    "positivity_or_normalization_executed": false,
+    "alpha_or_bridge_physics_validation_executed": false,
+    "reference_closure_executed": false,
+    "events_data_detector_or_neural_work": false
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized",
+    "phase": "Phase2B",
+    "work_type": "Physics",
+    "priority": "P0",
+    "research_line": "Reduced NC DIS"
+  },
+  "next_action": "Revise the Phase 2B preauthorization plan to replace the error-budget parent and allocation, fully freeze the post-authorization tests, correct the resource bound, and pin load-bearing dependencies; then conduct another independent authorization review. Do not execute Phase 2B in this task."
+}
