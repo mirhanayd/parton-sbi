@@ -98,3 +98,14 @@ is warranted from this blocked record.
 
 - [Phase 2B preauthorization plan V3](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V3.md)
 - [Machine-readable Phase 2B preauthorization V3 plan](contracts/phase2b_preauthorization_validation_plan_v3.json)
+
+The Phase 2B preauthorization blocker-resolution record derives
+`BR5_MULTIPLE_BLOCKERS_REMAIN`. It resolves the exact alpha provider
+mathematics, the `4*pi` convention and the interval backend, and binds the
+MassiveDIS and massless reference sources, but the platform-logarithm enclosure,
+an independent executable FONLL-A comparator and a declared project precision
+target all remain missing. No V4 successor plan was created. Phase 2B remains
+Not Authorized and `NOT_EXECUTED`.
+
+- [Phase 2B blocker resolution V1](PHASE2B_BLOCKER_RESOLUTION_V1.md)
+- [Machine-readable Phase 2B blocker resolution V1](contracts/phase2b_blocker_resolution_v1.json)

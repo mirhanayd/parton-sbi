@@ -1,0 +1,1172 @@
+{
+  "schema_version": "partonsbi.phase2b.blocker-resolution.v1",
+  "record_type": "PHASE2B_PREAUTHORIZATION_BLOCKER_RESOLUTION_V1",
+  "created_utc": "2026-08-14T00:35:00Z",
+  "starting_main_sha": "e29f8f63aa4d98f102e087c7be3901705eed5365",
+  "task_kind": "BLOCKER_RESOLUTION_ONLY",
+  "not_an_execution_authorization_review": true,
+  "predecessors": {
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8",
+      "bytes_immutable": true
+    },
+    "preauthorization_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan.json",
+      "sha256": "7eb8834eb8435532a85bd7d49b173b03e57a268f69f9676e0effbd877903672b",
+      "bytes_immutable": true
+    },
+    "execution_authorization_review_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review.json",
+      "sha256": "03d8119efb819b7a8b51161d5f2ce58fe59dd385b63f2dbfd6203692dac1f9e2",
+      "bytes_immutable": true
+    },
+    "preauthorization_v2": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v2.json",
+      "sha256": "a79e87538fae4d3f20793756b321af4d7521c1277ee08580e1b773a7452a9cd2",
+      "bytes_immutable": true
+    },
+    "execution_authorization_review_v2": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review_v2.json",
+      "sha256": "d7826158718ea0c4e5d3fc7c0f60829913e9634c98c45d2316c63bffdce47821",
+      "bytes_immutable": true
+    },
+    "preauthorization_v3": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v3.json",
+      "sha256": "78a029686489e9712e65ef6f9df3263b4821f96de0ee9873a910dee31f307e06",
+      "verified_this_task": true,
+      "historical_outcome": "V3R6_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "adr_013_status": "Proposed",
+    "accepted_pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "issue_54_unchanged": true,
+    "issue_10_unchanged": true,
+    "all_predecessor_bytes_unchanged": true
+  },
+  "accepted_v3_results_not_relitigated": [
+    "MassiveDIS 0.001 is a local published observed benchmark level, not a global error budget.",
+    "A single shared parent numerical budget is rejected.",
+    "Equal eight-way tolerance allocation is rejected.",
+    "PDF identity is frozen at CT18NLO DataVersion 1 SetIndex 14400 member 0.",
+    "The PDF to APFEL bridge semantic contract B1-B8 is the accepted planning basis.",
+    "Sign policy is SIGN1_STRICT_IMPLEMENTED_RATE_NONNEGATIVITY with no repair of any kind.",
+    "Sign PASS applies only to evaluated simulator-law points and claims no continuum or all-orders positivity.",
+    "Historical plans and reviews remain immutable."
+  ],
+  "blocker_dependency_graph": {
+    "note": "Re-derived from the accepted machine-readable records rather than copied from V3 prose. A node is load-bearing when a future authorization review cannot reach a PASS while the node is unresolved.",
+    "deficiency_codes": [
+      "MISSING_SOURCE_EVIDENCE",
+      "MISSING_SOFTWARE_IDENTITY",
+      "MISSING_MATHEMATICAL_BOUND",
+      "MISSING_ACCEPTANCE_RULE",
+      "MISSING_RESOURCE_BOUND",
+      "UPSTREAM_BLOCKED"
+    ],
+    "nodes": [
+      {
+        "test_id": "TEST_ALPHA",
+        "v3_status": "BLOCKED_PREAUTH_SPECIFICATION",
+        "post_task_status": "PARTIALLY_RESOLVED_BLOCKER_NARROWED",
+        "deficiencies_before": [
+          "MISSING_SOFTWARE_IDENTITY",
+          "MISSING_MATHEMATICAL_BOUND",
+          "MISSING_ACCEPTANCE_RULE",
+          "MISSING_RESOURCE_BOUND"
+        ],
+        "deficiencies_after": [
+          "MISSING_MATHEMATICAL_BOUND",
+          "MISSING_ACCEPTANCE_RULE",
+          "MISSING_RESOURCE_BOUND"
+        ],
+        "depends_on": [
+          "ENVIRONMENT_LIBM_IDENTITY"
+        ],
+        "resolved_here": [
+          "Exact CT18 alpha representation derived from LHAPDF 6.5.6 source.",
+          "Exact APFEL 3.1.1 coupling mathematics derived from pinned source.",
+          "The 4*pi convention is resolved from primary source.",
+          "A rigorous interval backend is bound.",
+          "Validated initial-value-problem integration is shown not to be required."
+        ],
+        "still_missing": [
+          "A rigorous enclosure of the platform natural logarithm actually invoked by both providers.",
+          "A defensible nonzero consistency criterion, which has no source in the accepted records.",
+          "A finite resource count, which cannot be derived before the two items above are fixed."
+        ]
+      },
+      {
+        "test_id": "TEST_FONLL_COMPONENT",
+        "v3_status": "BLOCKED_PREAUTH_SPECIFICATION",
+        "post_task_status": "BLOCKED_PREAUTH_SPECIFICATION",
+        "deficiencies_before": [
+          "MISSING_SOURCE_EVIDENCE",
+          "MISSING_SOFTWARE_IDENTITY",
+          "MISSING_ACCEPTANCE_RULE",
+          "MISSING_RESOURCE_BOUND"
+        ],
+        "deficiencies_after": [
+          "MISSING_SOURCE_EVIDENCE",
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "depends_on": [
+          "PROJECT_PRECISION_TARGET"
+        ],
+        "resolved_here": [
+          "MassiveDISsFunction v1.2 source, build recipe, observable coverage and integration limits are bound.",
+          "A finite internal-work ceiling is now derivable from the GSL subdivision limits."
+        ],
+        "still_missing": [
+          "The published benchmark PDF set is not in the LHAPDF 6.5.6 index, so the published configuration is not reconstructable.",
+          "The published evidence is figure-only, so no exact reference coordinates or values exist.",
+          "A project-coordinate comparison would have no acceptance rule."
+        ]
+      },
+      {
+        "test_id": "TEST_MASSLESS",
+        "v3_status": "BLOCKED_PREAUTH_SPECIFICATION",
+        "post_task_status": "PARTIALLY_RESOLVED_BLOCKER_NARROWED",
+        "deficiencies_before": [
+          "MISSING_SOURCE_EVIDENCE",
+          "MISSING_SOFTWARE_IDENTITY",
+          "MISSING_ACCEPTANCE_RULE",
+          "MISSING_RESOURCE_BOUND"
+        ],
+        "deficiencies_after": [
+          "MISSING_SOFTWARE_IDENTITY",
+          "MISSING_RESOURCE_BOUND"
+        ],
+        "depends_on": [],
+        "resolved_here": [
+          "The reference-side configuration is recovered from the released benchmark program.",
+          "The active-flavour state at the initial scale is stated as nf=3 by the publication.",
+          "The acceptance rule is publication displayed-digit containment, which invents no tolerance."
+        ],
+        "still_missing": [
+          "The candidate-side APFEL 3.1.1 grid and interpolation settings are not frozen.",
+          "The accepted bridge contract fixes Q0 at 1.295 GeV and does not cover a sqrt(2) GeV boundary run.",
+          "No finite candidate work cap follows before the two items above are fixed."
+        ]
+      },
+      {
+        "test_id": "TEST_GRID_CONVERGENCE",
+        "v3_status": "BLOCKED_ACCEPTANCE_RULE",
+        "post_task_status": "REDESIGN_REQUIRED_IN_A_SUCCESSOR",
+        "deficiencies_before": [
+          "MISSING_MATHEMATICAL_BOUND",
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "deficiencies_after": [
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "depends_on": [],
+        "resolved_here": [
+          "The gate's intended claim is separated into pointwise coverage, discretisation error and continuum physics.",
+          "No interpolation is performed between tested points, so no discretisation error exists to estimate.",
+          "The 17/33/65 node sets are shown to be bitwise nested, which is an exact checkable property."
+        ],
+        "still_missing": [
+          "As specified in V3 the gate does not map to a scientifically meaningful quantity and needs replacement, not a threshold."
+        ]
+      },
+      {
+        "test_id": "TEST_QUADRATURE_A",
+        "v3_status": "BLOCKED_ACCEPTANCE_RULE",
+        "post_task_status": "BLOCKED_ACCEPTANCE_RULE",
+        "deficiencies_before": [
+          "MISSING_MATHEMATICAL_BOUND",
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "deficiencies_after": [
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "depends_on": [
+          "PROJECT_PRECISION_TARGET"
+        ],
+        "resolved_here": [
+          "A rigorous remainder certificate is shown to be unobtainable against a binary64 black-box integrand.",
+          "The empirical route is therefore the only available one, which fixes what the successor must supply."
+        ],
+        "still_missing": [
+          "No declared project precision target exists, so no empirical convergence rule can be anchored."
+        ]
+      },
+      {
+        "test_id": "TEST_QUADRATURE_B",
+        "v3_status": "BLOCKED_ACCEPTANCE_RULE",
+        "post_task_status": "BLOCKED_ACCEPTANCE_RULE",
+        "deficiencies_before": [
+          "MISSING_MATHEMATICAL_BOUND",
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "deficiencies_after": [
+          "MISSING_ACCEPTANCE_RULE"
+        ],
+        "depends_on": [
+          "PROJECT_PRECISION_TARGET"
+        ],
+        "resolved_here": [
+          "Same finding as path A; the two paths share the integrand and the domain map."
+        ],
+        "still_missing": [
+          "No declared project precision target exists, so no empirical convergence rule can be anchored."
+        ]
+      },
+      {
+        "test_id": "TEST_CROSS_QUADRATURE",
+        "v3_status": "BLOCKED_BY_UPSTREAM_RULES",
+        "post_task_status": "BLOCKED_BY_UPSTREAM_RULES",
+        "deficiencies_before": [
+          "UPSTREAM_BLOCKED"
+        ],
+        "deficiencies_after": [
+          "UPSTREAM_BLOCKED"
+        ],
+        "depends_on": [
+          "TEST_QUADRATURE_A",
+          "TEST_QUADRATURE_B"
+        ],
+        "resolved_here": [
+          "A worked analytic counterexample shows independent-rule agreement can be exact while both rules are entirely wrong."
+        ],
+        "still_missing": [
+          "Certified per-path error intervals remain unavailable."
+        ]
+      },
+      {
+        "test_id": "TEST_NORMALIZATION",
+        "v3_status": "BLOCKED_BY_UPSTREAM_RULES",
+        "post_task_status": "BLOCKED_BY_UPSTREAM_RULES",
+        "deficiencies_before": [
+          "UPSTREAM_BLOCKED"
+        ],
+        "deficiencies_after": [
+          "UPSTREAM_BLOCKED"
+        ],
+        "depends_on": [
+          "TEST_QUADRATURE_A",
+          "TEST_QUADRATURE_B"
+        ],
+        "resolved_here": [],
+        "still_missing": [
+          "Certified positive lower endpoints require the missing per-path intervals."
+        ]
+      },
+      {
+        "test_id": "TEST_NORMALIZED_LAW",
+        "v3_status": "BLOCKED_BY_UPSTREAM_RULES",
+        "post_task_status": "BLOCKED_BY_UPSTREAM_RULES",
+        "deficiencies_before": [
+          "UPSTREAM_BLOCKED"
+        ],
+        "deficiencies_after": [
+          "UPSTREAM_BLOCKED"
+        ],
+        "depends_on": [
+          "TEST_NORMALIZATION"
+        ],
+        "resolved_here": [],
+        "still_missing": [
+          "The algebra is fixed but its certified inputs are unavailable."
+        ]
+      },
+      {
+        "test_id": "TEST_BRIDGE",
+        "v3_status": "FULLY_SPECIFIED_NOT_EXECUTED",
+        "post_task_status": "FULLY_SPECIFIED_NOT_EXECUTED",
+        "deficiencies_before": [],
+        "deficiencies_after": [],
+        "depends_on": [],
+        "resolved_here": [],
+        "still_missing": []
+      },
+      {
+        "test_id": "TEST_EW_JACOBIAN",
+        "v3_status": "FULLY_SPECIFIED_NOT_EXECUTED",
+        "post_task_status": "FULLY_SPECIFIED_NOT_EXECUTED",
+        "deficiencies_before": [],
+        "deficiencies_after": [],
+        "depends_on": [],
+        "resolved_here": [],
+        "still_missing": []
+      },
+      {
+        "test_id": "TEST_RAW_RATE_SIGN",
+        "v3_status": "FULLY_SPECIFIED_NOT_EXECUTED",
+        "post_task_status": "FULLY_SPECIFIED_NOT_EXECUTED",
+        "deficiencies_before": [],
+        "deficiencies_after": [],
+        "depends_on": [],
+        "resolved_here": [],
+        "still_missing": []
+      }
+    ],
+    "shared_prerequisite_nodes": [
+      {
+        "node": "ENVIRONMENT_LIBM_IDENTITY",
+        "status": "UNRESOLVED",
+        "blocks": [
+          "TEST_ALPHA"
+        ],
+        "reason": "Both frozen coupling providers call the platform natural logarithm, and on x86_64 glibc that symbol is selected at load time from several implementations with different documented rounding behaviour."
+      },
+      {
+        "node": "PROJECT_PRECISION_TARGET",
+        "status": "UNRESOLVED",
+        "blocks": [
+          "TEST_QUADRATURE_A",
+          "TEST_QUADRATURE_B",
+          "TEST_FONLL_COMPONENT"
+        ],
+        "reason": "The accepted research-question record selects no metric, declares no event-set size and declares no calibration or coverage tolerance, so no accuracy requirement for the normalized law can be derived from it."
+      }
+    ],
+    "traversal_rule": "No downstream node was worked before its upstream prerequisite. TEST_CROSS_QUADRATURE, TEST_NORMALIZATION and TEST_NORMALIZED_LAW were not given acceptance rules because their inputs remain unavailable."
+  },
+  "workstream_a_alpha": {
+    "a1_ct18_exact_representation": {
+      "status": "RESOLVED",
+      "provider_identity": "CT18NLO DataVersion 1 SetIndex 14400 member 0 via LHAPDF 6.5.6 AlphaS_Ipol",
+      "local_artifact_bytes_verified": {
+        "info_sha256": "be60232d8e6c49982c82f5fa990fd5b0fd1050719944f31602bf27cdb16548b0",
+        "member0_sha256": "375db856d2f8c7087a626c92ebf228d3f080e5de83175519778ffaf6e72e5410",
+        "matches_v3_frozen_identity": true
+      },
+      "alphas_type": "ipol",
+      "stored_q_points": 37,
+      "stored_alphas_values": 37,
+      "alphas_mz": 0.118,
+      "alphas_order_qcd": 1,
+      "pole_masses_gev": {
+        "charm": 1.3,
+        "bottom": 4.75,
+        "top": 172.0
+      },
+      "subgrid_structure": {
+        "rule": "AlphaS_Ipol::_setup_grids splits a new subgrid whenever fabs(currQ2-prevQ2) < DBL_EPSILON.",
+        "ct18_result": "All 37 squared knots are pairwise distinct, so exactly one AlphaSArray covers the whole table and no threshold subgrid exists for this set.",
+        "verified_this_task": true
+      },
+      "interpolation_variable": "natural log of Q^2; KnotArray::_syncq2s stores _logq2s[i] = log(_q2s[i])",
+      "entry_point": "AlphaS::alphasQ(q) returns alphasQ2(q*q) with a single rounded binary64 square",
+      "index_selection": "AlphaSArray::iq2below uses upper_bound on the Q^2 knots and steps back one index",
+      "slope_rule": {
+        "interior": "central finite differences at i and i+1",
+        "first_cell": "forward difference at i, central at i+1",
+        "last_cell": "central at i, backward at i+1",
+        "definition": "differences are taken with respect to natural log Q^2"
+      },
+      "polynomial": "cubic Hermite p0+m0+p1+m1 with t=(log(q2)-logq2s[i])/(logq2s[i+1]-logq2s[i]) and slopes scaled by the cell width",
+      "discontinuous_clamp": {
+        "source_line": "src/AlphaS_Ipol.cc line 71",
+        "expression": "abs(p0+m0+p1+m1) < 2. ? p0+m0+p1+m1 : std::numeric_limits<double>::max()",
+        "abs_resolution": "LHAPDF/Utils.h imports namespace std, so abs is the double overload and there is no integer truncation",
+        "consequence": "The provider is not continuous. Any enclosure must decide the magnitude branch for a whole cell before it may use the smooth expression.",
+        "not_recorded_in_v3": true
+      },
+      "extrapolation": {
+        "below_first_knot": "base-ten log-log constant-gradient power law",
+        "above_last_knot": "constant, returns the final tabulated value",
+        "caller_policy": "strict_no_extrapolation, so neither branch is reachable inside the accepted domain"
+      },
+      "domain_partition_verified": {
+        "q2_domain_gev2": [
+          3.5,
+          50000
+        ],
+        "in_domain_knots": 21,
+        "unique_breakpoints": 24,
+        "root_intervals": 23,
+        "intervals_at_or_below_mb": 7,
+        "intervals_above_mb": 16,
+        "note": "Independently recomputed here; it agrees with the V3 partition arithmetic."
+      },
+      "source_locators": [
+        "LHAPDF-6.5.6/src/AlphaS_Ipol.cc sha256 6e077122e7fa0ecbcd967b644e2698b1b107ab4a7d8f95b19f5111169c886bfe",
+        "LHAPDF-6.5.6/include/LHAPDF/KnotArray.h sha256 ec6d10769c5e9a2aa7ede456fb6b623780847747d1f62610ac399fa7461c9308",
+        "LHAPDF-6.5.6/include/LHAPDF/AlphaS.h sha256 5cb6ef49a769df21f34789b6d849215e1cdbd264fc925d54afa5192931f55897",
+        "LHAPDF-6.5.6.tar.gz sha256 6b8b7e38dc26a977a24f5a321215b7054c14a4469d04134d70cb93a860eeeea7"
+      ]
+    },
+    "a2_apfel_exact_mathematics": {
+      "status": "RESOLVED",
+      "source_file_hashes_reverified": {
+        "apfel_evol_header": "de70eaa26195ed5258fd8bf59485733b3c9fea0a40ff2de46e5a11fe6fa536b0",
+        "compute_dis_operators": "4f4b17bac6cf360fe1406b00fe7d20078053f99e624c6b403b93bf3a8aa65990",
+        "a_qcd": "3725900eb705779e3595eb1e85fccc11b864b1fde8a91971775abe3bad56ca94",
+        "set_pdf_set": "b5505d4298487eb04c4fbf30a26fb90750973ce0897f38d7155d25057cd9d165",
+        "init_pdfs": "e96aa76b41bff4217613f45dfacca7f53591955cca65e286abaa9fd2dcbda1a2",
+        "all_match_v3": true
+      },
+      "additional_source_locators": [
+        "apfel-3.1.1/src/Evolution/AlphaQCD.f",
+        "apfel-3.1.1/src/commons/consts.h",
+        "apfel-3.1.1/src/Evolution/SetMaxFlavourAlpha.f"
+      ],
+      "beta_normalisation": "a_QCD is alpha_QCD divided by 4 and by pi, stated in the a_QCD.f header and used at asr0 = alpha_ref_QCD / 4d0 / pi",
+      "perturbative_coefficients": {
+        "beta0apf": "(33d0 - 2d0*nf) / 3d0",
+        "beta1apf": "102d0 - 38d0/3d0*nf",
+        "beta2apf": "2857d0/2d0 - 5033d0/18d0*nf + ...",
+        "fbeta_nlo": "-a**2 * (beta0apf(nf) + a*beta1apf(nf))"
+      },
+      "independent_variable": "natural log of the scale ratio; LRRAT = DLOG(MU2/MU20)",
+      "rk4": {
+        "routine": "AS_EXACT in src/Evolution/a_QCD.f",
+        "nstep": 10,
+        "adaptivity": "none",
+        "step": "DLR = LRRAT / NSTEP",
+        "stages": "XK0..XK3 with the classical half-step and full-step arguments",
+        "update": "AS = AS + SXTH * (XK0 + 2D0*XK1 + 2D0*XK2 + XK3)",
+        "sixth_literal": {
+          "token": "0.166666666666666D0",
+          "binary64_hex": "3fc555555555553d",
+          "exact_one_sixth_hex": "3fc5555555555555",
+          "relative_deviation": -3.9968028886505635e-15,
+          "consequence": "The frozen recursion does not use one sixth. An exact-replay claim must carry this literal.",
+          "not_recorded_in_v3": true
+        }
+      },
+      "four_pi_conclusion": {
+        "resolved": true,
+        "public_api": "AlphaQCD(Q) in src/Evolution/AlphaQCD.f",
+        "body": "Q2 = Q * Q / kren followed by AlphaQCD = 4d0 * pi * a_QCD(Q2)",
+        "pi_parameter_token": "3.1415926535897932385d0",
+        "pi_binary64_hex": "400921fb54442d18",
+        "pi_is_nearest_binary64_to_pi": true,
+        "four_pi_multiplication_is_exact": "4d0 * pi scales by a power of two and introduces no rounding",
+        "operation_order": "The result is independent of how the compiler associates the product. Scaling by four is exact and commutes with round-to-nearest away from overflow and underflow, so (4*pi)*a and 4*(pi*a) give the same binary64 value and exactly one rounding is observable.",
+        "practical_consequence": "A later test may call AlphaQCD(Q) directly and never form the conversion by hand.",
+        "v3_open_item_closed": true
+      },
+      "threshold_semantics": {
+        "renormalisation_thresholds": "mur2th(i) = kren * m2th(i) for i in 4..6",
+        "final_flavour_selection": "nff increases when mur2 is greater than or equal to mur2th(k)",
+        "initial_flavour_selection": "nfi increases when mur20 is strictly greater than mur2th(k)",
+        "asymmetry_is_real": true,
+        "cap": "both nff and nfi are capped at nfMaxAlpha, which the accepted controls set to 5"
+      },
+      "matching": {
+        "kappa": "kren * k2th(nfi+snf)",
+        "under_accepted_controls": "SetRenFacRatio(1) and SetMassMatchingScales(1,1,1) give kappa = 1 and dlog(kappa) = 0",
+        "nlo_matching_factor": "asi * (1d0 + c1*asi) with c1 proportional to dlog(kappa)",
+        "consequence": "At NLO with the accepted controls the threshold matching is the exact identity."
+      },
+      "segment_structure_under_accepted_controls": {
+        "reference": "SetAlphaQCDRef(0.118, 91.187) gives mur20 = 91.187^2 and nfi = 5 after the cap",
+        "q2_at_or_above_22_5625": "one nf=5 segment from the reference scale to Q^2",
+        "q2_below_22_5625": "an nf=5 segment from the reference scale to mb^2, an identity match, then an nf=4 segment to Q^2",
+        "top_threshold": "unreachable because nfMaxAlpha is 5, so no nf=6 segment exists in the accepted domain",
+        "note": "V3 sketched a split at mt; it is harmless but unnecessary."
+      },
+      "direction_of_evolution": "downward in scale from the Z reference to the target for the whole accepted domain",
+      "rounding_path": "every operation is a Fortran double precision operation with no declared reassociation control"
+    },
+    "a3_interval_backend": {
+      "decision": "ALPHA_BACKEND_BOUND",
+      "reduction_that_made_this_tractable": "The Hermite cubic, the beta right-hand side and the RK4 recursion use only addition, subtraction, multiplication and one division. The natural logarithm is the only transcendental in either provider, so the external backend requirement is confined to it.",
+      "selected": {
+        "rational_core": {
+          "identity": "analysis/validation/phase2b_interval_oracles.py",
+          "sha256": "a977b4a8e693a80e03bed8e12e2b6dbb4366ca240091fa2998a341bd3b64b6f8",
+          "guarantee": "Exact Fraction endpoints make the four rational operations exact; dyadic_outward widens endpoints outward onto a dyadic grid so containment is preserved while endpoint size stays bounded.",
+          "binary64_model": "RN(z) lies within u*abs(z) + eta of z with u = 2**-53 and eta = 2**-1075, which covers the subnormal range",
+          "dependency_footprint": "Python standard library only"
+        },
+        "transcendental_backend": {
+          "identity": "python-flint 0.6.0 Arb ball arithmetic",
+          "cp310_wheel": "python_flint-0.6.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "cp310_wheel_sha256": "4a99082434cbc568c7ad55fe6810eb832e04548af3d8130539ec4b78b0cc5cb9",
+          "probe_performed_on": "python_flint-0.6.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+          "probe_qualification": "The probe ran under CPython 3.12 because the frozen CPython 3.10.20 is not installed here. The cp310 wheel identity is bound but was not itself exercised.",
+          "guarantee": "Arb returns a ball with an explicit radius that provably contains the exact result, and it supplies a rigorous natural logarithm."
+        }
+      },
+      "evaluated_and_rejected": [
+        {
+          "candidate": "mpmath and mpmath.iv",
+          "reason": "Arbitrary precision is not containment, and mpmath interval transcendental rounding is not a documented rigorous enclosure. The accepted records already exclude it."
+        },
+        {
+          "candidate": "platform math and NumPy",
+          "reason": "Both return a point value from the platform libm and carry no containment contract."
+        },
+        {
+          "candidate": "MPFI",
+          "reason": "Accepted in principle as a directed-rounding interval library, but no maintained Python binding with a reproducible wheel identity was found, so its dependency footprint is worse than the selected pair."
+        }
+      ],
+      "critical_qualification": "Binding a rigorous backend for the mathematical logarithm does not enclose the logarithm the frozen providers actually call. That gap is recorded under a5."
+    },
+    "a4_ct18_continuous_enclosure": {
+      "status": "SPECIFIABLE_FOR_THE_IDEALISED_FUNCTION_ONLY",
+      "input_interval": "a closed interval of Q^2 lying strictly inside one knot cell",
+      "coefficient_enclosure": "the knot values, the natural-log knot positions and the three finite-difference slopes are binary64 constants that must be enclosed as computed, not as exact reals",
+      "evaluation": "hermite_cubic_enclosure with the binary64 rounding model applied to every elementary operation",
+      "branch_handling": "magnitude_clamp_branch must return BELOW for the whole cell before the smooth expression may be used; UNDECIDED forces subdivision",
+      "threshold_side_handling": "cells never cross a knot, and the two sides of a knot are separate cells",
+      "outward_rounding": "every derived endpoint is widened by dyadic_outward",
+      "certified_this_task": "The enclosure machinery was exercised on toy analytic inputs and contained every binary64 replay point.",
+      "remaining_gap": "The natural-log knot positions and the runtime log call are platform libm results, so the enclosure is only rigorous once a bound for that routine is available."
+    },
+    "a5_apfel_continuous_enclosure": {
+      "status": "SPECIFIABLE_FOR_THE_IDEALISED_FUNCTION_ONLY",
+      "method_finding": {
+        "headline": "VALIDATED_IVP_INTEGRATION_IS_NOT_REQUIRED",
+        "derivation": "AS_EXACT performs a fixed ten-step recursion with no adaptivity, no step control and no error estimate. Given an enclosure of DLR the whole computation is a finite composition of additions, subtractions and multiplications, so ordinary interval evaluation already encloses every value the recursion can produce.",
+        "what_it_does_not_claim": "The enclosure bounds the recursion's own output. It says nothing about the exact solution of the beta-function differential equation, and the two are not the same object.",
+        "consequence_for_v3": "The provisional V3 design and this task's brief both anticipated interval Runge-Kutta with a local truncation bound or Taylor-model integration. Neither is needed, because the frozen target is the algorithm rather than the differential equation."
+      },
+      "evidence": {
+        "toy_demonstration": "fixed_step_rk4_enclosure over a toy cubic right-hand side contained all 401 binary64 replay points at every subdivision level, and the enclosure overshoot fell from 1.0749 to 1.0003 as the partition went from 1 to 256 cells.",
+        "physics_executed": false
+      },
+      "remaining_gap": "DLR is DLOG(MU2/MU20) from the platform libm, so the same logarithm gap applies."
+    },
+    "a6_consistency_claim": {
+      "decision": "ALPHA_CLAIM_BOUNDED_NUMERICAL_CONSISTENCY",
+      "why_not_exact_identity": "CT18 exposes a cubic Hermite interpolation of serialized values with a magnitude clamp; APFEL exposes a ten-step fixed RK4 recursion with a truncated one-sixth literal. These are different finite algorithms and are not the same mathematical function, so exact identity is not the right claim and could never pass.",
+      "criterion_status": "UNRESOLVED",
+      "why_unresolved": "A bounded-consistency claim needs a level. The accepted records supply none: the massless 1e-5 and MassiveDIS 0.001 figures are comparator-local and explicitly non-transferable, machine epsilon is not a physics requirement, and the research-question record selects no metric and declares no event-set size or calibration tolerance.",
+      "alternative_gate_considered": {
+        "form": "record the certified discrepancy and require the reference-closure gates to pass instead of imposing an alpha threshold",
+        "assessment": "This is the structurally correct fallback and matches the V3 downstream rule of propagating the whole certified discrepancy. It cannot be adopted here because every reference-closure gate is itself blocked, so the fallback would rest on gates that cannot currently pass.",
+        "adopted": false
+      },
+      "no_tolerance_manufactured": true
+    },
+    "a7_finite_certification_algorithm": {
+      "status": "NOT_SERIALIZED",
+      "reason": "A7 is conditional on Workstream A succeeding. It did not: the implemented-function enclosure and the consistency criterion are unresolved, so serialising a PASS, FAIL, INCONCLUSIVE and resource ceiling would present an untestable design as a finished algorithm.",
+      "components_that_are_ready": [
+        "the 23-interval partition and its 24 breakpoints",
+        "deterministic left-first bisection with a fixed maximum depth and no retry",
+        "the exact interval backend identity and the binary64 rounding model",
+        "the branch-decision rule for the magnitude clamp",
+        "the exact provider mathematics on both sides"
+      ],
+      "components_that_are_missing": [
+        "a rigorous enclosure of the platform natural logarithm",
+        "a defensible consistency criterion",
+        "the resource count that follows from both"
+      ]
+    },
+    "libm_finding": {
+      "status": "UNRESOLVED_AND_LOAD_BEARING",
+      "why_it_matters": "Both providers evaluate a natural logarithm, and the accepted sign contract makes the actual implemented finite-precision object the load-bearing one. Enclosing an idealised real-arithmetic function is therefore not sufficient.",
+      "evidence": [
+        {
+          "locator": "glibc 2.39 sysdeps/ieee754/dbl-64/e_log.c sha256 a645fd8877ca71441cbf4268ab1bdd2ca38f3054ebfe15d75e820742f75770ae",
+          "retrieval_qualification": "Retrieved from the bminor/glibc GitHub mirror at tag glibc-2.39, not from sourceware directly; the hash identifies the retrieved bytes, and a successor that relies on this bound should re-retrieve from the upstream repository.",
+          "finding": "The source states a worst-case error around 0.507 ULP on the near-one path and 0.519 ULP with fma or 0.520 ULP without fma otherwise. These are the implementers' own error analysis, not a machine-checked proof."
+        },
+        {
+          "locator": "glibc 2.39 sysdeps/x86_64/fpu/multiarch/e_log.c",
+          "finding": "The x86_64 symbol is an ifunc selected at load time among sse2, avx, fma4 and fma variants, and the source itself documents different rounding for the fma and non-fma paths. The mathematical function realised by log therefore depends on the CPU."
+        },
+        {
+          "locator": "host /proc/cpuinfo",
+          "finding": "The inspection host advertises fma and avx2, so it would select an fma variant. A host without fma would select a different one and could return different bits."
+        }
+      ],
+      "consequence": "A rigorous enclosure of either implemented provider requires either an interval re-implementation of the selected libm routine including its lookup tables, or acceptance of a declared and clearly qualified ULP bound together with a frozen CPU feature set. Neither is established by the accepted records.",
+      "guard_implemented": "declared_ulp_log_enclosure refuses to widen an enclosure unless both a numeric bound and a stated authority are supplied."
+    },
+    "outcome": "ALPHA_BLOCKER_REMAINS_NARROWED"
+  },
+  "workstream_b_references": {
+    "b1_massivedis_executable_provenance": {
+      "decision": "FONLL_REF_PUBLISHED_ONLY",
+      "code_version": "massiveDISsFunction v1.2, released 2016-01-29",
+      "official_url": "https://www.roma1.infn.it/~bonvini/massivedis/",
+      "archive_sha256": "ccdcbc5147da8532cf80c41d890cc117adee10d3a9141164de752780cfd8f9f2",
+      "component_hashes": {
+        "inc/massiveDIS.hh": "71ad2ef4f16e0f1d5f8bf724dfb78972d6c2fbdb752c2e51be820c458e90560d",
+        "src/massiveDIS.cc": "71e33732ac4b401206eea015baaac8ae385240fd7883fa9a300aa8d1d7f2cbd0",
+        "src/integration.cc": "4b761ed18872bed21f7305184dd769ec890a4306607cab8aea73438839da3024",
+        "examples/example.cc": "1e557c89de37167a0452f6e8913c67b319d77553f60b558dd1dc1353c0377971"
+      },
+      "build": "GNU make with g++, flags -Wall -O3, linking -lLHAPDF -lgsl -lgslcblas -lgfortran",
+      "compiler_requirements": "a C++ compiler plus LHAPDF 6 and GSL development packages",
+      "runtime_inputs": "process, massive parton, LHAPDF set name and member; optional SetM1, SetM2, SetPrec, SetDamping and SetCounting",
+      "entry_point": "MassiveDIS::F(x, Q, order, scheme, sfunction, muF_Q_ratio, muR_Q_ratio)",
+      "observable_coverage": {
+        "f2c": true,
+        "flc": true,
+        "f3": true,
+        "nc_support": "DISNC, DISNCGAMMA, DISNCZ and DISNCZGAMMA are all provided",
+        "cc_support": "provided, with CKM mixing neglected"
+      },
+      "fonll_a_configuration": {
+        "available_schemes": [
+          "FO",
+          "FONLL",
+          "ACOT",
+          "ZM",
+          "FOQ"
+        ],
+        "labels_in_released_example": "FONLL is labelled FONLL-A (FLNR) and ACOT is labelled ACOT = newFONLL-A",
+        "likely_apfel_counterpart": "FONLL",
+        "binding_status": "NOT_BOUND",
+        "why": "The correspondence is a plausible reading of the README and the example labels. The damping and counting switches and the active-flavour treatment of the massless part would also have to be matched to APFEL, and no authoritative statement establishes that mapping."
+      },
+      "masses": "SetM1 and SetM2, defaulting in the released example to the PDF set's own quark mass",
+      "scales": "muF and muR supplied as ratios to Q",
+      "pdf_expectations": "an LHAPDF 6 set by name and member",
+      "alpha_s_expectations": "taken from the LHAPDF set",
+      "intrinsic_heavy_assumptions": "DeltaIC and DeltaF2IC provide the intrinsic-charm terms separately",
+      "internal_work_bound": {
+        "derivable": true,
+        "gsl_calls": "gsl_integration_qags with a subdivision limit of 1000 and gsl_integration_qagiu with a limit of 100000",
+        "per_call_ceiling": "at most 21000 integrand evaluations per qags call and 1500000 per qagiu call",
+        "qualification": "A complete per-observable count still requires tracing how many integration calls one F evaluation issues."
+      },
+      "numerical_error_certificate": {
+        "available": false,
+        "evidence": "integration::gauss accepts an error pointer, but every internal call in src/massiveDIS.cc passes NULL and precedes it with gsl_set_error_handler_off, so GSL error estimates are discarded and non-convergence is not signalled.",
+        "consequence": "An unmodified MassiveDIS returns no error interval. Retaining one requires patching the source, which changes the comparator's frozen identity."
+      },
+      "published_configuration_reconstructable": false,
+      "why_not": [
+        "The published APFEL versus MassiveDIS agreement is presented as a figure, so no exact x values or output values exist in the source material.",
+        "The published setup uses NNPDF30_nlo_as_0118_IC5, and the LHAPDF 6.5.6 index contains no set whose name carries an IC suffix, so the PDF input is not available from the official distribution."
+      ]
+    },
+    "b2_alternative_independent_comparator": {
+      "search_performed": true,
+      "search_bounded_to": "candidates that are implementation-independent from APFEL, cover NC heavy-flavour structure functions, match FONLL-A or a decomposable equivalent, and carry a source and version identity",
+      "candidates": [
+        {
+          "name": "yadism",
+          "url": "https://github.com/NNPDF/yadism",
+          "assessment": "NOT_BOUND",
+          "reason": "Its own documentation states that FONLL is not provided explicitly and that only the FFNS, FFN0 and ZM-VFNS ingredients are available. Assembling FONLL-A from those pieces and matching APFEL's damping is a substantial specification task that was not completed here. Its NNPDF lineage also makes the independence claim arguable."
+        },
+        {
+          "name": "APFEL++",
+          "assessment": "REJECTED_AS_INDEPENDENT",
+          "reason": "It shares authorship and construction with the pinned APFEL. Treating it as an independent comparator would be the wrapper-mislabelled-as-independent error."
+        },
+        {
+          "name": "FONLLdis and FastKernel table records",
+          "assessment": "UNCHANGED_FROM_V3",
+          "reason": "The 24 exact records exist, but the referenced Les Houches PDF and coupling setup is still not serialized, so the comparator configuration cannot be matched exactly."
+        }
+      ],
+      "conclusion": "No independent executable FONLL-A comparator could be bound within the permitted bounded search."
+    },
+    "b3_massless_benchmark_execution_contract": {
+      "decision": "MASSLESS_REF_PARTIAL",
+      "new_evidence_beyond_v3": {
+        "released_reference_program": "https://github.com/alexanderkarlberg/n3lo-structure-function-benchmarks blob main code/StructureFunctionsJoint.cc",
+        "retrieved_sha256": "199f7e90b057083a2cb68d4e6649cc527c30ba27bcb09977641acc87a457a5fe",
+        "publication_source_tar_sha256": "ccd5134044bc95027e696ddf764d759950dd2486eeeece9f98deaa2a4591c0db",
+        "note": "V3 recorded only the TeX source. The paper points at a released program, and that program fixes much of what V3 recorded as unresolved."
+      },
+      "coordinate_table": "27 NLO NC coordinates and 81 displayed values, already serialized by V3 and unchanged here",
+      "observable_definitions": "F1, F2 and F3 neutral current, built with zero-mass NC objects in the released program",
+      "reference_side_now_bound": {
+        "initial_scale": "Q0 = sqrt(2.0) evaluated in binary64, which is correctly rounded and reproducible",
+        "alpha_s_at_q0": 0.35,
+        "active_flavours_at_q0": "nf = 3, stated by the publication because the charm threshold is placed above Q0",
+        "thresholds_in_released_code": {
+          "charm": 1.414213563,
+          "bottom": 4.5,
+          "top": 175.0
+        },
+        "renormalisation_and_factorisation": "xmuR = 1.0 and xmuF = 1.0",
+        "weak_mixing": "sin^2(theta_W) = 1 - (M_W/M_Z)^2 with M_W and M_Z from the APFEL++ constants",
+        "hoppet_settings": "ymax 16.0, dy 0.05, dlnlnQ dy/8, order -6, Qmin 1.0, Qmax 13000.0, exact threshold corrections, parametrised splitting",
+        "apfelxx_grid": "four subgrids: {200, 1e-6, 5}, {250, 1e-2, 5}, {200, 6e-1, 5}, {100, 8.5e-1, 5}",
+        "coupling_tabulation": "AlphaQCD tabulated with 1000 points from 0.9, 111 nodes, interpolation degree 3"
+      },
+      "prose_versus_code_discrepancy": {
+        "paper_text": "charm mass is sqrt(2) + epsilon with epsilon taken as 1e-9",
+        "released_code_literal": 1.414213563,
+        "difference_from_sqrt_two": 6.269047503337788e-10,
+        "matches_stated_epsilon": false,
+        "consequence": "The executable truth and the prose differ. A future test must bind the literal, not the prose. This closes V3's open question about how sqrt(2) + 1e-9 is parsed by showing that the reference never parsed it."
+      },
+      "decision_rule": "candidate value must lie inside the published displayed-digit interval; no tolerance is invented",
+      "still_blocking": [
+        "The candidate side would use the accepted APFEL 3.1.1, whose grid and interpolation settings for this run are not frozen, so its own numerical accuracy is unbound.",
+        "The accepted bridge contract requires the callback scale to equal the CT18 boundary at 1.295 GeV, and a sqrt(2) GeV toy-PDF boundary run is outside it.",
+        "No finite candidate work cap follows until those settings exist."
+      ]
+    },
+    "b4_reference_decision_rules": {
+      "global_budget_created": false,
+      "rules": [
+        {
+          "gate": "G2 massless reference",
+          "mode": "REPLICATE_PUBLISHED_CONFIGURATION",
+          "rule": "candidate interval must be contained in the published displayed-digit interval",
+          "transferable": false
+        },
+        {
+          "gate": "G1 FONLL component reference",
+          "mode": "REPLICATE_PUBLISHED_CONFIGURATION",
+          "rule": "not formable; the published configuration is not reconstructable",
+          "transferable": false
+        },
+        {
+          "gate": "G1 FONLL component reference at project coordinates",
+          "mode": "GENERAL_SIMULATOR_CLOSURE",
+          "rule": "not formable; no project precision target exists and the published benchmark level may not be transferred to it",
+          "transferable": false
+        }
+      ],
+      "explicit_nontransfer": "The 0.001 published observation and the 1e-5 published observation stay attached to their own configurations and are not reused anywhere else."
+    },
+    "b5_reference_graph": [
+      {
+        "node": "complete_implemented_nc_rate",
+        "validation_kind": "unvalidated",
+        "load_bearing": true
+      },
+      {
+        "node": "electroweak_assembly",
+        "validation_kind": "exact analytic",
+        "load_bearing": true
+      },
+      {
+        "node": "coordinate_jacobian",
+        "validation_kind": "exact analytic",
+        "load_bearing": true
+      },
+      {
+        "node": "pdf_evaluator",
+        "validation_kind": "deterministic semantic bridge test",
+        "load_bearing": true
+      },
+      {
+        "node": "pdf_to_apfel_bridge",
+        "validation_kind": "deterministic semantic bridge test",
+        "load_bearing": true
+      },
+      {
+        "node": "massless_coefficients",
+        "validation_kind": "published benchmark",
+        "load_bearing": true,
+        "executable_status": "reference side bound, candidate side unbound"
+      },
+      {
+        "node": "massive_contribution",
+        "validation_kind": "unvalidated",
+        "load_bearing": true
+      },
+      {
+        "node": "fonll_difference_matching",
+        "validation_kind": "unvalidated",
+        "load_bearing": true
+      },
+      {
+        "node": "alpha_s",
+        "validation_kind": "unvalidated",
+        "load_bearing": true
+      },
+      {
+        "node": "quadrature_a",
+        "validation_kind": "self-convergence only",
+        "load_bearing": true
+      },
+      {
+        "node": "quadrature_b",
+        "validation_kind": "self-convergence only",
+        "load_bearing": true
+      },
+      {
+        "node": "normalization_assembly",
+        "validation_kind": "self-convergence only",
+        "load_bearing": true
+      },
+      {
+        "node": "normalized_law_assembly",
+        "validation_kind": "self-convergence only",
+        "load_bearing": true
+      }
+    ],
+    "load_bearing_unvalidated_nodes_present": true,
+    "outcome": "REFERENCE_BLOCKER_REMAINS"
+  },
+  "workstream_c_convergence": {
+    "c1_requirement_decision": {
+      "question": "does authorization require a rigorous quadrature remainder certificate, or a predeclared empirical convergence rule with an independent cross-check",
+      "answer": "NEITHER_IS_CURRENTLY_AVAILABLE",
+      "c1a_assessment": {
+        "verdict": "NOT_IMPLEMENTABLE_AGAINST_THE_ACCEPTED_IMPLEMENTATION",
+        "derivation": "A rigorous remainder needs an integrand that can be evaluated in interval arithmetic, or at least a certified bound on a derivative of known order. The accepted integrand is the frozen APFEL FONLL-A binary64 rate wrapper. It exposes one binary64 number per point and no interval extension, no derivative enclosure and no modulus of continuity. No verified quadrature method, including interval Gauss rules, validated adaptive quadrature and Arb ball integration, can be applied to such a black box.",
+        "consequence": "Requiring C1A would require replacing the accepted implementation, which the accepted records forbid for the same reason AS1 was rejected."
+      },
+      "c1b_assessment": {
+        "verdict": "STRUCTURALLY_AVAILABLE_BUT_UNANCHORED",
+        "reason": "An empirical rule is implementable, but it needs a declared precision target, and no accepted record supplies one."
+      },
+      "no_requirement_was_weakened_for_convenience": true,
+      "no_stronger_requirement_was_imposed_than_the_claim_needs": true
+    },
+    "c2_rigorous_route": {
+      "investigated": [
+        "interval Gauss rules",
+        "validated adaptive quadrature",
+        "Arb ball integration",
+        "Taylor-model quadrature"
+      ],
+      "common_precondition": "an interval-extensible integrand or a certified derivative bound",
+      "precondition_satisfied": false,
+      "conclusion": "No rigorous integration method can be predeclared for the future DIS integrand while the integrand remains a binary64 black box."
+    },
+    "c3_empirical_route": {
+      "precision_target_derivable": false,
+      "attempted_derivation": "The load-bearing object is the normalized selected-event law q = r / Z. A relative error in Z biases the per-event log density, and over an event set of size N the bias on the log posterior scales like N times that relative error. A sufficient accuracy for Z therefore follows from a declared event-set size and a declared acceptable posterior or coverage distortion.",
+      "why_it_fails": [
+        "The accepted research-question record fixes no event-set size N for the planned study.",
+        "It explicitly states that no information-content or calibration metric is selected.",
+        "It declares no acceptable coverage or calibration distortion.",
+        "The MassiveDIS 0.001 and massless 1e-5 levels are comparator-local and may not be reused as a project target."
+      ],
+      "no_target_manufactured": true,
+      "rule_shape_that_a_successor_would_need": [
+        "an absolute floor for behaviour near zero and a relative criterion away from zero",
+        "a successive-refinement criterion over the declared levels",
+        "an independent A and B path comparison",
+        "agreement required at every theta anchor",
+        "explicit failure semantics with no after-the-fact tuning"
+      ],
+      "outcome": "WORKSTREAM_C_REMAINS_BLOCKED"
+    },
+    "c4_analytic_software_tests": {
+      "scope": "software and rule mechanics only; these do not prove anything about the future DIS integrand",
+      "exact_integral_cases": [
+        {
+          "function": "x^7 - 3x^3 + 1 on [-1,1]",
+          "exact": 2.0,
+          "gauss_legendre_errors": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "clenshaw_curtis_errors": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "function": "exp(x) on [-1,1]",
+          "gauss_legendre_errors": [
+            1.332e-15,
+            1.776e-15,
+            1.776e-15
+          ],
+          "clenshaw_curtis_errors": [
+            4.441e-16,
+            4.441e-16,
+            4.441e-16
+          ]
+        },
+        {
+          "function": "1/(1+25x^2) on [-1,1]",
+          "gauss_legendre_errors": [
+            1.777e-3,
+            3.088e-6,
+            9.279e-12
+          ],
+          "clenshaw_curtis_errors": [
+            2.196e-3,
+            3.852e-6,
+            2.86e-11
+          ]
+        },
+        {
+          "function": "1/(x+1.0001) on [-1,1], analytic on the closed interval with a pole just outside it",
+          "gauss_legendre_errors": [
+            3.169,
+            1.889,
+            0.7844
+          ],
+          "clenshaw_curtis_errors": [
+            35.05,
+            6.962,
+            0.8809
+          ]
+        }
+      ],
+      "counterexample": {
+        "purpose": "test whether successive-difference agreement, or independent cross-rule agreement, bounds the remainder",
+        "function": "exp(-((x-c)/w)^2) on [-1,1], an entire function, with c = 0.1824 and w = 1e-4",
+        "node_separation": "c is at least 0.01269 away from every node of Gauss-Legendre 16, 32 and 64 and Clenshaw-Curtis 17, 33 and 65",
+        "exact_integral": 1.772453850906e-4,
+        "gauss_legendre_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "clenshaw_curtis_values": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "first_difference": 0.0,
+        "second_difference": 0.0,
+        "cross_path_difference": 0.0,
+        "true_error_of_both_paths": 1.772453850906e-4,
+        "finding": "Both paths report perfect self-convergence and perfect mutual agreement while both are entirely wrong. Successive-difference agreement is not a remainder bound, and an independent second rule sharing the node placement problem does not rescue it.",
+        "scope_limit": "This proves the rule provides no bound in general. It is not a claim about the behaviour of the future DIS integrand."
+      }
+    },
+    "c5_grid_gate": {
+      "v3_intent": "assess refinement of extrema and classification statistics on the fixed 17/33/65 hierarchy",
+      "separation": {
+        "pointwise_validation_coverage": "real and meaningful; the levels decide how many points the sign gate examines",
+        "numerical_interpolation_or_discretisation_error": "not applicable; nothing is interpolated between tested points, so there is no discretisation error to estimate",
+        "continuum_physics_claim": "not supported; a finite point set cannot certify unsampled continuum behaviour and the accepted sign contract already forbids that inference"
+      },
+      "conclusion": "As specified in V3, TEST_GRID_CONVERGENCE does not map to a scientifically meaningful quantity. The successive differences of a sample statistic measure sampling instability, not error.",
+      "recommended_successor_redesign": {
+        "replace_with": "an exact coverage and consistency audit",
+        "checks": [
+          "each coarse level's nodes are bitwise present in every finer level",
+          "every shared point carries a bitwise identical cached rate across levels",
+          "the required augmentation points are present at every level"
+        ],
+        "verified_here": "The 17/33/65 geometric node sets are bitwise nested for both the x and the Q^2 axes; a 16/32/64 hierarchy is not, which shows the property has to be tested rather than assumed.",
+        "not_applied_to_v3": "V3 is immutable and was not edited."
+      }
+    },
+    "outcome": "NUMERICAL_CONVERGENCE_BLOCKER_REMAINS"
+  },
+  "workstream_d_environment": {
+    "cpython": {
+      "target": "3.10.20",
+      "source_sha256": "4ff5fd4c5bab803b935019f3e31d7219cebd6f870d00389cea53b88bbe935d1a",
+      "executable_bound": false,
+      "note": "Only CPython 3.12.3 is present on the inspection host, so the frozen interpreter was not instantiated or exercised."
+    },
+    "operating_system_of_inspection_host": {
+      "distribution": "Ubuntu 24.04.3 LTS",
+      "kernel": "6.6.87.2-microsoft-standard-WSL2",
+      "glibc": "2.39-0ubuntu8.8",
+      "cpu": "12th Gen Intel Core i5-12500H",
+      "relevant_cpu_features": [
+        "fma",
+        "avx2"
+      ],
+      "is_the_frozen_runtime": false
+    },
+    "packages": {
+      "numpy": {
+        "version": "2.2.6",
+        "cp310_wheel_sha256": "fc7b73d02efb0e18c000e9ad8b83480dfcd5dfd11065997ed4c6747470ae8915"
+      },
+      "scipy": {
+        "version": "1.15.3",
+        "cp310_wheel_sha256": "9e2abc762b0811e09a0d3258abee2d98e0c703eee49464ce0069590846f31d40"
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "wheel_sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+        "role": "pinned diagnostic only, never a rigorous backend"
+      },
+      "python_flint": {
+        "version": "0.6.0",
+        "cp310_wheel_sha256": "4a99082434cbc568c7ad55fe6810eb832e04548af3d8130539ec4b78b0cc5cb9",
+        "role": "candidate rigorous transcendental backend",
+        "installed_in_repository_requirements": false
+      }
+    },
+    "native_code_identity": {
+      "load_bearing_native_components": [
+        "LHAPDF 6.5.6",
+        "APFEL 3.1.1",
+        "the platform libm"
+      ],
+      "compiler_identity_bound": false,
+      "libm_identity_bound": false,
+      "reason": "The x86_64 log symbol is resolved by an ifunc at load time from the CPU feature set, so the numerical function realised depends on the host CPU and not only on the pinned software versions."
+    },
+    "reproducibility_classification": "ENVIRONMENT_REPRODUCIBILITY_UNRESOLVED",
+    "bitwise_claim": false,
+    "bitwise_claim_reason": "Bitwise reproducibility would require a frozen CPU feature set in addition to frozen software, because the selected libm variant and its documented rounding differ between fma and non-fma hosts.",
+    "why_not_numerically_reproducible_with_frozen_software_identity": "That weaker classification asserts that freezing the software identity determines the numbers. The ifunc finding shows it does not: the same frozen LHAPDF, APFEL and glibc versions realise different logarithms on hosts with and without fma. The claim would also need a declared agreement tolerance, and no accepted record supplies one, so it is not a checkable statement. The honest classification is therefore unresolved rather than the weaker positive one.",
+    "outcome": "ENVIRONMENT_PARTIALLY_BOUND_LIBM_UNRESOLVED"
+  },
+  "non_dis_validation_evidence": {
+    "authorized_scope": "interval backend toy containment, validated arithmetic on toy recursions, quadrature exact-integral tests, grid nesting tests, rigor guards",
+    "physics_executed": false,
+    "results": [
+      "A toy fixed-step RK4 recursion enclosure contained all 401 binary64 replay points at 1, 4, 16, 64 and 256 cells, with the overshoot falling from 1.0749 to 1.0003.",
+      "A Hermite cubic enclosure over 32 cells contained all 2001 binary64 replay points.",
+      "The magnitude clamp classifier returned BELOW, AT_OR_ABOVE and UNDECIDED on the three intended cases.",
+      "The rigor guard accepted python-flint.arb and mpfi and rejected mpmath, mpmath.iv, math, numpy, decimal and an unknown name.",
+      "The declared-ulp logarithm helper refused a missing bound, an empty justification and a negative bound.",
+      "The 17/33/65 geometric grids are bitwise nested on both axes; 16/32/64 is not.",
+      "The convergence verdict helper refused a missing target, an empty justification, a zero target and an infinite target.",
+      "Gauss-Legendre and Clenshaw-Curtis reproduced exact polynomial and exponential integrals and converged on a smooth rational; both stalled badly on a near-endpoint pole.",
+      "On an entire narrow-bump integrand both rules returned exactly zero at all three levels while the exact integral is 1.7725e-4."
+    ],
+    "toy_literal_note": "The truncated one-sixth literal shifted the toy recursion midpoint by 1.31e-17, which is inside that configuration's 2.33e-16 accumulated rounding envelope. The literal is a real deviation from one sixth and matters for any bitwise-replay claim, but this toy configuration does not by itself demonstrate a numerically significant effect."
+  },
+  "resource_model": {
+    "policy": "Categories are reported separately in their own units. No heterogeneous aggregate is formed.",
+    "aggregate_status": "BLOCKED_NOT_DERIVABLE",
+    "aggregate_blocker": "TEST_ALPHA, TEST_FONLL_COMPONENT and TEST_MASSLESS still have no executable specification, so three categories remain null and an aggregate would be fabricated.",
+    "categories": [
+      {
+        "category": "physics_evaluator_calls",
+        "unit": "frozen rate evaluations",
+        "value": 63882,
+        "source": "TEST_RAW_RATE_SIGN, unchanged and fully specified"
+      },
+      {
+        "category": "alpha_interval_cells",
+        "unit": "interval cells",
+        "value": null,
+        "reason": "the certification algorithm is not serialized"
+      },
+      {
+        "category": "alpha_rhs_evaluations",
+        "unit": "interval beta right-hand-side evaluations",
+        "value": null,
+        "reason": "the certification algorithm is not serialized"
+      },
+      {
+        "category": "external_reference_calls",
+        "unit": "comparator invocations",
+        "value": null,
+        "reason": "no external comparator is bound"
+      },
+      {
+        "category": "bridge_evaluator_calls",
+        "unit": "callback attempts",
+        "value": 1045,
+        "source": "TEST_BRIDGE, unchanged and fully specified"
+      },
+      {
+        "category": "quadrature_integrand_calls",
+        "unit": "integrand evaluations",
+        "value": 98811,
+        "source": "TEST_QUADRATURE_A 48384 plus TEST_QUADRATURE_B 50427; the counts are fixed even though the acceptance rules are not"
+      },
+      {
+        "category": "analytic_unit_test_calls",
+        "unit": "analytic cases",
+        "value": 216,
+        "source": "TEST_EW_JACOBIAN, unchanged and fully specified"
+      },
+      {
+        "category": "storage_bound",
+        "unit": "emitted records",
+        "value": null,
+        "reason": "three tests emit no specified artifact set yet"
+      }
+    ],
+    "every_category_finite": false,
+    "why_not": "Finiteness is claimed only where the specification is complete. Three categories are explicitly null rather than filled with a plausible number."
+  },
+  "outcome": {
+    "code": "BR5_MULTIPLE_BLOCKERS_REMAIN",
+    "v4_created": false,
+    "derivation": "Workstream A resolved the exact provider mathematics, the 4*pi convention and the interval backend, and eliminated the validated-IVP requirement, but the implemented-function enclosure and the consistency criterion remain unresolved. Workstream B bound the MassiveDIS executable identity and recovered the massless reference configuration, yet no independent FONLL-A comparator is bound and the massless candidate side is unbound. Workstream C established that a rigorous remainder is not implementable against the accepted black-box integrand and that no project precision target exists to anchor the empirical alternative. Workstream D could not bind the libm identity. Three blocker families therefore remain.",
+    "blockers_remaining": [
+      {
+        "family": "A_ALPHA",
+        "id": "BLOCKER_ALPHA_IMPLEMENTED_LOG_ENCLOSURE",
+        "missing": "a rigorous enclosure of the platform natural logarithm invoked by both providers, together with a frozen CPU feature set",
+        "would_be_resolved_by": "either an interval re-implementation of the selected glibc log routine including its tables, or an accepted decision to certify against a declared and qualified ULP bound on a frozen CPU"
+      },
+      {
+        "family": "A_ALPHA",
+        "id": "BLOCKER_ALPHA_CONSISTENCY_CRITERION",
+        "missing": "a defensible nonzero consistency level, or an accepted decision to replace the threshold with propagation plus reference-closure gates",
+        "would_be_resolved_by": "a declared project precision target, or reference-closure gates that can actually pass"
+      },
+      {
+        "family": "B_REFERENCE",
+        "id": "BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC",
+        "missing": "an executable independent FONLL-A comparator with a matched configuration and an acceptance rule",
+        "would_be_resolved_by": "an authoritative APFEL-to-MassiveDIS scheme correspondence plus a declared precision target, or a published table with exact coordinates for a reproducible configuration"
+      },
+      {
+        "family": "B_REFERENCE",
+        "id": "BLOCKER_MASSLESS_CANDIDATE_SIDE",
+        "missing": "frozen APFEL 3.1.1 grid and interpolation settings, a bridge contract covering a sqrt(2) GeV boundary, and a finite work cap",
+        "would_be_resolved_by": "serializing those settings and extending the bridge contract to a second boundary configuration"
+      },
+      {
+        "family": "C_CONVERGENCE",
+        "id": "BLOCKER_PROJECT_PRECISION_TARGET",
+        "missing": "a declared accuracy requirement for the normalized simulator law",
+        "would_be_resolved_by": "declaring the event-set size and an acceptable posterior or coverage distortion, from which an accuracy for Z follows, or removing the normalization-accuracy claim from the paper boundary"
+      },
+      {
+        "family": "C_CONVERGENCE",
+        "id": "BLOCKER_GRID_GATE_SEMANTICS",
+        "missing": "a gate whose quantity is scientifically meaningful",
+        "would_be_resolved_by": "replacing the refinement gate with the exact coverage and nesting audit in a successor plan"
+      },
+      {
+        "family": "D_ENVIRONMENT",
+        "id": "BLOCKER_NUMERICAL_RUNTIME_IDENTITY",
+        "missing": "an executable interpreter, libm and CPU feature identity",
+        "would_be_resolved_by": "freezing a container image with a pinned CPU feature baseline and recording the resolved ifunc selection"
+      }
+    ],
+    "new_authorization_review_warranted": false,
+    "why_no_authorization_review": "Three load-bearing blocker families remain and every reference-closure gate is still unable to pass. An authorization review conducted now could only restate the same blockers.",
+    "why_no_v4": "V4 may exist only if BR1 is independently and positively established. It was not. Creating a successor plan now would present unresolved specifications as complete."
+  },
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "PHASE2B_EXECUTION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "TRAINING_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "FULL_GENERATOR_EXECUTION_AUTHORIZED": false
+  },
+  "execution_state": {
+    "phase2b": "NOT_EXECUTED",
+    "dis_structure_functions_executed": false,
+    "alpha_s_equivalence_executed": false,
+    "pdf_bridge_validation_executed": false,
+    "massivedis_comparison_executed": false,
+    "fonll_benchmark_executed": false,
+    "raw_rate_or_positivity_scan_executed": false,
+    "normalization_integrals_executed": false,
+    "convergence_studies_executed": false,
+    "events_or_datasets_generated": false,
+    "detector_or_neural_work_executed": false
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized"
+  },
+  "remaining_scientific_limitations": [
+    "No end-to-end independent implementation of the complete NC rate exists.",
+    "No independent executable FONLL-A comparator is bound.",
+    "The massless candidate-side execution specification is incomplete.",
+    "The alpha certification cannot enclose the implemented providers because the platform logarithm is unbound.",
+    "No rigorous quadrature remainder is obtainable against the accepted black-box integrand.",
+    "No accepted project precision target exists, so no empirical convergence rule can be anchored.",
+    "Successive-difference and cross-rule agreement are demonstrated not to bound a remainder.",
+    "Finite point grids do not prove continuum positivity.",
+    "Nine theta anchors do not establish every interior theta.",
+    "Inclusive NC electron-proton data do not provide unrestricted flavour separation.",
+    "No alpha, bridge, DIS, sign, convergence, normalization or closure result was executed."
+  ],
+  "next_step": "Decide the two questions that gate everything else: whether the project will certify against a declared and qualified platform-logarithm bound on a frozen CPU, and what accuracy the normalized simulator law actually requires. Both are scientific decisions about the claim, not further source review. Until they are recorded, a successor preauthorization plan cannot be complete and no authorization review is warranted."
+}

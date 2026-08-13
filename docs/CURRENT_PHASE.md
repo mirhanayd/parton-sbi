@@ -642,3 +642,35 @@ warranted.
 Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
 and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
 ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
+
+## Phase 2B preauthorization blocker resolution V1
+
+The blocker-resolution record derives `BR5_MULTIPLE_BLOCKERS_REMAIN`. It is a
+blocker-resolution task, not an execution authorization review, and it created
+no V4 successor plan.
+
+Real progress was made in every family. The exact CT18 alpha representation and
+the exact APFEL coupling mathematics are now derived from pinned source rather
+than described, including the previously unrecorded sentinel magnitude clamp in
+`AlphaS_Ipol.cc` and the truncated `0.166666666666666D0` literal in `AS_EXACT`.
+The `4*pi` convention is resolved: `AlphaQCD(Q)` returns `4d0 * pi * a_QCD` with
+`pi = 3.1415926535897932385d0`. A rigorous interval backend is bound
+(`ALPHA_BACKEND_BOUND`), and validated initial-value-problem integration is
+shown not to be required, because the frozen ten-step recursion is a finite
+composition of arithmetic operations. MassiveDIS v1.2 and the released massless
+benchmark program are both retrieved and inspected.
+
+Three families still block. Both coupling providers call the platform natural
+logarithm, which on x86_64 glibc is selected by an ifunc from CPU features and
+carries only an author-stated error analysis, so the implemented functions
+cannot be enclosed. No independent executable FONLL-A comparator is bound: the
+published benchmark PDF set is absent from the LHAPDF index and the published
+evidence is figure-only. No rigorous quadrature remainder is obtainable against
+the accepted binary64 black-box integrand, and no accepted record declares a
+project precision target to anchor the empirical alternative; a worked analytic
+counterexample shows successive-difference and cross-rule agreement bounding
+nothing.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
+ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
