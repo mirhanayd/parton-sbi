@@ -202,3 +202,29 @@ acceptance remains scientifically underived, and the FONLL component comparator
 is not fully executable from frozen inputs. Historical Phase 2A remains
 `INCONCLUSIVE`; this ADR remains Proposed. Phase 2B remains `NOT_AUTHORIZED`
 and `NOT_EXECUTED`, and no downstream phase is authorized.
+
+## Follow-on Phase 2B preauthorization blocker resolution
+
+The blocker-resolution record derives `BR5_MULTIPLE_BLOCKERS_REMAIN`. It is not
+an execution authorization review and it created no V4 successor plan.
+
+It resolves the exact CT18 and APFEL coupling representations from pinned
+source, including the sentinel magnitude clamp in LHAPDF's alpha interpolation
+and the truncated one-sixth literal in APFEL's fixed-step recursion; it closes
+the `4*pi` conversion question; it binds a rigorous interval backend; and it
+establishes that validated initial-value-problem integration is not required
+because the frozen recursion is a finite arithmetic composition. It binds the
+MassiveDIS v1.2 source identity and recovers the released massless benchmark
+program.
+
+Three blocker families remain. The platform natural logarithm invoked by both
+coupling providers is selected at load time from CPU features and carries only
+an author-stated error analysis, so neither implemented provider can be
+enclosed. No independent executable FONLL-A comparator is bound. No rigorous
+quadrature remainder is obtainable against the accepted binary64 black-box
+integrand, and no accepted record declares a project precision target for the
+normalized law.
+
+Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed. Phase 2B
+remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
+authorized.
