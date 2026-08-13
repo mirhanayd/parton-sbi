@@ -322,7 +322,7 @@ EXPECTED_BRIDGE_ORACLE = {
     "path": "analysis/validation/phase2b_bridge_oracles.py",
     "sha256": "b1c70070dc0fbb66a5b7de7125a16b478893d624b5909b44426ae61a8a27f92c",
     "test_path": "analysis/tests/test_phase2b_bridge_oracles.py",
-    "test_sha256": "01029a7969b00b878d3de3096e6b1c4074edd5f0147d58204bfe25378aa77fe1",
+    "test_sha256": "1e921b6287484b689f6b4202df04d4de8da847f9bf305194df87a3e702113c0c",
 }
 EXPECTED_BRIDGE_CASE_HASHES = {
     "identity_cases": "4e651393009b8df31d634437c90fd5cacb4f5853c54fdab52709c3bc6e7a8246",

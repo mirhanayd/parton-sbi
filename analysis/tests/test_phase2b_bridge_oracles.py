@@ -1,7 +1,12 @@
 import math
 import random
+import sys
+from pathlib import Path
 
 import pytest
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
 
 from analysis.validation.phase2b_bridge_oracles import (
     BINARY64_NEGATIVE_INFINITY_BITS,

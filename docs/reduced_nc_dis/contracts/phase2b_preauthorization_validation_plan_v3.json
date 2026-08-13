@@ -615,7 +615,7 @@
       "sha256": "b1c70070dc0fbb66a5b7de7125a16b478893d624b5909b44426ae61a8a27f92c",
       "algorithm": "Decode finite IEEE-754 binary64 operands to exact signed dyadic integers, multiply exact integer significands, then round once to binary64 with integer round-to-nearest ties-to-even. The algorithm explicitly covers signed zero, gradual underflow/subnormals, the normal/subnormal crossover and signed overflow; NaN/infinite inputs are rejected.",
       "test_path": "analysis/tests/test_phase2b_bridge_oracles.py",
-      "test_sha256": "01029a7969b00b878d3de3096e6b1c4074edd5f0147d58204bfe25378aa77fe1"
+      "test_sha256": "1e921b6287484b689f6b4202df04d4de8da847f9bf305194df87a3e702113c0c"
     },
     "flavor_slots": {
       "0": "x*f(21)",

@@ -276,11 +276,14 @@ physics validation was performed, so `scripts/pythia_env.sh` was not sourced.
 | `env PYTHONPATH=/tmp/partonsbi-phase2b-preauth-v3-review/analysis-site python3 -m pytest -q analysis/tests/` | PASS, 602 tests |
 | `env PYTHONPATH=/tmp/partonsbi-phase2b-preauth-v3-review/analysis-site python3 -m pytest -q analysis/tests/` after WSL cleared that temporary tree | FAIL, 601 passed / 1 exact-version guard failure; not treated as a dependency-matched run |
 | `bash -lc "python3 -m pip install --quiet --target /tmp/partonsbi-phase2b-v3-analysis-site -r /mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/parton-sbi/analysis/requirements.txt && cd /mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/parton-sbi && PYTHONPATH=/tmp/partonsbi-phase2b-v3-analysis-site python3 -m pytest -q analysis/tests/"` | PASS, 604 tests; authoritative final coupled run |
+| PR CI run `31748390132`, Python Analysis Tests | FAIL during collection: the `pytest` entrypoint did not place the repository root on `sys.path` for the new bridge-oracle test |
+| `/home/mrxn/.local/bin/pytest -q analysis/tests/test_phase2b_preauthorization_validation_plan_v3.py analysis/tests/test_phase2b_bridge_oracles.py` after explicit test-root import fix | PASS, 131 tests |
+| `bash -lc "python3 -m pip install --quiet --target /tmp/partonsbi-phase2b-v3-ci-fix-site -r /mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/parton-sbi/analysis/requirements.txt && cd /mnt/c/Users/mirha/OneDrive/Belgeler/GitHub/parton-sbi && PYTHONPATH=/tmp/partonsbi-phase2b-v3-ci-fix-site /home/mrxn/.local/bin/pytest -q analysis/tests/"` | PASS, 604 tests; exact CI-style entrypoint verification for correction cycle 1 |
 | `cargo fmt --all -- --check` | PASS |
 | `git diff --check` | PASS |
 
 The machine artifact SHA-256 is
-`53868593d99d6e4768b1658e061ae42fe2a90a5dff3aa32618f7150323c5eb3b`.
+`78a029686489e9712e65ef6f9df3263b4821f96de0ee9873a910dee31f307e06`.
 The temporary dependency directory is outside the repository and is not a
 deliverable. The one failed first run is retained here rather than hidden; no
 scientific rule or test was weakened to obtain the clean dependency-matched
