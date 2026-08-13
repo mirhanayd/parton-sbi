@@ -1,0 +1,316 @@
+{
+  "schema_version": "partonsbi.phase2b.execution-authorization-review.v1",
+  "record_type": "PHASE2B_EXECUTION_AUTHORIZATION_REVIEW",
+  "decision": "AR2_PREAUTH_PLAN_REVISION_REQUIRED",
+  "starting_main_sha": "ae8cc6837a1692353c08aa08de2d0cf3a9ca8f58",
+  "predecessors": {
+    "phase2b_preauthorization_plan": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan.json",
+      "schema": "partonsbi.phase2b.preauthorization-validation-plan.v1",
+      "sha256": "7eb8834eb8435532a85bd7d49b173b03e57a268f69f9676e0effbd877903672b",
+      "accepted_outcome": "P1_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_AUTHORIZATION_REVIEW"
+    },
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8"
+    },
+    "phase2a_contract_review": {
+      "path": "docs/reduced_nc_dis/contracts/phase2a_contract_review.json",
+      "sha256": "4ce2b5b8e910edda6f2183fe7a7e24ec1f0d5e99bd603b708f587c178d1d237b"
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "phase2a_changed": false,
+    "adr_013_status": "Proposed",
+    "fonll_a_selection_changed": false,
+    "preauthorization_p1_changed": false
+  },
+  "provenance_audit": {
+    "reviewed_utc": "2026-08-13T15:07:39Z",
+    "new_source_selection_performed": false,
+    "accepted_source_bytes_reinspected": true,
+    "source_observations": [
+      {
+        "source_id": "CT18NLO_DATAVERSION_1",
+        "sha256": "c9127231e77e97cbec79cb5839203ab00f8db77237a061b61f9420f2b7b9c213",
+        "locator": "CT18NLO/CT18NLO.info",
+        "observation": "MZ=91.1870, AlphaS_MZ=0.118000, AlphaS_OrderQCD=1, AlphaS_Type=ipol; SetDesc attributes the running solution to HOPPET."
+      },
+      {
+        "source_id": "APFEL_SOURCE_3_1_1",
+        "sha256": "e5c4b3d955f8d33e8e8ff2d9d1687da57f2ee99245abc579f9d32caa616f0f53",
+        "locator": "include/APFEL/APFELevol.h and src/Evolution/EvolveAPFEL.f",
+        "observation": "The public evolution/alpha/PDF interfaces use C++ double and the evolution routine declares double precision; no complete-rate binary128 path is exposed by the pinned source."
+      }
+    ],
+    "source_bytes_committed": false
+  },
+  "rederived_plan": {
+    "pre_auth_items": [
+      "heavy_quark_mass_convention_and_values",
+      "shared_alpha_s_identity",
+      "theta_anchors",
+      "physics_validity_domain",
+      "coordinate_and_jacobian_convention",
+      "validation_grids",
+      "tolerances_with_justification",
+      "convergence_rules",
+      "independent_reference_hierarchy",
+      "resource_bounds",
+      "positivity_no_clipping_policy",
+      "normalization_closure_strategy",
+      "failure_precedence"
+    ],
+    "pre_auth_plan_completeness": "COMPLETE_AS_A_REVIEWABLE_PLAN",
+    "post_auth_items": [
+      "APFEL_FONLL_A_EVALUATIONS",
+      "POSITIVITY_SCAN",
+      "NORMALIZATION_INTEGRATION",
+      "CONVERGENCE_STUDY",
+      "CROSS_IMPLEMENTATION_COMPARISON",
+      "SELECTED_EVENT_NORMALIZATION_EVALUATION"
+    ],
+    "post_auth_execution_status": "NOT_EXECUTED",
+    "starting_execution_authorization": false
+  },
+  "accepted_contract": {
+    "scheme": "FONLL-A",
+    "perturbative_order": "NLO",
+    "software": {
+      "name": "APFEL",
+      "version": "3.1.1",
+      "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a"
+    },
+    "pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "pdf_baseline": "ct18nlo_member0_sumrule_projected_boundary_v2",
+    "strict_support": true
+  },
+  "heavy_flavor_and_coupling_audit": {
+    "mass_result": "COHERENT",
+    "mass_findings": {
+      "convention": "POLE",
+      "charm_mass_gev": 1.3,
+      "bottom_mass_gev": 4.75,
+      "charm_threshold": "mu_c=m_c_pole",
+      "bottom_threshold": "mu_b=m_b_pole",
+      "nf_max": 5,
+      "classification": "CT18_SOURCE_SUPPORTED_VALUES_WITH_PROJECT_SELECTED_POLE_CONVENTION",
+      "reason": "The CT18NLO metadata, CT18 publication and pinned APFEL controls agree on the selected pole masses and five-flavor scope; the values are not accepted merely as APFEL defaults."
+    },
+    "alpha_s_result": "UNRESOLVED",
+    "alpha_s_findings": {
+      "repository_identity": "ct18nlo_as_mz_0p118_nlo_vfns_mc1p3_mb4p75_nfmax5_v1",
+      "reference_value": 0.118,
+      "reference_scale_gev": 91.187,
+      "order": "NLO_TWO_LOOP",
+      "ct18_authoritative_type": "IPOL_TABLE_FROM_HOPPET_RUNNING_SOLUTION",
+      "apfel_planned_type": "INTERNAL_TWO_LOOP_EVOLUTION_FROM_REFERENCE_TUPLE",
+      "classification": "UNRESOLVED",
+      "reason": "The shared name does not establish numerical identity between CT18NLO's tabulated HOPPET coupling and APFEL's internal evolution. The plan compares APFEL only with a new analytic solver and does not bind the CT18 table, exact matching convention, threshold-side semantics or an evidence-derived cross-object tolerance."
+    },
+    "overall_result": "UNRESOLVED",
+    "authorization_consequence": "REVISION_REQUIRED"
+  },
+  "domain_audit": {
+    "result": "PASS",
+    "coordinates": ["x_Bj", "Q2"],
+    "differential_quantity": "d2sigma_dx_Bj_dQ2",
+    "beam": {"electron_energy_gev": 27.5, "proton_energy_gev": 920.0, "s_massless_gev2": 101200.0},
+    "jacobian": "dy/dQ2 at fixed x_Bj = 1/(s*x_Bj)",
+    "domain": "6e-7<=x_Bj<=0.65; 3.5<=Q2<=50000 GeV2; 0.005<=Q2/(101200*x_Bj)<=0.95",
+    "effective_x_min": "3.5/(101200*0.95)",
+    "mask": "PREDECLARED_RESULT_INDEPENDENT_INTERSECTION_MASK",
+    "normalization_domain_matches": true,
+    "strict_pdf_support": true,
+    "post_hoc_removal_allowed": false,
+    "reason": "The domain is the mathematical intersection, not the surrounding rectangle. Empty x/Q2/y combinations are excluded by a fixed kinematic mask before any rate result exists."
+  },
+  "anchor_audit": {
+    "result": "PASS_FOR_NINE_ANCHOR_CLAIM_ONLY",
+    "theta_bounds": {"delta_v": [-0.2, 0.2], "lambda_sea": [-0.25, 0.25]},
+    "required_roles": ["center", "four_axis_endpoints", "four_corners"],
+    "anchor_count": 9,
+    "adaptive_anchors_allowed": false,
+    "claim_limit": "Agreement at nine anchors does not prove closure at every interior theta and must not be reported that way."
+  },
+  "grid_audit": {
+    "result": "PASS_WITH_IMPLEMENTATION_INDEPENDENCE_REVISION",
+    "point_levels": [17, 33, 65],
+    "point_nesting": "Each geometric level contains the preceding level because N_next=2*N_previous-1.",
+    "boundary_and_threshold_candidates_per_level": "13*N",
+    "normalization_primary_orders": [16, 32, 64],
+    "normalization_independent_orders": [17, 33, 65],
+    "adaptive_extension_allowed": false,
+    "qualification": "The mathematical rules are distinct, but the plan does not bind implementation provenance or a test proving that Gauss-Legendre and Clenshaw-Curtis do not share the same quadrature core."
+  },
+  "resource_audit": {
+    "result": "PASS",
+    "anchor_count": 9,
+    "refinement_levels": 3,
+    "point_formula": "9*((17^2+13*17)+(33^2+13*33)+(65^2+13*65))",
+    "point_evaluations": 63882,
+    "normalization_formula": "9*((16^2+32^2+64^2)+(17^2+33^2+65^2))",
+    "normalization_evaluations": 98811,
+    "reference_formula": "64+30+9*24",
+    "reference_evaluations": 310,
+    "total_formula": "63882+98811+310",
+    "total_evaluations": 163003,
+    "maximum_output_bytes": 67108864,
+    "unbounded_adaptive_loop": false,
+    "continue_until_pass_allowed": false,
+    "exhaustion_result": "INCONCLUSIVE"
+  },
+  "tolerance_audit": [
+    {
+      "tolerance_id": "TOL_FONLL_PUBLISHED_COMPONENT",
+      "threshold": 0.013,
+      "mode": "RELATIVE",
+      "classification": "QUALIFIED_TOLERANCE",
+      "basis": "Published maximum APFEL/FONLLdis discrepancy envelope.",
+      "authorization_finding": "Source-bounded and not tighter than the reference, but the plan must bind behavior for a zero or near-zero reference component before AR1."
+    },
+    {
+      "tolerance_id": "TOL_MASSLESS_NC_REFERENCE",
+      "threshold": 1e-05,
+      "mode": "RELATIVE",
+      "classification": "QUALIFIED_TOLERANCE",
+      "basis": "Published APFEL++/HOPPET benchmark agreement.",
+      "authorization_finding": "Source-bounded at the published nonzero lookup points; any extension to zero-crossing or near-zero values requires an explicit mixed rule."
+    },
+    {
+      "tolerance_id": "TOL_INTEGRATION_AND_GRID_BUDGET",
+      "threshold": 0.0013,
+      "mode": "RELATIVE",
+      "classification": "UNJUSTIFIED_TOLERANCE",
+      "basis": "Chosen as one tenth of 0.013.",
+      "authorization_finding": "A factor-of-ten separation alone does not allocate a complete error budget, define near-zero extrema behavior, or demonstrate that this discretization error cannot conceal the intended closure failure."
+    },
+    {
+      "tolerance_id": "TOL_NORMALIZED_LAW",
+      "threshold": 0.0013,
+      "mode": "ABSOLUTE",
+      "classification": "UNJUSTIFIED_TOLERANCE",
+      "basis": "Copied from the integration/grid budget for a unit target.",
+      "authorization_finding": "The plan does not derive the allowed probability-mass residual from an end-to-end normalization error budget; using the same integrand and normalization estimate can also be tautological unless implementation separation is bound."
+    },
+    {
+      "tolerance_id": "TOL_ALPHA_S_IDENTITY",
+      "threshold": 7.993605777301127e-15,
+      "mode": "RELATIVE",
+      "classification": "UNJUSTIFIED_TOLERANCE",
+      "basis": "72 binary64 unit roundoffs for APFEL versus an analytic solver.",
+      "authorization_finding": "The tolerance addresses implementation roundoff for one evolution equation but not identity with CT18NLO's authoritative ipol/HOPPET table, threshold-side matching semantics or its serialized precision."
+    },
+    {
+      "tolerance_id": "TOL_JACOBIAN",
+      "threshold": 8.881784197001252e-16,
+      "mode": "RELATIVE",
+      "classification": "AUTHORIZED_TOLERANCE",
+      "basis": "Eight-unit-roundoff operation budget against the exact analytic Jacobian.",
+      "authorization_finding": "The comparison is analytic, local and independent of observed physics results."
+    },
+    {
+      "tolerance_id": "TOL_NEGATIVE_ROUNDOFF_ENVELOPE",
+      "threshold": "gamma_32*S",
+      "mode": "MIXED_LOCAL_BACKWARD_ERROR",
+      "classification": "UNJUSTIFIED_TOLERANCE",
+      "basis": "Thirty-two-operation outer-assembly error model plus binary128 sign adjudication.",
+      "authorization_finding": "The bound covers only a declared outer assembly and does not cover APFEL's internal binary64 coefficient/evolution errors; no operational full same-point binary128 implementation is pinned."
+    }
+  ],
+  "roundoff_and_negative_rate_audit": {
+    "result": "REVISION_REQUIRED",
+    "clipping_allowed": false,
+    "absolute_value_repair_allowed": false,
+    "replace_negative_with_zero_allowed": false,
+    "original_signed_rate_retained": true,
+    "high_precision_negative_result": "FAIL",
+    "high_precision_unavailable_result": "INCONCLUSIVE",
+    "operational_binary128_complete_rate_recomputation_bound": false,
+    "reason": "The policy intent is non-repairing, but pinned APFEL is a binary64 implementation. Reassembling binary64 APFEL outputs in binary128 is not a high-precision recomputation of the complete rate and cannot adjudicate errors originating inside APFEL."
+  },
+  "independent_reference_coverage": [
+    {"component": "complete_theta_dependent_nc_rate", "classification": "PARTIALLY_INDEPENDENT", "oracle": "Composition of component checks", "gap": "No full end-to-end independent comparator."},
+    {"component": "electroweak_assembly", "classification": "FULLY_INDEPENDENT", "oracle": "APFEL-free analytic HERA formula and charge-sign implementation", "gap": "None for outer assembly."},
+    {"component": "massless_coefficient_contribution", "classification": "PARTIALLY_INDEPENDENT", "oracle": "Published APFEL++/HOPPET massless NC benchmark", "gap": "Does not directly close pinned APFEL 3.1.1 with the exact accepted theta family."},
+    {"component": "massive_contribution", "classification": "PUBLISHED_BENCHMARK", "oracle": "Published FONLLdis/APFEL heavy-structure-function comparisons", "gap": "Lookup configurations are not the complete accepted project observable."},
+    {"component": "fonll_matching_difference_term", "classification": "PUBLISHED_BENCHMARK", "oracle": "Published FONLL-A matched heavy benchmarks", "gap": "No exact theta-dependent project configuration."},
+    {"component": "accepted_deformed_pdfs_and_external_apfel_bridge", "classification": "UNVALIDATED", "oracle": "None in the current hierarchy", "gap": "The exact ExternalSetAPFEL bridge and flavor-map identity are load-bearing but absent from the independent plan."},
+    {"component": "shared_alpha_s", "classification": "UNVALIDATED", "oracle": "Planned analytic two-loop solver only", "gap": "Does not bind CT18NLO ipol/HOPPET values to APFEL internal evolution."},
+    {"component": "coordinate_and_jacobian", "classification": "FULLY_INDEPENDENT", "oracle": "Analytic y and Jacobian identities", "gap": "None."},
+    {"component": "numerical_integration_and_normalization", "classification": "PARTIALLY_INDEPENDENT", "oracle": "Gauss-Legendre and Clenshaw-Curtis rules", "gap": "Separate implementation provenance and anti-shared-core test are not bound."}
+  ],
+  "independent_reference_conclusion": {
+    "repository_gate_semantics": "A component decomposition can satisfy INDEPENDENT_NUMERICAL_CLOSURE_PLAN; a wholly independent full FONLL-A program is not categorically required.",
+    "current_hierarchy_sufficient": false,
+    "result": "REVISION_REQUIRED",
+    "reason": "Decomposition is scientifically permissible, but the current graph has unvalidated load-bearing PDF-bridge and shared-coupling nodes and only asserted implementation independence for normalization."
+  },
+  "failure_precedence_audit": {
+    "result": "PASS",
+    "one_bad_anchor_can_be_averaged_away": false,
+    "clipping_can_convert_fail_to_pass": false,
+    "resource_exhaustion_can_convert_fail_to_pass": false,
+    "reference_disagreement_can_be_waived": false,
+    "inconclusive_counts_as_pass": false,
+    "reason": "The serialized ordering gives contract, nonfinite, negative and support failures precedence and defines unresolved convergence/resource outcomes as INCONCLUSIVE."
+  },
+  "paper_claim_audit": {
+    "result": "PASS",
+    "authorized_claim_scope_if_eventually_executed": ["reduced NC DIS FONLL-A observation-law validation", "nine declared theta anchors", "declared kinematic domain", "numerical positivity normalization and component closure"],
+    "forbidden_implications": ["full generator realism", "shower or hadronization validity", "detector realism", "global-fit replacement", "unrestricted flavor identifiability", "production precision", "arbitrary PDF-family validity"]
+  },
+  "authorization_criteria": {
+    "heavy_mass_threshold_alpha_s_identity": "BLOCKED_REVISION",
+    "physics_domain": "PASS",
+    "theta_anchors": "PASS",
+    "grid_and_refinement": "BLOCKED_REVISION",
+    "tolerances": "BLOCKED_REVISION",
+    "roundoff_and_negative_rate_policy": "BLOCKED_REVISION",
+    "independent_reference_coverage": "BLOCKED_REVISION",
+    "resource_bounds": "PASS",
+    "failure_precedence": "PASS",
+    "paper_claim_boundary": "PASS"
+  },
+  "blocking_revisions": [
+    "Bind one shared alpha_s object across CT18NLO ipol/HOPPET provenance, APFEL, and the independent reference, including threshold-side matching semantics and an evidence-derived comparison rule.",
+    "Replace or operationally bind the complete-rate binary128 adjudicator; binary128 outer assembly of binary64 APFEL results is insufficient.",
+    "Add independent closure for the exact accepted deformed-PDF flavor map and ExternalSetAPFEL bridge, and bind provenance proving the two normalization quadratures do not share a computational core.",
+    "Amend the 0.0013 integration and normalized-law budgets and relative near-zero rules with a complete, non-tautological error budget."
+  ],
+  "decision_derivation": "AR2 is required because the direction and fixed FONLL-A contract remain viable, but multiple bounded plan fields require amendment before execution. AR1 is forbidden while any mandatory criterion is BLOCKED_REVISION; AR3 is unnecessary because each gap has a plausible planning-level remedy.",
+  "authorization": {
+    "PHASE2B_BOUNDED_NUMERICAL_VALIDATION_AUTHORIZED": false,
+    "PHASE2B_EXECUTION_AUTHORIZED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "TRAINING_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "FULL_GENERATOR_EXECUTION_AUTHORIZED": false
+  },
+  "execution_boundary": {
+    "phase2b_execution_status": "NOT_EXECUTED",
+    "apfel_or_apfelxx_numerical_physics_executed": false,
+    "positivity_or_normalization_calculation_executed": false,
+    "convergence_or_independent_closure_executed": false,
+    "events_data_detector_or_neural_work": false,
+    "later_execution_task_permitted": false
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "phase": "Phase2B",
+    "work_type": "Physics",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized",
+    "priority": "P0",
+    "research_line": "Reduced NC DIS"
+  },
+  "next_action": "Revise and separately review the fixed preauthorization plan to close all four recorded blockers; do not execute Phase 2B before a later AR1 authorization decision."
+}

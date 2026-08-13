@@ -572,3 +572,18 @@ issue #55 remains Open/Backlog with Gate Decision Not
 Evaluated, and execution remains `NOT_EXECUTED`. No APFEL numerical physics,
 positivity or normalization scan, event, dataset, detector, or neural work was
 performed.
+
+## Phase 2B execution authorization review
+
+The successor authorization review derives
+`AR2_PREAUTH_PLAN_REVISION_REQUIRED`. The P1 artifact remains complete as a
+reviewable plan, and the FONLL-A selection remains viable, but execution is not
+authorized. The review requires amendments for the shared CT18/APFEL
+`alpha_s` identity, operational complete-rate high-precision sign
+adjudication, exact deformed-PDF bridge/reference coverage, normalization
+implementation independence, and the `0.0013`/near-zero error budgets.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE` and
+ADR-013 remains Proposed. Phase 2C and all event, dataset, detector, neural,
+legacy D2, and full-generator work remain unauthorized.

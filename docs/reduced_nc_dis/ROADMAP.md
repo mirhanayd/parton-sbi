@@ -117,3 +117,12 @@ plan is `COMPLETE` as a reviewable plan only. It does not change the dependency
 graph or the historical incomplete proposal: Phase 2B remains Backlog, Gate
 Decision Not Evaluated, Not Authorized, and `NOT_EXECUTED`. A separate future
 authorization decision is required before any plan execution.
+
+## Phase 2B execution authorization review
+
+The successor review derives `AR2_PREAUTH_PLAN_REVISION_REQUIRED`. The P1 plan
+remains complete as a planning artifact, but execution authorization is
+withheld pending bounded amendments to coupling identity, high-precision sign
+adjudication, exact PDF-bridge/reference coverage, quadrature independence and
+tolerance error budgets. Phase 2B remains Open/Backlog, Gate Decision Not
+Evaluated, Not Authorized and `NOT_EXECUTED`; Phase 2C remains Not Authorized.

@@ -148,3 +148,16 @@ Planning completeness is not execution authority. Phase 2B remains `NOT_AUTHORIZ
 issue #55 remains Backlog with Gate
 Decision Not Evaluated. No numerical positivity, normalization or independent
 closure result is asserted.
+
+## Follow-on Phase 2B execution authorization review
+
+The subsequent authorization review derives
+`AR2_PREAUTH_PLAN_REVISION_REQUIRED`. This successor decision preserves the
+P1 planning-completeness result but does not authorize execution. It identifies
+bounded revisions to the shared `alpha_s` identity, complete-rate
+high-precision sign adjudication, exact accepted-PDF bridge closure,
+quadrature implementation independence, and tolerance/error-budget semantics.
+
+Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed. Phase
+2B remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
+authorized.
