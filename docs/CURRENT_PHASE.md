@@ -618,3 +618,27 @@ Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
 and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
 ADR-013 remains Proposed. Phase 2C and all event, dataset, detector, neural,
 legacy D2, and full-generator work remain unauthorized.
+
+## Phase 2B preauthorization V3 successor
+
+The scientific V3 successor derives `V3R6_MULTIPLE_BLOCKERS_REMAIN`. It
+removes the invalid `0.001` parent budget and equal split, freezes the
+PDF/member and B1-B8 bridge contract, adopts
+`SIGN1_STRICT_IMPLEMENTED_RATE_NONNEGATIVITY`, and hash-binds dependency input
+bytes. It does not promote the provisional AS2 design, dependency inputs, or
+published tables into executable certificates.
+
+V3 remains blocked because AS2 lacks a hash-bound interval backend and complete
+provider/runtime semantics; the massless table lacks a finite certified
+candidate construction; and the executable Python/OS/libc/libm environment is
+not frozen. The 17/33/65 grid and both fixed quadrature
+hierarchies lack a source-/regularity-derived remainder rule or accepted
+scientific precision target. The MassiveDIS comparison is figure-only, while
+the exact-table FONLL alternative still lacks a completely bound Les Houches
+configuration and finite executable work count. Consequently no authoritative
+aggregate execution maximum exists and no new authorization review is
+warranted.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
+ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
