@@ -57,3 +57,12 @@ remains Not Authorized and `NOT_EXECUTED`.
 
 - [Phase 2B pre-authorization validation plan](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN.md)
 - [Machine-readable Phase 2B pre-authorization plan](contracts/phase2b_preauthorization_validation_plan.json)
+
+A successor execution authorization review independently audits that complete
+plan and derives `AR2_PREAUTH_PLAN_REVISION_REQUIRED`. The research direction
+remains viable, but bounded plan amendments are required before numerical
+execution can be authorized. Phase 2B remains Not Authorized and
+`NOT_EXECUTED`.
+
+- [Phase 2B execution authorization review](PHASE2B_EXECUTION_AUTHORIZATION_REVIEW.md)
+- [Machine-readable authorization review](contracts/phase2b_execution_authorization_review.json)
