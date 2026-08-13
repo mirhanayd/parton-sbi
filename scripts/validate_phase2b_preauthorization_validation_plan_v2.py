@@ -51,8 +51,8 @@ SOURCE_HASHES = {
         "2361fb39f047f42ad1f964f49b43ecd619a599c3afecc8137435c32e79fda420",
         "ccdcbc5147da8532cf80c41d890cc117adee10d3a9141164de752780cfd8f9f2",
     },
-    "SCIPY_1_18_0_SDIST": {
-        "67b2ad2ad54c72ca6d04975a9b2df8c3638c34ddd5b28738e94fc2b57929d378"
+    "SCIPY_1_15_3_SDIST": {
+        "eae3cf522bc7df64b42cad3925c876e1b0b6c35c1337c93e12c0f366f55b0eaf"
     },
     "WALDVOGEL_CC_2006": {
         "183264aa174aa7cd542e69715d41dfb4f28e057a3a898c47ad90f85bd7632128"
@@ -202,7 +202,7 @@ def validate(record: dict[str, Any], *, root: Path = ROOT, check_docs: bool = Tr
         for line in (root / "analysis/requirements.txt").read_text(encoding="utf-8").splitlines()
         if line.strip() and not line.lstrip().startswith("#")
     }
-    require("scipy==1.18.0" in requirements, "SciPy quadrature version not pinned")
+    require("scipy==1.15.3" in requirements, "SciPy quadrature version not pinned")
     require("mpmath==1.3.0" in requirements, "alpha_s precision reference version not pinned")
 
     historical = record.get("historical_state", {})
@@ -308,7 +308,7 @@ def validate(record: dict[str, Any], *, root: Path = ROOT, check_docs: bool = Tr
         == "analysis/validation/phase2b_quadrature_oracles.py::scipy_gauss_legendre_integrate",
         "Wrong quadrature A integration entrypoint",
     )
-    require(path_a.get("version") == "SciPy 1.18.0", "Quadrature A version not pinned")
+    require(path_a.get("version") == "SciPy 1.15.3", "Quadrature A version not pinned")
     require(path_a.get("orders") == [16, 32, 64], "Quadrature A levels changed")
     require(path_b.get("implementation") == "analysis/validation/phase2b_quadrature_oracles.py::clenshaw_curtis_rule", "Wrong quadrature B implementation")
     require(

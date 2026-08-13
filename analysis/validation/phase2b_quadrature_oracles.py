@@ -12,15 +12,15 @@ from collections.abc import Callable
 
 
 def scipy_gauss_legendre_rule(order: int) -> tuple[tuple[float, ...], tuple[float, ...]]:
-    """Return SciPy 1.18.0 Gauss--Legendre nodes and weights on [-1, 1]."""
+    """Return SciPy 1.15.3 Gauss--Legendre nodes and weights on [-1, 1]."""
 
     if order < 1:
         raise ValueError("Gauss--Legendre order must be positive")
     import scipy
     from scipy.special import roots_legendre
 
-    if scipy.__version__ != "1.18.0":
-        raise RuntimeError(f"Phase 2B quadrature path A requires scipy==1.18.0, found {scipy.__version__}")
+    if scipy.__version__ != "1.15.3":
+        raise RuntimeError(f"Phase 2B quadrature path A requires scipy==1.15.3, found {scipy.__version__}")
     nodes, weights = roots_legendre(order)
     return tuple(float(value) for value in nodes), tuple(float(value) for value in weights)
 

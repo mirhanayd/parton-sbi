@@ -115,7 +115,7 @@ remains `PARTIAL`; v2 makes no end-to-end independent-equivalence claim.
 ## Independent quadratures
 
 Path A is fixed tensor Gauss-Legendre at orders 16/32/64 using pinned SciPy
-1.18.0 `scipy.special.roots_legendre`. Path B is fixed tensor
+1.15.3 `scipy.special.roots_legendre`. Path B is fixed tensor
 Clenshaw-Curtis at 17/33/65 nodes using the direct cosine-sum implementation in
 [`phase2b_quadrature_oracles.py`](../../analysis/validation/phase2b_quadrature_oracles.py).
 Path B imports neither SciPy nor NumPy for node, weight or accumulation work.

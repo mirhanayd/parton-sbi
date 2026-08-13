@@ -105,14 +105,14 @@
       "explicit_noncoverage": "It is not a second implementation of the complete PartonSBI light-plus-heavy gamma/Z rate, PDF bridge, Jacobian or normalization."
     },
     {
-      "source_id": "SCIPY_1_18_0_SDIST",
-      "title": "SciPy 1.18.0 source distribution",
+      "source_id": "SCIPY_1_15_3_SDIST",
+      "title": "SciPy 1.15.3 source distribution",
       "authors_or_project": "SciPy project",
-      "official_url": "https://files.pythonhosted.org/packages/a7/25/c2700dfaf6442b4effaa91af24ebce5dc9d31bb4a69706313aae70d72cd0/scipy-1.18.0.tar.gz",
-      "publication_or_version": "SciPy 1.18.0",
-      "retrieved_utc": "2026-08-13T16:17:18Z",
+      "official_url": "https://files.pythonhosted.org/packages/0f/37/6964b830433e654ec7485e45a00fc9a27cf868d622838f6b6d9c5ec0d532/scipy-1.15.3.tar.gz",
+      "publication_or_version": "SciPy 1.15.3",
+      "retrieved_utc": "2026-08-13T17:13:02Z",
       "byte_streams": [
-        {"kind": "SOURCE_TARBALL", "sha256": "67b2ad2ad54c72ca6d04975a9b2df8c3638c34ddd5b28738e94fc2b57929d378"}
+        {"kind": "SOURCE_TARBALL", "sha256": "eae3cf522bc7df64b42cad3925c876e1b0b6c35c1337c93e12c0f366f55b0eaf"}
       ],
       "exact_locators": [
         "scipy/special/_orthogonal.py lines 160-205: banded eigenvalue roots, Newton update and weight construction",
@@ -264,8 +264,8 @@
       "algorithm": "fixed tensor Gauss-Legendre",
       "implementation": "scipy.special.roots_legendre",
       "integration_entrypoint": "analysis/validation/phase2b_quadrature_oracles.py::scipy_gauss_legendre_integrate",
-      "version": "SciPy 1.18.0",
-      "source_sha256": "67b2ad2ad54c72ca6d04975a9b2df8c3638c34ddd5b28738e94fc2b57929d378",
+      "version": "SciPy 1.15.3",
+      "source_sha256": "eae3cf522bc7df64b42cad3925c876e1b0b6c35c1337c93e12c0f366f55b0eaf",
       "precision": "binary64",
       "orders": [16, 32, 64],
       "node_generation": "SciPy banded symmetric eigenproblem followed by one Newton correction",
@@ -277,7 +277,7 @@
       "algorithm": "fixed tensor Clenshaw-Curtis",
       "implementation": "analysis/validation/phase2b_quadrature_oracles.py::clenshaw_curtis_rule",
       "integration_entrypoint": "analysis/validation/phase2b_quadrature_oracles.py::clenshaw_curtis_integrate",
-      "implementation_sha256": "24be79ccf6a79cd96cac5b31ae5f495019a1dcab25a63020948410eee1b40eef",
+      "implementation_sha256": "3d2e783124c032c10094325726b25da23fbc37d891e949f26251f337239bf8a7",
       "provenance": "Waldvogel 2006/Trefethen direct cosine-sum construction",
       "source_sha256": "183264aa174aa7cd542e69715d41dfb4f28e057a3a898c47ad90f85bd7632128",
       "precision": "binary64",
@@ -304,7 +304,7 @@
     {"node": "pdf_to_apfel_bridge", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "instrumented ExternalSetAPFEL callback against ContinuousPdfPoint", "future_test": "Synthetic flavor sentinels plus all fixed accepted-value bridge points.", "load_bearing": true},
     {"node": "alpha_s", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "CT18/LHAPDF ipol provider against APFEL exact two-loop provider", "future_test": "AS2 282-point mixed comparison including threshold sides.", "load_bearing": true},
     {"node": "coordinate_jacobian", "classification": "FULLY_INDEPENDENT", "oracle": "analytic y=Q2/(sx) and dy/dQ2=1/(sx)", "future_test": "Fixed-domain analytic arithmetic check.", "load_bearing": true},
-    {"node": "quadrature_a", "classification": "FULLY_INDEPENDENT", "oracle": "SciPy 1.18.0 roots_legendre path", "future_test": "Generic analytic unit integrals then fixed physics integration if separately authorized.", "load_bearing": true},
+    {"node": "quadrature_a", "classification": "FULLY_INDEPENDENT", "oracle": "SciPy 1.15.3 roots_legendre path", "future_test": "Generic analytic unit integrals then fixed physics integration if separately authorized.", "load_bearing": true},
     {"node": "quadrature_b", "classification": "FULLY_INDEPENDENT", "oracle": "repository direct Clenshaw-Curtis path", "future_test": "Generic analytic unit integrals then fixed physics integration if separately authorized.", "load_bearing": true},
     {"node": "normalization_assembly", "classification": "INDEPENDENT_POSTAUTH_TEST_DEFINED", "oracle": "cross-normalized A/B estimates and interval propagation", "future_test": "No same-path self-normalization may count as closure.", "load_bearing": true}
   ],
