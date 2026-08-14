@@ -109,3 +109,15 @@ Not Authorized and `NOT_EXECUTED`.
 
 - [Phase 2B blocker resolution V1](PHASE2B_BLOCKER_RESOLUTION_V1.md)
 - [Machine-readable Phase 2B blocker resolution V1](contracts/phase2b_blocker_resolution_v1.json)
+
+The Phase 2B numerical-contract policy decision derives `PD1_ADOPT_AP1_AND_NP2`.
+APFEL's internal coupling is authoritative for the simulator, because the DIS
+computation evaluates `a_QCD` directly and never calls LHAPDF's `alphasQ`;
+CT18NLO coupling metadata is a declared-convention compatibility constraint with
+one item left explicitly unresolved. Normalization keeps a predeclared empirical
+stability requirement rather than a certified-accuracy requirement, and remains
+mandatory, finite and strictly positive. The research question is unchanged, no
+V4 was created, and Phase 2B remains Not Authorized and `NOT_EXECUTED`.
+
+- [Phase 2B numerical-contract policy decision V1](PHASE2B_NUMERICAL_POLICY_DECISION_V1.md)
+- [Machine-readable Phase 2B numerical policy decision V1](contracts/phase2b_numerical_policy_decision_v1.json)

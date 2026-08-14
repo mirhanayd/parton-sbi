@@ -176,3 +176,19 @@ created.
 This result does not alter the dependency graph or issue metadata. Phase 2B
 remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
 `NOT_EXECUTED`; Phase 2C remains Not Authorized.
+
+## Phase 2B numerical-contract policy decision V1
+
+The policy decision derives `PD1_ADOPT_AP1_AND_NP2`. APFEL's internal coupling
+is authoritative for the reduced simulator, and normalization carries a
+predeclared empirical stability requirement rather than a certified-accuracy
+requirement. Both replace a preauthorization gate explicitly; neither changes
+the research question. Two alpha blockers are dissolved, three become
+plan-authoring items, and one is downgraded to a disclosure requirement.
+`BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC` remains a scientific blocker, so a
+successor plan may be drafted but cannot reach a complete state until the
+independent-reference scope question is recorded. No V4 was created.
+
+This result does not alter the dependency graph or issue metadata. Phase 2B
+remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
+`NOT_EXECUTED`; Phase 2C remains Not Authorized.

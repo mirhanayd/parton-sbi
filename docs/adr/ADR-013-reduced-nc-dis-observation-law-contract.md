@@ -228,3 +228,40 @@ normalized law.
 Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed. Phase 2B
 remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
 authorized.
+
+## Follow-on Phase 2B numerical-contract policy decision
+
+The policy decision derives `PD1_ADOPT_AP1_AND_NP2`. It is a scientific
+contract-policy decision, not an authorization review and not a successor
+preauthorization plan; no V4 was created.
+
+`AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING` makes APFEL 3.1.1's
+internal coupling the authoritative coupling of the reduced simulator. The
+decisive source fact is that `ComputeDISOperators.f` evaluates `a_QCD` directly
+and the external PDF callback carries no coupling, so LHAPDF's `alphasQ` is
+never consulted by the DIS computation and the previous continuous-equivalence
+gate would have certified a function outside the observation law. CT18NLO
+coupling metadata becomes a provenance and declared-convention compatibility
+constraint covering `alpha_s(M_Z)`, perturbative order, flavour thresholds and
+the heavy-flavour setup. The CT18NLO running-order tension between
+`AlphaS_OrderQCD` and its `SetDesc` is recorded as an unresolved compatibility
+item and assigned to a required, non-gating diagnostic. No provider-equivalence
+claim is permitted.
+
+`NP2_REQUIRE_EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY` fixes the
+normalization claim type. A rigorous remainder is not implementable against the
+accepted binary64 black-box integrand, and the proof-of-principle claim rests on
+empirical posterior calibration rather than a quadrature theorem. Normalization
+remains part of the probability-law contract and must remain finite and strictly
+positive, with no clipping or repair of any kind. No numerical tolerance was
+selected; the decision fixes only that a target must be predeclared.
+
+Both policies replace a preauthorization gate explicitly and narrow the paper
+claim boundary. Neither changes the observation law, the posterior target or the
+research question. `BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC` survives the
+decision, so a successor plan may be drafted but cannot reach a complete state
+until the independent-reference scope question is separately recorded.
+
+Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed. Phase 2B
+remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
+authorized.

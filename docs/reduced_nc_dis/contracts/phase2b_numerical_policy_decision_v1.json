@@ -1,0 +1,380 @@
+{
+  "schema_version": "partonsbi.phase2b.numerical-policy-decision.v1",
+  "record_type": "PHASE2B_NUMERICAL_CONTRACT_POLICY_DECISION_V1",
+  "created_utc": "2026-08-14T02:10:00Z",
+  "starting_main_sha": "bf36b7c193a8061c70f4209051f979ed4c7441ba",
+  "task_kind": "SCIENTIFIC_CONTRACT_POLICY_DECISION",
+  "not_an_execution_authorization_review": true,
+  "not_a_successor_preauthorization_plan": true,
+  "not_a_source_search": true,
+  "predecessors": {
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8",
+      "bytes_immutable": true
+    },
+    "preauthorization_v3": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v3.json",
+      "sha256": "78a029686489e9712e65ef6f9df3263b4821f96de0ee9873a910dee31f307e06",
+      "historical_outcome": "V3R6_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    },
+    "blocker_resolution_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_blocker_resolution_v1.json",
+      "sha256": "d66a1bbcb67b7105f489233bfd292c7064bcda35ef8c6f8dbc0dec41aa6da8de",
+      "historical_outcome": "BR5_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "adr_013_status": "Proposed",
+    "accepted_pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "heavy_flavor_contract": "APFEL FONLL-A NLO",
+    "issue_54_unchanged": true,
+    "issue_10_unchanged": true,
+    "all_predecessor_bytes_unchanged": true
+  },
+  "question_a_alpha_authority": {
+    "decision": "AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING",
+    "decisive_source_fact": {
+      "statement": "The coupling that enters the FONLL-A neutral-current coefficient functions is APFEL's own internal a_QCD. LHAPDF's alphasQ is never consulted by the DIS computation.",
+      "locator": "apfel-3.1.1/src/DIS/ComputeDISOperators.f sha256 4f4b17bac6cf360fe1406b00fe7d20078053f99e624c6b403b93bf3a8aa65990",
+      "evidence": "mu2as is set from the factorisation scale, and the non-FFNS branch evaluates as(1) = a_QCD(mu2as) directly. Under the accepted muF = muR = Q configuration mu2as equals Q^2. The external PDF callback ExternalSetAPFEL carries densities only and no coupling.",
+      "verified_this_task": true
+    },
+    "why_this_is_not_a_convenience_choice": "The V3 G3 gate would have rigorously certified LHAPDF alphasQ over the continuum. That function is not evaluated by the observation law. Requiring a proof about it is requiring a proof about an object outside the simulator, which is a scientific defect in the gate rather than a difficulty to be worked around.",
+    "scientific_review": {
+      "q1_runtime_evaluator_must_match_grid_producing_evaluator": {
+        "answer": "NO",
+        "derivation": "A structure function is a convolution of coefficient functions with PDF grids. The coupling used when the grids were fitted is already embedded in the grid values. The coupling used at evaluation must share the renormalisation scheme, the perturbative order and the flavour-threshold convention of the fit, because a scheme or reference-value mismatch is a genuine theory inconsistency. Numerical identity of the evaluator is a different and much stronger property: two evaluators solving the same renormalisation-group equation at the same order from the same reference value differ only by their numerical solution method. CT18 serialises a HOPPET running solution and interpolates it; APFEL integrates the same equation with a fixed ten-step recursion. Their difference is numerical, not theoretical.",
+        "field_practice_corroboration": "The accepted massless benchmark ran HOPPET and APFEL++ from a common alpha_s at a common initial scale with each code running its own coupling, rather than sharing one evaluator. Independent internal couplings are the normal contract in this class of comparison."
+      },
+      "q2_declared_convention_is_the_relevant_contract": {
+        "answer": "YES",
+        "required_compatibility_items": [
+          {
+            "item": "alpha_s at the Z mass",
+            "ct18nlo_declared": "AlphaS_MZ 0.118000 at MZ 91.1870",
+            "apfel_accepted_control": "SetAlphaQCDRef(0.118,91.187)",
+            "status": "COMPATIBLE"
+          },
+          {
+            "item": "perturbative order of the observable",
+            "ct18nlo_declared": "OrderQCD 1",
+            "apfel_accepted_control": "SetPerturbativeOrder(1)",
+            "status": "COMPATIBLE"
+          },
+          {
+            "item": "heavy-quark pole masses",
+            "ct18nlo_declared": "MCharm 1.3000, MBottom 4.7500, MTop 172.0000",
+            "apfel_accepted_control": "SetPoleMasses(1.3,4.75,172.0)",
+            "status": "COMPATIBLE"
+          },
+          {
+            "item": "flavour scheme and maximum active flavours",
+            "ct18nlo_declared": "FlavorScheme variable, NumFlavors 5",
+            "apfel_accepted_control": "SetVFNS with SetMaxFlavourAlpha(5)",
+            "status": "COMPATIBLE"
+          },
+          {
+            "item": "matching-scale ratios and renormalisation-to-factorisation ratio",
+            "ct18nlo_declared": "not serialized in the set metadata",
+            "apfel_accepted_control": "SetMassMatchingScales(1,1,1), SetRenFacRatio(1)",
+            "status": "APFEL_SIDE_DECLARED_CT18_SIDE_UNSTATED"
+          },
+          {
+            "item": "perturbative order of the coupling running itself",
+            "ct18nlo_declared": "AlphaS_OrderQCD 1, while SetDesc states a HOPPET three-loop running solution",
+            "apfel_accepted_control": "ipt=1, which integrates the two-loop beta function",
+            "status": "UNRESOLVED_COMPATIBILITY_ITEM",
+            "note": "The CT18NLO metadata is internally in tension on this point. AP1 does not resolve it and does not hide it; it is a mandatory item of the required diagnostic."
+          }
+        ]
+      },
+      "q3_new_hidden_theory_inconsistency": {
+        "answer": "NO_NEW_INCONSISTENCY_IS_INTRODUCED_AND_NOTHING_IS_HIDDEN",
+        "derivation": "The frozen software already evaluates the coefficient functions with APFEL's coupling; no policy choice can change that without modifying the accepted implementation. AP1 therefore describes the existing simulator rather than altering it. Any residual mismatch between the running used to fit CT18 and the running used at evaluation is formally suppressed relative to the claimed NLO accuracy, because a difference in the beta function at the next order shifts alpha_s by a relatively higher-order amount and enters an already order-alpha_s coefficient term. Formal suppression is an argument about scaling, not a bound, so AP1 requires the residual to be measured and reported rather than assumed small.",
+        "explicitly_not_claimed": [
+          "that the two couplings agree",
+          "that the residual is negligible",
+          "that formal higher-order suppression is a numerical bound"
+        ]
+      },
+      "q4_changes_the_research_question": {
+        "answer": "NO",
+        "derivation": "The research question concerns whether amortized simulation-based inference can produce calibrated posterior constraints on continuous PDF deformations from unbinned neutral-current DIS event sets. AP1 leaves the inference unit, the posterior target, the theta domain and prior, the observation space, the selected-event conditioning and the detector kernel untouched. It fixes which internal coupling the simulator's own observation law declares as authoritative and what evidence is owed about it."
+      },
+      "q5_later_diagnostic_that_remains_appropriate": {
+        "required": true,
+        "gating": false,
+        "content": [
+          "a declared-convention compatibility check over every item listed above, including the unresolved running-order item",
+          "a numerical comparison of the CT18 tabulated coupling against the simulator coupling over the accepted Q^2 domain, reported as an observed difference at evaluated points",
+          "explicit labelling of that comparison as sampled diagnostic evidence, never as certified or continuous equivalence",
+          "retention and publication of the observed value whatever it is, with no suppression of an inconvenient result"
+        ],
+        "review_trigger": "A difference large enough to change any reported conclusion, or any failure of a declared-convention compatibility item, must trigger scientific review before the affected result is used.",
+        "review_trigger_is_not_a_numerical_threshold": true,
+        "no_tolerance_defined_here": true
+      }
+    },
+    "what_ap1_forbids": [
+      "requiring continuous or bitwise CT18 versus APFEL coupling identity as a preauthorization gate",
+      "claiming the diagnostic comparison establishes equivalence, consistency or a certified bound",
+      "treating CT18 alphasQ as the simulator's runtime coupling",
+      "dropping any declared-convention compatibility item",
+      "suppressing a material disagreement discovered later"
+    ],
+    "rejected_alternatives": [
+      {
+        "option": "AP2_CERTIFY_FROZEN_PLATFORM_LIBM_PROVIDER",
+        "rejected_because": "It would retain a preauthorization requirement to certify a function the observation law never evaluates, and the blocker-resolution record established that the platform logarithm is selected at load time by an ifunc from CPU features with only an author-stated error analysis. Freezing an image would not convert that analysis into a proof, and the certified quantity would still not be load-bearing."
+      },
+      {
+        "option": "AP3_REIMPLEMENT_PROVIDER_WITH_RIGOROUS_INTERVAL_LOG",
+        "rejected_because": "It would replace the coupling provider inside the accepted APFEL 3.1.1 build pinned by the FONLL-A amendment, changing the simulator object and the software contract, and would reopen the Phase 2A and amendment work. That cost is not warranted by a proof-of-principle claim, and the same reasoning already rejected AS1."
+      },
+      {
+        "option": "AP4_ALPHA_POLICY_REMAINS_UNRESOLVED",
+        "rejected_because": "The decisive source fact is established and the scientific derivation is available, so leaving the policy open would be indecision rather than conservatism."
+      }
+    ],
+    "contract_impact": {
+      "primary": "DISAMBIGUATES_EXISTING_CONTRACT",
+      "by_scope": {
+        "observation_law_and_simulator_object": "DISAMBIGUATES_EXISTING_CONTRACT",
+        "g3_preauthorization_gate_semantics": "REPLACES_EXISTING_CONTRACT",
+        "paper_claim_boundary": "NARROWS_CLAIM_BOUNDARY",
+        "research_question": "UNCHANGED"
+      },
+      "replacement_is_explicit_not_silent": true,
+      "replacement_detail": "The V3 G3 requirement of continuous provider-equivalence certification with propagation of a certified discrepancy is replaced by a declared-convention compatibility requirement plus a mandatory non-gating diagnostic."
+    }
+  },
+  "question_b_normalization_claim": {
+    "decision": "NP2_REQUIRE_EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY",
+    "scientific_review": {
+      "distinctions": {
+        "mathematical_proof_of_quadrature_error": "A theorem bounding the difference between the exact integral and the rule's output. It needs an interval-extensible integrand or a certified derivative bound of known order. The accepted integrand is a frozen binary64 wrapper exposing one number per point, so this is unobtainable without replacing the implementation.",
+        "empirical_convergence_evidence": "Observed behaviour of a fixed, predeclared refinement ladder and of an independently implemented second rule. It is evidence that the computation is stable and reproducible. It is not a bound, and the blocker-resolution record exhibits an entire integrand on which both accepted rules return exactly zero at every level while the true integral is nonzero.",
+        "reproducibility": "Whether the same frozen software and inputs yield the same numbers. The blocker-resolution record classified the environment as unresolved because the platform logarithm is ifunc-selected, so reproducibility is asserted only at the level of frozen software identity and declared inputs.",
+        "physical_or_theory_uncertainty": "Uncertainty from the truncated perturbative series, scheme and scale choices, and PDF uncertainty. It is a different object from numerical error and is not claimed here.",
+        "downstream_sbi_calibration": "Empirical coverage and calibration diagnostics on the posterior. These are end-to-end checks of the inference pipeline and would themselves be sensitive to a normalization defect large enough to matter."
+      },
+      "q1_paper_requires_a_certified_integration_theorem": {
+        "answer": "NO",
+        "derivation": "The proof-of-principle claim is that amortized simulation-based inference can produce calibrated posterior constraints from an explicit normalized observation law. What makes that claim true or false is whether the posterior is calibrated, which is established by empirical coverage evidence, not by a quadrature theorem. A certified remainder would strengthen the description of the simulator's internals; it is not the load-bearing support for the methodological claim."
+      },
+      "q2_empirical_independent_quadrature_stability_is_sufficient_if_disclosed": {
+        "answer": "YES_CONDITIONALLY",
+        "conditions": [
+          "the claim is stated as numerical stability and reproducibility, never as certified accuracy",
+          "the two quadrature families keep independent node generation, weight generation and accumulation",
+          "the refinement ladder and the decision rule are predeclared before any estimate is computed",
+          "finite and strictly positive normalization remains mandatory",
+          "instability, non-monotone refinement or cross-family disagreement yields FAIL or INCONCLUSIVE and never PASS",
+          "the known limitation is disclosed: agreement between rules does not bound the error, and a counterexample exists"
+        ],
+        "residual_risk_disclosed": "Two rules with different node placements reduce, but do not eliminate, the risk that structure between the nodes is missed by both. NP2 does not claim otherwise."
+      },
+      "q3_claims_forbidden_under_np2": [
+        "normalization is rigorously certified to any stated accuracy",
+        "the quadrature remainder is bounded by a successive difference such as the gap between two refinement levels",
+        "agreement between the two quadrature families proves convergence or bounds the error",
+        "any external benchmark level, including the published MassiveDIS 0.001 and the massless 1e-5 observations, applies to normalization",
+        "the normalization estimate carries a theoretical or physical uncertainty",
+        "a tolerance chosen or adjusted after seeing any estimate"
+      ],
+      "q4_minimum_predeclared_empirical_criteria": [
+        "two quadrature families with independently generated nodes, weights and accumulation, and disjoint implementation provenance",
+        "a fixed refinement ladder per family, frozen in an immutable artifact before execution",
+        "the comparison statistic and the precision target declared in that artifact before any estimate is computed, with the plan invalid if either is written afterwards",
+        "absolute comparison whenever a compared interval contains zero, and relative comparison only away from zero",
+        "agreement required at every theta anchor, with no averaging, no best-of and no anchor dropped",
+        "finite and strictly positive normalization at every anchor, with a nonpositive result a failure",
+        "non-monotone or growing successive differences classified INCONCLUSIVE and never PASS",
+        "cross-family disagreement classified FAIL, while cross-family agreement is necessary and explicitly not sufficient",
+        "a bounded and finite work count with no retry-until-pass, no point deletion and no post-hoc tuning",
+        "the stability-not-a-bound disclosure carried in both the machine artifact and the paper"
+      ],
+      "numerical_tolerance_defined_here": false,
+      "why_no_tolerance_here": "This decision fixes the claim type. Selecting the numerical target is the successor plan's task, and this record only fixes that the target must be predeclared rather than discovered."
+    },
+    "normalization_remains_in_the_probability_law_contract": true,
+    "normalization_mandatory_properties": [
+      "finite",
+      "strictly positive",
+      "evaluated at every theta anchor",
+      "no clipping",
+      "no absolute value",
+      "no maximum with zero",
+      "no replacement",
+      "no point deletion",
+      "no epsilon repair",
+      "no averaging",
+      "no retry"
+    ],
+    "rejected_alternatives": [
+      {
+        "option": "NP1_REQUIRE_RIGOROUS_CERTIFIED_NORMALIZATION_ACCURACY",
+        "rejected_because": "The blocker-resolution record established that a rigorous remainder is not implementable against the accepted binary64 black-box integrand. Retaining NP1 would make authorization conditional on an unobtainable precondition, or would force replacement of the accepted implementation, and neither is required by the proof-of-principle claim."
+      },
+      {
+        "option": "NP3_REMOVE_NORMALIZATION_VALIDATION_FROM_PHASE2B",
+        "rejected_because": "The accepted observation law is explicitly normalized, so the denominator is load-bearing for the probability law itself. Removing its validation would leave a load-bearing quantity unvalidated. The compatibility proof that this option would require was not attempted and is not believed to exist.",
+        "compatibility_with_normalized_law_proven": false
+      },
+      {
+        "option": "NP4_NORMALIZATION_POLICY_REMAINS_UNRESOLVED",
+        "rejected_because": "The claim-type question is answerable from the accepted paper boundary and the blocker-resolution evidence, so leaving it open would not be conservatism."
+      }
+    ],
+    "contract_impact": {
+      "primary": "NARROWS_CLAIM_BOUNDARY",
+      "by_scope": {
+        "observation_law_and_probability_law": "DISAMBIGUATES_EXISTING_CONTRACT",
+        "g7_to_g11_preauthorization_gate_semantics": "REPLACES_EXISTING_CONTRACT",
+        "paper_claim_boundary": "NARROWS_CLAIM_BOUNDARY",
+        "research_question": "UNCHANGED"
+      },
+      "replacement_is_explicit_not_silent": true,
+      "replacement_detail": "The requirement of a certified path-local remainder producing intervals Z_A plus or minus E_A and Z_B plus or minus E_B is replaced by a predeclared empirical stability protocol. Cross-path comparison remains, but it is reported as agreement rather than as an interval-overlap certificate."
+    }
+  },
+  "combined_decision": {
+    "code": "PD1_ADOPT_AP1_AND_NP2",
+    "derivation": "Question A resolves to AP1 because the decisive source fact shows the observation law evaluates APFEL's internal coupling and never LHAPDF's, so the V3 certification target was outside the simulator; the scientifically relevant contract is declared-convention compatibility, which is satisfied on every serialized item except the coupling running order, which becomes a mandatory diagnostic item. Question B resolves to NP2 because a rigorous remainder is unobtainable against the accepted black-box integrand, the proof-of-principle claim rests on empirical calibration rather than a quadrature theorem, and normalization must remain finite, positive and validated. Both policies leave the research question untouched, so the combined outcome is PD1.",
+    "research_question_impact": "UNCHANGED",
+    "research_question_check": {
+      "inference_unit_unchanged": true,
+      "posterior_target_unchanged": true,
+      "theta_domain_and_prior_unchanged": true,
+      "observation_space_unchanged": true,
+      "selected_event_conditioning_unchanged": true,
+      "detector_kernel_unchanged": true,
+      "normalized_law_form_unchanged": true
+    }
+  },
+  "paper_impact": {
+    "may_claim": [
+      "the reduced simulator's coupling is APFEL 3.1.1's NLO variable-flavour running, configured to the CT18NLO declared convention",
+      "the CT18NLO coupling metadata is a provenance and compatibility constraint on the parton-distribution boundary rather than the runtime evaluator",
+      "the declared-convention compatibility items were checked and are reported, including any item that remains unresolved",
+      "an observed numerical comparison between the CT18 tabulated coupling and the simulator coupling is reported as a sampled diagnostic",
+      "normalization was checked for reproducible numerical stability under independent fixed-refinement quadrature families",
+      "normalization was finite and strictly positive at every evaluated configuration",
+      "the raw implemented simulator rate was nonnegative at every evaluated point"
+    ],
+    "must_not_claim": [
+      "CT18 and APFEL alpha_s are equivalent, identical, or certified consistent",
+      "the simulator coupling is certified over the continuum",
+      "the sampled coupling diagnostic bounds the difference between the providers",
+      "normalization is rigorously certified to any stated accuracy",
+      "a successive difference between refinement levels bounds the quadrature remainder",
+      "agreement between the two quadrature families proves convergence",
+      "any external benchmark level applies to normalization",
+      "the implemented rate is positive on the continuum or at all orders",
+      "any numerical accuracy figure selected after results were seen"
+    ],
+    "example_permitted_sentence": "Normalization was checked for reproducible numerical stability under independent fixed-refinement quadratures.",
+    "example_forbidden_sentence": "Normalization is rigorously certified to X accuracy.",
+    "conditional_release": "A must-not item may be revisited only if future evidence changes the contract through a new reviewed decision record."
+  },
+  "blocker_status_after_decision": [
+    {
+      "id": "BLOCKER_ALPHA_IMPLEMENTED_LOG_ENCLOSURE",
+      "status": "DISSOLVED_BY_POLICY",
+      "reason": "AP1 removes the requirement to certify a coupling function that the observation law does not evaluate, so no enclosure of the platform logarithm is owed."
+    },
+    {
+      "id": "BLOCKER_ALPHA_CONSISTENCY_CRITERION",
+      "status": "DISSOLVED_BY_POLICY",
+      "reason": "AP1 replaces the missing gate threshold with declared-convention compatibility plus a reported non-gating diagnostic, so no consistency level has to be invented."
+    },
+    {
+      "id": "BLOCKER_PROJECT_PRECISION_TARGET",
+      "status": "CONVERTED_TO_PLAN_AUTHORING_ITEM",
+      "reason": "NP2 fixes the claim type as stability rather than certified accuracy. A predeclared target is still required, but selecting it is now a bounded drafting task with a decided semantics rather than an open scientific question."
+    },
+    {
+      "id": "BLOCKER_GRID_GATE_SEMANTICS",
+      "status": "CONVERTED_TO_PLAN_AUTHORING_ITEM",
+      "reason": "The blocker-resolution record already supplies the recommended exact coverage and nesting audit; a successor plan has to adopt it."
+    },
+    {
+      "id": "BLOCKER_MASSLESS_CANDIDATE_SIDE",
+      "status": "CONVERTED_TO_PLAN_AUTHORING_ITEM",
+      "reason": "Freezing the APFEL grid settings, extending the bridge contract to a second boundary configuration and deriving a work cap are bounded serialization tasks."
+    },
+    {
+      "id": "BLOCKER_NUMERICAL_RUNTIME_IDENTITY",
+      "status": "DOWNGRADED_TO_DISCLOSURE_REQUIREMENT",
+      "reason": "No rigorous bit-level claim survives PD1, so the runtime identity is owed as honest reproducibility disclosure rather than as support for a certificate."
+    },
+    {
+      "id": "BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC",
+      "status": "REMAINS_A_SCIENTIFIC_BLOCKER",
+      "reason": "Neither policy touches it. No independent executable FONLL-A comparator is bound, the published benchmark configuration is not reconstructable, and the load-bearing massive_contribution and fonll_difference_matching nodes stay unvalidated."
+    }
+  ],
+  "successor_plan_assessment": {
+    "v4_planning_warranted": true,
+    "v4_completeness_achievable_now": false,
+    "why": "The two policy questions that gated the alpha and numerical-acceptance semantics are now decided, so a successor preauthorization plan can be drafted. It could not be COMPLETE, because the blocker-resolution rule forbids a complete result that contains a load-bearing unvalidated node and the independent FONLL-A reference remains unbound.",
+    "third_policy_question_identified": {
+      "question": "Is an independent executable FONLL-A component reference a required Phase 2B gate, or is its absence an accepted and disclosed limitation of a proof-of-principle result?",
+      "status": "NOT_DECIDED_HERE",
+      "why_not_decided_here": "This task was scoped to the alpha authority and the normalization claim type. The reference question is a distinct scope decision about what the paper may assert without an independent comparator, and deciding it inside this record would exceed the requested scope.",
+      "consequence": "Until it is decided, a successor plan can be drafted but cannot reach a complete state."
+    },
+    "v4_not_created_in_this_task": true
+  },
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "PHASE2B_EXECUTION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "TRAINING_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "FULL_GENERATOR_EXECUTION_AUTHORIZED": false
+  },
+  "execution_state": {
+    "phase2b": "NOT_EXECUTED",
+    "dis_structure_functions_executed": false,
+    "alpha_s_comparison_executed": false,
+    "pdf_bridge_validation_executed": false,
+    "massivedis_comparison_executed": false,
+    "fonll_benchmark_executed": false,
+    "raw_rate_or_positivity_scan_executed": false,
+    "normalization_integrals_executed": false,
+    "convergence_studies_executed": false,
+    "events_or_datasets_generated": false,
+    "detector_or_neural_work_executed": false
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized"
+  },
+  "remaining_scientific_limitations": [
+    "No independent executable FONLL-A comparator is bound, so the massive and matching contributions stay unvalidated.",
+    "The CT18NLO coupling running order is internally in tension in the set metadata and is not resolved by this decision.",
+    "The coupling diagnostic will be sampled evidence and will not bound the difference between providers.",
+    "Empirical quadrature stability is not a remainder bound, and a counterexample on an analytic integrand is on record.",
+    "The numerical runtime identity remains unresolved, so reproducibility is asserted only at the level of frozen software identity.",
+    "Finite point grids do not prove continuum positivity.",
+    "Nine theta anchors do not establish every interior theta.",
+    "Inclusive neutral-current electron-proton data do not provide unrestricted flavour separation.",
+    "No alpha, bridge, DIS, sign, convergence, normalization or closure result was executed."
+  ],
+  "next_step": "Decide the third policy question about the independent FONLL-A reference. A successor preauthorization plan may be drafted in parallel under PD1, but it cannot reach a complete state until that question is recorded."
+}
