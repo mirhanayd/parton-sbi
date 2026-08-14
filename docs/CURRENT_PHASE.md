@@ -674,3 +674,40 @@ nothing.
 Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
 and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
 ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
+
+## Phase 2B numerical-contract policy decision V1
+
+The policy decision derives `PD1_ADOPT_AP1_AND_NP2`. It is a scientific
+contract-policy decision, not an authorization review and not a successor plan;
+no V4 was created.
+
+`AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING` is adopted on a decisive
+source fact rather than on convenience: `ComputeDISOperators.f` evaluates
+`as(1) = a_QCD(mu2as)` internally, so LHAPDF's `alphasQ` is never consulted by
+the DIS computation, and the V3 `G3` gate would have certified a function the
+observation law does not evaluate. The scientifically relevant contract is
+declared-convention consistency, which the CT18NLO metadata and the accepted
+APFEL controls satisfy on `alpha_s(M_Z)`, observable order, pole masses and
+flavour scheme. One item is left explicitly unresolved rather than hidden: the
+CT18NLO metadata declares `AlphaS_OrderQCD 1` while its `SetDesc` states a
+three-loop running solution. A required, non-gating diagnostic must report both
+the compatibility checklist and an observed CT18-versus-simulator coupling
+comparison, labelled as sampled evidence.
+
+`NP2_REQUIRE_EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY` is adopted
+because a rigorous remainder is not implementable against the accepted binary64
+black-box integrand, and because the proof-of-principle claim rests on empirical
+posterior calibration rather than a quadrature theorem. Normalization stays in
+the probability-law contract and must remain finite and strictly positive.
+
+Both policies leave the research question unchanged. Both replace a
+preauthorization gate, and both replacements are recorded explicitly. Two alpha
+blockers are dissolved, three become plan-authoring items, and one is downgraded
+to a disclosure requirement. `BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC` remains a
+scientific blocker, so a successor plan may now be drafted but cannot reach a
+complete state until a third policy question — whether an independent executable
+FONLL-A reference is a required gate or a disclosed limitation — is recorded.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
+ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
