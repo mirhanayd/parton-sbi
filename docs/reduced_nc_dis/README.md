@@ -137,3 +137,15 @@ Authorized and `NOT_EXECUTED`.
 
 - [Phase 2B FONLL validation policy V1](PHASE2B_FONLL_VALIDATION_POLICY_V1.md)
 - [Machine-readable Phase 2B FONLL validation policy V1](contracts/phase2b_fonll_validation_policy_v1.json)
+
+The Phase 2B preauthorization validation plan V4 derives
+`V4_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_EXECUTION_AUTHORIZATION_REVIEW`.
+All seven plan-authoring items are frozen, the sixteen-row component coverage
+matrix carries no undisclosed load-bearing validation gap, and resources are
+recounted from first principles. Completing V4 is not authorization to execute
+Phase 2B; the next action is a separate independent execution-authorization
+review. `AP1`, `NP2` and `FPD3` are inherited unchanged, no new scientific
+policy was created, and Phase 2B remains Not Authorized and `NOT_EXECUTED`.
+
+- [Phase 2B preauthorization validation plan V4](PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V4.md)
+- [Machine-readable Phase 2B preauthorization plan V4](contracts/phase2b_preauthorization_validation_plan_v4.json)

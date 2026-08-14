@@ -305,3 +305,37 @@ This resolves the final scientific policy blocker, so successor preauthorization
 planning is now warranted. Historical Phase 2A remains `INCONCLUSIVE`; this ADR
 remains Proposed. Phase 2B remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no
 downstream phase is authorized.
+
+## Follow-on Phase 2B preauthorization validation plan V4
+
+The successor plan derives
+`V4_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_EXECUTION_AUTHORIZATION_REVIEW`.
+It is a planning artifact only. Completing V4 is not authorization to execute
+Phase 2B, and no numerical physics was executed to produce it.
+
+V4 inherits `AP1`, `NP2`, `FPD3`, `NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP`
+and `SIGN1` unchanged and creates no new scientific policy. It freezes the seven
+plan-authoring items the FONLL validation policy left open: a numerical
+stability protocol that invents no scalar tolerance because every comparison
+scale is computed at execution from formulas frozen in advance; an exact
+coverage and nesting audit replacing the previous refinement gate, with the
+Gauss-Legendre ladder confirmed non-nested; the massless reference with its
+unbound items declared and the candidate-side grid bound by reference to APFEL's
+source-defined defaults; a second bridge boundary profile with a recounted work
+cap; a serialized, explicitly non-gating coupling diagnostic over twenty-five
+deterministic nodes; a per-dependency runtime classification in which a source
+hash is not executable verification; and a resource model recounted from first
+principles with defined units and exactly one additive aggregate.
+
+The sixteen-row component coverage matrix records for every component its
+evidence class, reference identity, gating status, PASS, FAIL and INCONCLUSIVE
+semantics, residual risk, and allowed and prohibited claims. The complete
+neutral-current observable is not `E1`, not independently closed and not
+end-to-end validated, and the surviving limitation is stated explicitly: a
+correctly configured, correctly interfaced but internally wrong FONLL matching
+term is not independently detectable.
+
+The next action is a separate independent Phase 2B execution-authorization
+review. Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed.
+Phase 2B remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
+authorized.

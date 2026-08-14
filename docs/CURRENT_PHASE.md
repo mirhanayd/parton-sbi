@@ -754,3 +754,40 @@ remaining items are ordinary plan authoring.
 Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
 and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
 ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
+
+## Phase 2B preauthorization validation plan V4
+
+The successor plan derives
+`V4_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_EXECUTION_AUTHORIZATION_REVIEW`.
+It is a planning artifact. **Completing V4 is not authorization to execute Phase
+2B**, and no numerical physics was executed to produce it.
+
+All seven plan-authoring items are frozen. The NP2 stability protocol invents no
+scalar tolerance: every comparison scale is computed at execution from formulas
+frozen in the artifact, combining each family's own last observed refinement
+change with the arithmetic-noise bound of its accumulation method. The grid gate
+is replaced by `EXACT_COVERAGE_AND_NESTING_AUDIT`, whose nesting claims were
+verified rather than assumed — the point grid and Clenshaw-Curtis ladders are
+bitwise nested, while the Gauss-Legendre ladder is confirmed **not** nested and
+may not be labelled otherwise. The massless reference is frozen with its unbound
+items declared, and the candidate-side grid is bound by reference to APFEL's
+source-defined defaults rather than invented. The bridge gains a second boundary
+profile for the massless run, with a recounted work cap. The coupling diagnostic
+is serialized over 25 deterministic nodes and is explicitly non-gating. Runtime
+identity is classified per dependency, with a source hash explicitly not treated
+as executable verification. Resources are recounted from first principles with
+defined units and exactly one additive aggregate.
+
+The component coverage matrix spans all sixteen components with no undisclosed
+load-bearing validation gap. The complete neutral-current observable is not
+`E1`, not independently closed and not end-to-end validated. The surviving
+limitation is stated rather than absorbed: a correctly configured, correctly
+interfaced but internally wrong FONLL matching term is not independently
+detectable.
+
+The next action is a separate independent Phase 2B execution-authorization
+review, which V4 does not perform and does not imply.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
+ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.

@@ -65,13 +65,22 @@ def test_recorded_outcome(record):
     assert record["contract_impact"]["by_scope"]["research_question"] == "UNCHANGED"
 
 
-def test_no_v4_artifact_created():
-    assert not (
-        ROOT / "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v4.json"
-    ).exists()
-    assert not (
-        ROOT / "docs/reduced_nc_dis/PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V4.md"
-    ).exists()
+def test_this_record_did_not_create_v4(record):
+    """This policy task must not have created V4.
+
+    A later, separately reviewed successor may legitimately create one, so the
+    assertion is on this record's own flag rather than on the permanent absence
+    of the file.  When a V4 exists it must bind this record.
+    """
+
+    assert record["v4_not_created_in_this_task"] is True
+    v4_path = ROOT / "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v4.json"
+    if v4_path.exists():
+        v4 = json.loads(v4_path.read_text(encoding="utf-8"))
+        assert (
+            v4["predecessors"]["fonll_validation_policy_v1"]["sha256"]
+            == VALIDATOR.sha256_of(ARTIFACT)
+        )
 
 
 def test_predecessor_bytes_are_checked_on_disk(record):
