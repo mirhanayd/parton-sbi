@@ -1,0 +1,565 @@
+{
+  "schema_version": "partonsbi.phase2b.fonll-validation-policy.v1",
+  "record_type": "PHASE2B_FONLL_VALIDATION_POLICY_V1",
+  "created_utc": "2026-08-14T03:20:00Z",
+  "starting_main_sha": "41e1600c369b9b655b84eae9c9a0b6a1e2384fbe",
+  "task_kind": "SCIENTIFIC_VALIDATION_POLICY_DECISION",
+  "not_an_execution_authorization_review": true,
+  "not_a_successor_preauthorization_plan": true,
+  "v4_not_created_in_this_task": true,
+  "predecessors": {
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8",
+      "bytes_immutable": true
+    },
+    "preauthorization_v3": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v3.json",
+      "sha256": "78a029686489e9712e65ef6f9df3263b4821f96de0ee9873a910dee31f307e06",
+      "historical_outcome": "V3R6_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    },
+    "blocker_resolution_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_blocker_resolution_v1.json",
+      "sha256": "d66a1bbcb67b7105f489233bfd292c7064bcda35ef8c6f8dbc0dec41aa6da8de",
+      "historical_outcome": "BR5_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    },
+    "numerical_policy_decision_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_numerical_policy_decision_v1.json",
+      "sha256": "a855dfeb49a4f6f8e26804c5fac8708691fa9c345be57acfc5efa55e1864830c",
+      "historical_outcome": "PD1_ADOPT_AP1_AND_NP2",
+      "bytes_immutable": true
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "adr_013_status": "Proposed",
+    "accepted_pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "heavy_flavor_contract": "APFEL FONLL-A NLO",
+    "alpha_policy_unchanged": "AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING",
+    "normalization_policy_unchanged": "NP2_REQUIRE_EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY",
+    "issue_54_unchanged": true,
+    "issue_10_unchanged": true,
+    "all_predecessor_bytes_unchanged": true
+  },
+  "historical_requirement_reconstruction": {
+    "obligation_id": "INDEPENDENT_NUMERICAL_CLOSURE_PLAN",
+    "accepted_sources": [
+      {
+        "locator": "docs/reduced_nc_dis/contracts/phase2a_contract_review_spec.json, obligation INDEPENDENT_NUMERICAL_CLOSURE_PLAN",
+        "scientific_question": "Is there a bounded, independent plan to test formulae, normalization, support, and sampling?",
+        "pass_condition": "Phase2B has a finite reproducible plan capable of returning PASS, FAIL, or INCONCLUSIVE.",
+        "fail_condition": "Validation is circular, unbounded, adaptive to failures, or lacks tolerances."
+      },
+      {
+        "locator": "docs/reduced_nc_dis/contracts/phase2a_claim_source_ledger.json, CLAIM_NUMERICAL_CLOSURE_PLAN",
+        "exact_claim": "A bounded numerical closure plan is required.",
+        "claim_class": "PROJECT_BOUNDARY"
+      },
+      {
+        "locator": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review.json, independent_reference_conclusion.repository_gate_semantics",
+        "exact_text": "A component decomposition can satisfy INDEPENDENT_NUMERICAL_CLOSURE_PLAN; a wholly independent full FONLL-A program is not categorically required."
+      },
+      {
+        "locator": "docs/reduced_nc_dis/PHASE2_FONLL_A_CONTRACT_AMENDMENT.md, scheme selection table",
+        "finding": "FONLL-A was rated MEDIUM on independent closure strength and was selected anyway, over ZM-VFN which was rated HIGH on that criterion. The accepted contract knowingly traded maximal independent-closure strength against threshold physics fidelity, research-objective preservation and accepted-PDF-family compatibility."
+      }
+    ],
+    "q1_required_executable_implementation_for_every_load_bearing_component": {
+      "answer": "NO",
+      "evidence": "The accepted pass condition is the existence of a finite reproducible plan capable of returning PASS, FAIL or INCONCLUSIVE. It says nothing about an independent executable implementation per component, and the accepted claim is literally that a bounded numerical closure plan is required."
+    },
+    "q2_required_credible_independent_closure_strategy": {
+      "answer": "YES",
+      "evidence": "The obligation asks for a bounded, independent, non-circular, deterministic, bounded-cost plan with declared references and failure precedence. Independence is required of the strategy and of the reference provenance, not realised as a second complete program."
+    },
+    "q3_any_accepted_record_promised_end_to_end_independent_fonll_a": {
+      "answer": "NO",
+      "evidence": "No accepted record promises a complete end-to-end independent FONLL-A implementation. The v1 execution authorization review states the opposite in terms: a wholly independent full FONLL-A program is not categorically required."
+    },
+    "q4_status_of_the_present_executable_fonll_requirement": {
+      "answer": "LATER_INTERPRETATION_NOT_AN_ORIGINAL_REQUIREMENT",
+      "evidence": "The executable-comparator framing appears in the v2 and V3 planning successors and hardens through the blocker-resolution review. The originating Phase 2A obligation and the v1 authorization review do not impose it.",
+      "qualification": "The v1 review did find the then-current decomposition insufficient, but for three specific and now-addressed defects: an unvalidated PDF bridge, an unvalidated shared-coupling node, and asserted-rather-than-bound quadrature independence."
+    },
+    "retroactive_strengthening_performed": false,
+    "v1_review_specific_defects_now_addressed": [
+      {
+        "defect": "exact ExternalSetAPFEL bridge and flavor-map identity unvalidated",
+        "status": "ADDRESSED",
+        "how": "V3 froze the B1-B8 bridge contract with a hash-bound exact-integer oracle; the gate is FULLY_SPECIFIED_NOT_EXECUTED."
+      },
+      {
+        "defect": "shared alpha_s node unvalidated",
+        "status": "ADDRESSED_BY_POLICY",
+        "how": "AP1 makes APFEL's internal coupling authoritative, replaces the equivalence gate with declared-convention compatibility plus a non-gating diagnostic, and records the CT18 running-order tension as an open compatibility item."
+      },
+      {
+        "defect": "quadrature implementation independence asserted rather than bound",
+        "status": "ADDRESSED",
+        "how": "V3 bound two implementations with disjoint provenance and hash identity: SciPy Gauss-Legendre with NumPy accumulation, and repository Clenshaw-Curtis cosine sums with math.fsum."
+      }
+    ]
+  },
+  "evidence_classes": [
+    {
+      "class": "E1_EXECUTABLE_INDEPENDENT_ORACLE",
+      "definition": "An independently implemented program, runnable here under a configuration matched to the candidate, whose outputs are compared point by point.",
+      "can_establish": [
+        "that two independent implementations of the same specification agree at the compared points under a matched configuration",
+        "detection of an implementation error in either program at those points"
+      ],
+      "cannot_establish": [
+        "that the shared specification is itself correct",
+        "behaviour away from the compared points",
+        "a numerical error bound",
+        "independence from a shared upstream such as a common PDF library"
+      ]
+    },
+    {
+      "class": "E2_PUBLISHED_INDEPENDENT_NUMERICAL_BENCHMARK",
+      "definition": "Numbers published by an independent group from an independent implementation, at that group's own configuration.",
+      "can_establish": [
+        "that the scheme and code family have been independently cross-checked at the published configuration and level",
+        "prior evidence that the published implementation is not grossly wrong"
+      ],
+      "cannot_establish": [
+        "anything about this frozen build, version or configuration",
+        "executable replication here",
+        "a transferable tolerance",
+        "correctness at the project's own coordinates"
+      ]
+    },
+    {
+      "class": "E3_INDEPENDENT_ANALYTIC_CHECK",
+      "definition": "A closed-form identity checked against an independently derived expression with exact or bounded arithmetic.",
+      "can_establish": [
+        "exact correctness of the checked algebraic relation to the stated arithmetic precision"
+      ],
+      "cannot_establish": [
+        "correctness of convolutions, coefficient functions or evolution",
+        "anything outside the checked identity"
+      ]
+    },
+    {
+      "class": "E4_SEMANTIC_IMPLEMENTATION_CROSSCHECK",
+      "definition": "Deterministic tests of interface semantics against a hash-bound oracle, covering identity, mapping, transformation, sign, zero, support and linkage.",
+      "can_establish": [
+        "that data crosses the interface with the intended identity and transformation",
+        "detection of mapping, scaling, sign, support and linkage errors"
+      ],
+      "cannot_establish": [
+        "that the physics downstream of the interface is correct"
+      ]
+    },
+    {
+      "class": "E5_SOURCE_PROVENANCE_ONLY",
+      "definition": "Frozen version, commit and byte identity plus serialized configuration compared against declared metadata.",
+      "can_establish": [
+        "reproducibility of what was run",
+        "that the configuration matches a declared convention",
+        "detection of drift and of declared-convention mismatch"
+      ],
+      "cannot_establish": [
+        "numerical correctness of any output"
+      ]
+    },
+    {
+      "class": "E6_INTERNAL_SELF_CONVERGENCE",
+      "definition": "Refinement or repetition of the same implementation compared against itself.",
+      "can_establish": [
+        "numerical stability and reproducibility of the implementation's own output"
+      ],
+      "cannot_establish": [
+        "correctness",
+        "an error bound, for which a counterexample is on record in the blocker-resolution artifact",
+        "independence of any kind"
+      ]
+    }
+  ],
+  "fonll_validation_graph": [
+    {
+      "node": "complete_nc_observable",
+      "evidence_class": "E6",
+      "independent": false,
+      "evidence_mode": "composition of component checks",
+      "future_phase2b_test": null,
+      "residual_risk": "An end-to-end composition error, or an error internal to APFEL that survives every component check, is not independently detectable.",
+      "disclosure_required": true
+    },
+    {
+      "node": "electroweak_assembly",
+      "evidence_class": "E3",
+      "independent": true,
+      "evidence_mode": "static analytic",
+      "future_phase2b_test": "TEST_EW_JACOBIAN",
+      "residual_risk": "Covers the outer assembly identities only, not APFEL internals.",
+      "disclosure_required": false
+    },
+    {
+      "node": "massless_coefficient_contribution",
+      "evidence_class": "E2",
+      "independent": true,
+      "evidence_mode": "published",
+      "future_phase2b_test": "TEST_MASSLESS",
+      "residual_risk": "The candidate-side APFEL grid and interpolation settings are not yet frozen, and the accepted bridge contract does not cover the publication's initial scale.",
+      "disclosure_required": true
+    },
+    {
+      "node": "massive_contribution",
+      "evidence_class": "E2",
+      "independent": true,
+      "evidence_mode": "published",
+      "future_phase2b_test": null,
+      "residual_risk": "No version-matched executable replication. The published agreement concerns the publishing groups' runs, not this frozen build.",
+      "disclosure_required": true
+    },
+    {
+      "node": "fonll_matching_difference_contribution",
+      "evidence_class": "E2",
+      "independent": true,
+      "evidence_mode": "published",
+      "future_phase2b_test": null,
+      "residual_risk": "Same as the massive contribution, and no exact theta-dependent project configuration is covered.",
+      "disclosure_required": true
+    },
+    {
+      "node": "pdfs",
+      "evidence_class": "E5",
+      "independent": true,
+      "evidence_mode": "static",
+      "future_phase2b_test": "TEST_BRIDGE identity cases",
+      "residual_risk": "Byte identity establishes what was loaded, not that the grids are physically correct. The grids are taken as a published input and are not re-validated here.",
+      "disclosure_required": true
+    },
+    {
+      "node": "pdf_to_apfel_bridge",
+      "evidence_class": "E4",
+      "independent": true,
+      "evidence_mode": "executable deterministic",
+      "future_phase2b_test": "TEST_BRIDGE",
+      "residual_risk": "Interface semantics are validated; the physics consuming the interface is not.",
+      "disclosure_required": false
+    },
+    {
+      "node": "alpha_s",
+      "evidence_class": "E5",
+      "independent": true,
+      "evidence_mode": "static plus a non-gating numerical diagnostic",
+      "future_phase2b_test": "declared-convention compatibility check plus the AP1 diagnostic",
+      "residual_risk": "The CT18NLO running-order tension between AlphaS_OrderQCD and its SetDesc is unresolved; the diagnostic reports a sampled difference and bounds nothing.",
+      "disclosure_required": true
+    },
+    {
+      "node": "coordinate_and_jacobian",
+      "evidence_class": "E3",
+      "independent": true,
+      "evidence_mode": "static analytic",
+      "future_phase2b_test": "TEST_EW_JACOBIAN",
+      "residual_risk": "None beyond the checked identities.",
+      "disclosure_required": false
+    },
+    {
+      "node": "numerical_integration",
+      "evidence_class": "E6",
+      "independent": false,
+      "evidence_mode": "executable, two implementations with disjoint provenance",
+      "future_phase2b_test": "TEST_QUADRATURE_A and TEST_QUADRATURE_B",
+      "residual_risk": "Implementation independence does not make the evidence independent of the integrand; under NP2 this is stability, not a remainder bound.",
+      "disclosure_required": true
+    },
+    {
+      "node": "normalization",
+      "evidence_class": "E6",
+      "independent": false,
+      "evidence_mode": "executable self-convergence",
+      "future_phase2b_test": "TEST_NORMALIZATION",
+      "residual_risk": "A systematic bias common to both quadrature paths would escape; finiteness and positivity remain mandatory.",
+      "disclosure_required": true
+    },
+    {
+      "node": "normalized_law_assembly",
+      "evidence_class": "E3",
+      "independent": true,
+      "evidence_mode": "algebraic propagation over cached values",
+      "future_phase2b_test": "TEST_NORMALIZED_LAW",
+      "residual_risk": "The algebra is exact; its inputs carry the normalization residual risk.",
+      "disclosure_required": true
+    }
+  ],
+  "end_to_end_independent_closure_claimed": false,
+  "paper_scope_proportionality": {
+    "classification": "SCIENTIFICALLY_DESIRABLE_BUT_NOT_REQUIRED_GATE",
+    "derivation": "The paper claim is methodological: whether amortized simulation-based inference can produce calibrated posterior constraints on continuous PDF deformations from unbinned neutral-current DIS event sets generated by an explicit, normalized, detector-aware observation model. Its conclusions are conditional on that explicitly defined simulator. If the frozen FONLL-A implementation contained an error, the inference claim would still be assessable, because what is being tested is recovery of theta from data generated by the declared law. What would become false is any statement that the law is the true physics, and the accepted nonclaims already forbid that.",
+    "cost_consideration": "A second complete independently executable FONLL-A implementation is a physics-software project comparable to or larger than the inference study it would support, and its output would validate APFEL rather than the inference method.",
+    "not_an_excuse_for_weak_physics": "Proportionality is not used to lower the standard of what is checked. Every independent check that is actually available is made mandatory and gating by this policy, and the uncovered residual is named rather than absorbed."
+  },
+  "failure_mode_analysis": [
+    {
+      "failure": "APFEL internal implementation error in a coefficient function",
+      "covered_by": [
+        "published independent massless benchmark",
+        "published independent FONLL heavy-flavour benchmark"
+      ],
+      "classification": "PARTIALLY_DETECTABLE",
+      "why": "The published evidence concerns the publishing groups' runs and configurations, not this frozen build."
+    },
+    {
+      "failure": "incorrect FONLL scheme, damping or order configuration",
+      "covered_by": [
+        "frozen source and configuration identity",
+        "massless benchmark for the massless sector"
+      ],
+      "classification": "PARTIALLY_DETECTABLE",
+      "why": "A configuration mismatch against declared metadata is detectable; a FONLL-specific misconfiguration that leaves the massless sector correct is not."
+    },
+    {
+      "failure": "wrong heavy-quark mass settings",
+      "covered_by": [
+        "declared-convention compatibility check against the CT18NLO metadata"
+      ],
+      "classification": "DETECTABLE_BY_CURRENT_PLAN",
+      "why": "Detectable as a configuration mismatch; its physical consequence is not independently measured."
+    },
+    {
+      "failure": "wrong renormalisation or factorisation scale setting",
+      "covered_by": [
+        "frozen configuration identity",
+        "analytic kinematic and Jacobian checks"
+      ],
+      "classification": "PARTIALLY_DETECTABLE",
+      "why": "A declared-value mismatch is detectable; a scale error consistent with the declaration would not show in analytic checks."
+    },
+    {
+      "failure": "wrong alpha_s configuration",
+      "covered_by": [
+        "AP1 declared-convention compatibility items",
+        "AP1 non-gating numerical diagnostic"
+      ],
+      "classification": "DETECTABLE_BY_CURRENT_PLAN",
+      "why": "A convention mismatch fails the compatibility check; a subtle running difference is reported by the diagnostic and bounds nothing."
+    },
+    {
+      "failure": "wrong PDF mapping, flavour order, x-scaling, sign, zero or support handling",
+      "covered_by": [
+        "bridge B1-B8 semantic crosscheck against a hash-bound exact-integer oracle"
+      ],
+      "classification": "DETECTABLE_BY_CURRENT_PLAN",
+      "why": "The bridge tests enumerate identity mutations, support boundaries, scale meaning, signed zeros and subnormal crossover."
+    },
+    {
+      "failure": "incorrect electroweak assembly or charge-sign construction",
+      "covered_by": [
+        "independent analytic oracle over the enumerated kinematic cases"
+      ],
+      "classification": "DETECTABLE_BY_CURRENT_PLAN",
+      "why": "The assembly identities are checked symbolically against an independently constructed expression."
+    },
+    {
+      "failure": "normalization error",
+      "covered_by": [
+        "two quadrature implementations with disjoint provenance",
+        "algebraic cross-normalization identities",
+        "mandatory finiteness and strict positivity"
+      ],
+      "classification": "PARTIALLY_DETECTABLE",
+      "why": "A systematic bias shared by both quadrature paths, for instance from the common domain map or integrand, would escape."
+    },
+    {
+      "failure": "a correctly configured, correctly interfaced but internally wrong FONLL matching term",
+      "covered_by": [],
+      "classification": "NOT_INDEPENDENTLY_DETECTABLE",
+      "why": "No independent executable comparator is bound for the heavy and matching terms. This is the residual that the policy discloses rather than removes."
+    }
+  ],
+  "posterior_calibration_is_not_physics_validation": {
+    "asserted": true,
+    "reason": "Calibration and coverage are measured against the same simulator that generated the data, so they are circular with respect to the correctness of the physics formula. They validate the inference pipeline, not the observation law."
+  },
+  "disclosure_sufficiency": {
+    "classification": "DISCLOSURE_SCIENTIFICALLY_SUFFICIENT",
+    "scope_limit": "Sufficient for the bounded proof-of-principle methodological claim only. It would not be sufficient for any precision phenomenology or structure-function accuracy claim.",
+    "conditions_all_required": [
+      "the gap is explicitly disclosed in the machine artifact and in the paper",
+      "no node lacking independent executable evidence is ever labelled independently validated",
+      "the APFEL version, commit and configuration remain frozen and serialized",
+      "published independent evidence is cited at its own configuration and never as replication",
+      "every independent or component check that is actually available is executed",
+      "no precision phenomenology claim is made",
+      "no uncertainty value is assigned from the missing validation",
+      "conclusions are stated as conditional on the frozen reduced simulator",
+      "stronger future validation is recorded as an extension"
+    ]
+  },
+  "candidate_policies": {
+    "FR1_REQUIRE_EXECUTABLE_FONLL_REFERENCE": {
+      "evaluation": "REJECTED",
+      "would_be_required_if": [
+        "exact executable independence was an accepted non-negotiable contract term",
+        "missing E1 evidence made the reduced observation law scientifically uninterpretable rather than merely less validated",
+        "disclosure would materially overstate the paper's physical credibility"
+      ],
+      "assessment": "None of the three holds. The accepted obligation is a bounded plan; the v1 authorization review states that a wholly independent full FONLL-A program is not categorically required; and the observation law is fully interpretable because it is an explicitly defined, frozen, deterministic simulator whose interpretation does not depend on it being the true physics.",
+      "rejected_because_more_validation_is_always_better": false
+    },
+    "FR2_ACCEPT_PUBLISHED_FONLL_EVIDENCE_AS_DISCLOSED_LIMITATION": {
+      "evaluation": "SOUND_BUT_INSUFFICIENTLY_SPECIFIC",
+      "assessment": "Every condition attached to FR2 is satisfied. Its weakness is that it does not require the per-node evidence coverage to be frozen before authorization, which would leave open a post-hoc choice of which component checks were treated as available. That is the same failure mode the accepted normalization policy forbids elsewhere."
+    },
+    "FR3_HYBRID_REQUIRED_COMPONENT_COVERAGE": {
+      "evaluation": "ADOPTED",
+      "why_not_a_compromise": "The node set genuinely partitions on evidence availability rather than on convenience. Independent non-APFEL validation exists and is bindable for the electroweak assembly, the coordinate Jacobian, the PDF identity and bridge, the two quadrature implementations and the massless coefficient sector. It is not bindable for the massive contribution, the FONLL matching difference or the complete end-to-end rate. The policy consequence differs between the two groups, so a single uniform rule would be less accurate than the partition.",
+      "stronger_than_fr2_because": "It makes the available independent checks mandatory and gating, and it requires the exact component coverage matrix to be frozen before authorization.",
+      "requirements": [
+        "executable or independent coverage is mandatory and gating for every node where a suitable independent implementation or analytic oracle exists",
+        "published independent benchmark evidence is accepted for the heavy and matching terms where exact executable reconstruction is unavailable",
+        "the exact component coverage matrix, giving each load-bearing node its evidence class, method and residual risk, is frozen before authorization",
+        "every node without independent executable evidence is explicitly disclosed in the paper",
+        "a node whose available check is skipped fails rather than being reclassified"
+      ]
+    }
+  },
+  "terminology_replacement": {
+    "classification": "TERMINOLOGY_REPLACEMENT_JUSTIFIED",
+    "old_rule": "no load-bearing UNVALIDATED node",
+    "new_rule": "NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP",
+    "derivation": "Under the accepted contract the complete end-to-end rate can never carry E1 evidence without a second complete independent implementation, which the contract never required. As a completion criterion the old rule is therefore unsatisfiable in principle, which makes a successor plan permanently unreachable for a reason unrelated to scientific merit. The replacement keeps the rigour where it belongs: every load-bearing node must carry an exact evidence status, an exact validation method, an exact residual-risk statement, and explicit paper disclosure wherever independent executable validation is absent.",
+    "required_fields_per_load_bearing_node": [
+      "evidence_class",
+      "validation_method",
+      "residual_risk",
+      "paper_disclosure_when_no_executable_independent_evidence"
+    ],
+    "does_not_permit": [
+      "an unnamed or unspecified gap",
+      "treating a disclosed gap as a PASS",
+      "omitting the residual-risk statement",
+      "reclassifying a node to avoid running an available check"
+    ]
+  },
+  "preserved_non_equivalences": [
+    "PUBLISHED != EXECUTABLE",
+    "BENCHMARKED != FULLY_VALIDATED",
+    "COMPONENT_VALIDATION != END_TO_END_VALIDATION",
+    "DISCLOSED_LIMITATION != PASS",
+    "ABSENCE_OF_EVIDENCE != EVIDENCE_OF_CORRECTNESS",
+    "CALIBRATED_POSTERIOR != VALIDATED_PHYSICS_IMPLEMENTATION"
+  ],
+  "outcome": {
+    "code": "FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY",
+    "scientific_rationale": "The historical obligation requires a bounded, independent, non-circular closure plan, not an executable oracle per component, and the v1 authorization review states in terms that a wholly independent full FONLL-A program is not categorically required. The three specific defects that review did identify have since been addressed. Proportionality against the methodological claim makes a second complete FONLL-A implementation desirable but not a required gate, and disclosure is sufficient for that bounded claim. A uniform acceptance policy would nevertheless be less accurate than the evidence supports, because independent validation genuinely is available for a well-defined subset of nodes. The hybrid therefore accepts the published-evidence limitation only where executable reconstruction is unavailable, makes every available independent check mandatory and gating, and freezes the coverage matrix before authorization so that the set of available checks cannot be chosen after the fact.",
+    "fpd1_rejected_reason": "No accepted record makes executable independence non-negotiable, missing E1 does not make the law uninterpretable, and the disclosure regime prevents overstatement.",
+    "fpd2_rejected_reason": "Its conditions hold, but it does not freeze the per-node coverage matrix and would permit post-hoc selection of which component checks counted as available.",
+    "fpd4_rejected_reason": "The historical record answers the question directly and the supporting analysis is available, so leaving the policy open would be indecision rather than conservatism."
+  },
+  "contract_impact": {
+    "by_scope": {
+      "independent_numerical_closure_plan_obligation": "DISAMBIGUATES_EXISTING_CONTRACT",
+      "g1_fonll_component_reference_gate_semantics": "REPLACES_VALIDATION_GATE_SEMANTICS",
+      "successor_completion_criterion": "REPLACES_VALIDATION_GATE_SEMANTICS",
+      "paper_claim_boundary": "NARROWS_CLAIM_BOUNDARY",
+      "research_question": "UNCHANGED"
+    },
+    "replacement_is_explicit_not_silent": true,
+    "replacement_detail": "The G1 gate stops requiring a fully specified independently executable FONLL-A comparator and instead requires frozen published-evidence citation plus mandatory coverage of every node where independent validation is available. The successor completion criterion changes from no load-bearing unvalidated node to no undisclosed load-bearing validation gap.",
+    "research_question_check": {
+      "inference_unit_unchanged": true,
+      "posterior_target_unchanged": true,
+      "theta_domain_and_prior_unchanged": true,
+      "observation_space_unchanged": true,
+      "selected_event_conditioning_unchanged": true,
+      "detector_kernel_unchanged": true,
+      "normalized_law_form_unchanged": true
+    }
+  },
+  "paper_impact": {
+    "may_claim": [
+      "the APFEL version, commit and FONLL-A configuration are frozen and source-defined",
+      "independent published FONLL and heavy-flavour benchmark evidence exists for the scheme and code family",
+      "every independent component test that was available was specified and performed",
+      "the electroweak assembly and the coordinate Jacobian were checked against independent analytic oracles",
+      "the parton-distribution interface was checked against a hash-bound deterministic oracle",
+      "normalization was checked for reproducible numerical stability under independent fixed-refinement quadratures",
+      "the absence of an independently executable exact FONLL-A comparator is a stated limitation of this work",
+      "the inference conclusions are conditional on the explicitly defined frozen reduced simulator"
+    ],
+    "must_not_claim": [
+      "independently executable FONLL-A closure was achieved",
+      "the published benchmark proves the correctness of the present frozen implementation",
+      "production-precision or phenomenology-grade FONLL validation",
+      "complete end-to-end independent physics closure",
+      "that posterior calibration validates the underlying physics implementation",
+      "that any external benchmark level is an uncertainty on this work's structure functions or normalization",
+      "that a disclosed validation limitation is a passed gate",
+      "that absence of a detected discrepancy is evidence of correctness"
+    ],
+    "mandatory_paper_limitation": "The paper must state that no independently executable exact FONLL-A comparator was available, that the heavy-flavour and matching contributions rest on published independent benchmark evidence obtained at other groups' configurations, and that no end-to-end independent physics closure is claimed.",
+    "example_permitted_sentence": "The absence of an independently executable exact FONLL-A comparator is a stated limitation; the heavy-flavour and matching terms rest on published independent benchmarks obtained at other configurations.",
+    "example_forbidden_sentence": "The FONLL-A implementation was independently validated end to end."
+  },
+  "v4_assessment": {
+    "conclusion": "V4_SUCCESSOR_PLANNING_NOW_WARRANTED",
+    "why": "The final scientific policy blocker is resolved. Every remaining item is ordinary plan authoring under decided semantics rather than an open scientific question.",
+    "remaining_policy_blockers": [],
+    "remaining_plan_authoring_tasks": [
+      "declare the numerical stability target and the predeclared empirical protocol required by NP2",
+      "replace the grid gate with the exact coverage and nesting audit recommended by the blocker-resolution record",
+      "freeze the candidate-side APFEL grid and interpolation settings for the massless test, extend the bridge contract to the publication's initial scale, and derive the work cap",
+      "freeze the component coverage matrix required by this policy",
+      "serialize the non-gating alpha diagnostic, its probes and its reporting format",
+      "record the runtime identity disclosure required by the numerical policy",
+      "recount the per-category resource model once the tests above are specified"
+    ],
+    "v4_not_created_here": true
+  },
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "PHASE2B_EXECUTION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "TRAINING_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false,
+    "FULL_GENERATOR_EXECUTION_AUTHORIZED": false
+  },
+  "execution_state": {
+    "phase2b": "NOT_EXECUTED",
+    "dis_structure_functions_executed": false,
+    "apfel_executed": false,
+    "apfelxx_executed": false,
+    "massivedis_executed": false,
+    "fonll_benchmark_executed": false,
+    "alpha_diagnostic_executed": false,
+    "pdf_bridge_validation_executed": false,
+    "raw_rate_or_positivity_scan_executed": false,
+    "normalization_integrals_executed": false,
+    "convergence_studies_executed": false,
+    "events_or_datasets_generated": false,
+    "detector_or_neural_work_executed": false
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized"
+  },
+  "remaining_scientific_limitations": [
+    "No independently executable exact FONLL-A comparator is bound, and the heavy and matching terms rest on published evidence obtained at other configurations.",
+    "A correctly configured, correctly interfaced but internally wrong FONLL matching term is not independently detectable.",
+    "Published agreement concerns the publishing groups' runs and says nothing about this frozen build.",
+    "The CT18NLO coupling running-order tension is unresolved and is carried as a compatibility item.",
+    "Empirical quadrature stability is not a remainder bound.",
+    "Finite point grids do not prove continuum positivity.",
+    "Nine theta anchors do not establish every interior theta.",
+    "Inclusive neutral-current electron-proton data do not provide unrestricted flavour separation.",
+    "No alpha, bridge, DIS, sign, convergence, normalization or closure result was executed."
+  ],
+  "next_step": "Draft the Phase 2B preauthorization V4 successor plan under AP1, NP2 and FPD3, freezing the component coverage matrix and the seven plan-authoring items. Phase 2B remains NOT_AUTHORIZED and NOT_EXECUTED, and a separate independent authorization review remains required afterwards."
+}

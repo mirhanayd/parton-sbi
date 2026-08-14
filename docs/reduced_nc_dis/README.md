@@ -121,3 +121,19 @@ V4 was created, and Phase 2B remains Not Authorized and `NOT_EXECUTED`.
 
 - [Phase 2B numerical-contract policy decision V1](PHASE2B_NUMERICAL_POLICY_DECISION_V1.md)
 - [Machine-readable Phase 2B numerical policy decision V1](contracts/phase2b_numerical_policy_decision_v1.json)
+
+The Phase 2B FONLL validation policy derives
+`FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY`. The accepted Phase 2A
+obligation required a bounded independent closure *plan*, and the v1 execution
+authorization review states that a wholly independent full FONLL-A program is
+not categorically required; the executable-comparator framing was a later
+interpretation. Independent validation therefore stays mandatory and gating
+wherever it is actually available, the component coverage matrix must be frozen
+before authorization, and published independent evidence is accepted only for
+the heavy and matching terms, as an explicitly disclosed limitation. The
+completion criterion becomes `NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP`. The
+research question is unchanged, no V4 was created, and Phase 2B remains Not
+Authorized and `NOT_EXECUTED`.
+
+- [Phase 2B FONLL validation policy V1](PHASE2B_FONLL_VALIDATION_POLICY_V1.md)
+- [Machine-readable Phase 2B FONLL validation policy V1](contracts/phase2b_fonll_validation_policy_v1.json)
