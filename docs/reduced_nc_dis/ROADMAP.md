@@ -185,9 +185,10 @@ predeclared empirical stability requirement rather than a certified-accuracy
 requirement. Both replace a preauthorization gate explicitly; neither changes
 the research question. Two alpha blockers are dissolved, three become
 plan-authoring items, and one is downgraded to a disclosure requirement.
-`BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC` remains a scientific blocker, so a
-successor plan may be drafted but cannot reach a complete state until the
-independent-reference scope question is recorded. No V4 was created.
+`BLOCKER_FONLL_REFERENCE_EXECUTION_SPEC` remains a scientific blocker at that
+record, so a successor plan may be drafted but cannot reach a complete state
+until the independent-reference scope question is recorded. No V4 was created by
+that decision.
 
 This result does not alter the dependency graph or issue metadata. Phase 2B
 remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
@@ -210,3 +211,16 @@ policy blocker, so `V4_SUCCESSOR_PLANNING_NOW_WARRANTED`; no V4 was created here
 This result does not alter the dependency graph or issue metadata. Phase 2B
 remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
 `NOT_EXECUTED`; Phase 2C remains Not Authorized.
+
+## Phase 2B preauthorization validation plan V4
+
+The successor plan derives
+V4_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_EXECUTION_AUTHORIZATION_REVIEW.
+All seven plan-authoring items are frozen and the sixteen-row component coverage
+matrix carries no undisclosed load-bearing validation gap. Completing V4 is not
+authorization to execute Phase 2B; the next action is a separate independent
+execution-authorization review.
+
+This result does not alter the dependency graph or issue metadata. Phase 2B
+remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
+NOT_EXECUTED; Phase 2C remains Not Authorized.

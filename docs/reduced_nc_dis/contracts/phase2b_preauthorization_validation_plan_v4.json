@@ -1,0 +1,1257 @@
+{
+  "schema_version": "partonsbi.phase2b.preauthorization-validation-plan.v4",
+  "record_type": "PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V4",
+  "created_utc": "2026-08-14T10:40:00Z",
+  "starting_main_sha": "4d2018a0873b9374559194221b6e6cf8b5bf7ac8",
+  "task_kind": "PREAUTHORIZATION_PLANNING_ONLY",
+  "not_an_execution_authorization_review": true,
+  "no_numerical_physics_executed": true,
+  "predecessors": {
+    "fonll_a_amendment": {
+      "path": "docs/reduced_nc_dis/contracts/phase2_fonll_a_contract_amendment.json",
+      "sha256": "10cf19fedcdfe1b94e18ff89d1ae09514a31b8e0f6b055beeb729d61b6c32da8",
+      "bytes_immutable": true
+    },
+    "preauthorization_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan.json",
+      "sha256": "7eb8834eb8435532a85bd7d49b173b03e57a268f69f9676e0effbd877903672b",
+      "bytes_immutable": true
+    },
+    "execution_authorization_review_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review.json",
+      "sha256": "03d8119efb819b7a8b51161d5f2ce58fe59dd385b63f2dbfd6203692dac1f9e2",
+      "bytes_immutable": true
+    },
+    "preauthorization_v2": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v2.json",
+      "sha256": "a79e87538fae4d3f20793756b321af4d7521c1277ee08580e1b773a7452a9cd2",
+      "bytes_immutable": true
+    },
+    "execution_authorization_review_v2": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_execution_authorization_review_v2.json",
+      "sha256": "d7826158718ea0c4e5d3fc7c0f60829913e9634c98c45d2316c63bffdce47821",
+      "bytes_immutable": true
+    },
+    "preauthorization_v3": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v3.json",
+      "sha256": "78a029686489e9712e65ef6f9df3263b4821f96de0ee9873a910dee31f307e06",
+      "historical_outcome": "V3R6_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    },
+    "blocker_resolution_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_blocker_resolution_v1.json",
+      "sha256": "d66a1bbcb67b7105f489233bfd292c7064bcda35ef8c6f8dbc0dec41aa6da8de",
+      "historical_outcome": "BR5_MULTIPLE_BLOCKERS_REMAIN",
+      "bytes_immutable": true
+    },
+    "numerical_policy_decision_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_numerical_policy_decision_v1.json",
+      "sha256": "a855dfeb49a4f6f8e26804c5fac8708691fa9c345be57acfc5efa55e1864830c",
+      "historical_outcome": "PD1_ADOPT_AP1_AND_NP2",
+      "bytes_immutable": true
+    },
+    "fonll_validation_policy_v1": {
+      "path": "docs/reduced_nc_dis/contracts/phase2b_fonll_validation_policy_v1.json",
+      "sha256": "8210b926f1461938638f9ddcbb94c1003e52b4a5ec0bcd944d53e6b6bec8ce91",
+      "historical_outcome": "FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY",
+      "bytes_immutable": true
+    }
+  },
+  "historical_state": {
+    "phase2a_status": "COMPLETE",
+    "phase2a_scientific_decision": "INCONCLUSIVE",
+    "adr_013_status": "Proposed",
+    "accepted_pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "heavy_flavor_contract": "APFEL FONLL-A NLO",
+    "issue_54_unchanged": true,
+    "issue_10_unchanged": true,
+    "all_predecessor_bytes_unchanged": true
+  },
+  "inherited_policies": {
+    "alpha_policy": "AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING",
+    "normalization_policy": "NP2_REQUIRE_EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY",
+    "fonll_validation_policy": "FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY",
+    "completion_rule": "NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP",
+    "sign_policy": "SIGN1_STRICT_IMPLEMENTED_RATE_NONNEGATIVITY",
+    "policies_changed_by_v4": []
+  },
+  "preserved_non_equivalences": [
+    "PUBLISHED != EXECUTABLE",
+    "BENCHMARKED != FULLY_VALIDATED",
+    "COMPONENT_VALIDATION != END_TO_END_VALIDATION",
+    "SELF_CONVERGENCE != INDEPENDENT_CORRECTNESS",
+    "DISCLOSED_LIMITATION != PASS",
+    "NO_DETECTED_DISCREPANCY != PROOF_OF_CORRECTNESS",
+    "POSTERIOR_CALIBRATION != PHYSICS_IMPLEMENTATION_VALIDATION",
+    "NUMERICAL_STABILITY != CERTIFIED_NUMERICAL_ACCURACY",
+    "V4_COMPLETE != PHASE2B_AUTHORIZED",
+    "PHASE2B_AUTHORIZED != PHASE2B_EXECUTED"
+  ],
+  "evidence_taxonomy": [
+    {
+      "class": "E1_EXECUTABLE_INDEPENDENT_ORACLE",
+      "may_support": "independent executable comparison for the exact declared target",
+      "cannot_establish": [
+        "end-to-end validation by itself",
+        "correctness of the shared specification",
+        "behaviour away from the compared points"
+      ]
+    },
+    {
+      "class": "E2_PUBLISHED_INDEPENDENT_NUMERICAL_BENCHMARK",
+      "may_support": "external published component evidence at the publisher's own configuration",
+      "cannot_establish": [
+        "correctness of the frozen current build",
+        "executable replication",
+        "a transferable tolerance",
+        "end-to-end validation"
+      ]
+    },
+    {
+      "class": "E3_INDEPENDENT_ANALYTIC_CHECK",
+      "may_support": "exact analytic and local identities",
+      "cannot_establish": [
+        "unrelated implementation correctness",
+        "correctness of convolutions, coefficient functions or evolution"
+      ]
+    },
+    {
+      "class": "E4_SEMANTIC_IMPLEMENTATION_CROSSCHECK",
+      "may_support": "repository and software interface semantics",
+      "cannot_establish": [
+        "independent physics correctness when implementation cores are shared"
+      ]
+    },
+    {
+      "class": "E5_SOURCE_PROVENANCE_ONLY",
+      "may_support": "source and configuration identity",
+      "cannot_establish": [
+        "numerical correctness of any output"
+      ]
+    },
+    {
+      "class": "E6_INTERNAL_SELF_CONVERGENCE",
+      "may_support": "empirical internal stability of one implementation",
+      "cannot_establish": [
+        "independent correctness",
+        "rigorous accuracy",
+        "a theorem-level error bound"
+      ]
+    }
+  ],
+  "evidence_promotion_forbidden": [
+    "E2 may not be recorded as E1",
+    "E2 may not be recorded as evidence of current-build correctness",
+    "E5 may not be recorded as executable verification",
+    "E6 may not be recorded as independent correctness",
+    "E6 may not be recorded as a certified accuracy bound",
+    "E4 may not be recorded as independent physics correctness",
+    "no node may be reclassified after results are observed"
+  ],
+  "fpd3_binding": {
+    "policy": "FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY",
+    "requirements_frozen_here": [
+      "independent executable validation is mandatory and gating for every node where a suitable independently executable comparator is actually available and predeclared",
+      "published independent FONLL evidence remains acceptable for load-bearing FONLL and heavy-flavour components where exact executable reconstruction is unavailable",
+      "the absence of an independently executable exact FONLL-A comparator remains an explicit scientific limitation",
+      "the component coverage matrix is frozen in this artifact before any execution",
+      "a predeclared available check that is later skipped yields FAIL or INCONCLUSIVE by its own predeclared semantics and may not be reclassified as unavailable, optional, non-applicable or non-gating after results are observed"
+    ],
+    "post_result_reclassification_allowed": false,
+    "executable_fonll_comparator_available": false,
+    "executable_fonll_comparator_limitation": "No independently executable exact FONLL-A comparator is bound. The massive contribution, the FONLL matching-difference contribution and the complete NC observable therefore carry no E1 evidence, and this is a declared permanent limitation of the Phase 2B result rather than a deferred task."
+  },
+  "accepted_contract": {
+    "scheme": "FONLL-A",
+    "perturbative_order": "NLO",
+    "software": {
+      "name": "APFEL",
+      "version": "3.1.1",
+      "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a"
+    },
+    "pdf_family": "ct18nlo_two_parameter_boundary_v2",
+    "pdf_baseline": "ct18nlo_member0_sumrule_projected_boundary_v2",
+    "theta_anchor_count": 9,
+    "theta_domain": {
+      "delta_v": [-0.2, 0.2],
+      "lambda_sea": [-0.25, 0.25]
+    },
+    "physics_domain": {
+      "x_bj": [6e-7, 0.65],
+      "q2_gev2": [3.5, 50000],
+      "y": [0.005, 0.95],
+      "s_gev2": 101200
+    },
+    "strict_support": true,
+    "no_extrapolation": true
+  },
+  "authoring_item_1_np2_stability_protocol": {
+    "status": "FROZEN",
+    "claim_type": "EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY",
+    "rule_id": "NP2_STABILITY_RULE_V4_SELF_SCALED_NO_FREE_PARAMETER",
+    "invented_scalar_tolerance": false,
+    "why_no_scalar_target": "The accepted research-question record fixes no event-set size, selects no information-content or calibration metric, and declares no acceptable posterior or coverage distortion. A scalar accuracy target for the normalization therefore has no derivable provenance, and inventing one is forbidden. V4 instead freezes a decision rule whose every comparison scale is computed at execution from formulas frozen here, with no adjustable parameter.",
+    "distinguished_concepts": {
+      "floating_point_reproducibility": "same frozen software and inputs produce the same bits on the same runtime; established by provenance, not by refinement",
+      "refinement_stability": "behaviour of one family's estimate across its own frozen ladder",
+      "cross_family_numerical_stability": "agreement between two independently implemented families at their finest frozen level",
+      "implementation_comparison": "whether two implementations of the same rule family agree",
+      "physics_correctness": "not addressed by any of the above",
+      "physical_or_theory_uncertainty": "a different object entirely and not claimed",
+      "normalized_law_stability": "behaviour of q = r / Z under the frozen protocol"
+    },
+    "frozen_before_execution": {
+      "statistic": "Z(theta, family, level), the normalization integral estimate on the frozen conditional HERA domain in the frozen t=ln(x), u=ln(Q2) coordinates",
+      "comparison_direction": "coarse to fine within a family; family A against family B at the finest level only",
+      "refinement_ladder": {
+        "family_a_gauss_legendre_orders": [16, 32, 64],
+        "family_b_clenshaw_curtis_node_counts": [17, 33, 65],
+        "ladder_is_fixed": true,
+        "adaptive_refinement_allowed": false
+      },
+      "arithmetic_noise_formulas": {
+        "unit_roundoff": "u = 2^-53",
+        "family_a_accumulation": "numpy.dot pairwise summation; eps_A = gamma_k * S_A with k = ceil(log2(n)) and gamma_k = k*u/(1-k*u), S_A = sum of abs(w_i * f_i) over the evaluated nodes",
+        "family_b_accumulation": "math.fsum is exactly rounded; eps_B = u * abs(Z_B)",
+        "note": "Both formulas are properties of the frozen accumulation methods, not chosen tolerances. Their numeric values are computed at execution from quantities the run itself produces."
+      },
+      "within_family_criterion": "d1 = abs(Z_L2 - Z_L1); d2 = abs(Z_L3 - Z_L2); require d2 <= d1 for each family at each theta anchor",
+      "cross_family_criterion": "abs(Z_A_finest - Z_B_finest) <= d2_A + d2_B + eps_A + eps_B, evaluated at each theta anchor",
+      "near_zero_behavior": "All criteria are absolute differences. No relative division is performed anywhere in this rule, so no near-zero division can arise.",
+      "absolute_versus_relative_switching_rule": "None is required, because the rule is purely absolute; a relative form is explicitly not used and may not be substituted later.",
+      "anchor_aggregation": "Per anchor. Every one of the nine theta anchors must satisfy every criterion independently. There is no averaging, no best-of, no median, and no anchor may be dropped.",
+      "acceptance_semantics": {
+        "PASS": "At every theta anchor: all six estimates finite; Z_A_finest > 0 and Z_B_finest > 0; the within-family criterion holds for both families; and the cross-family criterion holds.",
+        "FAIL": "Any nonfinite estimate; any nonpositive finest-level estimate; or the cross-family criterion violated at any anchor.",
+        "INCONCLUSIVE": "The within-family criterion violated at any anchor with everything else satisfied, that is non-monotone or growing successive differences. INCONCLUSIVE is never PASS."
+      },
+      "failure_precedence": "NONFINITE_ESTIMATE, then NORMALIZATION_NONPOSITIVE, then CROSS_FAMILY_DISAGREEMENT, then REFINEMENT_NONMONOTONE",
+      "work_limit": "the frozen integrand-evaluation counts in the resource model; exceeding them is RESOURCE_EXHAUSTION and is INCONCLUSIVE, never PASS",
+      "no_retry_rule": "No retry, no re-run with modified settings, no point deletion, no post-hoc tuning, no adaptive insertion."
+    },
+    "required_principles_asserted": {
+      "families_independently_implemented": true,
+      "every_theta_anchor_evaluated": true,
+      "no_anchor_dropped": true,
+      "no_averaging_over_a_failed_anchor": true,
+      "no_post_hoc_tolerance_choice": true,
+      "no_retry_until_pass": true,
+      "no_point_deletion": true,
+      "no_adaptive_refinement_beyond_frozen_ladder": true,
+      "finite_normalization_required": true,
+      "strictly_positive_normalization_required": true,
+      "cross_family_disagreement_is_fail": true,
+      "agreement_necessary_but_not_sufficient": true,
+      "unstable_refinement_cannot_become_pass": true,
+      "empirical_stability_is_not_a_remainder_certificate": true
+    },
+    "forbidden_imports": [
+      "the published MassiveDIS 0.001 observation",
+      "the published massless 1e-5 observation",
+      "any other external benchmark discrepancy used as a normalization tolerance"
+    ],
+    "disclosure_carried_to_paper": "Normalization evidence is reproducible numerical stability under two independently implemented fixed-refinement quadrature families. It is not a certified accuracy and not a mathematical remainder bound."
+  },
+  "authoring_item_2_grid_gate": {
+    "status": "FROZEN",
+    "gate_id": "EXACT_COVERAGE_AND_NESTING_AUDIT",
+    "replaces": "the V3 TEST_GRID_CONVERGENCE refinement-difference gate, which did not map to a scientifically meaningful quantity because nothing is interpolated between tested points",
+    "what_it_certifies": "exact structural properties of the frozen point sets and of the cached evaluation records; it certifies no continuum property whatsoever",
+    "point_grid": {
+      "levels": [17, 33, 65],
+      "node_generation": "x_i = x_eff_min * (0.65 / x_eff_min) ** (i / (N - 1)) and Q2_j = 3.5 * (50000 / 3.5) ** (j / (N - 1)), evaluated in binary64 in exactly this form",
+      "boundary_points": "both endpoints of each axis are nodes by construction at every level",
+      "support_mask_rule": "retain exactly 6e-7 <= x <= 0.65, 3.5 <= Q2 <= 50000 and 0.005 <= Q2/(101200*x) <= 0.95",
+      "threshold_probes": [
+        "Q2 = 4.75^2 times (1 - 2^-10), 4.75^2, and 4.75^2 times (1 + 2^-10) at every admissible x node",
+        "x = Q2/(Q2 + 4*mh^2) times (1 - 2^-10), 1, and (1 + 2^-10) for mh in {1.3, 4.75} at every admissible Q2 node",
+        "y = 0.005 and y = 0.95 at every x node",
+        "Q2 = 3.5 and Q2 = 50000 at every admissible x node"
+      ],
+      "per_level_work_formula": "N^2 + 13*N",
+      "deterministic_ordering": "ascending index order on x then Q2, then augmentation blocks in the serialized order above",
+      "nesting_status": "NESTED_BITWISE",
+      "nesting_verification": "verified in this task on both the x and Q2 axes for levels 17, 33 and 65 using the repository grid oracle; zero failures"
+    },
+    "clenshaw_curtis": {
+      "node_counts": [17, 33, 65],
+      "nesting_status": "NESTED_BITWISE",
+      "nesting_verification": "verified in this task: level 17 is bitwise a stride-2 subset of level 33, level 33 a stride-2 subset of level 65, and level 17 a stride-4 subset of level 65"
+    },
+    "gauss_legendre": {
+      "orders": [16, 32, 64],
+      "nesting_status": "NOT_NESTED",
+      "nesting_verification": "verified in this task: the order-16 and order-32 node sets share zero nodes. Gauss-Legendre levels are explicitly not labelled nested and no audit step may assume shared nodes.",
+      "mislabelling_forbidden": true
+    },
+    "audit_checks": [
+      "each coarse point-grid level's nodes are bitwise present in every finer level at the declared stride",
+      "each coarse Clenshaw-Curtis level's nodes are bitwise present in every finer level at the declared stride",
+      "the Gauss-Legendre levels are confirmed non-nested and no shared-node assumption is used",
+      "every shared point carries a bitwise identical cached rate record across levels",
+      "every required augmentation point is present at every level",
+      "the realised evaluation count equals the frozen per-level formula exactly"
+    ],
+    "prohibitions": {
+      "adaptive_insertion_allowed": false,
+      "post_hoc_deletion_allowed": false,
+      "reordering_allowed": false
+    },
+    "pass": "every audit check holds exactly",
+    "fail": "any nesting, cache-identity, augmentation or count mismatch",
+    "inconclusive": "a required cached record is missing or the resource cap is reached",
+    "resource_cap": "reuses the frozen point-grid records; zero additional physics evaluations",
+    "structural_counterexample_required": {
+      "requirement": "the future plan must retain a deterministic non-DIS analytic counterexample in which two refinement sequences agree perfectly with themselves and with each other while both are wrong",
+      "reference_implementation": "analysis/tests/test_phase2b_grid_oracles.py, test_successive_difference_agreement_does_not_bound_the_remainder",
+      "purpose": "to keep the audit from being reinterpreted as a convergence proof",
+      "is_dis_physics": false
+    }
+  },
+  "authoring_item_3_massless_reference": {
+    "status": "FROZEN_WITH_DECLARED_UNBOUND_ITEMS",
+    "publication": {
+      "identity": "arXiv:2404.15711v1, Bertone and Karlberg, benchmark of DIS structure functions",
+      "source_tar_sha256": "ccd5134044bc95027e696ddf764d759950dd2486eeeece9f98deaa2a4591c0db",
+      "nlo_table_locator": "table_N1LO_HOPPET.tex, 27 NLO rows"
+    },
+    "released_reference_program": {
+      "locator": "github.com/alexanderkarlberg/n3lo-structure-function-benchmarks, code/StructureFunctionsJoint.cc",
+      "sha256": "199f7e90b057083a2cb68d4e6649cc527c30ba27bcb09977641acc87a457a5fe",
+      "reference_codes": "HOPPET and APFEL++",
+      "classification": "E2_PUBLISHED_INDEPENDENT_NUMERICAL_BENCHMARK"
+    },
+    "reference_side_bound": {
+      "perturbative_order": "NLO with exact splitting and coefficient functions",
+      "initial_scale_gev": "sqrt(2.0) evaluated in binary64, which is correctly rounded and reproducible",
+      "alpha_s_at_q0": 0.35,
+      "active_flavours_at_q0": 3,
+      "thresholds_gev_in_released_code": {"charm": 1.414213563, "bottom": 4.5, "top": 175.0},
+      "scales": "xmuR = 1.0 and xmuF = 1.0",
+      "weak_mixing": "sin^2(theta_W) = 1 - (M_W/M_Z)^2 with M_W = 80.377 and M_Z = 91.1876",
+      "initial_pdfs": "the APFEL++ built-in Les Houches toy parameterisation used by the released program",
+      "observables": "zero-mass neutral-current F1, F2 and F3",
+      "coordinates": "27 rows: Q in {2, 50, 100} GeV crossed with nine x values from 1e-5 to 0.9",
+      "published_scalar_tokens": 81
+    },
+    "prose_versus_code_discrepancy_carried_forward": {
+      "paper_text": "charm mass sqrt(2) + epsilon with epsilon taken as 1e-9",
+      "released_code_literal": 1.414213563,
+      "difference_from_sqrt_two": 6.269047503337788e-10,
+      "binding_rule": "the executable literal is binding; the prose value may not be substituted"
+    },
+    "candidate_side": {
+      "implementation": "the accepted APFEL 3.1.1 build configured in zero-mass neutral-current mode",
+      "grid_settings_source": "APFEL 3.1.1 source-defined defaults, bound by reference rather than invented",
+      "grid_settings_locator": "apfel-3.1.1/src/Evolution/initParameters.f sha256 1acd6161a8870cfb9f22b20fc0bc7ee11dcac7d5211237b42ab7d55f72d5bbc4 lines 87-91",
+      "grid_settings_values": "SetNumberOfGrids(3); SetGridParameters(1,80,3,1d-5); SetGridParameters(2,50,5,1d-1); SetGridParameters(3,40,5,8d-1)",
+      "grid_settings_binding_rule": "the future run must not call SetNumberOfGrids or SetGridParameters, so that the source-defined defaults apply, and must record the realised values in the emitted provenance artifact",
+      "boundary_supply": "the Les Houches toy parameterisation supplied through the bridge profile B defined in authoring item 4"
+    },
+    "declared_unbound_items": [
+      {
+        "item": "the exact APFEL++ and HOPPET internal grid settings used by the publishers",
+        "consequence": "the comparison is candidate-against-published-values, not a reproduction of the publishers' numerical pipeline"
+      },
+      {
+        "item": "the exact numerical agreement level between the publishers' two codes beyond the digits shown",
+        "consequence": "no tolerance may be derived from the publication's own agreement statement"
+      }
+    ],
+    "comparison_rule": {
+      "target": "each of the 81 published scalar tokens",
+      "rule": "the candidate value must lie inside the interval implied by the published displayed digits of that token",
+      "tolerance_invented": false,
+      "provenance": "publication display precision only; no external benchmark level is imported",
+      "pass": "all 81 containments hold",
+      "fail": "any candidate value outside its published displayed-digit interval, or any configuration identity mismatch",
+      "inconclusive": "a required candidate value is missing or the resource cap is reached"
+    },
+    "evidence_class": "E2",
+    "gating": true,
+    "gating_justification": "the published table is available and the candidate side is now fully specified, so under FPD3 this available check is mandatory and gating",
+    "residual_risk": "Agreement with a published zero-mass table constrains the massless sector of the frozen build only. It says nothing about the massive or matching sectors and is not an end-to-end validation."
+  },
+  "authoring_item_4_bridge": {
+    "status": "FROZEN",
+    "profiles": [
+      {
+        "profile_id": "BRIDGE_PROFILE_A_CT18_BOUNDARY",
+        "purpose": "the accepted reduced-simulator boundary",
+        "pdf_identity": {
+          "set": "CT18NLO",
+          "data_version": 1,
+          "set_index": 14400,
+          "member": 0,
+          "archive_sha256": "c9127231e77e97cbec79cb5839203ab00f8db77237a061b61f9420f2b7b9c213",
+          "info_sha256": "be60232d8e6c49982c82f5fa990fd5b0fd1050719944f31602bf27cdb16548b0",
+          "member_sha256": "375db856d2f8c7087a626c92ebf228d3f080e5de83175519778ffaf6e72e5410"
+        },
+        "q0_gev": 1.295,
+        "x_support": [1e-9, 1],
+        "q_support_gev": [1.295, 100000],
+        "flavor_order": [-5, -4, -3, -2, -1, 1, 2, 3, 4, 5, 21],
+        "interpolation": "logcubic",
+        "caller_policy": "strict_no_extrapolation"
+      },
+      {
+        "profile_id": "BRIDGE_PROFILE_B_MASSLESS_REFERENCE_BOUNDARY",
+        "purpose": "supply the Les Houches toy boundary for the massless reference candidate",
+        "pdf_identity": "analytic Les Houches toy parameterisation, not an LHAPDF set",
+        "q0_gev": "sqrt(2.0) in binary64, exactly 1.4142135623730951",
+        "x_support": [1e-9, 1],
+        "flavor_order": "identical to profile A",
+        "caller_policy": "strict_no_extrapolation",
+        "note": "profile B exists only to run the massless reference candidate and never supplies the accepted reduced simulator"
+      }
+    ],
+    "shared_semantics": {
+      "interface": "APFEL SetPDFSet(external) resolving to exactly one strong ExternalSetAPFEL(x, Q, xf[-6:7])",
+      "value_source": "the evaluator returns f; the bridge performs exactly one round-to-nearest-even binary64 multiplication x*f",
+      "f_versus_xf": "the evaluator supplies f and the bridge supplies x*f; the product is formed exactly once",
+      "exactly_one_multiplication_policy": true,
+      "q_versus_q2_convention": "the callback argument Q is in GeV, never Q^2; a Q^2 value passed as Q must fail before the evaluator",
+      "q0_behaviour": "the callback scale must equal the profile's Q0 exactly, compared bitwise",
+      "threshold_behaviour": "no cross-threshold interpolation is performed by the bridge; the bridge transports values only",
+      "signed_zero_behaviour": "a mapped flavour carrying a signed zero preserves that sign bit exactly",
+      "exact_zero_slots": "structural slots -6, 6 and 7 are bitwise +0.0",
+      "subnormal_semantics": "gradual-underflow and subnormal-crossover outputs are compared bitwise against the exact-integer oracle",
+      "extrapolation_allowed": false,
+      "support_repair_allowed": false,
+      "double_multiplication_allowed": false,
+      "implicit_flavor_remap_allowed": false,
+      "silent_zero_replacement_allowed": false
+    },
+    "invariants": ["B1_MEMBER_SET_IDENTITY", "B2_FLAVOR_MAPPING", "B3_X_TIMES_F_EXACTLY_ONCE", "B4_SIGN_PRESERVATION", "B5_ZERO_PRESERVATION", "B6_STRICT_SUPPORT", "B7_Q_IN_GEV_EXACT_Q0", "B8_CALLBACK_INTERFACE_IDENTITY"],
+    "reference_oracle": {
+      "path": "analysis/validation/phase2b_bridge_oracles.py",
+      "sha256": "b1c70070dc0fbb66a5b7de7125a16b478893d624b5909b44426ae61a8a27f92c",
+      "algorithm": "decode finite binary64 operands to exact signed dyadic integers, multiply exact integer significands, then round once with integer round-to-nearest ties-to-even"
+    },
+    "comparison_rule": "bitwise equality of every written slot to the hash-bound exact-integer oracle output",
+    "failure_precedence": "CONTRACT_IDENTITY_FAILURE, then SUPPORT_FAILURE, then BRIDGE_FAILURE",
+    "profile_a_inventory": {
+      "identity_cases": 16,
+      "interface_checks": 2,
+      "real_callbacks": 1035,
+      "sentinel_callbacks": 3,
+      "support_attempts": 4,
+      "additional_wrong_q_attempts": 3,
+      "callback_attempts": 1045,
+      "evaluator_invocations": 1040
+    },
+    "profile_b_inventory": {
+      "sentinel_callbacks": 2,
+      "callback_attempts": 2,
+      "evaluator_invocations": 2,
+      "cases": "one signed power-of-two sentinel and one alternating signed-zero sentinel, both at the profile B Q0"
+    },
+    "work_cap": {
+      "callback_attempts_total": 1047,
+      "evaluator_invocations_total": 1042,
+      "slot_comparisons_total": 14588,
+      "slot_comparison_formula": "evaluator_invocations_total * 14 slots"
+    },
+    "executed_in_this_task": false
+  },
+  "authoring_item_5_alpha_diagnostic": {
+    "status": "FROZEN",
+    "policy": "AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING",
+    "runtime_coupling": "APFEL 3.1.1 AlphaQCD under the accepted frozen FONLL-A configuration",
+    "ct18_alpha_role": "provenance and declared-convention compatibility evidence only; not the runtime evaluator",
+    "gating": "NON_GATING",
+    "gating_is_false": true,
+    "provider_a": {
+      "identity": "CT18NLO DataVersion 1 member 0 via LHAPDF 6.5.6 alphasQ",
+      "lhapdf_version": "6.5.6",
+      "alphas_type": "ipol",
+      "declared_alphas_mz": 0.118,
+      "declared_alphas_order_qcd": 1,
+      "declared_mz": 91.187
+    },
+    "provider_b": {
+      "identity": "APFEL 3.1.1 AlphaQCD",
+      "commit": "72bf6ec7c72c923dd2115f2a98c6f593f9c91d2a",
+      "controls": ["SetAlphaQCDRef(0.118,91.187)", "SetAlphaEvolution(exact)", "SetPerturbativeOrder(1)", "SetPoleMasses(1.3,4.75,172.0)", "SetMaxFlavourAlpha(5)", "SetVFNS", "SetRenFacRatio(1)", "SetMassMatchingScales(1,1,1)", "SetRenQRatio(1)"],
+      "conversion": "AlphaQCD(Q) returns 4d0 * pi * a_QCD(Q*Q/kren) with pi = 3.1415926535897932385d0; no manual conversion is performed"
+    },
+    "declared_convention_compatibility_items": [
+      {"item": "alpha_s at the Z mass", "status": "COMPATIBLE"},
+      {"item": "perturbative order of the observable", "status": "COMPATIBLE"},
+      {"item": "heavy-quark pole masses", "status": "COMPATIBLE"},
+      {"item": "flavour scheme and maximum active flavours", "status": "COMPATIBLE"},
+      {"item": "matching-scale ratios and renormalisation-to-factorisation ratio", "status": "APFEL_SIDE_DECLARED_CT18_SIDE_UNSTATED"},
+      {"item": "perturbative order of the coupling running itself", "status": "UNRESOLVED_COMPATIBILITY_ITEM", "note": "CT18NLO declares AlphaS_OrderQCD 1 while its SetDesc states a HOPPET three-loop running solution; this remains unresolved and must be reported"}
+    ],
+    "material_mismatch_triggers_review": true,
+    "q_domain_gev2": [3.5, 50000],
+    "coordinate_variable": "z = ln(Q^2)",
+    "node_generation": {
+      "rule": "the sorted union of the two Q^2 domain endpoints, the squares of the 21 CT18 alpha knots lying strictly inside the domain, and the two binary64 neighbours of mb^2 obtained with nextafter towards minus and plus infinity",
+      "mb_gev": 4.75,
+      "mb_is_a_ct18_knot": true,
+      "distinct_nodes": 25,
+      "verified_in_this_task": true
+    },
+    "comparison_statistic": "at each node, the observed absolute and relative difference between the two providers' alpha_s values",
+    "output_fields": ["node_q2", "provider_a_alpha_s", "provider_b_alpha_s", "absolute_difference", "relative_difference", "compatibility_item_statuses", "provider_identities"],
+    "interpretation": "observed sampled diagnostic evidence about two differently implemented finite algorithms",
+    "must_not_establish": [
+      "continuous-domain equivalence",
+      "bitwise identity",
+      "certified consistency",
+      "physics correctness",
+      "Phase 2B authorization",
+      "a generic error budget for any other gate"
+    ],
+    "provider_evaluations": 50,
+    "executed_in_this_task": false
+  },
+  "authoring_item_6_runtime_identity": {
+    "status": "FROZEN_WITH_EXPLICIT_CLASSIFICATIONS",
+    "reproducibility_claim": "NUMERICALLY_REPRODUCIBLE_ON_ONE_FROZEN_RUNTIME_NOT_ACROSS_ARBITRARY_HOSTS",
+    "bitwise_cross_host_claim": false,
+    "libm_certification_resurrected_as_gate": false,
+    "libm_note": "Under AP1 no continuous certification of the platform logarithm is a Phase 2B gate. Under NP2 runtime identity supports reproducibility, not certified accuracy.",
+    "dependencies": [
+      {"name": "CPython", "version": "3.10.20", "source_identified": true, "hash_pinned": true, "installed": false, "executable_in_current_environment": false, "required_for_phase2b_execution": true},
+      {"name": "NumPy", "version": "2.2.6", "source_identified": true, "hash_pinned": true, "installed": false, "executable_in_current_environment": false, "required_for_phase2b_execution": true},
+      {"name": "SciPy", "version": "1.15.3", "source_identified": true, "hash_pinned": true, "installed": false, "executable_in_current_environment": false, "required_for_phase2b_execution": true},
+      {"name": "mpmath", "version": "1.3.0", "source_identified": true, "hash_pinned": true, "installed": false, "executable_in_current_environment": false, "required_for_phase2b_execution": false},
+      {"name": "python-flint", "version": "0.6.0", "source_identified": true, "hash_pinned": true, "installed": false, "executable_in_current_environment": false, "required_for_phase2b_execution": false},
+      {"name": "APFEL", "version": "3.1.1", "source_identified": true, "hash_pinned": true, "installed": false, "executable_in_current_environment": false, "required_for_phase2b_execution": true},
+      {"name": "LHAPDF", "version": "6.5.6", "source_identified": true, "hash_pinned": true, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true},
+      {"name": "CT18NLO data", "version": "DataVersion 1", "source_identified": true, "hash_pinned": true, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true},
+      {"name": "compiler", "version": "unbound", "source_identified": false, "hash_pinned": false, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true},
+      {"name": "glibc", "version": "2.39-0ubuntu8.8 on the inspection host", "source_identified": true, "hash_pinned": false, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true},
+      {"name": "libm", "version": "provided by glibc, ifunc-selected at load time", "source_identified": true, "hash_pinned": false, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true},
+      {"name": "Ubuntu", "version": "24.04.3 LTS on the inspection host", "source_identified": true, "hash_pinned": false, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true},
+      {"name": "WSL kernel", "version": "6.6.87.2-microsoft-standard-WSL2", "source_identified": true, "hash_pinned": false, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": false},
+      {"name": "architecture", "version": "x86_64", "source_identified": true, "hash_pinned": false, "installed": true, "executable_in_current_environment": true, "required_for_phase2b_execution": true}
+    ],
+    "cpu_feature_dependency": {
+      "is_a_scientific_dependency": false,
+      "reason": "No frozen Phase 2B gate depends on a specific CPU feature set. The ifunc selection of the platform logarithm is recorded as a reproducibility disclosure only, because AP1 removed the continuous coupling certification that would have made it load-bearing.",
+      "recorded_for_disclosure": "the executing host's CPU feature set and the resolved libm variant must be recorded in the emitted provenance artifact"
+    },
+    "source_hash_is_not_executable_verification": true,
+    "must_be_installed_before_execution": ["CPython 3.10.20", "NumPy 2.2.6", "SciPy 1.15.3", "APFEL 3.1.1"],
+    "preauthorization_consequence": "These four are hash-pinned but not installed. Installing and verifying them is an execution-time prerequisite recorded here, not a planning gap, because no planning decision depends on their presence."
+  },
+  "authoring_item_7_resource_model": {
+    "status": "FROZEN",
+    "recount_from_first_principles": true,
+    "copied_from_previous_totals": false,
+    "unit_definitions": {
+      "complete_rate_evaluation": "one call to the frozen APFEL FONLL-A complete-rate wrapper at one (x, Q2, theta) point",
+      "zm_structure_function_evaluation": "one zero-mass neutral-current structure-function evaluation at one (x, Q) point in the massless reference configuration",
+      "published_scalar_comparison": "one comparison of one candidate scalar against one published displayed-digit interval",
+      "bridge_callback_attempt": "one attempted invocation of the ExternalSetAPFEL callback",
+      "bridge_evaluator_invocation": "one callback attempt that reaches the PDF evaluator",
+      "bridge_slot_comparison": "one bitwise comparison of one of the 14 written flavour slots",
+      "alpha_provider_evaluation": "one alpha_s evaluation by one provider at one Q2 node",
+      "analytic_case": "one analytic identity or Jacobian check at one kinematic pair",
+      "structural_oracle_check": "one non-physics deterministic check on nodes, weights, nesting or cached-record identity",
+      "cached_operation": "one arithmetic operation on already-computed cached values, involving no new physics evaluation",
+      "byte": "one byte of serialized emitted artifact content"
+    },
+    "categories": [
+      {
+        "category": "point_grid_complete_rate_evaluations",
+        "unit": "complete_rate_evaluation",
+        "formula": "9 anchors * sum over N in {17,33,65} of (N^2 + 13*N)",
+        "fixed_factors": {"anchors": 9, "levels": [17, 33, 65], "per_level": [510, 1518, 5070], "per_anchor": 7098},
+        "minimum": 63882,
+        "nominal": 63882,
+        "worst_case": 63882,
+        "cap": 63882
+      },
+      {
+        "category": "quadrature_a_integrand_evaluations",
+        "unit": "complete_rate_evaluation",
+        "formula": "9 anchors * (16^2 + 32^2 + 64^2)",
+        "fixed_factors": {"anchors": 9, "orders": [16, 32, 64], "per_anchor": 5376},
+        "minimum": 48384,
+        "nominal": 48384,
+        "worst_case": 48384,
+        "cap": 48384
+      },
+      {
+        "category": "quadrature_b_integrand_evaluations",
+        "unit": "complete_rate_evaluation",
+        "formula": "9 anchors * (17^2 + 33^2 + 65^2)",
+        "fixed_factors": {"anchors": 9, "node_counts": [17, 33, 65], "per_anchor": 5603},
+        "minimum": 50427,
+        "nominal": 50427,
+        "worst_case": 50427,
+        "cap": 50427
+      },
+      {
+        "category": "massless_reference_candidate_evaluations",
+        "unit": "zm_structure_function_evaluation",
+        "formula": "27 coordinates * 3 observables",
+        "fixed_factors": {"coordinates": 27, "observables": 3},
+        "minimum": 81,
+        "nominal": 81,
+        "worst_case": 81,
+        "cap": 81
+      },
+      {
+        "category": "published_record_comparisons",
+        "unit": "published_scalar_comparison",
+        "formula": "27 coordinates * 3 observables",
+        "fixed_factors": {"coordinates": 27, "observables": 3},
+        "minimum": 81,
+        "nominal": 81,
+        "worst_case": 81,
+        "cap": 81
+      },
+      {
+        "category": "bridge_callback_attempts",
+        "unit": "bridge_callback_attempt",
+        "formula": "profile A 1045 + profile B 2",
+        "fixed_factors": {"profile_a": 1045, "profile_b": 2},
+        "minimum": 1047,
+        "nominal": 1047,
+        "worst_case": 1047,
+        "cap": 1047
+      },
+      {
+        "category": "bridge_evaluator_invocations",
+        "unit": "bridge_evaluator_invocation",
+        "formula": "profile A 1040 + profile B 2",
+        "fixed_factors": {"profile_a": 1040, "profile_b": 2},
+        "minimum": 1042,
+        "nominal": 1042,
+        "worst_case": 1042,
+        "cap": 1042
+      },
+      {
+        "category": "bridge_slot_comparisons",
+        "unit": "bridge_slot_comparison",
+        "formula": "bridge_evaluator_invocations * 14",
+        "fixed_factors": {"invocations": 1042, "slots": 14},
+        "minimum": 14588,
+        "nominal": 14588,
+        "worst_case": 14588,
+        "cap": 14588,
+        "note": "Recounted from first principles as invocations times slots. V3 recorded 14,532 under a different counting convention; that figure is not reused."
+      },
+      {
+        "category": "alpha_diagnostic_provider_evaluations",
+        "unit": "alpha_provider_evaluation",
+        "formula": "2 providers * 25 distinct Q2 nodes",
+        "fixed_factors": {"providers": 2, "nodes": 25},
+        "minimum": 50,
+        "nominal": 50,
+        "worst_case": 50,
+        "cap": 50
+      },
+      {
+        "category": "analytic_ew_jacobian_cases",
+        "unit": "analytic_case",
+        "formula": "9 anchors * 24 kinematic pairs",
+        "fixed_factors": {"anchors": 9, "pairs": 24},
+        "minimum": 216,
+        "nominal": 216,
+        "worst_case": 216,
+        "cap": 216
+      },
+      {
+        "category": "grid_audit_structural_checks",
+        "unit": "structural_oracle_check",
+        "formula": "point-grid nesting pairs 3 per axis * 2 axes + Clenshaw-Curtis nesting pairs 3 + Gauss-Legendre non-nesting confirmations 3 + cached-identity confirmations equal to the shared-node count",
+        "fixed_factors": {"nesting_pair_checks": 12, "cached_identity_checks_per_anchor": 7098},
+        "minimum": 12,
+        "nominal": 63894,
+        "worst_case": 63894,
+        "cap": 63894,
+        "note": "cached-identity confirmations reuse existing records and perform no physics evaluation"
+      },
+      {
+        "category": "normalization_cross_check_operations",
+        "unit": "cached_operation",
+        "formula": "9 anchors * (2 within-family difference pairs per family * 2 families + 1 cross-family comparison + 2 positivity decisions)",
+        "fixed_factors": {"anchors": 9, "per_anchor": 7},
+        "minimum": 63,
+        "nominal": 63,
+        "worst_case": 63,
+        "cap": 63
+      },
+      {
+        "category": "serialization_bytes",
+        "unit": "byte",
+        "formula": "sum of the emitted artifact size caps",
+        "fixed_factors": {"raw_rate_records": 63882, "bytes_per_record_cap": 512, "other_artifacts_cap_bytes": 8388608},
+        "minimum": 8388608,
+        "nominal": 41096192,
+        "worst_case": 41096192,
+        "cap": 41096192
+      },
+      {
+        "category": "non_physics_oracle_test_evaluations",
+        "unit": "structural_oracle_check",
+        "formula": "the repository focused test suites for the bridge, grid, quadrature and interval oracles",
+        "fixed_factors": {},
+        "minimum": 1,
+        "nominal": 300,
+        "worst_case": 1000,
+        "cap": 1000,
+        "note": "test-only, non-physics, and not part of any Phase 2B physics budget"
+      }
+    ],
+    "additive_aggregates": [
+      {
+        "aggregate": "total_complete_rate_evaluations",
+        "unit": "complete_rate_evaluation",
+        "members": ["point_grid_complete_rate_evaluations", "quadrature_a_integrand_evaluations", "quadrature_b_integrand_evaluations"],
+        "value": 162693,
+        "unit_is_common": true,
+        "definition_of_one_evaluation": "one call to the frozen APFEL FONLL-A complete-rate wrapper at one (x, Q2, theta) point"
+      }
+    ],
+    "forbidden_aggregate": "No total may be formed across categories with different units. Structure-function evaluations, callback attempts, slot comparisons, alpha provider evaluations, analytic cases, cached operations and bytes are never summed with complete-rate evaluations or with each other.",
+    "retry_budget": 0,
+    "retry_until_pass_allowed": false,
+    "resource_exhaustion_result": "INCONCLUSIVE"
+  },
+  "component_coverage_matrix": [
+    {
+      "component_id": "COMPLETE_NC_OBSERVABLE",
+      "implementation_identity": "frozen APFEL 3.1.1 FONLL-A NLO complete-rate wrapper with the accepted bridge, coupling, electroweak assembly and coordinate map",
+      "evidence_class": "E6",
+      "reference_identity": null,
+      "independent": false,
+      "executable": true,
+      "reference_available": false,
+      "mandatory": false,
+      "gating": false,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "no end-to-end independent comparison exists; the node is covered only by the composition of its component checks",
+      "comparison_target": null,
+      "pass_semantics": null,
+      "fail_semantics": null,
+      "inconclusive_semantics": null,
+      "residual_risk": "An error internal to APFEL that survives every component check, or an end-to-end composition error, is not independently detectable.",
+      "allowed_claim": "the complete observable is produced by an explicitly frozen, source-identified configuration",
+      "prohibited_claim": "the complete observable was independently validated end to end",
+      "work_count_formula": "not applicable; no independent comparison exists",
+      "resource_category": null,
+      "disclosure_required": true
+    },
+    {
+      "component_id": "ELECTROWEAK_ASSEMBLY",
+      "implementation_identity": "repository analytic oracle from the HERA neutral-current formulae bound by the FONLL-A amendment",
+      "evidence_class": "E3",
+      "reference_identity": "independently assembled symbolic expression with exact-rational inputs",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_EW_JACOBIAN charge and sign identities at 9 anchors times 24 kinematic pairs",
+      "comparison_target": "exact symbolic equality of Y_plus, Y_minus and the beam-charge sign factors",
+      "pass_semantics": "all 216 cases satisfy the symbolic identities",
+      "fail_semantics": "any nonfinite value or any symbolic identity violation",
+      "inconclusive_semantics": "a required case is missing or the resource cap is reached",
+      "residual_risk": "covers the outer assembly only and says nothing about APFEL internals",
+      "allowed_claim": "the electroweak assembly was checked against an independent analytic oracle",
+      "prohibited_claim": "the structure functions were validated",
+      "work_count_formula": "9 * 24",
+      "resource_category": "analytic_ew_jacobian_cases",
+      "disclosure_required": false
+    },
+    {
+      "component_id": "MASSLESS_COEFFICIENT_CONTRIBUTION",
+      "implementation_identity": "the accepted APFEL 3.1.1 build in zero-mass neutral-current mode with source-defined default grids",
+      "evidence_class": "E2",
+      "reference_identity": "arXiv:2404.15711v1 NLO table, 27 coordinates and 81 published scalar tokens, produced by HOPPET and APFEL++",
+      "independent": true,
+      "executable": false,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_MASSLESS displayed-digit containment at all 81 published tokens",
+      "comparison_target": "each published displayed-digit interval",
+      "pass_semantics": "all 81 containments hold and every bound configuration item matches",
+      "fail_semantics": "any candidate value outside its published interval or any configuration identity mismatch",
+      "inconclusive_semantics": "a required candidate value is missing or the resource cap is reached",
+      "residual_risk": "constrains the massless sector of the frozen build only; the publishers' internal grid settings are unbound so this is comparison against published values, not reproduction of their pipeline",
+      "allowed_claim": "the massless sector was compared against an independent published benchmark table",
+      "prohibited_claim": "the published benchmark proves the correctness of the present build, or the massless comparison validates the heavy sector",
+      "work_count_formula": "27 * 3",
+      "resource_category": "massless_reference_candidate_evaluations",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "MASSIVE_CONTRIBUTION",
+      "implementation_identity": "frozen APFEL 3.1.1 FONLL-A massive terms",
+      "evidence_class": "E2",
+      "reference_identity": "published APFEL versus MassiveDISsFunction heavy-flavour comparisons at the publishers' configuration",
+      "independent": true,
+      "executable": false,
+      "reference_available": false,
+      "mandatory": false,
+      "gating": false,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "no executable comparison is available; the published evidence is cited and not re-run",
+      "comparison_target": null,
+      "pass_semantics": null,
+      "fail_semantics": null,
+      "inconclusive_semantics": null,
+      "residual_risk": "The published comparison concerns the publishers' runs at a configuration whose PDF set is absent from the LHAPDF 6.5.6 index, and the published evidence is figure-only. No version-matched executable replication is possible.",
+      "allowed_claim": "independent published heavy-flavour benchmark evidence exists for this scheme and code family",
+      "prohibited_claim": "the massive contribution of this build was independently validated",
+      "work_count_formula": "not applicable; no executable comparator is bound",
+      "resource_category": null,
+      "disclosure_required": true
+    },
+    {
+      "component_id": "FONLL_MATCHING_DIFFERENCE_CONTRIBUTION",
+      "implementation_identity": "frozen APFEL 3.1.1 FONLL-A matching and damping construction",
+      "evidence_class": "E2",
+      "reference_identity": "published FONLL-A matched heavy-flavour benchmarks",
+      "independent": true,
+      "executable": false,
+      "reference_available": false,
+      "mandatory": false,
+      "gating": false,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "no executable comparison is available",
+      "comparison_target": null,
+      "pass_semantics": null,
+      "fail_semantics": null,
+      "inconclusive_semantics": null,
+      "residual_risk": "A correctly configured, correctly interfaced but internally wrong matching term is not independently detectable. This is the surviving load-bearing limitation of the whole plan.",
+      "allowed_claim": "independent published matched-scheme benchmark evidence exists",
+      "prohibited_claim": "the FONLL matching was independently closed",
+      "work_count_formula": "not applicable; no executable comparator is bound",
+      "resource_category": null,
+      "disclosure_required": true
+    },
+    {
+      "component_id": "PDF_PROVIDER",
+      "implementation_identity": "CT18NLO DataVersion 1 SetIndex 14400 member 0 with frozen archive, info and member byte hashes, projected through the accepted boundary implementation",
+      "evidence_class": "E5",
+      "reference_identity": "the published CT18 set itself",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "exact equality of every serialized raw and projected identity field including all nine anchor canonical identities, plus the 15 enumerated corruption cases",
+      "comparison_target": "the frozen identity tuple",
+      "pass_semantics": "the valid tuple matches exactly and every corruption case is rejected",
+      "fail_semantics": "any identity field mismatch",
+      "inconclusive_semantics": "a required identity record is missing",
+      "residual_risk": "Byte identity establishes what was loaded, not that the grids are physically correct; the grids are a published input that is not re-validated here.",
+      "allowed_claim": "the parton-distribution input is byte-identified and frozen",
+      "prohibited_claim": "the parton distributions were validated by this work",
+      "work_count_formula": "16 identity cases",
+      "resource_category": "bridge_callback_attempts",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "PDF_TO_APFEL_BRIDGE",
+      "implementation_identity": "APFEL 3.1.1 ExternalSetAPFEL physical-basis callback with the accepted boundary implementation, profiles A and B",
+      "evidence_class": "E4",
+      "reference_identity": "analysis/validation/phase2b_bridge_oracles.py sha256 b1c70070dc0fbb66a5b7de7125a16b478893d624b5909b44426ae61a8a27f92c",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_BRIDGE invariants B1 through B8 across both profiles",
+      "comparison_target": "bitwise equality of every written slot to the exact-integer oracle",
+      "pass_semantics": "all identity, interface, support, scale, sign, zero and product cases pass bitwise",
+      "fail_semantics": "any identity, slot, transform, sign, zero, support, scale, linkage, finiteness or overflow difference",
+      "inconclusive_semantics": "resource exhaustion or a missing required artifact; it never passes by default",
+      "residual_risk": "validates interface semantics only; the physics consuming the interface is not validated",
+      "allowed_claim": "the parton-distribution interface was checked against a hash-bound deterministic oracle",
+      "prohibited_claim": "the physics downstream of the bridge was validated",
+      "work_count_formula": "1047 callback attempts, 1042 evaluator invocations, 1042 * 14 slot comparisons",
+      "resource_category": "bridge_slot_comparisons",
+      "disclosure_required": false
+    },
+    {
+      "component_id": "ALPHA_S",
+      "implementation_identity": "APFEL 3.1.1 AlphaQCD under the accepted controls; the authoritative simulator coupling under AP1",
+      "evidence_class": "E5",
+      "reference_identity": "CT18NLO declared coupling metadata, used as provenance and compatibility evidence",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": false,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "declared-convention compatibility check over the six enumerated items, plus the non-gating 25-node numerical diagnostic",
+      "comparison_target": "the declared convention items; the diagnostic reports observed differences",
+      "pass_semantics": "not applicable to the diagnostic, which is non-gating; a declared-convention mismatch triggers scientific review",
+      "fail_semantics": "not applicable to the diagnostic",
+      "inconclusive_semantics": "not applicable to the diagnostic",
+      "residual_risk": "The coupling running-order compatibility item is unresolved, and the diagnostic is sampled evidence that bounds nothing.",
+      "allowed_claim": "APFEL and CT18 coupling compatibility was investigated diagnostically and the observed differences are reported",
+      "prohibited_claim": "the two couplings are equivalent, identical or certified consistent, or the diagnostic proves continuum agreement",
+      "work_count_formula": "2 providers * 25 nodes",
+      "resource_category": "alpha_diagnostic_provider_evaluations",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "COORDINATE_AND_JACOBIAN",
+      "implementation_identity": "repository coordinate map with the dy/dQ2 = 1/(s*x) Jacobian",
+      "evidence_class": "E3",
+      "reference_identity": "independent analytic identity with exact-rational construction",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_EW_JACOBIAN Jacobian relative error at 9 anchors times 24 kinematic pairs",
+      "comparison_target": "the independently ordered analytic Jacobian",
+      "pass_semantics": "relative error at most 8*u with u = 2^-53 at every case",
+      "fail_semantics": "any nonfinite value or any case exceeding the 8*u arithmetic path bound",
+      "inconclusive_semantics": "a required case is missing or the resource cap is reached",
+      "residual_risk": "none beyond the checked identities",
+      "allowed_claim": "the coordinate Jacobian was checked against an independent analytic oracle",
+      "prohibited_claim": "the differential cross section was validated",
+      "work_count_formula": "9 * 24, shared with the electroweak assembly cases",
+      "resource_category": "analytic_ew_jacobian_cases",
+      "disclosure_required": false
+    },
+    {
+      "component_id": "POINT_GRID_COVERAGE",
+      "implementation_identity": "the frozen 17/33/65 geometric point hierarchy with the enumerated augmentation blocks",
+      "evidence_class": "E4",
+      "reference_identity": "analysis/validation/phase2b_grid_oracles.py deterministic node and nesting oracle",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "EXACT_COVERAGE_AND_NESTING_AUDIT as frozen in authoring item 2",
+      "comparison_target": "bitwise node nesting, bitwise cached-record identity at shared points, exact per-level counts",
+      "pass_semantics": "every audit check holds exactly",
+      "fail_semantics": "any nesting, cache-identity, augmentation or count mismatch",
+      "inconclusive_semantics": "a required cached record is missing or the resource cap is reached",
+      "residual_risk": "certifies structure only; it certifies no continuum property and is not a convergence argument",
+      "allowed_claim": "the evaluated point sets were audited for exact coverage and nesting",
+      "prohibited_claim": "grid refinement demonstrated convergence or bounded any remainder",
+      "work_count_formula": "12 nesting checks plus 7098 cached-identity confirmations per anchor",
+      "resource_category": "grid_audit_structural_checks",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "QUADRATURE_A",
+      "implementation_identity": "scipy.special.roots_legendre 1.15.3 nodes and weights with numpy 2.2.6 dot accumulation",
+      "evidence_class": "E6",
+      "reference_identity": "quadrature family B, which shares no node, weight or accumulation code",
+      "independent": false,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_QUADRATURE_A fixed orders 16, 32 and 64 under the NP2 stability rule",
+      "comparison_target": "its own refinement ladder and, at the finest level, family B",
+      "pass_semantics": "as defined by the NP2 stability rule; agreement is necessary and explicitly not sufficient",
+      "fail_semantics": "nonfinite estimate, nonpositive finest estimate, or cross-family criterion violated",
+      "inconclusive_semantics": "non-monotone or growing successive differences, or resource exhaustion",
+      "residual_risk": "Implementation independence is not independence from the integrand; this is stability evidence and not a remainder bound, and a bias common to both families would escape.",
+      "allowed_claim": "the normalization was computed with two independently implemented fixed quadrature families",
+      "prohibited_claim": "the quadrature remainder was bounded or the agreement proves convergence",
+      "work_count_formula": "9 * (16^2 + 32^2 + 64^2)",
+      "resource_category": "quadrature_a_integrand_evaluations",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "QUADRATURE_B",
+      "implementation_identity": "repository Clenshaw-Curtis cosine-sum construction with math.fsum accumulation",
+      "evidence_class": "E6",
+      "reference_identity": "quadrature family A, which shares no node, weight or accumulation code",
+      "independent": false,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_QUADRATURE_B fixed node counts 17, 33 and 65 under the NP2 stability rule",
+      "comparison_target": "its own refinement ladder and, at the finest level, family A",
+      "pass_semantics": "as defined by the NP2 stability rule",
+      "fail_semantics": "nonfinite estimate, nonpositive finest estimate, or cross-family criterion violated",
+      "inconclusive_semantics": "non-monotone or growing successive differences, or resource exhaustion",
+      "residual_risk": "same as family A; the two families share the integrand and the domain map",
+      "allowed_claim": "the second family uses independently generated nodes, weights and accumulation",
+      "prohibited_claim": "the quadrature remainder was bounded",
+      "work_count_formula": "9 * (17^2 + 33^2 + 65^2)",
+      "resource_category": "quadrature_b_integrand_evaluations",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "NORMALIZATION_ASSEMBLY",
+      "implementation_identity": "assembly of the two quadrature families' estimates under the NP2 stability rule",
+      "evidence_class": "E6",
+      "reference_identity": "cross-family comparison only",
+      "independent": false,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_NORMALIZATION finiteness, strict positivity and the NP2 stability rule at every anchor",
+      "comparison_target": "the frozen NP2 acceptance semantics",
+      "pass_semantics": "every anchor finite, strictly positive and satisfying both NP2 criteria",
+      "fail_semantics": "any nonfinite estimate, any nonpositive finest estimate, or any cross-family violation",
+      "inconclusive_semantics": "non-monotone refinement at any anchor, or resource exhaustion",
+      "residual_risk": "empirical stability only; no certified accuracy and no remainder bound",
+      "allowed_claim": "normalization was finite, strictly positive and numerically stable under the frozen protocol",
+      "prohibited_claim": "normalization is certified to any accuracy",
+      "work_count_formula": "9 anchors * 7 cached operations",
+      "resource_category": "normalization_cross_check_operations",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "NORMALIZED_LAW_ASSEMBLY",
+      "implementation_identity": "algebraic cross-normalization q = r / Z using cached rates and opposite-path denominators",
+      "evidence_class": "E3",
+      "reference_identity": "exact algebraic identities I_A[r/Z_B] = Z_A/Z_B and I_B[r/Z_A] = Z_B/Z_A",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_NORMALIZED_LAW algebraic closure over cached values with no new physics evaluation",
+      "comparison_target": "the exact algebraic identities",
+      "pass_semantics": "every cross residual lies inside its algebraically propagated interval",
+      "fail_semantics": "any residual outside its propagated interval after upstream PASS",
+      "inconclusive_semantics": "the denominator interval touches zero or upstream normalization is not PASS",
+      "residual_risk": "the algebra is exact; its inputs carry the normalization residual risk, and no theoretical uncertainty on q is claimed",
+      "allowed_claim": "the normalized law closes algebraically over the cached evaluations",
+      "prohibited_claim": "the normalized law carries a certified numerical or theoretical uncertainty",
+      "work_count_formula": "cached divisions and weighted contributions only; no new physics evaluation",
+      "resource_category": "normalization_cross_check_operations",
+      "disclosure_required": true
+    },
+    {
+      "component_id": "SUPPORT_AND_DOMAIN_HANDLING",
+      "implementation_identity": "strict no-extrapolation caller policy over the accepted x, Q2 and y domain",
+      "evidence_class": "E4",
+      "reference_identity": "the enumerated bridge support cases and the frozen support mask",
+      "independent": true,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "support-boundary attempts must succeed exactly inside and fail before the evaluator exactly outside, including the nextafter neighbours",
+      "comparison_target": "the frozen support boundaries",
+      "pass_semantics": "every in-support attempt reaches the evaluator and every out-of-support attempt fails before it",
+      "fail_semantics": "any extrapolation, any support repair, or any out-of-support evaluation",
+      "inconclusive_semantics": "a required boundary case is missing",
+      "residual_risk": "validates the support contract, not the physics inside it",
+      "allowed_claim": "strict support was enforced with no extrapolation and no repair",
+      "prohibited_claim": "the domain choice was physically validated",
+      "work_count_formula": "4 support attempts plus 4 scale cases per profile",
+      "resource_category": "bridge_callback_attempts",
+      "disclosure_required": false
+    },
+    {
+      "component_id": "RAW_RATE_SIGN_CLASSIFICATION",
+      "implementation_identity": "the raw retained binary64 output of the frozen complete-rate wrapper",
+      "evidence_class": "E4",
+      "reference_identity": "numeric ordering of the retained raw value; no external oracle exists or is needed",
+      "independent": false,
+      "executable": true,
+      "reference_available": true,
+      "mandatory": true,
+      "gating": true,
+      "future_execution_status": "NOT_EXECUTED",
+      "test_definition": "TEST_RAW_RATE_SIGN over all 63,882 required points",
+      "comparison_target": "zero",
+      "pass_semantics": "every required raw finite value is greater than or equal to zero; both +0.0 and -0.0 satisfy this and their distinct bits remain recorded",
+      "fail_semantics": "any finite raw value below zero, or any nonfinite value",
+      "inconclusive_semantics": "a required point is missing or the resource cap is reached",
+      "residual_risk": "A finite evaluated-point result is not continuum positivity and not all-orders positivity.",
+      "allowed_claim": "the raw implemented rate was nonnegative at every evaluated point",
+      "prohibited_claim": "the rate is positive on the continuum or at all orders",
+      "work_count_formula": "reuses the 63,882 point-grid evaluations",
+      "resource_category": "point_grid_complete_rate_evaluations",
+      "disclosure_required": true
+    }
+  ],
+  "coverage_matrix_rules": {
+    "complete_observable_must_not_be_e1": true,
+    "complete_observable_must_not_be_independently_closed": true,
+    "every_row_has_all_required_fields": true,
+    "gating_requires_a_reference": "a row may be gating only if reference_available is true",
+    "available_check_must_be_gating": "a row whose reference is available and which is mandatory must be gating, except for rows named in policy_designated_non_gating",
+    "policy_designated_non_gating": ["ALPHA_S"],
+    "policy_designated_non_gating_authority": "AP1_APFEL_ALPHA_IS_AUTHORITATIVE_SIMULATOR_COUPLING designates the CT18 versus APFEL coupling comparison as a required but explicitly non-gating diagnostic. This is the only such exception and it may not be extended.",
+    "unavailable_reference_forbids_gating": true,
+    "rows_without_executable_independent_evidence_require_disclosure": true,
+    "post_result_reclassification_forbidden": true
+  },
+  "raw_rate_sign_policy": {
+    "policy": "SIGN1_STRICT_IMPLEMENTED_RATE_NONNEGATIVITY",
+    "finite_negative": "FAIL",
+    "finite_nonnegative": "local sign check passes",
+    "nonfinite": "FAIL",
+    "forbidden_operations": ["clipping", "abs(rate)", "max(rate,0)", "epsilon replacement", "post-hoc support shrinkage", "point removal", "averaging over negative points", "retry with modified settings"],
+    "continuum_positivity_claimed": false,
+    "all_orders_positivity_claimed": false,
+    "executed_in_this_task": false
+  },
+  "normalization_policy": {
+    "policy": "NP2_REQUIRE_EMPIRICAL_NUMERICAL_STABILITY_NOT_CERTIFIED_ACCURACY",
+    "finite_required": true,
+    "strictly_positive_required": true,
+    "two_independent_families": true,
+    "refinement_levels_frozen": true,
+    "anchor_set_frozen": true,
+    "post_hoc_target_change_allowed": false,
+    "adaptive_retry_allowed": false,
+    "certified_remainder_provided": false,
+    "residual_risk_disclosed": true
+  },
+  "failure_precedence": [
+    "CONTRACT_IDENTITY_FAILURE",
+    "SUPPORT_FAILURE",
+    "BRIDGE_FAILURE",
+    "REFERENCE_FAILURE",
+    "NONFINITE_IMPLEMENTED_RATE",
+    "RAW_NEGATIVE_RATE",
+    "NORMALIZATION_NONPOSITIVE",
+    "CROSS_FAMILY_DISAGREEMENT",
+    "REFINEMENT_NONMONOTONE",
+    "RESOURCE_EXHAUSTION",
+    "INCONCLUSIVE"
+  ],
+  "paper_claim_boundary": {
+    "may_claim": [
+      "the reduced simulator uses a frozen APFEL FONLL-A configuration",
+      "source and configuration identities are fixed and serialized",
+      "the available independent component checks were predeclared and executed",
+      "independent published FONLL and heavy-flavour benchmark evidence exists for this scheme and code family",
+      "normalization showed reproducible empirical stability under two independently implemented fixed quadrature families",
+      "APFEL and CT18 coupling compatibility was investigated diagnostically",
+      "the absence of an independently executable exact FONLL-A comparator is an explicit limitation of this work",
+      "inference conclusions are conditional on the frozen reduced simulator"
+    ],
+    "must_not_claim": [
+      "independent executable full FONLL-A closure",
+      "exact current implementation correctness inferred from a published benchmark",
+      "production-precision FONLL validation",
+      "end-to-end independent physics closure",
+      "rigorous normalization accuracy or a certified remainder",
+      "continuum alpha-provider equivalence",
+      "continuum rate positivity",
+      "posterior calibration proves physics correctness",
+      "global-fit replacement",
+      "unrestricted parton-distribution determination",
+      "full-generator equivalence"
+    ],
+    "mandatory_limitation": "The paper must state that no independently executable exact FONLL-A comparator was available, that the massive and matching contributions rest on published evidence obtained at other groups' configurations, and that no end-to-end independent physics closure is claimed."
+  },
+  "research_question_invariants": {
+    "inference_unit_unchanged": true,
+    "posterior_target_unchanged": true,
+    "theta_domain_and_prior_unchanged": true,
+    "observation_space_unchanged": true,
+    "selected_event_conditioning_unchanged": true,
+    "detector_kernel_unchanged": true,
+    "normalized_law_form_unchanged": true
+  },
+  "outcome": {
+    "code": "V4_PREAUTH_PLAN_COMPLETE_READY_FOR_SEPARATE_EXECUTION_AUTHORIZATION_REVIEW",
+    "derivation": "All seven authoring items are frozen and internally consistent. The NP2 stability protocol is fully predeclared with no invented scalar, because every comparison scale is computed at execution from formulas frozen here. The grid gate is replaced by an exact structural audit whose nesting claims were verified in this task, including the explicit finding that the Gauss-Legendre levels are not nested. The massless reference is frozen with its unbound items declared, and the candidate-side grid is bound by reference to APFEL's source-defined defaults rather than invented. The bridge is extended to a second boundary profile with a recounted work cap. The alpha diagnostic is serialized and explicitly non-gating. Runtime identity is classified per dependency with source hashes explicitly not treated as executable verification. Resources are recounted from first principles with units defined and only one additive aggregate. The component coverage matrix is complete over all sixteen components with no undisclosed load-bearing validation gap.",
+    "means": [
+      "every preauthorization plan input is frozen",
+      "every future validation procedure is bounded",
+      "every future test has deterministic semantics",
+      "evidence categories are explicit",
+      "resource bounds are explicit",
+      "residual risks are disclosed",
+      "a separate authorization review is scientifically reviewable"
+    ],
+    "does_not_mean": [
+      "Phase 2B authorized",
+      "Phase 2B executed",
+      "numerical physics validated",
+      "positivity established",
+      "normalization validated",
+      "FONLL implementation independently closed",
+      "posterior calibrated",
+      "physics model proven correct"
+    ],
+    "seven_authoring_items_disposition": {
+      "item_1_np2_stability_protocol": "FROZEN",
+      "item_2_grid_gate": "FROZEN",
+      "item_3_massless_reference": "FROZEN_WITH_DECLARED_UNBOUND_ITEMS",
+      "item_4_bridge": "FROZEN",
+      "item_5_alpha_diagnostic": "FROZEN",
+      "item_6_runtime_identity": "FROZEN_WITH_EXPLICIT_CLASSIFICATIONS",
+      "item_7_resource_model": "FROZEN"
+    },
+    "new_policy_created": false,
+    "new_policy_contradiction_discovered": false
+  },
+  "authorization": {
+    "PHASE2B_AUTHORIZED": false,
+    "PHASE2B_EXECUTED": false,
+    "PHASE2C_AUTHORIZED": false,
+    "IMPLEMENTATION_AUTHORIZED": false,
+    "NUMERICAL_PHYSICS_AUTHORIZED": false,
+    "APFEL_EXECUTION_AUTHORIZED": false,
+    "APFELXX_EXECUTION_AUTHORIZED": false,
+    "MASSIVEDIS_EXECUTION_AUTHORIZED": false,
+    "POSITIVITY_SCAN_AUTHORIZED": false,
+    "NORMALIZATION_EXECUTION_AUTHORIZED": false,
+    "EVENT_GENERATION_AUTHORIZED": false,
+    "DATASET_AUTHORIZED": false,
+    "DETECTOR_IMPLEMENTATION_AUTHORIZED": false,
+    "NEURAL_TRAINING_AUTHORIZED": false,
+    "D2_AUTHORIZED": false
+  },
+  "execution_state": {
+    "phase2b": "NOT_EXECUTED",
+    "apfel_executed": false,
+    "apfelxx_executed": false,
+    "massivedis_executed": false,
+    "fonll_benchmark_executed": false,
+    "dis_structure_functions_executed": false,
+    "alpha_diagnostic_executed": false,
+    "pdf_bridge_validation_executed": false,
+    "raw_rate_or_positivity_scan_executed": false,
+    "normalization_integrals_executed": false,
+    "convergence_studies_executed": false,
+    "events_or_datasets_generated": false,
+    "detector_or_neural_work_executed": false
+  },
+  "github_target_state": {
+    "issue": 55,
+    "state": "OPEN",
+    "status": "Backlog",
+    "gate_decision": "Not Evaluated",
+    "authorization": "Not Authorized"
+  },
+  "remaining_scientific_limitations": [
+    "No independently executable exact FONLL-A comparator is bound; the massive and matching contributions rest on published evidence obtained at other configurations.",
+    "A correctly configured, correctly interfaced but internally wrong FONLL matching term is not independently detectable.",
+    "The complete neutral-current observable has no end-to-end independent validation.",
+    "The CT18 coupling running-order compatibility item is unresolved and is carried as a reported diagnostic item.",
+    "Empirical quadrature stability is not a remainder bound and a counterexample on an analytic integrand is on record.",
+    "The massless comparison constrains the massless sector only and the publishers' internal grid settings are unbound.",
+    "Finite point grids do not prove continuum positivity.",
+    "Nine theta anchors do not establish every interior theta.",
+    "Inclusive neutral-current electron-proton data do not provide unrestricted flavour separation.",
+    "Four load-bearing dependencies are hash-pinned but not installed, so executable reproducibility is not yet demonstrated.",
+    "No alpha, bridge, DIS, sign, convergence, normalization or closure result was executed."
+  ],
+  "next_action": "SEPARATE_INDEPENDENT_PHASE2B_EXECUTION_AUTHORIZATION_REVIEW"
+}

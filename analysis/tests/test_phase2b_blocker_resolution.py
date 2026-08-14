@@ -59,13 +59,22 @@ def test_current_record_is_br5(record):
     assert record["outcome"]["new_authorization_review_warranted"] is False
 
 
-def test_v4_artifact_does_not_exist():
-    assert not (
-        ROOT / "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v4.json"
-    ).exists()
-    assert not (
-        ROOT / "docs/reduced_nc_dis/PHASE2B_PREAUTHORIZATION_VALIDATION_PLAN_V4.md"
-    ).exists()
+def test_this_record_did_not_create_v4(record):
+    """This task must not have created V4.
+
+    A later, separately reviewed successor may legitimately create one, so the
+    assertion is on this record's own outcome rather than on the permanent
+    absence of the file.  When a V4 exists it must bind this record.
+    """
+
+    assert record["outcome"]["v4_created"] is False
+    v4_path = ROOT / "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v4.json"
+    if v4_path.exists():
+        v4 = json.loads(v4_path.read_text(encoding="utf-8"))
+        assert (
+            v4["predecessors"]["blocker_resolution_v1"]["sha256"]
+            == VALIDATOR.sha256_of(ARTIFACT)
+        )
 
 
 def test_record_declares_itself_a_blocker_resolution(record):

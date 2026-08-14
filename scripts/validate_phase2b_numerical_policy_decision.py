@@ -542,10 +542,24 @@ def _validate_state(record: dict, root: Path) -> None:
     serialized = json.dumps(record)
     for token in FORBIDDEN_TOLERANCE_TOKENS:
         require(token not in serialized, f"Rejected tolerance {token} reintroduced")
+    # The policy task itself must not have created V4.  A later, separately
+    # reviewed successor may legitimately create one, so the guard asserts the
+    # record's own flag and, when a V4 exists, that it binds this record as a
+    # predecessor rather than having been produced by this task.
     require(
-        not (root / "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v4.json").exists(),
+        record.get("successor_plan_assessment", {}).get("v4_not_created_in_this_task") is True,
         "A V4 plan artifact was created by the policy task",
     )
+    v4_path = root / "docs/reduced_nc_dis/contracts/phase2b_preauthorization_validation_plan_v4.json"
+    if v4_path.exists():
+        v4 = json.loads(v4_path.read_text(encoding="utf-8"))
+        binding = v4.get("predecessors", {}).get("numerical_policy_decision_v1", {})
+        require(
+            binding.get("sha256") == sha256_of(
+                root / "docs/reduced_nc_dis/contracts/phase2b_numerical_policy_decision_v1.json"
+            ),
+            "A V4 plan exists that does not bind this policy record as a predecessor",
+        )
 
 
 def validate(
