@@ -265,3 +265,43 @@ until the independent-reference scope question is separately recorded.
 Historical Phase 2A remains `INCONCLUSIVE`; this ADR remains Proposed. Phase 2B
 remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no downstream phase is
 authorized.
+
+## Follow-on Phase 2B FONLL validation policy
+
+The third and final validation-policy decision derives
+`FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY`. It is a policy decision only;
+no V4 was created and no authorization review was performed.
+
+The decision rests on a reconstruction of accepted records rather than on a new
+interpretation. The Phase 2A obligation `INDEPENDENT_NUMERICAL_CLOSURE_PLAN`
+requires a bounded, independent, non-circular plan whose pass condition is that
+Phase 2B has a finite reproducible plan capable of returning PASS, FAIL or
+INCONCLUSIVE; the accepted claim is that a bounded numerical closure plan is
+required. The v1 execution authorization review states that a component
+decomposition can satisfy that obligation and that a wholly independent full
+FONLL-A program is not categorically required, and this amendment's own scheme
+table rated FONLL-A MEDIUM on independent closure strength and selected it. No
+accepted record promised an end-to-end independent FONLL-A implementation.
+
+The adopted hybrid keeps independent validation mandatory and gating for every
+node where it is available — the electroweak assembly, the coordinate Jacobian,
+the parton-distribution identity and bridge, the two quadrature implementations
+and the massless sector — accepts published independent benchmark evidence only
+for the heavy and matching terms, requires the component coverage matrix to be
+frozen before authorization, and fails a node whose available check is skipped.
+The successor completion criterion is replaced by
+`NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP`, under which every load-bearing
+node carries an evidence class, a validation method, a residual-risk statement
+and explicit paper disclosure where independent executable validation is absent.
+
+The residual is named rather than removed: a correctly configured, correctly
+interfaced but internally wrong FONLL matching term is not independently
+detectable, and posterior calibration does not validate the physics because it
+is measured against the same simulator that generated the data. The paper must
+state that no independently executable exact FONLL-A comparator was available
+and that no end-to-end independent closure is claimed.
+
+This resolves the final scientific policy blocker, so successor preauthorization
+planning is now warranted. Historical Phase 2A remains `INCONCLUSIVE`; this ADR
+remains Proposed. Phase 2B remains `NOT_AUTHORIZED` and `NOT_EXECUTED`, and no
+downstream phase is authorized.

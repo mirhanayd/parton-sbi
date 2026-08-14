@@ -192,3 +192,21 @@ independent-reference scope question is recorded. No V4 was created.
 This result does not alter the dependency graph or issue metadata. Phase 2B
 remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
 `NOT_EXECUTED`; Phase 2C remains Not Authorized.
+
+## Phase 2B FONLL validation policy V1
+
+The FONLL validation policy derives
+`FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY`. An independently executable
+FONLL-A comparator is scientifically desirable but is not a required
+authorization gate: the accepted Phase 2A obligation required a bounded
+independent closure plan, and the v1 authorization review states that a wholly
+independent full FONLL-A program is not categorically required. Independent
+checks remain mandatory and gating wherever available, the component coverage
+matrix is frozen before authorization, and the missing executable comparator
+becomes a mandatory paper limitation. The completion criterion becomes
+`NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP`. This resolves the final scientific
+policy blocker, so `V4_SUCCESSOR_PLANNING_NOW_WARRANTED`; no V4 was created here.
+
+This result does not alter the dependency graph or issue metadata. Phase 2B
+remains Open/Backlog, Gate Decision Not Evaluated, Not Authorized and
+`NOT_EXECUTED`; Phase 2C remains Not Authorized.

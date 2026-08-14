@@ -711,3 +711,46 @@ FONLL-A reference is a required gate or a disclosed limitation — is recorded.
 Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
 and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
 ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
+
+## Phase 2B FONLL validation policy V1
+
+The third and final validation-policy decision derives
+`FPD3_ADOPT_HYBRID_COMPONENT_VALIDATION_POLICY`. It is a policy decision only;
+no V4 was created and no authorization review was performed.
+
+The historical reconstruction is decisive and is drawn from accepted records
+rather than reinterpretation. The Phase 2A obligation
+`INDEPENDENT_NUMERICAL_CLOSURE_PLAN` asks for a bounded, independent,
+non-circular plan, and its pass condition is that Phase 2B has a finite
+reproducible plan capable of returning PASS, FAIL or INCONCLUSIVE. The accepted
+claim is literally that a bounded numerical closure plan is required. The v1
+execution authorization review states in terms that a component decomposition
+can satisfy the obligation and that a wholly independent full FONLL-A program is
+not categorically required, and the FONLL-A amendment rated the scheme MEDIUM on
+independent closure strength and selected it anyway. An executable FONLL-A
+comparator is therefore a later and progressively stronger interpretation, not
+an original requirement. The three specific defects the v1 review did identify —
+the PDF bridge, the shared coupling and quadrature independence — have all since
+been addressed.
+
+The hybrid policy is stronger than simple acceptance: every node where
+independent validation is actually available keeps a mandatory and gating check,
+the component coverage matrix must be frozen before authorization, a node whose
+available check is skipped fails rather than being reclassified, and published
+independent evidence is accepted only for the heavy and matching terms where
+executable reconstruction is unavailable. The completion criterion changes from
+no load-bearing unvalidated node to `NO_UNDISCLOSED_LOAD_BEARING_VALIDATION_GAP`,
+which requires an evidence class, a validation method, a residual-risk statement
+and explicit paper disclosure for every load-bearing node.
+
+One residual is named rather than removed: a correctly configured, correctly
+interfaced but internally wrong FONLL matching term is not independently
+detectable. Posterior calibration does not validate the physics, because it is
+measured against the same simulator that generated the data.
+
+`V4_SUCCESSOR_PLANNING_NOW_WARRANTED`: no policy blockers remain, and the seven
+remaining items are ordinary plan authoring.
+
+Phase 2B remains Not Authorized, Open/Backlog, Gate Decision Not Evaluated,
+and `NOT_EXECUTED`. Historical Phase 2A remains `COMPLETE/INCONCLUSIVE`;
+ADR-013 remains Proposed. Phase 2C and all downstream work remain unauthorized.
